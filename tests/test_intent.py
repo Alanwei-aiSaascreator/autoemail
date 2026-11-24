@@ -1,0 +1,139 @@
+from datetime import date
+from decimal import Decimal
+
+from autoemail.channels.base import NormalizedMessage
+from autoemail.intent import classify_message, extract_payment_info
+from autoemail.channels.base import NormalizedAttachment
+
+
+def message(body: str, subject: str = "Invoice 1042", attachments=None):
+    return NormalizedMessage(
+        channel="eml",
+        channel_msg_id="m1",
+        from_addr="toni@a1surety.com",
+        subject=subject,
+        body_text=body,
+        attachments=attachments or [],
+        dedupe_hash="intent-hash",
+    )
+
+
+def test_extracts_invoice_payment_details():
+    result = extract_payment_info(
+        message(
+            "Amount due: $750.00\nDue date: 12/01/2026\nPayment method: Zelle to billing@a1surety.com"
+        )
+    )
+    assert result is not None
+    assert result.amount == Decimal("750.00")
+    assert result.currency == "USD"
+    assert result.due_date == date(2026, 12, 1)
+    assert result.payment_method == "zelle"
+    assert result.confidence >= 0.9
+
+
+def test_invoice_attachment_is_payment_signal():
+    attachment = NormalizedAttachment(
+        filename="invoice-100.pdf", mime="application/pdf", content=b"pdf", sha256="abc", doc_type="invoice"
+    )
+    result = classify_message(message("Please find attached.", attachments=[attachment]))
+    assert result.label == "invoice"
+    assert result.payment is not None
+    assert result.confidence >= 0.6
+
+
+def test_non_payment_email_is_not_invoice():
+    result = classify_message(message("Yes, we can write the continuous bond for $750." , subject="Bond quote"))
+    assert result.label == "quote_reply"
+    assert result.payment is None
+
+
+def test_unknown_payment_method_is_preserved():
+    result = extract_payment_info(message("Invoice total: $600. Please remit payment."))
+    assert result is not None
+    assert result.payment_method == "unknown"
+    assert result.amount == Decimal("600")
+
+
+def _a(filename, doc_type):
+    return NormalizedAttachment(
+        filename=filename, mime="application/pdf", content=b"%PDF", sha256="x", doc_type=doc_type
+    )
+
+
+def test_bond_application_attachments_are_form_request_not_invoice():
+    """代理商发来申请表格（POA/CBP5106/Bond Application），签名含 'accept payment via'，
+    应识别为 form_request 而非 invoice。"""
+    body = (
+        "Our annual bond fee is $650 per year.\n"
+        "We will need the following when getting a new POA:\n"
+        "1. POA signed with a pen\n"
+        "2. CBP form 5106 completed (skip section 3)\n"
+        "3. Photo ID of signor\n"
+        "4. Business Registration Document\n\n"
+        "We accept payment via PayCargo at https://app.paycargo.com/..."
+    )
+    result = classify_message(
+        message(
+            body,
+            subject="RE: [BOND-2026-0252] Inquiry - Continuous Customs Bond",
+            attachments=[
+                _a("ECC - Power of Attorney + Guide (EN) 2026.pdf", "poa"),
+                _a("ECC - CBP Form 5106 + Guide (EN) 2026.pdf", "application"),
+                _a("ECC - Continuous Bond Application + Guide (EN) 2026.pdf", "application"),
+            ],
+        )
+    )
+    assert result.label == "form_request"
+    assert result.payment is None
+
+
+def test_blank_forms_with_request_body_are_form_request_not_bond_delivered():
+    """Acora 案例（BOND-2026-0192）回归：代理回复附空白表格（附件名含
+    "Customs Bond Application"，历史 doc_type 误存为 bond），正文列明要我们
+    填写的材料清单——必须判 form_request，绝不能判 bond_delivered。"""
+    body = (
+        "Thank you for reaching out about this bond. We so appreciate the opportunity "
+        "to work with you.\n\n"
+        "In order to proceed, the forms and other information we would need are:\n"
+        "- Customs Bond application thoroughly completed and signed.\n"
+        "- Breakdown of ownership percentage for the company\n"
+        "- Personal Financial Statement for all owners and spouses (if married)\n"
+        "- Current business financial statement (balance sheet and income statement)\n"
+        "- Please confirm if the goods being imported are subject to any "
+        "anti-dumping and/or countervailing duties."
+    )
+    result = classify_message(
+        message(
+            body,
+            subject="RE: [BOND-2026-0192] Inquiry - Continuous Customs Bond",
+            attachments=[
+                _a("CA Shea.Customs Bond Application.pdf", "bond"),
+                _a("Personal Financial Form.xlsx", "application"),
+            ],
+        )
+    )
+    assert result.label == "form_request"
+
+
+def test_delivered_bond_without_request_body_still_bond_delivered():
+    """真正交付 Bond 的邮件（无填表要求正文）仍应判 bond_delivered。"""
+    result = classify_message(
+        message(
+            "Please find attached the executed continuous bond for your records.",
+            subject="Bond copy for Sunrise Home Goods",
+            attachments=[_a("Continuous_Bond_0427.pdf", "bond")],
+        )
+    )
+    assert result.label == "bond_delivered"
+
+
+def test_accept_payment_via_is_not_payment_signal():
+    """签名里的付款方式说明不应触发发票判定。"""
+    result = extract_payment_info(
+        message(
+            "Our annual bond fee is $650 per year.\n\nWe accept payment via PayCargo.",
+            subject="RE: Inquiry",
+        )
+    )
+    assert result is None

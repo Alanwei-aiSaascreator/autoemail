@@ -1,0 +1,23 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.db
+*.db.bak-*
+*.sqlite3
+.env
+.pytest_cache/
+logs/
+*.log
+*.egg-info/
+build/
+dist/
+.idea/
+.vscode/
+# 客户敏感材料与本地草稿，不入库
+filled_forms/
+_incoming_*/
+.trae/
+_tmp_*
+_*.py
+attachments/
