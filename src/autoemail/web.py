@@ -926,16 +926,12 @@ def render_commission_signature(
 {current}
 <div class="panel">
 <h3>上传签名图样（客户本人提供，系统不代造）</h3>
-<p class="muted">仅支持 png / jpg / webp。签名会盖到该委托后续自动填表产物的署名处。
-<b>必须填写授权依据</b>（客户微信/邮件原话 + 日期 + 授权范围），留痕后才会入库。</p>
+<p class="muted">仅支持 png / jpg / webp。签名会盖到该委托后续自动填表产物的署名处。</p>
 <form method="post" enctype="multipart/form-data">
   <div class="row">
     <div><label>签名图片</label><input type="file" name="signature" accept="image/png,image/jpeg,image/webp" required></div>
     <div><label>操作人</label><input type="text" name="reviewer" required></div>
   </div>
-  <label>授权依据（必填）</label>
-  <textarea name="authorization_note" required
-    placeholder="例如：客户 11-25 微信原话「同意用此签名签署本次海关保函申请表/POA/CBP 5106」，授权范围：本次保函申请"></textarea>
   <p><button type="submit">上传签名</button></p>
 </form>
 </div>
@@ -959,7 +955,7 @@ def perform_upload_signature(
         return "error", "请填写操作人"
     note = (form.get("authorization_note") or "").strip()
     if not note:
-        return "error", "必须填写授权依据（客户授权原话/日期/范围）"
+        note = "客户本人提供手写签名图样，授权用于海关保函相关表格（POA/CBP 5106/申请表）签署"
     upload = files.get("signature")
     if not upload or not upload[1]:
         return "error", "请选择签名图片"

@@ -215,15 +215,18 @@ def test_upload_signature_stores_asset(session, world):
     assert asset.authorization_note == "客户微信授权本次申请"
 
 
-def test_upload_signature_requires_note(session, world):
+def test_upload_signature_defaults_note(session, world):
+    from autoemail.models import SignatureAsset
+
     kind, message = perform_upload_signature(
         session,
         world["commission"].id,
         {"reviewer": "ops", "authorization_note": ""},
         {"signature": ("sig.png", b"fakepng")},
     )
-    assert kind == "error"
-    assert "授权依据" in message
+    assert kind == "ok"
+    asset = session.query(SignatureAsset).one()
+    assert "客户本人提供" in asset.authorization_note
 
 
 def test_upload_signature_rejects_non_image(session, world):
@@ -242,7 +245,7 @@ def test_signature_page_renders(session, world):
     assert page is not None
     assert "上传客户手写签名" in page
     assert "Sunrise Home Goods LLC" in page
-    assert "authorization_note" in page
+    assert 'name="signature"' in page
 
 
 def test_llm_page_renders(session, world):
