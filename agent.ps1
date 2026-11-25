@@ -34,7 +34,7 @@ function Start-Web {
     Stop-Pattern "web *--port 8787*"
     $proc = Start-Process -FilePath $Python `
         -ArgumentList "-m", "autoemail.cli", "web", "--port", "8787", "--no-open" `
-        -WorkingDirectory $Root -PassThru `
+        -WorkingDirectory $Root -PassThru -WindowStyle Hidden `
         -RedirectStandardOutput "$LogDir\web.out.log" `
         -RedirectStandardError "$LogDir\web.err.log"
     $proc.Id | Out-File -FilePath $WebPidFile -Encoding ascii
@@ -46,7 +46,7 @@ function Start-Watch {
     Stop-Pattern "mail watch*--allow-auto-send*"
     $proc = Start-Process -FilePath $Python `
         -ArgumentList "-m", "autoemail.cli", "mail", "watch", "--interval", "30", "--allow-auto-send", "--log", $WatchLog `
-        -WorkingDirectory $Root -PassThru `
+        -WorkingDirectory $Root -PassThru -WindowStyle Hidden `
         -RedirectStandardOutput "$LogDir\watch.out.log" `
         -RedirectStandardError "$LogDir\watch.err.log"
     $proc.Id | Out-File -FilePath $WatchPidFile -Encoding ascii
