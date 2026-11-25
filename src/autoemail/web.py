@@ -1,6 +1,6 @@
 """本地网页审核台：查看 case、草稿、审计和 LLM 统计，并支持草稿编辑/拒绝/批准。
 
-服务只监听 127.0.0.1；批准前会检查 SMTP 配置，避免把草稿误标为失败。
+服务默认只监听 127.0.0.1（可设 AUTOEMAIL_WEB_HOST=0.0.0.0 开放给局域网）；批准前会检查 SMTP 配置，避免把草稿误标为失败。
 """
 from __future__ import annotations
 
@@ -2137,17 +2137,18 @@ class Handler(BaseHTTPRequestHandler):
         return
 
 
-def serve(port: int = 8787, open_browser: bool = True) -> None:
+def serve(port: int = 8787, open_browser: bool = True, host: str = "127.0.0.1") -> None:
     # 输出重定向到文件时 stdout 可能是 cp1252，打印中文会崩，统一改成 UTF-8
     for stream in (sys.stdout, sys.stderr):
         reconfigure = getattr(stream, "reconfigure", None)
         if reconfigure is not None:
             reconfigure(encoding="utf-8", errors="replace")
-    server = ThreadingHTTPServer(("127.0.0.1", port), Handler)
-    url = f"http://127.0.0.1:{port}/"
+    server = ThreadingHTTPServer((host, port), Handler)
+    shown = host if host != "0.0.0.0" else f"<本机IP>({host})"
+    url = f"http://{shown}:{port}/"
     print(f"只读看板已启动：{url}（Ctrl+C 停止）")
     if open_browser:
-        webbrowser.open(url)
+        webbrowser.open(f"http://127.0.0.1:{port}/")
     try:
         server.serve_forever()
     except KeyboardInterrupt:

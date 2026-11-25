@@ -761,7 +761,7 @@ def cmd_web(args: argparse.Namespace) -> int:
     init_db()
     from .web import serve
 
-    serve(port=args.port, open_browser=not args.no_open)
+    serve(port=args.port, open_browser=not args.no_open, host=args.host)
     return 0
 
 
@@ -887,6 +887,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     web = sub.add_parser("web", help="启动本地网页审核台")
     web.add_argument("--port", type=int, default=8787)
+    web.add_argument("--host", default=settings.web_host, help="监听地址，默认 127.0.0.1")
     web.add_argument("--no-open", action="store_true", help="不自动打开浏览器")
     web.set_defaults(func=cmd_web)
 

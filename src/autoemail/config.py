@@ -45,6 +45,9 @@ class Settings(BaseSettings):
     # 自动填表产物目录：收到代理商表格自动填充后的 PDF 落盘位置
     filled_forms_dir: str = "./filled_forms"
 
+    # 审核台监听地址：默认仅本机可访问；运行设备可设 0.0.0.0 开放给局域网
+    web_host: str = "127.0.0.1"
+
     # 自动发送时间窗：自动邮件从纽约时间每天 09:00 起才允许发出（人工批准不受限）
     auto_send_timezone: str = "America/New_York"
     auto_send_start_et: str = "09:00"

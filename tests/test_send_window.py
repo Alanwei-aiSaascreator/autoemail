@@ -144,6 +144,8 @@ def test_daily_inquiry_batch_waits_for_window(session, world, monkeypatch):
         "autoemail.policy.window.auto_send_window_open",
         lambda: (False, "纽约时间每天 09:00 起"),
     )
+    # .env 可能关掉了每日询价（开发设备），测试显式打开
+    monkeypatch.setattr("autoemail.daily_inquiry.settings.daily_inquiry_enabled", True)
     from autoemail.daily_inquiry import maybe_run_daily_batch
 
     summary = maybe_run_daily_batch(session, channel=FakeChannel())
@@ -158,6 +160,7 @@ def test_daily_inquiry_batch_runs_after_window(session, world, monkeypatch):
         "autoemail.policy.window.auto_send_window_open",
         lambda: (True, "纽约时间每天 09:00 起"),
     )
+    monkeypatch.setattr("autoemail.daily_inquiry.settings.daily_inquiry_enabled", True)
     from autoemail.daily_inquiry import maybe_run_daily_batch
 
     summary = maybe_run_daily_batch(session, channel=FakeChannel())
