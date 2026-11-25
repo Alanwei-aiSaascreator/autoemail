@@ -235,6 +235,7 @@ def classify_message(message: NormalizedMessage) -> IntentResult:
     # 附件是空白申请表（application/form/5106 等）同理，优先判 form_request。
     _FORM_REQUEST_BODY_RE = re.compile(
         r"forms?\s+(?:and\s+\w+\s+information\s+)?we\s+(?:would|will)\s+need|"
+        r"need\s+(?:will\s+need\s+)?(?:the\s+)?attached\s+(?:application|form|forms)|"
         r"(?:thoroughly\s+)?completed\s+and\s+signed|"
         r"please\s+(?:complete|fill(?:\s+out)?|return|submit)(?:\s+the)?\s+(?:attached\s+)?(?:application|form|bond application)|"
         r"fill\s+out\s+the\s+(?:application|form)|"

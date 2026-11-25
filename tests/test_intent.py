@@ -128,6 +128,31 @@ def test_delivered_bond_without_request_body_still_bond_delivered():
     assert result.label == "bond_delivered"
 
 
+def test_need_attached_application_is_form_request_even_with_bond_attachment():
+    """Surety One 案例（BOND-2026-0214）回归：正文 "we will need the attached
+    application"（含重复 will need 的笔误）+ 空白 bond.pdf 附件——必须判
+    form_request，不能因为附件名含 bond 就判 bond_delivered。"""
+    body = (
+        "Thank you for your interest in our bonding company's support of this "
+        "need, Chanrathana.\n\n"
+        "In order to quote you we will need will need the attached application "
+        "and the items at the bottom of page three. ALL required items listed "
+        "on the application must be submitted or the application will be declined."
+    )
+    result = classify_message(
+        message(
+            body,
+            subject="Re: [BOND-2026-0214] Inquiry - Continuous Customs Bond",
+            attachments=[
+                _a("bond.pdf", "bond"),
+                _a("cbp5106.pdf", "application"),
+                _a("poa.pdf", "poa"),
+            ],
+        )
+    )
+    assert result.label == "form_request"
+
+
 def test_accept_payment_via_is_not_payment_signal():
     """签名里的付款方式说明不应触发发票判定。"""
     result = extract_payment_info(
