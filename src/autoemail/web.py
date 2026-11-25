@@ -14,7 +14,7 @@ from email import policy
 from email.parser import BytesParser
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from urllib.parse import parse_qs, quote, urlsplit
+from urllib.parse import parse_qs, quote, unquote, urlsplit
 
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
@@ -2096,8 +2096,8 @@ class Handler(BaseHTTPRequestHandler):
         return {key: values[0] for key, values in parsed.items()}
 
     def _serve_filled(self, filename: str) -> None:
-        # 只取文件名，防路径穿越；填表产物只允许落在 filled_forms_dir 下
-        name = Path(filename).name
+        # 先 URL 解码（空格/中文会被编码成 %20/%XX），再只取文件名防路径穿越
+        name = Path(unquote(filename)).name
         base = Path(settings.filled_forms_dir)
         file_path = base / name
         if name in {"", ".", ".."} or not file_path.is_file():
