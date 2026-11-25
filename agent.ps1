@@ -4,7 +4,7 @@ param(
     [string]$Action
 )
 
-$Root = "C:\Users\26562\Documents\Trae-CN\temp_20261116_01\autoemail"
+$Root = $PSScriptRoot
 $Python = "$Root\.venv\Scripts\python.exe"
 $LogDir = "$Root\logs"
 $WebPidFile = "$LogDir\web.pid"
