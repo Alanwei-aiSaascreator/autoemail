@@ -30,6 +30,7 @@ from .feishu_import import import_commission_from_feishu
 from .initiate import missing_commission_fields, start_case
 from .invoices import mark_paid
 from .mailcheck import check_imap, check_smtp
+from .reprocess import reprocess_message
 from .state import set_auto_mode
 from .textutil import normalize_text
 from .models import (
@@ -1416,6 +1417,14 @@ def render_case(
             _e(item.from_addr),
             _e(item.subject),
             f'<details><summary>查看正文</summary><pre>{_e(item.body_text)}</pre></details>',
+            # 入站邮件可人工「重新处理」：作废旧草稿、回滚状态后按当前分类器重跑
+            (
+                f'<form method="post" action="/message/{item.id}/reprocess" style="margin:0" '
+                f'onsubmit="return confirm(\'重新处理该入站邮件？旧草稿将作废，case 状态会回滚后按当前分类器重跑。\')">'
+                f'<button type="submit">重新处理</button></form>'
+            )
+            if item.direction == "in"
+            else "",
         ]
         for item in messages
     ]
@@ -1563,7 +1572,7 @@ def render_case(
         ),
         _section(
             "邮件",
-            _table(["方向", "时间", "发件人", "主题", "正文"], message_rows),
+            _table(["方向", "时间", "发件人", "主题", "正文", "操作"], message_rows),
             len(messages),
         ),
         _section(
@@ -1875,6 +1884,24 @@ def render_llm(session: Session) -> str:
     return _layout("LLM", "llm", content)
 
 
+def perform_reprocess_message(session: Session, message_id: int) -> tuple[str, str, str]:
+    """重新处理入站邮件；返回 (flash 类型, flash 文案, 重定向路径)。"""
+    stored = session.get(Message, message_id)
+    case_id = None
+    if stored is not None:
+        thread_row = session.get(Thread, stored.thread_id)
+        case_id = thread_row.case_id if thread_row else None
+    base = f"/cases/{case_id}" if case_id else "/cases"
+    try:
+        summary = reprocess_message(session, message_id, actor="web")
+    except ValueError as exc:
+        return "error", str(exc), base
+    text = f"重新处理完成：{summary['old_intent']} → {summary['new_intent']}"
+    if summary.get("draft_status"):
+        text += f"，新草稿 {summary['draft_status']}"
+    return "ok", text, base
+
+
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self) -> None:  # noqa: N802
         parsed = urlsplit(self.path)
@@ -1977,6 +2004,9 @@ class Handler(BaseHTTPRequestHandler):
             and parts[2] == "form-type"
             and parts[3] == "convert"
         )
+        is_message_reprocess = (
+            len(parts) == 3 and parts[0] == "message" and parts[2] == "reprocess"
+        )
         if not (
             is_settings
             or is_settings_test
@@ -1988,6 +2018,7 @@ class Handler(BaseHTTPRequestHandler):
             or is_case_mode
             or is_invoice_paid
             or is_form_type_convert
+            or is_message_reprocess
         ):
             self._respond(404, _layout("未找到", "", "<h1>页面不存在</h1>"))
             return
@@ -2024,7 +2055,9 @@ class Handler(BaseHTTPRequestHandler):
                 except ValueError:
                     self._respond(404, _layout("未找到", "", "<h1>记录不存在</h1>"))
                     return
-                if is_case_mode:
+                if is_message_reprocess:
+                    kind, message, base = perform_reprocess_message(session, item_id)
+                elif is_case_mode:
                     kind, message = perform_set_mode(session, item_id, form)
                 elif is_invoice_paid:
                     kind, message = perform_invoice_paid(session, item_id, form)
@@ -2036,11 +2069,12 @@ class Handler(BaseHTTPRequestHandler):
                     kind, message = perform_reject(session, item_id, form)
                 else:
                     kind, message = perform_approve(session, item_id, form)
-                base = (
-                    f"/cases/{item_id}"
-                    if is_case_mode or is_invoice_paid or is_form_type_convert
-                    else f"/drafts/{item_id}"
-                )
+                if not is_message_reprocess:
+                    base = (
+                        f"/cases/{item_id}"
+                        if is_case_mode or is_invoice_paid or is_form_type_convert
+                        else f"/drafts/{item_id}"
+                    )
                 location = f"{base}?kind={quote(kind)}&msg={quote(message)}"
         finally:
             session.close()

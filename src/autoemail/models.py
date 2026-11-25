@@ -216,6 +216,8 @@ class Message(Base):
     subject: Mapped[str] = mapped_column(String(600))
     body_text: Mapped[str] = mapped_column(Text)
     sent_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    # 原始 .eml 落盘路径（IMAP 入站时存档）；为空表示未存档，重新处理时退回 DB 字段
+    raw_path: Mapped[str] = mapped_column(String(600), default="")
     dedupe_hash: Mapped[str] = mapped_column(String(64))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
 

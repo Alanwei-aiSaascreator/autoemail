@@ -124,6 +124,36 @@ def process_message(
             )
         return ProcessResult(stored.id, stored.thread_id, None, Assignment(None, "duplicate", 0.0, False), IntentResult("unclear", 0.0), ignored_reason="duplicate")
 
+    return _process_stored(
+        session,
+        stored,
+        message,
+        webhook=webhook,
+        attachment_url=attachment_url,
+        llm_provider=llm_provider,
+        retriever=retriever,
+        auto_send=auto_send,
+        notify=True,
+    )
+
+
+def _process_stored(
+    session: Session,
+    stored: Message,
+    message: NormalizedMessage,
+    *,
+    webhook: str | None = None,
+    attachment_url: str | None = None,
+    llm_provider: object | None = None,
+    retriever: object | None = None,
+    auto_send: bool = True,
+    notify: bool = True,
+) -> ProcessResult:
+    """store_message 去重之后的处理逻辑：归属 → 意图 → 状态迁移 → 草稿/付款。
+
+    process_message 与重新处理（reprocess.reprocess_message）共用同一份实现；
+    notify=False 时不推送群通知（避免重复打扰），auto_send=False 时强制不自动发送。
+    """
     thread = session.get(Thread, stored.thread_id)
     if thread is None:
         raise RuntimeError(f"message {stored.id} 的 thread 不存在")
@@ -208,26 +238,27 @@ def process_message(
         session.commit()
         # 报价即推群：人工横向对比各代理商价格（不议价，低者得，付款人工执行）
         commission, agent = _case_context(session, case)
-        notify_wecom(
-            settings.wecom_webhook,
-            build_quote_markdown(
-                commission_name=commission.legal_name,
-                agent_name=agent.name,
-                case_no=case.case_no,
-                amount=intent.slots["amount"],
-                currency=str(intent.slots.get("currency") or "USD"),
-            ),
-        )
-        notify_feishu(
-            settings.feishu_webhook,
-            build_quote_text(
-                commission_name=commission.legal_name,
-                agent_name=agent.name,
-                case_no=case.case_no,
-                amount=intent.slots["amount"],
-                currency=str(intent.slots.get("currency") or "USD"),
-            ),
-        )
+        if notify:
+            notify_wecom(
+                settings.wecom_webhook,
+                build_quote_markdown(
+                    commission_name=commission.legal_name,
+                    agent_name=agent.name,
+                    case_no=case.case_no,
+                    amount=intent.slots["amount"],
+                    currency=str(intent.slots.get("currency") or "USD"),
+                ),
+            )
+            notify_feishu(
+                settings.feishu_webhook,
+                build_quote_text(
+                    commission_name=commission.legal_name,
+                    agent_name=agent.name,
+                    case_no=case.case_no,
+                    amount=intent.slots["amount"],
+                    currency=str(intent.slots.get("currency") or "USD"),
+                ),
+            )
 
     if intent.payment is None:
         draft_result = generate_draft(
@@ -271,6 +302,10 @@ def process_message(
 
     if not record.created:
         # 重发同一张发票：不重复推群，避免同一笔款被安排两次
+        return ProcessResult(stored.id, thread.id, case.id, assignment, intent, False)
+
+    if not notify:
+        # 重新处理：只重建数据，不重复推群安排付款
         return ProcessResult(stored.id, thread.id, case.id, assignment, intent, False)
 
     commission, agent = _case_context(session, case)

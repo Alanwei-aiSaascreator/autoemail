@@ -1,11 +1,19 @@
 """线程还原与消息入库。"""
 
+from pathlib import Path
+
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from ..channels.base import NormalizedMessage
+from ..config import settings
 from ..models import Attachment, Message, Thread
 from ..textutil import normalize_subject
+
+
+def raw_archive_path(dedupe_hash: str) -> Path:
+    """原始邮件落盘的约定路径：{raw_mail_dir}/{dedupe_hash}.eml。"""
+    return Path(settings.raw_mail_dir) / f"{dedupe_hash}.eml"
 
 
 def resolve_thread(session: Session, msg: NormalizedMessage) -> Thread:
@@ -44,6 +52,10 @@ def store_message(session: Session, msg: NormalizedMessage) -> Message | None:
 
     thread = resolve_thread(session, msg)
 
+    # IMAP 入站路径会先把原始 .eml 按去重哈希落盘，这里按约定路径回填 raw_path
+    archived = raw_archive_path(msg.dedupe_hash)
+    raw_path = str(archived) if archived.is_file() else ""
+
     message = Message(
         thread_id=thread.id,
         direction="in",
@@ -57,6 +69,7 @@ def store_message(session: Session, msg: NormalizedMessage) -> Message | None:
         subject=msg.subject,
         body_text=msg.body_text,
         sent_at=msg.sent_at,
+        raw_path=raw_path,
         dedupe_hash=msg.dedupe_hash,
     )
     session.add(message)

@@ -45,6 +45,9 @@ class Settings(BaseSettings):
     # 自动填表产物目录：收到代理商表格自动填充后的 PDF 落盘位置
     filled_forms_dir: str = "./filled_forms"
 
+    # 原始邮件落盘目录：IMAP 入站邮件原文按去重哈希存档，供事后重新处理还原
+    raw_mail_dir: str = "./raw_mail"
+
     # 审核台监听地址：默认仅本机可访问；运行设备可设 0.0.0.0 开放给局域网
     web_host: str = "127.0.0.1"
 

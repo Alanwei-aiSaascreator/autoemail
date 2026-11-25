@@ -39,6 +39,23 @@ def _throttle() -> None:
         _last_send_at = time.monotonic()
 
 
+def _persist_raw(dedupe_hash: str, raw: bytes) -> str:
+    """原始邮件落盘（尽力而为）：按去重哈希存档，供事后重新处理还原原始邮件。
+
+    落盘失败只记日志，不阻断收信主链路。
+    """
+    try:
+        directory = Path(settings.raw_mail_dir)
+        directory.mkdir(parents=True, exist_ok=True)
+        path = directory / f"{dedupe_hash}.eml"
+        if not path.exists():
+            path.write_bytes(raw)
+        return str(path)
+    except OSError:
+        LOGGER.debug("原始邮件落盘失败：%s", dedupe_hash, exc_info=True)
+        return ""
+
+
 class ImapSmtpChannel:
     name = "imap"
 
@@ -70,7 +87,10 @@ class ImapSmtpChannel:
                     continue
                 raw = next((part[1] for part in payload if isinstance(part, tuple)), None)
                 if raw:
-                    messages.append(parse_email_bytes(raw, channel=self.name))
+                    parsed = parse_email_bytes(raw, channel=self.name)
+                    # 原始邮件先落盘再入队：入库时按约定路径回填 Message.raw_path
+                    _persist_raw(parsed.dedupe_hash, raw)
+                    messages.append(parsed)
         return messages
 
     def verify(self) -> tuple[bool, str]:
