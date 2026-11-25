@@ -24,8 +24,11 @@ def _process_as(session, monkeypatch, label: str, dedupe: str):
     return process_message(session, message)
 
 
-def test_reprocess_misclassified_message(session, world, monkeypatch):
+def test_reprocess_misclassified_message(session, world, monkeypatch, tmp_path):
     """误判 bond_delivered → 修复后重跑为 form_request：旧草稿作废、新草稿生成、状态回滚再推进。"""
+    from autoemail.config import settings
+
+    monkeypatch.setattr(settings, "filled_forms_dir", str(tmp_path))
     result = _process_as(session, monkeypatch, "bond_delivered", "reprocess-1")
     stored_id = result.message_id
     case = session.get(Case, world["case"].id)
@@ -132,3 +135,27 @@ def test_reprocess_rejected_when_invoice_paid(session, world, monkeypatch):
     assert session.scalar(
         select(AuditEvent).where(AuditEvent.action == "message.reprocessed")
     ) is None
+
+
+def test_reprocess_attaches_existing_fillings(session, world, monkeypatch, tmp_path):
+    """重新处理历史 form_request 邮件时，自动附上该 case 已存在的填表产物（含签名表格）。"""
+    from autoemail.config import settings
+
+    monkeypatch.setattr(settings, "filled_forms_dir", str(tmp_path))
+    (tmp_path / f"{world['case'].case_no}_bond.pdf").write_bytes(b"%PDF-1.4 bond")
+    (tmp_path / "Sunrise Home Goods LLC_poa.pdf").write_bytes(b"%PDF-1.4 poa")
+
+    result = _process_as(session, monkeypatch, "bond_delivered", "reprocess-attach")
+    monkeypatch.setattr(
+        "autoemail.pipeline.classify_message",
+        lambda msg: IntentResult("form_request", 0.9, evidence=["fixed"]),
+    )
+    summary = reprocess_message(session, result.message_id, actor="tester")
+
+    new_draft = session.get(Draft, summary["draft_id"])
+    assert new_draft is not None
+    assert new_draft.intent == "form_request"
+    assert len(new_draft.attachments) == 2
+    assert any("bond.pdf" in a for a in new_draft.attachments)
+    assert any("poa.pdf" in a for a in new_draft.attachments)
+    assert "completed application form" in new_draft.body
