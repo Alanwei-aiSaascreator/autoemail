@@ -16,8 +16,10 @@ from autoemail.web import (
     perform_set_mode,
     perform_settings,
     perform_start_inquiry,
+    perform_upload_signature,
     render_case,
     render_cases,
+    render_commission_signature,
     render_dashboard,
     render_draft,
     render_drafts,
@@ -195,6 +197,52 @@ def test_draft_pages_render_body_and_fields(session, world):
     assert "受控字段" in detail
     assert "deterministic_template" in detail
     assert "Thank you for the quote" in detail
+
+
+def test_upload_signature_stores_asset(session, world):
+    from autoemail.models import SignatureAsset
+
+    kind, message = perform_upload_signature(
+        session,
+        world["commission"].id,
+        {"reviewer": "ops", "authorization_note": "客户微信授权本次申请"},
+        {"signature": ("sig.png", b"fakepng-bytes")},
+    )
+    assert kind == "ok"
+    asset = session.query(SignatureAsset).one()
+    assert asset.commission_id == world["commission"].id
+    assert asset.filename == "sig.png"
+    assert asset.authorization_note == "客户微信授权本次申请"
+
+
+def test_upload_signature_requires_note(session, world):
+    kind, message = perform_upload_signature(
+        session,
+        world["commission"].id,
+        {"reviewer": "ops", "authorization_note": ""},
+        {"signature": ("sig.png", b"fakepng")},
+    )
+    assert kind == "error"
+    assert "授权依据" in message
+
+
+def test_upload_signature_rejects_non_image(session, world):
+    kind, message = perform_upload_signature(
+        session,
+        world["commission"].id,
+        {"reviewer": "ops", "authorization_note": "客户授权"},
+        {"signature": ("sig.pdf", b"%PDF-1.4")},
+    )
+    assert kind == "error"
+    assert "图片" in message
+
+
+def test_signature_page_renders(session, world):
+    page = render_commission_signature(session, world["commission"].id)
+    assert page is not None
+    assert "上传客户手写签名" in page
+    assert "Sunrise Home Goods LLC" in page
+    assert "authorization_note" in page
 
 
 def test_llm_page_renders(session, world):

@@ -891,6 +891,106 @@ def perform_upload_document(
     return "ok", f"已上传{DOC_LABELS[doc_type]}：{filename}"
 
 
+def render_commission_signature(
+    session: Session,
+    commission_id: int,
+    *,
+    flash_kind: str | None = None,
+    flash_message: str | None = None,
+) -> str | None:
+    """上传客户手写签名的委托专属页。签名图样写入 SignatureAsset（按委托存）。"""
+    from .signature import get_signature_asset
+
+    commission = session.get(Commission, commission_id)
+    if commission is None:
+        return None
+    asset = get_signature_asset(session, commission_id)
+    flash = (
+        f'<div class="alert {_e(flash_kind)}">{_e(flash_message)}</div>'
+        if flash_message
+        else ""
+    )
+    if asset is not None:
+        current = (
+            '<p class="muted">当前已存签名：'
+            f'<span class="doc-ok">{_e(asset.filename)}</span>'
+            f'（{_e(asset.uploaded_by or "—")} 于 {_e(str(asset.created_at)[:16])} 上传）。'
+            "再次上传会覆盖旧图样。</p>"
+        )
+    else:
+        current = '<p class="muted">尚未上传客户签名图样。</p>'
+    content = f"""
+<div class="crumbs"><a href="/commissions">委托列表</a> / 上传签名</div>
+<h1>上传客户手写签名 — {_e(commission.legal_name)}</h1>
+{flash}
+{current}
+<div class="panel">
+<h3>上传签名图样（客户本人提供，系统不代造）</h3>
+<p class="muted">仅支持 png / jpg / webp。签名会盖到该委托后续自动填表产物的署名处。
+<b>必须填写授权依据</b>（客户微信/邮件原话 + 日期 + 授权范围），留痕后才会入库。</p>
+<form method="post" enctype="multipart/form-data">
+  <div class="row">
+    <div><label>签名图片</label><input type="file" name="signature" accept="image/png,image/jpeg,image/webp" required></div>
+    <div><label>操作人</label><input type="text" name="reviewer" required></div>
+  </div>
+  <label>授权依据（必填）</label>
+  <textarea name="authorization_note" required
+    placeholder="例如：客户 11-25 微信原话「同意用此签名签署本次海关保函申请表/POA/CBP 5106」，授权范围：本次保函申请"></textarea>
+  <p><button type="submit">上传签名</button></p>
+</form>
+</div>
+"""
+    return _layout("上传签名", "commissions", content)
+
+
+def perform_upload_signature(
+    session: Session,
+    commission_id: int,
+    form: dict[str, str],
+    files: dict[str, tuple[str, bytes]],
+) -> tuple[str, str]:
+    from .signature import save_signature_asset
+
+    commission = session.get(Commission, commission_id)
+    if commission is None:
+        return "error", "委托不存在"
+    reviewer = (form.get("reviewer") or "").strip()
+    if not reviewer:
+        return "error", "请填写操作人"
+    note = (form.get("authorization_note") or "").strip()
+    if not note:
+        return "error", "必须填写授权依据（客户授权原话/日期/范围）"
+    upload = files.get("signature")
+    if not upload or not upload[1]:
+        return "error", "请选择签名图片"
+    filename, content = upload
+    if len(content) > 5 * 1024 * 1024:
+        return "error", "签名图片超过 5MB"
+    suffix = filename.lower().rsplit(".", 1)[-1] if "." in filename else ""
+    mime = {
+        "png": "image/png",
+        "jpg": "image/jpeg",
+        "jpeg": "image/jpeg",
+        "webp": "image/webp",
+    }.get(suffix)
+    if mime is None:
+        return "error", "仅支持 png / jpg / webp 图片"
+    try:
+        save_signature_asset(
+            session,
+            commission=commission,
+            filename=filename,
+            mime=mime,
+            content=content,
+            actor=reviewer,
+            authorization_note=note,
+        )
+        session.commit()
+    except ValueError as exc:
+        return "error", f"上传被拒绝：{exc}"
+    return "ok", f"已保存 {commission.legal_name} 的客户签名（{filename}）"
+
+
 def perform_start_inquiry(
     session: Session, form: dict[str, str]
 ) -> tuple[str, str, int | None]:
@@ -1152,6 +1252,7 @@ def render_commissions(
 ) -> str:
     """委托列表：统计所有委托的资料 / 文件 / 询价数据，并提供飞书链接导入入口。"""
     from .daily_inquiry import TERMINAL_STATES as INQUIRY_STOP_STATES
+    from .models import SignatureAsset
 
     commissions = session.scalars(select(Commission).order_by(Commission.id)).all()
     imports = {
@@ -1159,6 +1260,10 @@ def render_commissions(
         for row in session.scalars(
             select(CommissionImport).where(CommissionImport.status == "ok").order_by(CommissionImport.id)
         ).all()
+    }
+    signatures = {
+        row.commission_id: row
+        for row in session.scalars(select(SignatureAsset).order_by(SignatureAsset.id)).all()
     }
     rows = []
     stats = {"total": len(commissions), "fields_ok": 0, "ready": 0, "paid": 0}
@@ -1189,6 +1294,11 @@ def render_commissions(
             else '<span class="ready no">已付款·停止询价</span>' if has_paid
             else '<span class="ready no">未就绪</span>'
         )
+        sig_asset = signatures.get(item.id)
+        sig_cell = (
+            f'<span class="doc-ok">{_e(sig_asset.filename)}</span>'
+            if sig_asset else '<span class="doc-miss">未上传</span>'
+        ) + f' <a href="/commissions/{item.id}/signature">{"重新上传" if sig_asset else "上传"}</a>'
         rows.append(
             [
                 f"#{item.id}",
@@ -1201,6 +1311,7 @@ def render_commissions(
                 f'<span class="{"doc-ok" if not missing_fields else "doc-miss"}">{len(missing_fields)} 项缺失</span>'
                 + (f'<span class="muted">（{_e("、".join(missing_fields))}）</span>' if missing_fields else ""),
                 status_cell,
+                sig_cell,
                 link_cell,
             ]
         )
@@ -1269,7 +1380,7 @@ def render_commissions(
   <p><button type="submit">导入委托</button></p>
 </form>
 </div>
-{_table(["ID", "公司", "EIN", "注册州", "Case", "活跃", "必要文件", "资料字段", "询价状态", "飞书来源"], rows)}
+{_table(["ID", "公司", "EIN", "注册州", "Case", "活跃", "必要文件", "资料字段", "询价状态", "签名", "飞书来源"], rows)}
 <div class="panel">
 <h3>自动询价 {auto_state}</h3>
 <p class="muted">文件齐全的委托由每日批量询价自动分配代理商（批次与开关在 <a href="/settings">设置</a> 页调整）。</p>
@@ -1924,6 +2035,20 @@ class Handler(BaseHTTPRequestHandler):
                     flash_kind=flash_kind,
                     flash_message=flash_message,
                 )
+            elif path.startswith("/commissions/") and path.endswith("/signature"):
+                try:
+                    commission_id = int(path.rstrip("/").split("/")[2])
+                except (ValueError, IndexError):
+                    commission_id = -1
+                body = render_commission_signature(
+                    session,
+                    commission_id,
+                    flash_kind=flash_kind,
+                    flash_message=flash_message,
+                )
+                status = 200 if body else 404
+                if body is None:
+                    body = _layout("未找到", "commissions", "<h1>委托不存在</h1>")
             elif path == "/inquiry":
                 body = render_inquiry(
                     session,
@@ -1989,6 +2114,11 @@ class Handler(BaseHTTPRequestHandler):
         is_new_commission = parsed.path == "/inquiry/commission"
         is_document_upload = parsed.path == "/inquiry/document"
         is_feishu_import = parsed.path == "/commissions/feishu"
+        is_signature_upload = (
+            len(parts) == 3
+            and parts[0] == "commissions"
+            and parts[2] == "signature"
+        )
         is_draft_action = (
             len(parts) == 3
             and parts[0] == "drafts"
@@ -2014,6 +2144,7 @@ class Handler(BaseHTTPRequestHandler):
             or is_new_commission
             or is_document_upload
             or is_feishu_import
+            or is_signature_upload
             or is_draft_action
             or is_case_mode
             or is_invoice_paid
@@ -2049,6 +2180,13 @@ class Handler(BaseHTTPRequestHandler):
             elif is_feishu_import:
                 kind, message = perform_import_feishu(session, form)
                 location = f"/commissions?kind={quote(kind)}&msg={quote(message)}"
+            elif is_signature_upload:
+                try:
+                    commission_id = int(parts[1])
+                except ValueError:
+                    commission_id = -1
+                kind, message = perform_upload_signature(session, commission_id, form, files)
+                location = f"/commissions/{commission_id}/signature?kind={quote(kind)}&msg={quote(message)}"
             else:
                 try:
                     item_id = int(parts[1])
