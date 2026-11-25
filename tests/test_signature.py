@@ -9,6 +9,7 @@ from pathlib import Path
 import pytest
 
 from autoemail import formfill
+from autoemail.config import settings
 from autoemail.formfill import _fill_core
 from autoemail.models import AuditEvent, Commission
 from autoemail.signature import (
@@ -183,3 +184,48 @@ def test_fill_core_without_signature_asset_leaves_blank(session, world, monkeypa
     assert report["signature_fields"]["Print Name and Title"] == "客户签名图样未提供，留空待客户签署"
     assert report["skipped"]["Print Name and Title"] == "需要客户本人签名"
     assert out.exists()
+
+
+# ---- 已填表格补签（时序补救：先填表后传签名） ----
+
+def test_stamp_signature_on_existing_stamps(monkeypatch, tmp_path):
+    from autoemail import signature as signature_mod
+
+    monkeypatch.setattr(settings, "filled_forms_dir", str(tmp_path))
+    (tmp_path / "Acme LLC_bond.pdf").write_bytes(b"%PDF-1.4 old")
+    monkeypatch.setattr(formfill, "_load_signature_png_by_name", lambda name: b"png")
+    monkeypatch.setattr(
+        formfill, "load_signature_anchor",
+        lambda fmt: {"field": "bond_print_name", "gap": 5, "height": 24},
+    )
+    monkeypatch.setattr(
+        signature_mod, "stamp_signature_at_anchor",
+        lambda pdf, png, field, gap, height: (b"%PDF-1.4 stamped", True),
+    )
+    r = formfill.stamp_signature_on_existing("Acme LLC", "bond")
+    assert r["stamped"] is True
+    assert (tmp_path / "Acme LLC_bond.pdf").read_bytes() == b"%PDF-1.4 stamped"
+
+
+def test_stamp_signature_on_existing_without_signature(monkeypatch, tmp_path):
+    monkeypatch.setattr(settings, "filled_forms_dir", str(tmp_path))
+    (tmp_path / "Acme LLC_bond.pdf").write_bytes(b"%PDF-1.4")
+    monkeypatch.setattr(formfill, "_load_signature_png_by_name", lambda name: None)
+    r = formfill.stamp_signature_on_existing("Acme LLC", "bond")
+    assert r["stamped"] is False
+    assert "签名图样" in r["reason"]
+
+
+def test_stamp_signature_on_existing_missing_file(monkeypatch, tmp_path):
+    monkeypatch.setattr(settings, "filled_forms_dir", str(tmp_path))
+    monkeypatch.setattr(formfill, "_load_signature_png_by_name", lambda name: b"png")
+    r = formfill.stamp_signature_on_existing("Acme LLC", "bond")
+    assert r["stamped"] is False
+    assert r["reason"] == "文件不存在"
+
+
+def test_stamp_signature_on_existing_unknown_short(monkeypatch, tmp_path):
+    monkeypatch.setattr(settings, "filled_forms_dir", str(tmp_path))
+    r = formfill.stamp_signature_on_existing("Acme LLC", "bogus")
+    assert r["stamped"] is False
+    assert "未知短名" in r["reason"]

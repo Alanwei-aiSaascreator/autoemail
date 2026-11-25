@@ -623,6 +623,46 @@ def cmd_signature_list(_: argparse.Namespace) -> int:
         session.close()
 
 
+def cmd_signature_stamp(args: argparse.Namespace) -> int:
+    """对已填表格补盖签名：覆盖 filled_forms 里 {legal_name}_{poa|bond|cbp5106}.pdf。"""
+    from pathlib import Path as _Path
+
+    import re
+
+    from .formfill import stamp_signature_on_existing
+
+    init_db()
+    out_dir = _Path(settings.filled_forms_dir)
+    if not out_dir.is_dir():
+        print(f"填表产物目录不存在：{out_dir}")
+        return 1
+    pattern = re.compile(r"^(.*)_(poa|bond|cbp5106)\.pdf$", re.IGNORECASE)
+    targets: dict[str, list[str]] = {}
+    for f in out_dir.glob("*.pdf"):
+        m = pattern.match(f.name)
+        if m:
+            targets.setdefault(m.group(1), []).append(m.group(2).lower())
+
+    if args.commission:
+        names = [n for n in targets if args.commission.lower() in n.lower()]
+        if not names:
+            print(f"填表产物里找不到委托：{args.commission}")
+            return 1
+    else:
+        names = sorted(targets)
+
+    results = []
+    for name in names:
+        for short in sorted(set(targets[name])):
+            r = stamp_signature_on_existing(name, short)
+            r["legal_name"] = name
+            results.append(r)
+    print(json.dumps(results, ensure_ascii=False, indent=2))
+    stamped = sum(1 for r in results if r.get("stamped"))
+    print(f"补签完成：{stamped}/{len(results)} 份已盖章")
+    return 0
+
+
 def cmd_intake_store(args: argparse.Namespace) -> int:
     """上传客户需求采集表 PDF，解析后存结构化字段（委托专属）。"""
     from .formfill import store_intake
@@ -920,6 +960,9 @@ def build_parser() -> argparse.ArgumentParser:
     signature_up.set_defaults(func=cmd_signature_upload)
     signature_list = signature_sub.add_parser("list", help="查看各委托已存的签名图样")
     signature_list.set_defaults(func=cmd_signature_list)
+    signature_stamp = signature_sub.add_parser("stamp", help="对已填表格补盖签名（poa/bond/cbp5106）")
+    signature_stamp.add_argument("--commission", default=None, help="仅处理指定委托（按名称模糊匹配）")
+    signature_stamp.set_defaults(func=cmd_signature_stamp)
 
     intake = sub.add_parser("intake", help="客户需求采集表：解析并存储结构化字段（委托专属）")
     intake_sub = intake.add_subparsers(dest="intake_command", required=True)

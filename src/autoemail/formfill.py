@@ -272,6 +272,51 @@ def auto_fill_form(
     return report
 
 
+# 批量填表产物使用的短名 -> 格式 id（历史命名：{legal_name}_{short}.pdf）
+SHORT_FORMAT_IDS = {
+    "poa": "asonic_poa_v1",
+    "bond": "asonic_bond_app_v1",
+    "cbp5106": "asonic_cbp5106_v1",
+}
+
+
+def stamp_signature_on_existing(legal_name: str, short: str) -> dict:
+    """对已填好的 {legal_name}_{short}.pdf 补盖签名并覆盖原文件。
+
+    用于「先填表、后上传签名」的时序补救：文字字段已填好，只按签名锚点把
+    客户签名图样盖到署名处。无签名图样 / 无锚点配置时返回 stamped=False。
+    short ∈ {poa, bond, cbp5106}。
+    """
+    from .signature import stamp_signature_at_anchor, stamp_signature_at_rects
+
+    fmt = SHORT_FORMAT_IDS.get(short)
+    if fmt is None:
+        return {"stamped": False, "file": None, "reason": f"未知短名：{short}"}
+    path = Path(settings.filled_forms_dir) / f"{legal_name}_{short}.pdf"
+    if not path.exists():
+        return {"stamped": False, "file": path.name, "reason": "文件不存在"}
+    png = _load_signature_png_by_name(legal_name)
+    if not png:
+        return {"stamped": False, "file": path.name, "reason": "无客户签名图样"}
+    anchor = load_signature_anchor(fmt)
+    if anchor is None:
+        return {"stamped": False, "file": path.name, "reason": f"格式 {fmt} 无签名锚点配置"}
+    pdf_bytes = path.read_bytes()
+    if "rect" in anchor:
+        page = int(anchor.get("page", 0))
+        rect = tuple(float(v) for v in anchor["rect"])
+        path.write_bytes(stamp_signature_at_rects(pdf_bytes, png, [(page, rect)]))
+        return {"stamped": True, "file": path.name, "method": f"rect page={page}"}
+    field = anchor.get("field")
+    if field:
+        gap = float(anchor.get("gap", 5))
+        height = float(anchor.get("height", 24))
+        new_bytes, ok = stamp_signature_at_anchor(pdf_bytes, png, field, gap=gap, height=height)
+        path.write_bytes(new_bytes)
+        return {"stamped": ok, "file": path.name, "method": f"anchor field={field}", "ok": ok}
+    return {"stamped": False, "file": path.name, "reason": "签名锚点配置无法识别"}
+
+
 def _load_intake_by_id(commission_id: int | None) -> dict[str, str] | None:
     """按委托 id 从库读结构化客户需求字段；无记录返回 None。"""
     if commission_id is None:
