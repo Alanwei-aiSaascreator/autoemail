@@ -511,12 +511,12 @@ def fill_flat_pdf(pdf_bytes: bytes, fields: list[dict], output_path: str) -> str
 def _bond_exchange_flat_fields(commission, intake: dict) -> list[dict]:
     """The Bond Exchange 版 C.A. Shea 海关保函申请表（平铺版，无表单字段）。
 
-    坐标已按样本 PDF 实测校准：文字坐落在填写线上，勾选框 X 落在 9x9 框内。
+    坐标已按样本 PDF 实测校准：文字坐落在填写线上，勾选框 X 落在 9x9 框内，
+    FEIN 为分段框（每个数字一格）。
     """
     ein = (commission.ein or "").replace("-", "")
     fields: list[dict] = [
         {"x": 20, "y": 724, "text": commission.legal_name, "size": 10},
-        {"x": 505, "y": 714, "text": ein, "size": 10},
         {"x": 20, "y": 700, "text": commission.addr_line1 or "", "size": 9},
         {"x": 20, "y": 653, "text": commission.addr_city or "", "size": 10},
         {"x": 267, "y": 653, "text": commission.addr_state or "", "size": 10},
@@ -527,6 +527,10 @@ def _bond_exchange_flat_fields(commission, intake: dict) -> list[dict]:
         {"x": 23, "y": 553, "check": True},    # Activity 1 - Importer
         {"x": 35, "y": 487, "check": True},    # Type of Business - Importer
     ]
+    # FEIN 分段框（top=93-115，13 格）：前 9 格填 EIN 9 位数字，每格一位
+    grid_cx = [383, 401, 417, 432.5, 450, 468, 486, 504, 521.5]
+    for i, ch in enumerate(ein[:9]):
+        fields.append({"x": grid_cx[i], "y": 684, "text": ch, "size": 11})
     return fields
 
 
