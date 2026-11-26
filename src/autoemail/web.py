@@ -420,8 +420,8 @@ def render_dashboard(session: Session) -> str:
     draft_counts = dict(
         session.execute(select(Draft.status, func.count()).group_by(Draft.status)).all()
     )
-    pending_drafts = draft_counts.get("pending", 0) + draft_counts.get("blocked", 0)
-    unpaid_invoices = session.scalar(
+    pending_total = draft_counts.get("pending", 0) + draft_counts.get("blocked", 0)
+    unpaid_total = session.scalar(
         select(func.count()).select_from(Invoice).where(Invoice.status == INVOICE_UNPAID)
     ) or 0
     active_total = session.scalar(
@@ -429,14 +429,64 @@ def render_dashboard(session: Session) -> str:
     ) or 0
 
     todo_cards = [
-        ("待审草稿", pending_drafts, "/drafts?status=pending", pending_drafts > 0),
+        ("待审草稿", pending_total, "/drafts?status=pending", pending_total > 0),
+        ("未付发票", unpaid_total, "/cases", unpaid_total > 0),
         ("进行中 Case", active_total, "/cases?group=active", False),
-        ("未付发票", unpaid_invoices, "/cases", unpaid_invoices > 0),
     ]
     cards_html = "".join(
         f'<a class="card" href="{href}"><div class="label">{_e(label)}</div>'
         f'<div class="num" style="{"color:var(--warn)" if alert else ""}">{_e(value)}</div></a>'
         for label, value, href, alert in todo_cards
+    )
+
+    # 待办 · 草稿：直接列出并内嵌批准，不用跳转
+    pending_drafts = session.scalars(
+        select(Draft)
+        .where(Draft.status.in_(("pending", "blocked")))
+        .order_by(Draft.created_at.asc())
+        .limit(50)
+    ).all()
+    draft_todo_rows = []
+    for draft in pending_drafts:
+        case = session.get(Case, draft.case_id)
+        case_link = (
+            f'<a href="/cases/{draft.case_id}">{_e(case.case_no if case else draft.case_id)}</a>'
+        )
+        actions = (
+            f'<form method="post" action="/drafts/{draft.id}/approve" style="margin:0;display:inline">'
+            f'<input type="hidden" name="confirm" value="yes">'
+            f'<input type="text" name="reviewer" placeholder="审核人" style="width:64px" required>'
+            f'<button class="btn-mini" onclick="return confirm(\'确认批准并发送该草稿？\')">批准</button></form> '
+            f'<a class="btn-mini ghost" href="/drafts/{draft.id}">查看</a>'
+        )
+        draft_todo_rows.append(
+            [case_link, _e(draft.intent), _tag(draft.status), _e(draft.subject), _fmt_dt(draft.created_at), actions]
+        )
+    draft_todo_html = (
+        _table(["Case", "意图", "状态", "主题", "时间", "操作"], draft_todo_rows)
+        if draft_todo_rows
+        else '<p class="muted">没有待审草稿</p>'
+    )
+
+    # 待办 · 发票：列出未付款项，直达回填
+    unpaid_rows = []
+    for inv in session.scalars(
+        select(Invoice).where(Invoice.status == INVOICE_UNPAID).order_by(Invoice.created_at.asc()).limit(50)
+    ).all():
+        case = session.get(Case, inv.case_id)
+        unpaid_rows.append(
+            [
+                f'<a href="/cases/{inv.case_id}">{_e(case.case_no if case else inv.case_id)}</a>',
+                _e(inv.invoice_no or "—"),
+                _e(f"{inv.amount} {inv.currency}" if inv.amount is not None else "未识别金额"),
+                _e(inv.due_date),
+                f'<a class="btn-mini ghost" href="/cases/{inv.case_id}">去回填付款</a>',
+            ]
+        )
+    unpaid_html = (
+        _table(["Case", "发票号", "金额", "到期日", "操作"], unpaid_rows)
+        if unpaid_rows
+        else '<p class="muted">没有待付款发票</p>'
     )
 
     cases = session.scalars(
@@ -482,6 +532,10 @@ def render_dashboard(session: Session) -> str:
   <a href="/inquiry"><button type="button">＋ 发起询价</button></a>
 </div>
 <div class="cards">{cards_html}</div>
+<h2>待办 · 草稿 <span class="muted">({pending_total})</span></h2>
+{draft_todo_html}
+<h2>待办 · 发票 <span class="muted">({unpaid_total})</span></h2>
+{unpaid_html}
 <h2>进行中 Case</h2>
 {_table(["Case 号", "委托公司", "代理商", "状态", "当前进展", "最新回复"], case_rows)}
 <h2>最近动态</h2>
