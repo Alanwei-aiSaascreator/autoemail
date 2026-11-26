@@ -316,7 +316,7 @@ def generate_draft(
         select(Draft).where(
             Draft.source_message_id == source_message.id,
             Draft.intent == intent.label,
-            Draft.status != DRAFT_SENT,
+            Draft.status.in_((DRAFT_PENDING, DRAFT_BLOCKED, DRAFT_FAILED)),
         )
     )
     if existing:
@@ -518,6 +518,7 @@ def generate_draft(
             select(Draft).where(
                 Draft.source_message_id == source_message.id,
                 Draft.intent == intent.label,
+                Draft.status.in_((DRAFT_PENDING, DRAFT_BLOCKED, DRAFT_FAILED)),
             )
         )
         if existing:

@@ -468,6 +468,128 @@ def _fill_core(
     }
 
 
+def fill_flat_pdf(pdf_bytes: bytes, fields: list[dict], output_path: str) -> str:
+    """平铺表填表：没有 acroform 字段的 PDF，按坐标在填写区画文字 / 勾选标记。
+
+    fields 每项：{"x", "y", "text"}（画文字）或 {"x", "y", "check": true}（画 X 勾选）。
+    坐标 x/y 为 PDF 坐标（左下角原点，单位 point）。返回落盘路径。
+    复用 reportlab 画覆盖页 + pypdf merge 的机制（与签名盖章同源）。
+    """
+    import io
+
+    from pypdf import PdfReader, PdfWriter
+    from reportlab.pdfgen import canvas
+
+    reader = PdfReader(io.BytesIO(pdf_bytes))
+    writer = PdfWriter(clone_from=reader)
+    mb = writer.pages[0].mediabox
+    width, height = float(mb.width), float(mb.height)
+
+    buf = io.BytesIO()
+    c = canvas.Canvas(buf, pagesize=(width, height))
+    for f in fields:
+        x, y = float(f["x"]), float(f["y"])
+        if f.get("check"):
+            c.setFont("Helvetica-Bold", float(f.get("size", 12)))
+            c.drawString(x, y, "X")
+        else:
+            c.setFont(f.get("font", "Helvetica"), float(f.get("size", 10)))
+            c.drawString(x, y, str(f.get("text", "")))
+    c.save()
+    buf.seek(0)
+    overlay = PdfReader(buf).pages[0]
+    writer.pages[0].merge_page(overlay)
+
+    out = io.BytesIO()
+    writer.write(out)
+    Path(output_path).write_bytes(out.getvalue())
+    return output_path
+
+
+# ---- 平铺表（无 acroform 字段）坐标填表 ----
+# 平铺表签名：文本关键词 → 坐标字段生成器。坐标 x/y 为 PDF 坐标（左下角原点）。
+def _bond_exchange_flat_fields(commission, intake: dict) -> list[dict]:
+    """The Bond Exchange 版 C.A. Shea 海关保函申请表（平铺版，无表单字段）。
+
+    坐标已按样本 PDF 实测校准：文字坐落在填写线上，勾选框 X 落在 9x9 框内。
+    """
+    ein = (commission.ein or "").replace("-", "")
+    fields: list[dict] = [
+        {"x": 20, "y": 724, "text": commission.legal_name, "size": 10},
+        {"x": 505, "y": 714, "text": ein, "size": 10},
+        {"x": 20, "y": 700, "text": commission.addr_line1 or "", "size": 9},
+        {"x": 20, "y": 653, "text": commission.addr_city or "", "size": 10},
+        {"x": 267, "y": 653, "text": commission.addr_state or "", "size": 10},
+        {"x": 376, "y": 653, "text": commission.addr_zip or "", "size": 10},
+        {"x": 90, "y": 535, "text": intake.get("a004") or "", "size": 10},
+        # 勾选框：X 基线 y = 792 - 框top - 10
+        {"x": 121, "y": 568, "check": True},   # Requested Bond Type - Continuous
+        {"x": 23, "y": 553, "check": True},    # Activity 1 - Importer
+        {"x": 35, "y": 487, "check": True},    # Type of Business - Importer
+    ]
+    return fields
+
+
+_FLAT_FORM_DETECTORS: dict[str, tuple[tuple[str, ...], Any]] = {
+    # 标识名 -> (文本关键词全部命中, 字段生成器)
+    "bond_exchange_flat_v1": (
+        ("bond exchange", "customs bond application"),
+        _bond_exchange_flat_fields,
+    ),
+}
+
+
+def _detect_flat_form(pdf_bytes: bytes) -> str | None:
+    """识别无 acroform 字段的平铺表：文本命中已知平铺表关键词返回其标识名。"""
+    from .ingest.pdf import extract_pdf_text
+
+    text = (extract_pdf_text(pdf_bytes) or "").lower()
+    if not text:
+        return None
+    for name, (keywords, _fn) in _FLAT_FORM_DETECTORS.items():
+        if all(kw in text for kw in keywords):
+            return name
+    return None
+
+
+def _fill_flat_form(session, case, flat_name: str, pdf_bytes: bytes, *, message_id: int | None = None) -> dict | None:
+    """填已知平铺表：按坐标画文字/勾选落盘并记审计。失败返回 None（不阻断主链路）。"""
+    from . import audit
+    from .models import Commission
+
+    commission = session.get(Commission, case.commission_id)
+    if commission is None:
+        return None
+    generator = _FLAT_FORM_DETECTORS[flat_name][1]
+    intake = get_intake_fields(session, commission.id) or {}
+    fields = generator(commission, intake)
+
+    out_dir = Path(settings.filled_forms_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    output_path = str(out_dir / f"{case.case_no}_{flat_name}.pdf")
+    try:
+        fill_flat_pdf(pdf_bytes, fields, output_path)
+    except Exception as exc:  # noqa: BLE001
+        audit.record(
+            session,
+            action="form.auto_fill",
+            case_id=case.id,
+            message_id=message_id,
+            decision="skipped",
+            reasons=[f"平铺表 {flat_name} 填表失败：{exc}"],
+        )
+        return None
+    audit.record(
+        session,
+        action="form.auto_fill",
+        case_id=case.id,
+        message_id=message_id,
+        decision="filled",
+        reasons=[f"平铺表 {flat_name} 坐标填表 {len(fields)} 项"],
+    )
+    return {"output_path": output_path, "form_format": flat_name, "filled": len(fields)}
+
+
 def auto_fill_for_case(session, case, attachment, *, message_id: int | None = None, provider=None) -> dict | None:  # noqa: ANN001
     """case 级填表入口：代理商发来的表格附件若命中已登记格式，按档案自动填好落盘。
 
@@ -483,6 +605,10 @@ def auto_fill_for_case(session, case, attachment, *, message_id: int | None = No
     pdf_bytes = attachment.content
     route = route_form(pdf_bytes)
     if not route.get("matched") or not route.get("format"):
+        # 平铺表（无 acroform 字段）：先按已知平铺表坐标填，否则走未命中分流
+        flat_name = _detect_flat_form(pdf_bytes)
+        if flat_name is not None:
+            return _fill_flat_form(session, case, flat_name, pdf_bytes, message_id=message_id)
         return _handle_unrouted_form(
             session, case, attachment, pdf_bytes, route,
             message_id=message_id, provider=provider,
