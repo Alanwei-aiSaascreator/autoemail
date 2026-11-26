@@ -142,6 +142,33 @@ def test_form_request_extracts_material_checklist():
     assert "ad_cvd" in materials
 
 
+def test_complete_and_return_attached_application_is_form_request():
+    """BondExchange 案例（BOND-2026-0646）回归：祈使句 "Complete and return the
+    attached application"（无 please）+ 附件名含 bond，必须判 form_request 而非
+    bond_delivered。"""
+    body = (
+        "Thank you for your request for a $50k Continuous Customs Import Bond. "
+        "To proceed with your quote please provide the following information:\n"
+        "Complete and return the attached application\n"
+        "2026 income statement and balance sheet\n"
+        "Advise on ownership breakdown if more than one\n"
+        "Are the goods imported by the principal subject to antidumping or countervailing duties?"
+    )
+    result = classify_message(
+        message(
+            body,
+            subject="Re: [BOND-2026-0646] Inquiry - Continuous Customs Bond",
+            attachments=[_a("Bond Application.pdf", "bond")],
+        )
+    )
+    assert result.label == "form_request"
+    materials = result.slots.get("materials", [])
+    assert "application" in materials
+    assert "financial_statement" in materials
+    assert "ownership" in materials
+    assert "ad_cvd" in materials
+
+
 def test_delivered_bond_without_request_body_still_bond_delivered():
     """真正交付 Bond 的邮件（无填表要求正文）仍应判 bond_delivered。"""
     result = classify_message(

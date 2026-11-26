@@ -257,7 +257,7 @@ def classify_message(message: NormalizedMessage) -> IntentResult:
         r"forms?\s+(?:and\s+\w+\s+information\s+)?we\s+(?:would|will)\s+need|"
         r"need\s+(?:will\s+need\s+)?(?:the\s+)?attached\s+(?:application|form|forms)|"
         r"(?:thoroughly\s+)?completed\s+and\s+signed|"
-        r"please\s+(?:complete|fill(?:\s+out)?|return|submit)(?:\s+the)?\s+(?:attached\s+)?(?:application|form|bond application)|"
+        r"(?:please\s+)?(?:complete\s+and\s+return|complete|fill(?:\s+out)?|return|submit)(?:\s+the)?\s+(?:attached\s+)?(?:application|form|bond application)|"
         r"fill\s+out\s+the\s+(?:application|form)|"
         r"申请表|请填写",
         re.IGNORECASE,
