@@ -232,13 +232,16 @@ def _remove_intent_data(session: Session, message_id: int, *, actor: str) -> dic
     return removed
 
 
-def reprocess_message(session: Session, message_id: int, *, actor: str = "system") -> dict:
+def reprocess_message(
+    session: Session, message_id: int, *, actor: str = "system", force: bool = False
+) -> dict:
     """重新处理一封入站邮件，返回摘要字典。
 
     前置校验（不满足直接 raise ValueError）：
     - 只能重新处理 direction=in 的消息；
-    - 已发出过回复（存在 sent 草稿）的消息不能重跑；
-    - 关联发票已付款的消息不能重跑。
+    - 已发出过回复（存在 sent 草稿）的消息默认不能重跑；force=True 时放行
+      （用于纠正误判后补发更正回复，发出过的事实不可撤销，只能补发）；
+    - 关联发票已付款的消息任何情况下都不能重跑（会破坏账务数据）。
     """
     stored = session.get(Message, message_id)
     if stored is None:
@@ -252,7 +255,8 @@ def reprocess_message(session: Session, message_id: int, *, actor: str = "system
         )
     )
     if sent_draft_id is not None:
-        raise ValueError("该邮件已发出过回复，不能重新处理")
+        if not force:
+            raise ValueError("该邮件已发出过回复，不能重新处理（确需补发更正回复请用强制重跑）")
 
     paid_invoice_id = session.scalar(
         select(Invoice.id).where(
@@ -266,6 +270,8 @@ def reprocess_message(session: Session, message_id: int, *, actor: str = "system
     case = session.get(Case, thread.case_id) if thread and thread.case_id else None
     old_intent = _latest_intent_label(session, message_id)
     notes: list[str] = []
+    if sent_draft_id is not None and force:
+        notes.append(f"强制重跑：该邮件已发出过回复（草稿 {sent_draft_id}），本次将补发更正回复")
 
     # 1) 作废旧草稿
     rejected_ids = _reject_old_drafts(session, message_id, actor=actor)

@@ -1524,11 +1524,16 @@ def render_case(
             _e(item.from_addr),
             _e(item.subject),
             f'<details><summary>查看正文</summary><pre>{_e(item.body_text)}</pre></details>',
-            # 入站邮件可人工「重新处理」：作废旧草稿、回滚状态后按当前分类器重跑
+            # 入站邮件可人工「重新处理」：作废旧草稿、回滚状态后按当前分类器重跑；
+            # 已发出过回复的邮件只能「强制重跑」补发更正回复（二次确认）
             (
-                f'<form method="post" action="/message/{item.id}/reprocess" style="margin:0" '
+                f'<form method="post" action="/message/{item.id}/reprocess" style="margin:0;display:inline" '
                 f'onsubmit="return confirm(\'重新处理该入站邮件？旧草稿将作废，case 状态会回滚后按当前分类器重跑。\')">'
                 f'<button type="submit">重新处理</button></form>'
+                f'<form method="post" action="/message/{item.id}/reprocess" style="margin:0;display:inline" '
+                f'onsubmit="return confirm(\'强制重跑：该邮件可能已发出过回复，重跑会再补发一封更正回复。确定继续？\')">'
+                f'<input type="hidden" name="force" value="1">'
+                f'<button type="submit">强制重跑</button></form>'
             )
             if item.direction == "in"
             else "",
@@ -1991,7 +1996,7 @@ def render_llm(session: Session) -> str:
     return _layout("LLM", "llm", content)
 
 
-def perform_reprocess_message(session: Session, message_id: int) -> tuple[str, str, str]:
+def perform_reprocess_message(session: Session, message_id: int, *, force: bool = False) -> tuple[str, str, str]:
     """重新处理入站邮件；返回 (flash 类型, flash 文案, 重定向路径)。"""
     stored = session.get(Message, message_id)
     case_id = None
@@ -2000,7 +2005,7 @@ def perform_reprocess_message(session: Session, message_id: int) -> tuple[str, s
         case_id = thread_row.case_id if thread_row else None
     base = f"/cases/{case_id}" if case_id else "/cases"
     try:
-        summary = reprocess_message(session, message_id, actor="web")
+        summary = reprocess_message(session, message_id, actor="web", force=force)
     except ValueError as exc:
         return "error", str(exc), base
     text = f"重新处理完成：{summary['old_intent']} → {summary['new_intent']}"
@@ -2190,7 +2195,9 @@ class Handler(BaseHTTPRequestHandler):
                     self._respond(404, _layout("未找到", "", "<h1>记录不存在</h1>"))
                     return
                 if is_message_reprocess:
-                    kind, message, base = perform_reprocess_message(session, item_id)
+                    kind, message, base = perform_reprocess_message(
+                        session, item_id, force=(form.get("force") == "1")
+                    )
                 elif is_case_mode:
                     kind, message = perform_set_mode(session, item_id, form)
                 elif is_invoice_paid:

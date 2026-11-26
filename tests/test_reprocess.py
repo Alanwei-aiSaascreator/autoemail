@@ -78,7 +78,7 @@ def test_reprocess_misclassified_message(session, world, monkeypatch, tmp_path):
 
 
 def test_reprocess_rejected_when_reply_already_sent(session, world, monkeypatch):
-    """已发出过回复（存在 sent 草稿）的入站邮件不能重跑。"""
+    """已发出过回复（存在 sent 草稿）的入站邮件默认不能重跑；force 放行补发更正回复。"""
     result = _process_as(session, monkeypatch, "bond_delivered", "reprocess-2")
     draft = session.get(Draft, result.draft_id)
     draft.status = "sent"
@@ -86,6 +86,18 @@ def test_reprocess_rejected_when_reply_already_sent(session, world, monkeypatch)
 
     with pytest.raises(ValueError, match="已发出"):
         reprocess_message(session, result.message_id)
+
+    # force=True：误判纠正场景下允许补发更正回复
+    monkeypatch.setattr(
+        "autoemail.pipeline.classify_message",
+        lambda msg: IntentResult("form_request", 0.9, evidence=["fixed"]),
+    )
+    summary = reprocess_message(session, result.message_id, actor="tester", force=True)
+    assert summary["new_intent"] == "form_request"
+    assert any("强制重跑" in note for note in summary["notes"])
+    new_draft = session.get(Draft, summary["draft_id"])
+    assert new_draft is not None
+    assert new_draft.status != "sent"
 
 
 def test_reprocess_rejects_outbound_message(session, world, monkeypatch):
