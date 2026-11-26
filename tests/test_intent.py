@@ -169,6 +169,22 @@ def test_complete_and_return_attached_application_is_form_request():
     assert "ad_cvd" in materials
 
 
+def test_bond_attachment_without_executed_signal_not_bond_delivered():
+    """附件 doc_type=bond 但正文无「已签发/交付」信号 → 不判 bond_delivered。
+
+    这是误判根因修复：空白申请表文件名常含 bond（如 "Customs Bond.pdf"），
+    只有正文明确表示 executed/issued bond 才算「Bond 已送达」。
+    """
+    result = classify_message(
+        message(
+            "Please see the attached document.",
+            subject="Re: [BOND-2026-0646] bond application",
+            attachments=[_a("Continuous Bond.pdf", "bond")],
+        )
+    )
+    assert result.label != "bond_delivered"
+
+
 def test_delivered_bond_without_request_body_still_bond_delivered():
     """真正交付 Bond 的邮件（无填表要求正文）仍应判 bond_delivered。"""
     result = classify_message(

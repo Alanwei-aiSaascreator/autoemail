@@ -63,6 +63,17 @@ def _extract_material_requirements(body_text: str) -> list[str]:
     return materials
 
 
+# 「Bond 已送达」的强信号：仅在正文明确表示"已签发/交付 Bond"时才判 bond_delivered。
+# 仅凭附件名含 bond（可能是空白申请表）不足以判，避免误判。
+_BOND_DELIVERED_BODY_RE = re.compile(
+    r"executed\s+(?:continuous\s+)?bond|"
+    r"bond\s+(?:has\s+been\s+|was\s+)?issued|issued\s+(?:continuous\s+)?bond|"
+    r"bond\s+number\s*[:#]?\s*\d|"
+    r"bond\s+copy\s+(?:enclosed|attached|for\s+your\s+records)",
+    re.IGNORECASE,
+)
+
+
 @dataclass
 class PaymentInfo:
     amount: Decimal | None = None
@@ -270,8 +281,8 @@ def classify_message(message: NormalizedMessage) -> IntentResult:
             },
             evidence=["正文要求填写/提交表格材料"],
         )
-    if "bond" in attachment_types:
-        return IntentResult("bond_delivered", 0.9, {"bond_ref": message.subject}, evidence=["附件识别为 Bond"])
+    if "bond" in attachment_types and _BOND_DELIVERED_BODY_RE.search(f"{message.subject}\n{message.body_text}"):
+        return IntentResult("bond_delivered", 0.9, {"bond_ref": message.subject}, evidence=["附件识别为 Bond 且正文有已签发信号"])
     if attachment_types & {"application", "poa", "articles"}:
         return IntentResult("form_request", 0.85, {"attachments": sorted(attachment_types)}, evidence=["附件包含申请材料"])
     if any(word in message.body_text.lower() for word in ("please complete", "application form", "申请表")):
