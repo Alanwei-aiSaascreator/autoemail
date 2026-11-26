@@ -351,3 +351,52 @@ def test_form_request_client_template_not_filled(session, world, monkeypatch, tm
     assert draft.attachments == []
     assert "attached" not in draft.body
     assert list(tmp_path.iterdir()) == []
+
+
+# ---- 平铺表（Bond Exchange）坐标填表 ----
+
+from types import SimpleNamespace
+
+
+def _flat_commission():
+    return SimpleNamespace(
+        legal_name="Don Ibrico LLC",
+        ein="43-2417659",
+        addr_line1="411 DONDEE ST STE B",
+        addr_city="PACIFICA",
+        addr_state="CA",
+        addr_zip="94044",
+    )
+
+
+def test_bond_exchange_flat_fields_layout():
+    fields = formfill._bond_exchange_flat_fields(
+        _flat_commission(),
+        {"a004": "50,000", "a006": "2026-11-22", "a007": "No", "b005": "B20260442134", "d002": "Thermos"},
+    )
+    texts = [f.get("text") for f in fields if not f.get("check")]
+    checks = [f for f in fields if f.get("check")]
+    # FEIN 9 位逐格填，州登记号 b005 绝不进 Customs Assigned Number 行（二选一）
+    assert [t for t in texts if t in "0123456789"] == list("432417659")
+    assert "B20260442134" not in texts and "B" not in texts
+    # Continuous / Other / E-Mail 为预印勾选，只画 Activity1 与 Type of Business 两处
+    assert len(checks) == 2
+    # Entity 名称在 Entity 框内部（700.8-724.4），不与标题重叠
+    name = next(f for f in fields if f.get("text") == "Don Ibrico LLC")
+    assert 700.8 < name["y"] < 717
+    # City/State/Zip 在各自格子内（x: 17.9-229.1 / 229.1-264.8 / 264.8-370.4）
+    city = next(f for f in fields if f.get("text") == "PACIFICA")
+    state = next(f for f in fields if f.get("text") == "CA")
+    zip_ = next(f for f in fields if f.get("text") == "94044")
+    assert 17.9 < city["x"] < 220 and 229.1 < state["x"] < 260 and 264.8 < zip_["x"] < 366
+    assert city["y"] == state["y"] == zip_["y"]
+
+
+def test_bond_exchange_flat_ad_cvd_yes_checks():
+    fields = formfill._bond_exchange_flat_fields(
+        _flat_commission(), {"a007": "Yes", "a004": "50,000"},
+    )
+    checks = [f for f in fields if f.get("check")]
+    assert len(checks) == 3
+    adcvd = checks[-1]
+    assert 360 < adcvd["x"] < 376

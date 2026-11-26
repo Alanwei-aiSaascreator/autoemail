@@ -471,8 +471,9 @@ def _fill_core(
 def fill_flat_pdf(pdf_bytes: bytes, fields: list[dict], output_path: str) -> str:
     """平铺表填表：没有 acroform 字段的 PDF，按坐标在填写区画文字 / 勾选标记。
 
-    fields 每项：{"x", "y", "text"}（画文字）或 {"x", "y", "check": true}（画 X 勾选）。
-    坐标 x/y 为 PDF 坐标（左下角原点，单位 point）。返回落盘路径。
+    fields 支持文字 {"x", "y", "text"}、勾选 {"rect", "check": true}
+    和清除原有内容 {"clear": [x0, y0, x1, y1]}。勾选按框心自动居中。
+    坐标均为 PDF 坐标（左下角原点，单位 point）。返回落盘路径。
     复用 reportlab 画覆盖页 + pypdf merge 的机制（与签名盖章同源）。
     """
     import io
@@ -487,14 +488,24 @@ def fill_flat_pdf(pdf_bytes: bytes, fields: list[dict], output_path: str) -> str
 
     buf = io.BytesIO()
     c = canvas.Canvas(buf, pagesize=(width, height))
+    from reportlab.pdfbase.pdfmetrics import stringWidth
+
     for f in fields:
         x, y = float(f["x"]), float(f["y"])
         if f.get("check"):
             c.setFont("Helvetica-Bold", float(f.get("size", 12)))
             c.drawString(x, y, "X")
         else:
-            c.setFont(f.get("font", "Helvetica"), float(f.get("size", 10)))
-            c.drawString(x, y, str(f.get("text", "")))
+            font = f.get("font", "Helvetica")
+            size = float(f.get("size", 10))
+            text = str(f.get("text", ""))
+            max_w = f.get("max_width")
+            if max_w and text:
+                natural = stringWidth(text, font, size)
+                if natural > float(max_w):
+                    size = max(6.0, size * float(max_w) / natural)
+            c.setFont(font, size)
+            c.drawString(x, y, text)
     c.save()
     buf.seek(0)
     overlay = PdfReader(buf).pages[0]
@@ -511,26 +522,42 @@ def fill_flat_pdf(pdf_bytes: bytes, fields: list[dict], output_path: str) -> str
 def _bond_exchange_flat_fields(commission, intake: dict) -> list[dict]:
     """The Bond Exchange 版 C.A. Shea 海关保函申请表（平铺版，无表单字段）。
 
-    坐标已按样本 PDF 实测校准：文字坐落在填写线上，勾选框 X 落在 9x9 框内，
-    FEIN 为分段框（每个数字一格）。
+    坐标按样本 PDF 实测校准（PDF 坐标，左下角原点）。该表标签印在格子
+    上沿，取值一律写在标签正下方的空区里。FEIN 为分段框每格一位；
+    Customs Assigned Number 与 FEIN 是"二选一"关系（表上印有 or），
+    客户有 EIN 时只填 FEIN、Customs 行留空，绝不把州登记号（b005）
+    误填进去。Continuous / Type of Business-Other / Send Via E-Mail
+    三处为原表预印勾选，不重复画。
     """
     ein = (commission.ein or "").replace("-", "")
     fields: list[dict] = [
-        {"x": 20, "y": 724, "text": commission.legal_name, "size": 10},
-        {"x": 20, "y": 700, "text": commission.addr_line1 or "", "size": 9},
-        {"x": 20, "y": 653, "text": commission.addr_city or "", "size": 10},
-        {"x": 267, "y": 653, "text": commission.addr_state or "", "size": 10},
-        {"x": 376, "y": 653, "text": commission.addr_zip or "", "size": 10},
-        {"x": 90, "y": 535, "text": intake.get("a004") or "", "size": 10},
-        # 勾选框：X 基线 y = 792 - 框top - 10
-        {"x": 121, "y": 568, "check": True},   # Requested Bond Type - Continuous
-        {"x": 23, "y": 553, "check": True},    # Activity 1 - Importer
-        {"x": 35, "y": 487, "check": True},    # Type of Business - Importer
+        # Entity Requesting Bond 大框内部（框 700.8-724.4）
+        {"x": 22, "y": 708, "text": commission.legal_name, "size": 10},
+        # Date 标签后的填写线
+        {"x": 505, "y": 714, "text": intake.get("a006") or "", "size": 10},
+        # Address 行（行 677.0-700.8，标签在上沿）
+        {"x": 22, "y": 683, "text": commission.addr_line1 or "", "size": 9},
+        # City / State / Zip 行（行 653.5-677，格子 17.9-229.1 / 229.1-264.8 / 264.8-370.4）
+        {"x": 22, "y": 634, "text": commission.addr_city or "", "size": 10},
+        {"x": 232, "y": 634, "text": commission.addr_state or "", "size": 10},
+        {"x": 268, "y": 634, "text": commission.addr_zip or "", "size": 10},
+        # Requested Bond Amount（标签 top 259.4-267.4 正下方）
+        {"x": 22, "y": 516, "text": intake.get("a004") or "", "size": 10},
+        # Imported Commodity（标签下方，超宽自动缩小字号）
+        {"x": 227, "y": 516, "text": intake.get("d002") or "", "size": 8, "max_width": 140},
+        # 勾选框：X 居中（size 10，x=框中心-3，y=框中心-3.5）
+        {"x": 20.5, "y": 555, "check": True, "size": 10},    # Activity 1 - Importer
+        {"x": 32.5, "y": 489, "check": True, "size": 10},    # Type of Business - Importer
     ]
-    # FEIN 分段框（top=93-115，13 格）：前 9 格填 EIN 9 位数字，每格一位
-    grid_cx = [383, 401, 417, 432.5, 450, 468, 486, 504, 521.5]
+    # AD/CVD（a007）为 Yes 时勾选 "Goods are subject to antidumping..." 前的框
+    if (intake.get("a007") or "").strip().lower().startswith("y"):
+        fields.append({"x": 367, "y": 524.5, "check": True, "size": 10})
+    # FEIN 分段框（top=93.2-115.7）：前 9 格填 EIN 9 位数字（第 11 格斜纹格不可填）
+    ein_cx = [383, 401, 417, 432.5, 450, 468, 486, 504, 521.5]
     for i, ch in enumerate(ein[:9]):
-        fields.append({"x": grid_cx[i], "y": 684, "text": ch, "size": 11})
+        fields.append({"x": ein_cx[i], "y": 684, "text": ch, "size": 11})
+    # Customs Assigned Number 行留空：表上 "Importer # (FEIN) or Customs
+    # Assigned Number" 二选一；b005 是州登记编号，语义不符不填。
     return fields
 
 
