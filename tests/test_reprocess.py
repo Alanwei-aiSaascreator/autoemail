@@ -159,3 +159,34 @@ def test_reprocess_attaches_existing_fillings(session, world, monkeypatch, tmp_p
     assert any("bond.pdf" in a for a in new_draft.attachments)
     assert any("poa.pdf" in a for a in new_draft.attachments)
     assert "completed application form" in new_draft.body
+
+
+def test_reprocess_skips_fillings_when_application_not_requested(session, world, monkeypatch, tmp_path):
+    """材料清单里没有 application 时不附填表产物：对方没要申请表，不能发三件套敷衍。"""
+    from autoemail.config import settings
+
+    monkeypatch.setattr(settings, "filled_forms_dir", str(tmp_path))
+    (tmp_path / f"{world['case'].case_no}_bond.pdf").write_bytes(b"%PDF-1.4 bond")
+    (tmp_path / "Sunrise Home Goods LLC_poa.pdf").write_bytes(b"%PDF-1.4 poa")
+
+    result = _process_as(session, monkeypatch, "bond_delivered", "reprocess-nofill")
+    monkeypatch.setattr(
+        "autoemail.pipeline.classify_message",
+        lambda msg: IntentResult(
+            "form_request",
+            0.9,
+            slots={"materials": ["financial_statement", "ownership"]},
+            evidence=["fixed"],
+        ),
+    )
+    summary = reprocess_message(session, result.message_id, actor="tester")
+
+    new_draft = session.get(Draft, summary["draft_id"])
+    assert new_draft is not None
+    assert new_draft.intent == "form_request"
+    # 代理商只要求财务报表和股权结构：不附任何填表产物
+    assert new_draft.attachments == []
+    assert new_draft.controlled_fields["material_keys"] == ["financial_statement", "ownership"]
+    # 正文明确列出待另行提供的材料，而不是谎称"attached"
+    assert "will follow in a separate email" in new_draft.body
+    assert "Please find attached" not in new_draft.body

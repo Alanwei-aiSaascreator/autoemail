@@ -39,6 +39,35 @@ def test_llm_reads_full_text_and_attachments_as_primary():
     assert "thoroughly completed and signed" in prompt
 
 
+def test_llm_extracts_materials_into_slots():
+    """LLM 结构化输出应携带代理商要求的材料清单（三层意图第三层）。"""
+    bondexchange_email = NormalizedMessage(
+        channel="eml",
+        channel_msg_id="m3",
+        from_addr="jackson@bondexchange.test",
+        subject="Bond Application",
+        body_text=(
+            "Complete and return the attached application, along with 2026 income "
+            "statement and balance sheet, ownership breakdown, and confirmation on "
+            "antidumping or countervailing duties."
+        ),
+        dedupe_hash="h3",
+    )
+    provider = FakeLLMProvider(
+        LLMIntentOutput(
+            label="form_request",
+            confidence=0.92,
+            evidence=["asks for application and financials"],
+            materials=["application", "financial_statement", "ownership", "ad_cvd"],
+            reasoning="Email lists four required items.",
+        )
+    )
+    result = classify_with_llm(bondexchange_email, provider=provider)
+    assert result is not None
+    assert result.slots["materials"] == ["application", "financial_statement", "ownership", "ad_cvd"]
+    assert "lists four required items" in result.slots["reasoning"]
+
+
 def test_llm_unavailable_returns_none_for_deterministic_fallback():
     provider = FakeLLMProvider(error="timeout")
     assert classify_with_llm(message(), provider=provider) is None

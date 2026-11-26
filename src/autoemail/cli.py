@@ -694,6 +694,50 @@ def cmd_agent_add_domain(args: argparse.Namespace) -> int:
         session.close()
 
 
+def cmd_agent_set_materials(args: argparse.Namespace) -> int:
+    """把某代理商的材料要求写入 AgentFormProfile 知识库（人工确认闭环）。
+
+    之后该代理商再来 form_request 邮件时，正文未提取到清单即命中此档案，
+    回复按清单逐项回应，不再发标准三件套敷衍。
+    """
+    from .models import Agent, AgentFormProfile, Case
+
+    valid_keys = {"application", "personal_financial", "financial_statement", "ownership", "ad_cvd"}
+    keys = [k.strip() for k in args.materials.split(",") if k.strip()]
+    bad = [k for k in keys if k not in valid_keys]
+    if bad:
+        print(f"非法材料 key：{bad}（可选：{sorted(valid_keys)}）")
+        return 1
+
+    init_db()
+    session = get_session()
+    try:
+        if args.case:
+            case = session.query(Case).filter(Case.case_no == args.case).first()
+            if case is None:
+                print(f"找不到 case：{args.case}")
+                return 1
+            agent = session.get(Agent, case.agent_id)
+        else:
+            agent = session.query(Agent).filter(Agent.name.like(f"%{args.agent}%")).first()
+        if agent is None:
+            print("找不到代理商")
+            return 1
+        profile = session.scalar(
+            select(AgentFormProfile).where(AgentFormProfile.agent_id == agent.id)
+        )
+        if profile is None:
+            profile = AgentFormProfile(agent_id=agent.id, name=agent.name)
+            session.add(profile)
+        profile.materials = keys
+        profile.confirmed_by = args.actor or "cli"
+        session.commit()
+        print(f"已记录 {agent.name}（#{agent.id}）材料要求：{keys}（来源：人工确认）")
+        return 0
+    finally:
+        session.close()
+
+
 def cmd_intake_store(args: argparse.Namespace) -> int:
     """上传客户需求采集表 PDF，解析后存结构化字段（委托专属）。"""
     from .formfill import store_intake
@@ -1002,6 +1046,16 @@ def build_parser() -> argparse.ArgumentParser:
     agent_domain.add_argument("--agent", default=None, help="按代理商名称模糊匹配")
     agent_domain.add_argument("--domain", required=True, help="要补的域名")
     agent_domain.set_defaults(func=cmd_agent_add_domain)
+    agent_materials = agent_sub.add_parser("set-materials", help="记录代理商材料要求（知识库，人工确认闭环）")
+    agent_materials.add_argument("--case", default=None, help="按 case 编号定位代理商")
+    agent_materials.add_argument("--agent", default=None, help="按代理商名称模糊匹配")
+    agent_materials.add_argument(
+        "--materials",
+        required=True,
+        help="逗号分隔：application,personal_financial,financial_statement,ownership,ad_cvd",
+    )
+    agent_materials.add_argument("--actor", default="cli", help="确认人（审计用）")
+    agent_materials.set_defaults(func=cmd_agent_set_materials)
 
     intake = sub.add_parser("intake", help="客户需求采集表：解析并存储结构化字段（委托专属）")
     intake_sub = intake.add_subparsers(dest="intake_command", required=True)

@@ -26,6 +26,7 @@ from .llm_schemas import LLMDraftSuggestion
 from .llm_context import build_context
 from .models import (
     Agent,
+    AgentFormProfile,
     AgentPolicy,
     Case,
     Commission,
@@ -54,6 +55,12 @@ _MATERIAL_LABELS = {
     "ownership": "Ownership breakdown",
     "ad_cvd": "Confirmation on anti-dumping / countervailing duties",
 }
+_LABEL_TO_KEY = {label.lower(): key for key, label in _MATERIAL_LABELS.items()}
+
+# 能随回复自动完成的材料：对方发来表格，我们填好签好附回。
+# 其余材料（财务报表/股权结构/AD-CVD 确认等）无法自动生成，只能列出请客户准备，
+# 绝不能拿标准三件套敷衍。
+_AUTO_PROVIDABLE = frozenset({"application"})
 
 DRAFT_SYSTEM_PROMPT = """You draft one professional reply email for a customs bond purchase case.
 Return only JSON matching the schema. Facts (company name, case number, amounts, materials) are provided and must be respected; never invent or change them.
@@ -100,14 +107,38 @@ def _case_context(session: Session, case: Case) -> tuple[Commission, Agent, Agen
     return commission, agent, policy
 
 
+def _resolve_materials(
+    session: Session, intent: IntentResult, agent: Agent, policy: AgentPolicy | None
+) -> tuple[list[str], str]:
+    """解析本次应回应的材料清单，返回 (keys, 来源)。
+
+    优先级（三层意图第三层）：正文/LLM 提取 > AgentFormProfile 知识库（交流对象
+    画像）> AgentPolicy 配置兜底。返回的 key 与 _MATERIAL_LABELS 对齐。
+    """
+    extracted = [str(x) for x in (intent.slots.get("materials") or [])]
+    if extracted:
+        return extracted, "email_extracted"
+    profile = session.scalar(select(AgentFormProfile).where(AgentFormProfile.agent_id == agent.id))
+    if profile is not None and profile.materials:
+        return [str(x) for x in profile.materials], "agent_form_profile"
+    if policy and policy.material_checklist:
+        keys: list[str] = []
+        for item in policy.material_checklist:
+            key = _LABEL_TO_KEY.get(str(item).lower(), str(item))
+            if key not in keys:
+                keys.append(key)
+        return keys, "policy"
+    return [], "default"
+
+
 def _template(
     intent: IntentResult,
     *,
     case: Case,
     commission: Commission,
     agent: Agent,
-    policy: AgentPolicy | None,
     source: NormalizedMessage,
+    material_keys: list[str],
 ) -> tuple[str, str, str, dict[str, Any]]:
     fields: dict[str, Any] = {
         "case_no": case.case_no,
@@ -133,27 +164,50 @@ def _template(
         return "quote_reply", subject, body, fields
 
     if intent.label == "form_request":
-        # 优先用邮件正文提取的材料清单（代理商实际要求），policy 配置作兜底
-        extracted = [str(x) for x in (intent.slots.get("materials") or [])]
-        if extracted:
-            materials = [_MATERIAL_LABELS.get(m, m) for m in extracted]
-        else:
-            materials = list(policy.material_checklist or []) if policy else []
-        if not materials:
-            materials = ["POA", "Commercial Invoice"]
-        fields["requested_materials"] = materials
+        fields["material_keys"] = list(material_keys)
+        # 无法自动完成的材料单独成段：明确告知"随后另行提供"，而不是发三件套敷衍。
+        enclosed = [_MATERIAL_LABELS[k] for k in material_keys if k in _AUTO_PROVIDABLE]
+        to_follow = [_MATERIAL_LABELS[k] for k in material_keys if k not in _AUTO_PROVIDABLE]
         subject = f"Re: [{case.case_no}] Application documents"
-        material_text = "\n".join(f"- {item}" for item in materials) or "- Please confirm the required application documents"
-        body = (
+        greeting = (
             f"Hi {agent.contact_name or agent.name},\n\n"
-            f"Thank you for your message regarding {commission.legal_name}. "
-            "We are preparing the application package. Please confirm whether the following "
-            "items are required for this case:\n\n"
-            f"{material_text}\n\n"
-            "We will provide the completed documents after our internal review.\n\n"
-            "Best regards,\n"
-            f"{commission.signer_name or 'Bond Operations'}\n"
+            f"Thank you for your message regarding {commission.legal_name}.\n\n"
         )
+        if material_keys:
+            parts: list[str] = []
+            if enclosed:
+                parts.append(
+                    "Completed and enclosed:\n" + "\n".join(f"- {item}" for item in enclosed)
+                )
+            if to_follow:
+                parts.append(
+                    "The following items are being prepared and will follow in a "
+                    "separate email:\n" + "\n".join(f"- {item}" for item in to_follow)
+                )
+            body = greeting + "\n\n".join(parts) + "\n\n"
+            if not enclosed:
+                body += (
+                    "We will send the completed application form(s) together with the "
+                    "items above as soon as they are ready.\n\n"
+                )
+            body += (
+                "Best regards,\n"
+                f"{commission.signer_name or 'Bond Operations'}\n"
+            )
+        else:
+            # 无法判定清单时退回确认式模板，并列出默认材料请对方确认
+            materials = ["POA", "Commercial Invoice"]
+            fields["requested_materials"] = materials
+            material_text = "\n".join(f"- {item}" for item in materials)
+            body = (
+                greeting
+                + "We are preparing the application package. Please confirm whether the "
+                "following items are required for this case:\n\n"
+                f"{material_text}\n\n"
+                "We will provide the completed documents after our internal review.\n\n"
+                "Best regards,\n"
+                f"{commission.signer_name or 'Bond Operations'}\n"
+            )
         return "form_request", subject, body, fields
 
     if intent.label == "bond_delivered":
@@ -267,14 +321,17 @@ def generate_draft(
         return DraftResult(existing, False)
 
     commission, agent, policy = _case_context(session, case)
+    material_keys, material_source = _resolve_materials(session, intent, agent, policy)
     template_id, subject, body, fields = _template(
         intent,
         case=case,
         commission=commission,
         agent=agent,
-        policy=policy,
         source=source,
+        material_keys=material_keys,
     )
+    if material_keys:
+        fields["material_source"] = material_source
     content_source = "deterministic_template"
     model_id: str | None = None
     input_hash = _hash_input(source, intent)
@@ -372,6 +429,18 @@ def generate_draft(
     # 客户自填模板（client_fill_template）与未命中格式的附件不代填，不阻断草稿。
     notices: list[str] = []
     attachments: list[str] = []
+    # 置信度分级人机协同：高置信度可自动处理；中等请人工核对材料清单；低置信度建议转人工。
+    if intent.confidence >= 0.85:
+        notices.append(f"意图置信度 {intent.confidence:.2f}（高），可自动处理")
+    elif intent.confidence >= 0.6:
+        notices.append(f"意图置信度 {intent.confidence:.2f}（中），请人工核对材料清单与收件人")
+    else:
+        notices.append(f"意图置信度 {intent.confidence:.2f}（低），建议转人工处理")
+    if intent.label == "form_request" and material_keys:
+        unmet = [k for k in material_keys if k not in _AUTO_PROVIDABLE]
+        if unmet:
+            labels = "、".join(_MATERIAL_LABELS.get(k, k) for k in unmet)
+            notices.append(f"以下材料无法自动生成，已在回复中列明待另行提供：{labels}")
     if intent.label == "form_request":
         for att in source.attachments or []:
             if not (att.filename or "").lower().endswith(".pdf"):

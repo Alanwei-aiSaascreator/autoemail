@@ -37,12 +37,19 @@ from .models import (
 _REVERTABLE_DRAFT_STATES = (DRAFT_PENDING, DRAFT_BLOCKED, DRAFT_FAILED)
 
 
-def _attach_case_fillings(session: Session, case: Case, draft: Draft) -> list[str]:
+def _attach_case_fillings(
+    session: Session, case: Case, draft: Draft, *, material_keys: list[str] | None = None
+) -> list[str]:
     """把该 case 的填表产物（filled_forms 里 case_no 或公司名前缀的 PDF）附到草稿。
 
     用于重新处理历史邮件：原始 .eml 未存档时拿不到空白表格，但填表产物已存在，
     直接附上已填好（含签名）的产物，让草稿可以随回复发出。返回附上的文件路径列表。
+
+    材料清单驱动：新草稿若已解析出代理商要求的材料（material_keys 非空）且其中
+    不含 application，则不附填表产物——对方根本没要申请表，不能拿三件套敷衍。
     """
+    if material_keys and "application" not in material_keys:
+        return []
     from .config import settings
 
     filled_dir = Path(settings.filled_forms_dir)
@@ -295,11 +302,13 @@ def reprocess_message(session: Session, message_id: int, *, actor: str = "system
     )
     session.commit()
 
-    # 重新处理后，若新草稿是 form_request，附上该 case 已有的填表产物（含签名的表格）
+    # 重新处理后，若新草稿是 form_request，附上该 case 已有的填表产物（含签名的表格）。
+    # 材料清单里不含 application 时不附：按代理商实际要求，不发无关文件。
     if result.draft_id and result.intent.label == "form_request" and case is not None:
         draft = session.get(Draft, result.draft_id)
         if draft is not None:
-            attached = _attach_case_fillings(session, case, draft)
+            keys = [str(x) for x in ((draft.controlled_fields or {}).get("material_keys") or [])]
+            attached = _attach_case_fillings(session, case, draft, material_keys=keys)
             if attached:
                 draft.body = draft.body.rstrip("\n") + (
                     "\n\nPlease find attached the completed application form(s) "

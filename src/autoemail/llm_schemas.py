@@ -3,6 +3,16 @@ from typing import Literal
 from pydantic import BaseModel, ConfigDict, Field, confloat
 
 
+# 代理商要求的材料类型（机器可执行的 key，与 intent._MATERIAL_RULES 一致）
+MaterialKey = Literal[
+    "application",
+    "personal_financial",
+    "financial_statement",
+    "ownership",
+    "ad_cvd",
+]
+
+
 class LLMIntentOutput(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -10,6 +20,9 @@ class LLMIntentOutput(BaseModel):
     confidence: confloat(ge=0, le=1)
     evidence: list[str] = Field(default_factory=list, max_length=8)
     needs_human_review: bool = True
+    # 三层意图：form_request 时列出对方要求的具体材料（决定回复附什么、缺什么）
+    materials: list[MaterialKey] = Field(default_factory=list, max_length=8)
+    reasoning: str = Field(default="", max_length=500)
 
 
 class LLMDraftSuggestion(BaseModel):

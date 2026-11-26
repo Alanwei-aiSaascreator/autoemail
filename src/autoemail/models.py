@@ -496,6 +496,31 @@ class FormTypeRegistry(Base):
     converted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
 
+class AgentFormProfile(Base):
+    """Form Template 知识库（按交流对象画像）：每家代理商的表格/材料要求。
+
+    三层意图的第三层落点：同一 form_request 意图下，不同代理商要求的材料
+    组合不同（如 BondExchange 要 application + 财务报表 + 股权 + AD/CVD 确认，
+    Express 只要填三件套）。检索顺序：正文提取 > 本档案 > policy 兜底。
+    人工确认一次后回写（闭环学习），后续同类来信直接命中。
+    """
+
+    __tablename__ = "agent_form_profile"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    agent_id: Mapped[int] = mapped_column(ForeignKey("agent.id"), unique=True, index=True)
+    name: Mapped[str] = mapped_column(String(200), default="")
+    # 材料清单 key 列表（application/personal_financial/financial_statement/ownership/ad_cvd）
+    materials: Mapped[list] = mapped_column(JSON, default=list)
+    # 主题/正文的典型关键词（后续检索用）
+    keywords: Mapped[list] = mapped_column(JSON, default=list)
+    notes: Mapped[str | None] = mapped_column(Text)
+    # 人工确认闭环：谁在哪次确认后写入
+    confirmed_by: Mapped[str | None] = mapped_column(String(120))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, onupdate=utcnow)
+
+
 class AuditEvent(Base):
     """每条出站动作都要能回答"为什么发了出去"。"""
 

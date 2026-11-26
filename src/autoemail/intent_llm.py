@@ -27,7 +27,17 @@ complete or provide anything.
 
 Key rule: if the body asks us to complete, sign, or provide forms/documents, the \
 label is form_request regardless of attachments. If the body merely attaches an \
-executed bond for our records, the label is bond_delivered."""
+executed bond for our records, the label is bond_delivered.
+
+For form_request, also extract `materials`: the specific items the sender asks us \
+to provide. Allowed keys:
+- application: a bond/application form to complete and return
+- personal_financial: personal financial statement of owners
+- financial_statement: business income statement / balance sheet
+- ownership: ownership breakdown / ownership percentages
+- ad_cvd: antidumping / countervailing duties confirmation
+Only list keys the sender actually asks for; do not guess. `reasoning` must state, \
+in one sentence, which sentence of the email justifies the label and materials."""
 
 
 def _attachment_lines(message: NormalizedMessage) -> str:
@@ -57,9 +67,15 @@ def classify_with_llm(message: NormalizedMessage, *, provider: LLMProvider | Non
     if response.parsed is None or response.parsed.confidence < 0.75:
         return None
     output = response.parsed
+    slots: dict[str, object] = {}
+    if output.label == "form_request" and output.materials:
+        slots["materials"] = list(output.materials)
+    if output.reasoning:
+        slots["reasoning"] = output.reasoning
     return IntentResult(
         label=output.label,
         confidence=float(output.confidence),
+        slots=slots,
         evidence=["LLM", *output.evidence],
     )
 

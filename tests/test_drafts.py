@@ -78,6 +78,73 @@ def test_material_draft_uses_extracted_checklist(session, world):
     assert "anti-dumping" in draft.body
 
 
+def test_form_request_separates_enclosed_from_to_follow(session, world):
+    """BondExchange 场景：对方要求 application + 财务报表 + 股权 + AD/CVD 确认。
+
+    回复必须分两段：能随邮件附回的已填表格 vs 无法自动生成、需另行提供的材料，
+    并且 material_keys 落入 controlled_fields 供后续（如重新处理）使用。
+    """
+    message = NormalizedMessage(
+        channel="eml",
+        channel_msg_id="material-3",
+        from_addr="toni@a1surety.com",
+        subject="Re: [BOND-2026-0142] Application",
+        body_text=(
+            "Hi, in order to issue the bond we need the following:\n"
+            "Complete and return the attached application.\n"
+            "Please provide the 2026 income statement and balance sheet.\n"
+            "Ownership breakdown of the company.\n"
+            "Confirmation on whether the goods are subject to antidumping or countervailing duties."
+        ),
+        dedupe_hash="material-hash-3",
+    )
+    result = process_message(session, message)
+    draft = session.get(Draft, result.draft_id)
+    assert result.intent.label == "form_request"
+    assert draft.controlled_fields["material_keys"] == [
+        "application",
+        "financial_statement",
+        "ownership",
+        "ad_cvd",
+    ]
+    assert "Completed and enclosed:" in draft.body
+    assert "will follow in a separate email" in draft.body
+    assert "Completed bond application form" in draft.body
+    assert "Ownership breakdown" in draft.body
+    # 置信度分级提示：无论高低都必须标出来供人工协同
+    assert any("意图置信度" in n for n in (draft.notices or []))
+
+
+def test_form_request_falls_back_to_agent_form_profile(session, world):
+    """正文提取不到清单时，命中 AgentFormProfile 知识库（交流对象画像）。"""
+    from autoemail.models import AgentFormProfile
+
+    agent = world["agent"]
+    session.add(
+        AgentFormProfile(
+            agent_id=agent.id,
+            name=agent.name,
+            materials=["application", "financial_statement"],
+        )
+    )
+    session.commit()
+    message = NormalizedMessage(
+        channel="eml",
+        channel_msg_id="material-4",
+        from_addr="toni@a1surety.com",
+        subject="Re: [BOND-2026-0142] Application",
+        body_text="Please return the thoroughly completed and signed documents.",
+        dedupe_hash="material-hash-4",
+    )
+    result = process_message(session, message)
+    draft = session.get(Draft, result.draft_id)
+    assert result.intent.label == "form_request"
+    assert draft.controlled_fields["material_keys"] == ["application", "financial_statement"]
+    assert draft.controlled_fields["material_source"] == "agent_form_profile"
+    assert "Business financial statement" in draft.body
+    assert "will follow in a separate email" in draft.body
+
+
 def test_invoice_does_not_create_email_draft(session, world, monkeypatch):
     monkeypatch.setattr("autoemail.pipeline.notify_wecom", lambda *args, **kwargs: True)
     invoice = EmlDirectoryChannel(FIXTURES).fetch_since()[1]
