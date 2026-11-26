@@ -468,13 +468,50 @@ def _fill_core(
     }
 
 
+def _draw_flat_fields(c, fields: list[dict]) -> None:  # noqa: ANN001
+    """在一个 reportlab 页面上执行文字、逐格字符、勾选和清除操作。"""
+    from reportlab.pdfbase.pdfmetrics import stringWidth
+
+    for f in fields:
+        if f.get("clear"):
+            x0, y0, x1, y1 = (float(v) for v in f["clear"])
+            c.saveState()
+            c.setFillColorRGB(1, 1, 1)
+            c.rect(x0, y0, x1 - x0, y1 - y0, stroke=0, fill=1)
+            c.restoreState()
+            continue
+        if f.get("check"):
+            size = float(f.get("size", 12))
+            c.setFont("Helvetica-Bold", size)
+            if f.get("rect"):
+                x0, y0, x1, y1 = (float(v) for v in f["rect"])
+                # Helvetica 字形的视觉中心比基线高约 0.29 * size。
+                c.drawCentredString((x0 + x1) / 2, (y0 + y1) / 2 - size * 0.29, "X")
+            else:
+                c.drawString(float(f["x"]), float(f["y"]), "X")
+            continue
+        x, y = float(f["x"]), float(f["y"])
+        font = f.get("font", "Helvetica")
+        size = float(f.get("size", 10))
+        text = str(f.get("text", ""))
+        max_w = f.get("max_width")
+        if max_w and text:
+            natural = stringWidth(text, font, size)
+            if natural > float(max_w):
+                size = max(6.0, size * float(max_w) / natural)
+        c.setFont(font, size)
+        if f.get("align") == "center":
+            c.drawCentredString(x, y, text)
+        else:
+            c.drawString(x, y, text)
+
+
 def fill_flat_pdf(pdf_bytes: bytes, fields: list[dict], output_path: str) -> str:
-    """平铺表填表：没有 acroform 字段的 PDF，按坐标在填写区画文字 / 勾选标记。
+    """按 PDF 坐标填写无 acroform 字段的平铺表，支持多页。
 
     fields 支持文字 {"x", "y", "text"}、勾选 {"rect", "check": true}
-    和清除原有内容 {"clear": [x0, y0, x1, y1]}。勾选按框心自动居中。
-    坐标均为 PDF 坐标（左下角原点，单位 point）。返回落盘路径。
-    复用 reportlab 画覆盖页 + pypdf merge 的机制（与签名盖章同源）。
+    和清除原有内容 {"clear": [x0, y0, x1, y1]}；page 默认 0。
+    勾选按框心自动居中，文字可用 max_width 防止越过填写区。
     """
     import io
 
@@ -483,33 +520,22 @@ def fill_flat_pdf(pdf_bytes: bytes, fields: list[dict], output_path: str) -> str
 
     reader = PdfReader(io.BytesIO(pdf_bytes))
     writer = PdfWriter(clone_from=reader)
-    mb = writer.pages[0].mediabox
-    width, height = float(mb.width), float(mb.height)
+    by_page: dict[int, list[dict]] = {}
+    for field in fields:
+        page_no = int(field.get("page", 0))
+        if not 0 <= page_no < len(writer.pages):
+            raise ValueError(f"平铺表页码越界：{page_no}")
+        by_page.setdefault(page_no, []).append(field)
 
-    buf = io.BytesIO()
-    c = canvas.Canvas(buf, pagesize=(width, height))
-    from reportlab.pdfbase.pdfmetrics import stringWidth
-
-    for f in fields:
-        x, y = float(f["x"]), float(f["y"])
-        if f.get("check"):
-            c.setFont("Helvetica-Bold", float(f.get("size", 12)))
-            c.drawString(x, y, "X")
-        else:
-            font = f.get("font", "Helvetica")
-            size = float(f.get("size", 10))
-            text = str(f.get("text", ""))
-            max_w = f.get("max_width")
-            if max_w and text:
-                natural = stringWidth(text, font, size)
-                if natural > float(max_w):
-                    size = max(6.0, size * float(max_w) / natural)
-            c.setFont(font, size)
-            c.drawString(x, y, text)
-    c.save()
-    buf.seek(0)
-    overlay = PdfReader(buf).pages[0]
-    writer.pages[0].merge_page(overlay)
+    for page_no, page_fields in by_page.items():
+        page = writer.pages[page_no]
+        width, height = float(page.mediabox.width), float(page.mediabox.height)
+        buf = io.BytesIO()
+        c = canvas.Canvas(buf, pagesize=(width, height))
+        _draw_flat_fields(c, page_fields)
+        c.save()
+        buf.seek(0)
+        page.merge_page(PdfReader(buf).pages[0])
 
     out = io.BytesIO()
     writer.write(out)
@@ -517,88 +543,123 @@ def fill_flat_pdf(pdf_bytes: bytes, fields: list[dict], output_path: str) -> str
     return output_path
 
 
-# ---- 平铺表（无 acroform 字段）坐标填表 ----
-# 平铺表签名：文本关键词 → 坐标字段生成器。坐标 x/y 为 PDF 坐标（左下角原点）。
-def _bond_exchange_flat_fields(commission, intake: dict) -> list[dict]:
-    """The Bond Exchange 版 C.A. Shea 海关保函申请表（平铺版，无表单字段）。
-
-    坐标按样本 PDF 实测校准（PDF 坐标，左下角原点）。该表标签印在格子
-    上沿，取值一律写在标签正下方的空区里。FEIN 为分段框每格一位；
-    Customs Assigned Number 与 FEIN 是"二选一"关系（表上印有 or），
-    客户有 EIN 时只填 FEIN、Customs 行留空，绝不把州登记号（b005）
-    误填进去。Continuous / Type of Business-Other / Send Via E-Mail
-    三处为原表预印勾选，不重复画。
-    """
-    ein = (commission.ein or "").replace("-", "")
-    fields: list[dict] = [
-        # Entity Requesting Bond 大框内部（框 700.8-724.4）
-        {"x": 22, "y": 708, "text": commission.legal_name, "size": 10},
-        # Date 标签后的填写线
-        {"x": 505, "y": 714, "text": intake.get("a006") or "", "size": 10},
-        # Address 行（行 677.0-700.8，标签在上沿）
-        {"x": 22, "y": 683, "text": commission.addr_line1 or "", "size": 9},
-        # City / State / Zip 行（行 653.5-677，格子 17.9-229.1 / 229.1-264.8 / 264.8-370.4）
-        {"x": 22, "y": 634, "text": commission.addr_city or "", "size": 10},
-        {"x": 232, "y": 634, "text": commission.addr_state or "", "size": 10},
-        {"x": 268, "y": 634, "text": commission.addr_zip or "", "size": 10},
-        # Requested Bond Amount（标签 top 259.4-267.4 正下方）
-        {"x": 22, "y": 516, "text": intake.get("a004") or "", "size": 10},
-        # Imported Commodity（标签下方，超宽自动缩小字号）
-        {"x": 227, "y": 516, "text": intake.get("d002") or "", "size": 8, "max_width": 140},
-        # 勾选框：X 居中（size 10，x=框中心-3，y=框中心-3.5）
-        {"x": 20.5, "y": 555, "check": True, "size": 10},    # Activity 1 - Importer
-        {"x": 32.5, "y": 489, "check": True, "size": 10},    # Type of Business - Importer
-    ]
-    # AD/CVD（a007）为 Yes 时勾选 "Goods are subject to antidumping..." 前的框
-    if (intake.get("a007") or "").strip().lower().startswith("y"):
-        fields.append({"x": 367, "y": 524.5, "check": True, "size": 10})
-    # FEIN 分段框（top=93.2-115.7）：前 9 格填 EIN 9 位数字（第 11 格斜纹格不可填）
-    ein_cx = [383, 401, 417, 432.5, 450, 468, 486, 504, 521.5]
-    for i, ch in enumerate(ein[:9]):
-        fields.append({"x": ein_cx[i], "y": 684, "text": ch, "size": 11})
-    # Customs Assigned Number 行留空：表上 "Importer # (FEIN) or Customs
-    # Assigned Number" 二选一；b005 是州登记编号，语义不符不填。
-    return fields
+# ---- 平铺表（无 acroform 字段）配置化填表 ----
+def load_flat_templates(path=None) -> dict[str, dict]:
+    """从 form_mappings.json 的 flat_forms 读取平铺表模板。"""
+    source = path or MAPPINGS_PATH
+    if not source.exists():
+        return {}
+    data = json.loads(source.read_text(encoding="utf-8"))
+    return {item["format_id"]: item for item in data.get("flat_forms", [])}
 
 
-_FLAT_FORM_DETECTORS: dict[str, tuple[tuple[str, ...], Any]] = {
-    # 标识名 -> (文本关键词全部命中, 字段生成器)
-    "bond_exchange_flat_v1": (
-        ("bond exchange", "customs bond application"),
-        _bond_exchange_flat_fields,
-    ),
-}
+def _flat_condition_matches(condition: dict, data: dict) -> bool:
+    """模板条件：支持某值存在/不存在，以及不区分大小写的等值判断。"""
+    value, skipped = resolve_value(condition.get("value"), data)
+    present = skipped is None and value is not None and bool(str(value).strip())
+    if "present" in condition and present is not bool(condition["present"]):
+        return False
+    if "equals" in condition:
+        return present and str(value).strip().lower() == str(condition["equals"]).strip().lower()
+    return True
+
+
+def build_flat_fields(template: dict, data: dict) -> tuple[list[dict], dict[str, str]]:
+    """把通用平铺表模板展开成坐标操作；缺值或长度异常时整项跳过。"""
+    fields: list[dict] = []
+    skipped: dict[str, str] = {}
+    layout_keys = ("page", "x", "y", "size", "font", "max_width", "align", "rect")
+    for item in template.get("fields", []):
+        name = item.get("name") or "未命名操作"
+        kind = item.get("kind", "text")
+        condition = item.get("when")
+        if condition and not _flat_condition_matches(condition, data):
+            continue
+        if kind == "clear":
+            fields.append({"page": item.get("page", 0), "clear": item["rect"]})
+            continue
+
+        value, skip_reason = resolve_value(item.get("value"), data)
+        if skip_reason is not None:
+            skipped[name] = skip_reason
+            continue
+        layout = {key: item[key] for key in layout_keys if key in item}
+        if kind == "text":
+            fields.append({**layout, "text": str(value)})
+        elif kind == "check":
+            if "equals" in item:
+                if str(value).strip().lower() != str(item["equals"]).strip().lower():
+                    continue
+            elif str(value).strip().lower() in {"", "0", "false", "no", "off"}:
+                continue
+            fields.append({**layout, "check": True})
+        elif kind == "chars":
+            remove = set(item.get("remove_chars", ""))
+            text = "".join(ch for ch in str(value) if ch not in remove)
+            positions = item.get("positions") or []
+            expected = item.get("length")
+            if expected is not None and len(text) != int(expected):
+                skipped[name] = f"需要 {expected} 位，实际 {len(text)} 位"
+                continue
+            if len(text) > len(positions):
+                skipped[name] = f"分段格只有 {len(positions)} 位，实际 {len(text)} 位"
+                continue
+            for ch, (x, y) in zip(text, positions):
+                fields.append({**layout, "x": x, "y": y, "text": ch})
+        else:
+            skipped[name] = f"未知平铺表操作类型：{kind}"
+    return fields, skipped
 
 
 def _detect_flat_form(pdf_bytes: bytes) -> str | None:
-    """识别无 acroform 字段的平铺表：文本命中已知平铺表关键词返回其标识名。"""
+    """关键词 + 页数 + 页面尺寸三重匹配，防止同标题不同版式误用坐标。"""
+    import io
+
+    from pypdf import PdfReader
+
     from .ingest.pdf import extract_pdf_text
 
     text = (extract_pdf_text(pdf_bytes) or "").lower()
     if not text:
         return None
-    for name, (keywords, _fn) in _FLAT_FORM_DETECTORS.items():
-        if all(kw in text for kw in keywords):
-            return name
+    reader = PdfReader(io.BytesIO(pdf_bytes))
+    for name, template in load_flat_templates().items():
+        if not all(keyword.lower() in text for keyword in template.get("keywords", [])):
+            continue
+        expected_pages = int(template.get("page_count", 0))
+        if expected_pages and len(reader.pages) != expected_pages:
+            continue
+        expected_sizes = template.get("page_sizes") or []
+        if len(expected_sizes) != len(reader.pages):
+            continue
+        if any(
+            abs(float(page.mediabox.width) - float(size[0])) > 1
+            or abs(float(page.mediabox.height) - float(size[1])) > 1
+            for page, size in zip(reader.pages, expected_sizes)
+        ):
+            continue
+        return name
     return None
 
 
 def _fill_flat_form(session, case, flat_name: str, pdf_bytes: bytes, *, message_id: int | None = None) -> dict | None:
-    """填已知平铺表：按坐标画文字/勾选落盘并记审计。失败返回 None（不阻断主链路）。"""
+    """按已登记模板填写平铺表；失败留审计并退回未命中流程。"""
     from . import audit
     from .models import Commission
 
     commission = session.get(Commission, case.commission_id)
-    if commission is None:
+    template = load_flat_templates().get(flat_name)
+    if commission is None or template is None:
         return None
-    generator = _FLAT_FORM_DETECTORS[flat_name][1]
     intake = get_intake_fields(session, commission.id) or {}
-    fields = generator(commission, intake)
+    data = _commission_data(commission)
+    data.update({f"client_{key}": value for key, value in intake.items()})
 
     out_dir = Path(settings.filled_forms_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     output_path = str(out_dir / f"{case.case_no}_{flat_name}.pdf")
     try:
+        fields, skipped = build_flat_fields(template, data)
         fill_flat_pdf(pdf_bytes, fields, output_path)
     except Exception as exc:  # noqa: BLE001
         audit.record(
@@ -610,15 +671,25 @@ def _fill_flat_form(session, case, flat_name: str, pdf_bytes: bytes, *, message_
             reasons=[f"平铺表 {flat_name} 填表失败：{exc}"],
         )
         return None
+    cleared = sum(1 for field in fields if field.get("clear"))
+    filled = len(fields) - cleared
+    reasons = [f"平铺表 {flat_name} 坐标填表 {filled} 项，清除 {cleared} 处"]
+    reasons.extend(f"{name}: {reason}" for name, reason in skipped.items())
     audit.record(
         session,
         action="form.auto_fill",
         case_id=case.id,
         message_id=message_id,
         decision="filled",
-        reasons=[f"平铺表 {flat_name} 坐标填表 {len(fields)} 项"],
+        reasons=reasons,
     )
-    return {"output_path": output_path, "form_format": flat_name, "filled": len(fields)}
+    return {
+        "output_path": output_path,
+        "form_format": flat_name,
+        "filled": filled,
+        "cleared": cleared,
+        "skipped": skipped,
+    }
 
 
 def auto_fill_for_case(session, case, attachment, *, message_id: int | None = None, provider=None) -> dict | None:  # noqa: ANN001

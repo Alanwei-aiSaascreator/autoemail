@@ -91,8 +91,10 @@ def save_formats(path: Path | None = None) -> None:
                 "role": fmt.role,
             }
         )
+    # 保留 flat_forms 等非 acroform 配置，登记新格式时不能把平铺模板冲掉。
+    existing["formats"] = list(by_id.values())
     source.write_text(
-        json.dumps({"formats": list(by_id.values())}, ensure_ascii=False, indent=2),
+        json.dumps(existing, ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
 

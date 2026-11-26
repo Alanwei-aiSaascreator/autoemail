@@ -353,50 +353,132 @@ def test_form_request_client_template_not_filled(session, world, monkeypatch, tm
     assert list(tmp_path.iterdir()) == []
 
 
-# ---- 平铺表（Bond Exchange）坐标填表 ----
-
-from types import SimpleNamespace
+# ---- 平铺表：配置驱动、逐格填写、条件勾选、多页渲染 ----
 
 
-def _flat_commission():
-    return SimpleNamespace(
-        legal_name="Don Ibrico LLC",
-        ein="43-2417659",
-        addr_line1="411 DONDEE ST STE B",
-        addr_city="PACIFICA",
-        addr_state="CA",
-        addr_zip="94044",
-    )
+def _flat_data(**overrides):
+    data = {
+        **DATA,
+        "client_a004": "50,000",
+        "client_a006": "2026-11-22",
+        "client_a007": "No",
+        "client_b005": "B20260442134",
+        "client_b011": "12345678901",
+        "client_d001": "Household kitchen storage products",
+    }
+    data.update(overrides)
+    return data
 
 
-def test_bond_exchange_flat_fields_layout():
-    fields = formfill._bond_exchange_flat_fields(
-        _flat_commission(),
-        {"a004": "50,000", "a006": "2026-11-22", "a007": "No", "b005": "B20260442134", "d002": "Thermos"},
-    )
-    texts = [f.get("text") for f in fields if not f.get("check")]
+def _flat_template():
+    return formfill.load_flat_templates()["bond_exchange_flat_v1"]
+
+
+def test_flat_template_builds_bond_exchange_layout():
+    fields, skipped = formfill.build_flat_fields(_flat_template(), _flat_data())
+    assert skipped == {}
+    texts = [f["text"] for f in fields if f.get("text")]
     checks = [f for f in fields if f.get("check")]
-    # FEIN 9 位逐格填，州登记号 b005 绝不进 Customs Assigned Number 行（二选一）
-    assert [t for t in texts if t in "0123456789"] == list("432417659")
-    assert "B20260442134" not in texts and "B" not in texts
-    # Continuous / Other / E-Mail 为预印勾选，只画 Activity1 与 Type of Business 两处
-    assert len(checks) == 2
-    # Entity 名称在 Entity 框内部（700.8-724.4），不与标题重叠
-    name = next(f for f in fields if f.get("text") == "Don Ibrico LLC")
-    assert 700.8 < name["y"] < 717
-    # City/State/Zip 在各自格子内（x: 17.9-229.1 / 229.1-264.8 / 264.8-370.4）
-    city = next(f for f in fields if f.get("text") == "PACIFICA")
-    state = next(f for f in fields if f.get("text") == "CA")
-    zip_ = next(f for f in fields if f.get("text") == "94044")
-    assert 17.9 < city["x"] < 220 and 229.1 < state["x"] < 260 and 264.8 < zip_["x"] < 366
-    assert city["y"] == state["y"] == zip_["y"]
+    clears = [f for f in fields if f.get("clear")]
+
+    assert "Sunrise Home Goods LLC" in texts
+    assert "Household kitchen storage products" in texts
+    assert "B20260442134" not in texts
+    fein = [f for f in fields if f.get("y") == 684]
+    assert [f["text"] for f in fein] == list("123456789")
+    assert len(fein) == 9
+    assert not [f for f in fields if f.get("y") == 644], "有 FEIN 时 Customs 栏必须留空"
+    assert len(checks) == 2 and all(f.get("rect") for f in checks)
+    assert clears == [{"page": 0, "clear": [445.0, 489.0, 452.5, 495.5]}]
+
+    city = next(f for f in fields if f.get("text") == "Wilmington")
+    state = next(f for f in fields if f.get("text") == "DE")
+    zip_ = next(f for f in fields if f.get("text") == "19801")
+    assert 17.9 < city["x"] < 229.1
+    assert 229.1 < state["x"] < 264.8
+    assert 264.8 < zip_["x"] < 370.4
+    assert city["y"] == state["y"] == zip_["y"] == 634
 
 
-def test_bond_exchange_flat_ad_cvd_yes_checks():
-    fields = formfill._bond_exchange_flat_fields(
-        _flat_commission(), {"a007": "Yes", "a004": "50,000"},
-    )
+def test_flat_template_conditional_ad_cvd_check():
+    fields, _ = formfill.build_flat_fields(_flat_template(), _flat_data(client_a007="Yes"))
     checks = [f for f in fields if f.get("check")]
     assert len(checks) == 3
-    adcvd = checks[-1]
-    assert 360 < adcvd["x"] < 376
+    assert checks[-1]["rect"] == [368.6, 526.7, 373.8, 531.8]
+    assert checks[-1]["size"] == 5.5
+
+
+def test_flat_template_uses_cbp_number_only_without_fein():
+    data = _flat_data()
+    data.pop("ein")
+    fields, skipped = formfill.build_flat_fields(_flat_template(), data)
+    customs = [f for f in fields if f.get("y") == 644]
+    assert [f["text"] for f in customs] == list("12345678901")
+    assert all(f["align"] == "center" for f in customs)
+    assert all(f["x"] != 492 for f in customs), "第 7 格是原表印刷横线，不能覆盖"
+    assert "fein" in skipped
+
+
+def test_flat_template_rejects_wrong_char_count_without_partial_fill():
+    fields, skipped = formfill.build_flat_fields(_flat_template(), _flat_data(ein="123"))
+    assert "需要 9 位" in skipped["fein"]
+    assert not [f for f in fields if f.get("y") == 684]
+
+
+def _pdf_with_pages(sizes: list[tuple[int, int]], text: str = "") -> bytes:
+    import io
+
+    from reportlab.pdfgen import canvas
+
+    buf = io.BytesIO()
+    c = canvas.Canvas(buf)
+    for width, height in sizes:
+        c.setPageSize((width, height))
+        if text:
+            c.drawString(30, height - 40, text)
+        c.showPage()
+    c.save()
+    return buf.getvalue()
+
+
+def test_flat_detection_requires_matching_page_geometry():
+    content = _pdf_with_pages([(612, 792)], "The Bond Exchange / Customs Bond Application")
+    assert formfill._detect_flat_form(content) == "bond_exchange_flat_v1"
+    wrong_size = _pdf_with_pages([(600, 792)], "The Bond Exchange / Customs Bond Application")
+    assert formfill._detect_flat_form(wrong_size) is None
+
+
+def test_flat_renderer_supports_multiple_pages_and_rejects_bad_page(tmp_path):
+    from pypdf import PdfReader
+
+    source = _pdf_with_pages([(612, 792), (612, 792)])
+    output = tmp_path / "filled.pdf"
+    formfill.fill_flat_pdf(
+        source,
+        [
+            {"page": 1, "x": 50, "y": 700, "text": "SECOND PAGE"},
+            {"page": 1, "rect": [50, 650, 60, 660], "check": True, "size": 10},
+            {"page": 0, "clear": [50, 600, 60, 610]},
+        ],
+        str(output),
+    )
+    reader = PdfReader(output)
+    assert "SECOND PAGE" not in (reader.pages[0].extract_text() or "")
+    second_text = reader.pages[1].extract_text() or ""
+    assert "SECOND PAGE" in second_text and "X" in second_text
+
+    with pytest.raises(ValueError, match="页码越界"):
+        formfill.fill_flat_pdf(
+            source, [{"page": 2, "x": 1, "y": 1, "text": "bad"}], str(output)
+        )
+
+
+def test_save_formats_preserves_flat_templates(tmp_path, monkeypatch):
+    from autoemail import router
+
+    path = tmp_path / "form_mappings.json"
+    flat = {"format_id": "flat_v1", "keywords": ["example"], "fields": []}
+    path.write_text(json.dumps({"formats": [], "flat_forms": [flat]}), encoding="utf-8")
+    monkeypatch.setattr(router, "FORMAT_LIBRARY", [])
+    router.save_formats(path)
+    assert json.loads(path.read_text(encoding="utf-8"))["flat_forms"] == [flat]

@@ -773,5 +773,49 @@
       },
       "note": "C.A. Shea & Company 版海关保函申请表（Acora/Goldleaf 使用）。表格本身无签名栏，签名盖在 Additional Comments 空白区。勾选类为 /Tx 文本框，填 X。AD/CVD 与 Bond 金额取自客户需求 a007/a004。"
     }
+  ],
+  "flat_forms": [
+    {
+      "format_id": "bond_exchange_flat_v1",
+      "type_id": "customs_bond_application",
+      "keywords": ["bond exchange", "customs bond application"],
+      "page_count": 1,
+      "page_sizes": [[612, 792]],
+      "fields": [
+        {"name": "legal_name", "kind": "text", "value": "legal_name", "x": 22, "y": 708, "size": 10},
+        {"name": "date", "kind": "text", "value": {"client": "a006"}, "x": 505, "y": 714, "size": 10},
+        {"name": "address", "kind": "text", "value": "addr_line1", "x": 22, "y": 683, "size": 9},
+        {"name": "city", "kind": "text", "value": "addr_city", "x": 22, "y": 634, "size": 10},
+        {"name": "state", "kind": "text", "value": "addr_state", "x": 232, "y": 634, "size": 10},
+        {"name": "zip", "kind": "text", "value": "addr_zip", "x": 268, "y": 634, "size": 10},
+        {"name": "bond_amount", "kind": "text", "value": {"client": "a004"}, "x": 22, "y": 516, "size": 10},
+        {"name": "commodity", "kind": "text", "value": {"client": "d001"}, "x": 227, "y": 516, "size": 8, "max_width": 360},
+        {"name": "clear_preselected_other", "kind": "clear", "rect": [445.0, 489.0, 452.5, 495.5]},
+        {"name": "activity_1_importer", "kind": "check", "value": {"const": "X"}, "rect": [19.4, 553.4, 28.6, 562.6], "size": 10},
+        {"name": "business_importer", "kind": "check", "value": {"const": "X"}, "rect": [30.6, 487.7, 39.7, 496.8], "size": 10},
+        {"name": "ad_cvd", "kind": "check", "value": {"client": "a007"}, "equals": "Yes", "rect": [368.6, 526.7, 373.8, 531.8], "size": 5.5},
+        {
+          "name": "fein",
+          "kind": "chars",
+          "value": "ein",
+          "remove_chars": "- ",
+          "length": 9,
+          "size": 11,
+          "positions": [[383, 684], [401, 684], [417, 684], [432.5, 684], [450, 684], [468, 684], [486, 684], [504, 684], [521.5, 684]]
+        },
+        {
+          "name": "customs_assigned_number",
+          "kind": "chars",
+          "value": {"client": "b011"},
+          "when": {"value": "ein", "present": false},
+          "remove_chars": "- ",
+          "length": 11,
+          "size": 11,
+          "align": "center",
+          "positions": [[383.5, 644], [401.6, 644], [419.7, 644], [437.7, 644], [455.9, 644], [474.0, 644], [510.1, 644], [528.2, 644], [546.3, 644], [564.4, 644], [582.4, 644]]
+        }
+      ],
+      "note": "FEIN 与 Customs Assigned Number 二选一；b005 是州登记编号，禁止映射。Continuous 和 Send Via E-Mail 沿用原表正确预勾；清除与 Importer 冲突的 Other 预勾。"
+    }
   ]
 }
