@@ -1156,6 +1156,12 @@ def render_inquiry(
 ) -> str:
     commissions = session.scalars(select(Commission).order_by(Commission.id)).all()
     agents = session.scalars(select(Agent).order_by(Agent.id)).all()
+    from .models import SignatureAsset
+
+    sig_map = {
+        row.commission_id: row
+        for row in session.scalars(select(SignatureAsset).order_by(SignatureAsset.id)).all()
+    }
     commission_rows = []
     readiness: list[tuple[str, bool, str]] = []  # (公司名, 是否可发起, 缺什么)
     for item in commissions:
@@ -1168,6 +1174,11 @@ def render_inquiry(
         company_ok = not missing_fields
         can_start = company_ok and not missing_docs
         missing_desc = "、".join(missing_fields + missing_docs) if not can_start else ""
+        sig_asset = sig_map.get(item.id)
+        sig_cell = (
+            f'<span class="doc-ok">{_e(sig_asset.filename)}</span>'
+            if sig_asset else '<span class="doc-miss">未上传</span>'
+        )
         commission_rows.append(
             [
                 f"#{item.id}",
@@ -1175,6 +1186,7 @@ def render_inquiry(
                 _e(item.ein),
                 f'<span class="{"doc-ok" if company_ok else "doc-miss"}">{"✓" if company_ok else "✗"}</span> 公司信息',
                 "　".join(doc_cells),
+                sig_cell,
                 f'<span class="ready {"yes" if can_start else "no"}">{"可发起询价" if can_start else "未就绪"}</span>',
             ]
         )
@@ -1200,7 +1212,7 @@ def render_inquiry(
     new_commission_form = f"""
 <div class="panel">
 <h3 class="stitle"><b>1</b>委托公司</h3>
-{_table(["ID", "公司", "EIN", "资料", "必要文件", "状态"], commission_rows)}
+{_table(["ID", "公司", "EIN", "资料", "必要文件", "签名", "状态"], commission_rows)}
 <details{' open' if not commissions else ''}>
 <summary>{'＋ 新建委托公司' if commissions else '点此填写委托公司信息（第 1 步）'}</summary>
 <form method="post" action="/inquiry/commission">
@@ -1255,6 +1267,18 @@ def render_inquiry(
   <p><button type="submit">上传文件</button></p>
 </form>
 <p class="muted">当前文件齐备情况见上表 ✓ / ✗ 标记。</p>
+</div>
+<div class="panel">
+<h3 class="stitle"><b>2.5</b>上传客户手写签名</h3>
+<p class="muted">签名用于自动填表时盖到署名处；不传不影响发起询价，可稍后补。仅支持 png / jpg / webp。</p>
+<form method="post" action="/inquiry/signature" enctype="multipart/form-data">
+  <div class="row">
+    <div><label>委托公司</label><select name="commission_id">{commission_options}</select></div>
+    <div><label>签名图片</label><input type="file" name="signature" accept="image/png,image/jpeg,image/webp" required></div>
+    <div><label>操作人</label><input type="text" name="reviewer" required></div>
+  </div>
+  <p><button type="submit">上传签名</button></p>
+</form>
 </div>
 <div class="panel">
 <h3 class="stitle"><b>3</b>发起询价</h3>
@@ -2261,6 +2285,7 @@ class Handler(BaseHTTPRequestHandler):
         is_inquiry = parsed.path == "/inquiry"
         is_new_commission = parsed.path == "/inquiry/commission"
         is_document_upload = parsed.path == "/inquiry/document"
+        is_inquiry_signature = parsed.path == "/inquiry/signature"
         is_feishu_import = parsed.path == "/commissions/feishu"
         is_signature_upload = (
             len(parts) == 3
@@ -2291,6 +2316,7 @@ class Handler(BaseHTTPRequestHandler):
             or is_inquiry
             or is_new_commission
             or is_document_upload
+            or is_inquiry_signature
             or is_feishu_import
             or is_signature_upload
             or is_draft_action
@@ -2335,6 +2361,13 @@ class Handler(BaseHTTPRequestHandler):
                     commission_id = -1
                 kind, message = perform_upload_signature(session, commission_id, form, files)
                 location = f"/commissions/{commission_id}/signature?kind={quote(kind)}&msg={quote(message)}"
+            elif is_inquiry_signature:
+                try:
+                    commission_id = int(form.get("commission_id") or 0)
+                except ValueError:
+                    commission_id = -1
+                kind, message = perform_upload_signature(session, commission_id, form, files)
+                location = f"/inquiry?kind={quote(kind)}&msg={quote(message)}"
             else:
                 try:
                     item_id = int(parts[1])
