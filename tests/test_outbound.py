@@ -1,6 +1,6 @@
 from autoemail.channels.base import SendResult
 from autoemail.drafts import approve_draft
-from autoemail.models import AuditEvent, Draft, Message, SendLedger, DRAFT_BLOCKED, DRAFT_FAILED, DRAFT_SENT
+from autoemail.models import AuditEvent, Attachment, Draft, Message, SendLedger, DRAFT_BLOCKED, DRAFT_FAILED, DRAFT_SENT
 from autoemail.pipeline import process_message
 from pathlib import Path
 from autoemail.channels.eml import EmlDirectoryChannel
@@ -72,3 +72,30 @@ def test_second_approval_of_sent_draft_is_rejected(session, world):
     else:
         raise AssertionError("已发送草稿不应允许再次批准")
     assert len(channel.calls) == 1
+
+
+def test_outbound_attachments_recorded_with_storage_key(session, world, tmp_path):
+    """发出的邮件附件回填 attachment 表，storage_key 指向落盘文件，网页可点开。"""
+    pdf = tmp_path / "filled_bond.pdf"
+    pdf.write_bytes(b"%PDF-1.4 outbound")
+    draft = _create_draft(session, world)
+    draft.attachments = [str(pdf)]
+    session.commit()
+
+    channel = FakeChannel()
+    approve_draft(session, draft.id, reviewer="reviewer", channel=channel)
+
+    outbound = session.query(Message).filter(Message.direction == "out").one()
+    rows = session.query(Attachment).filter(Attachment.message_id == outbound.id).all()
+    assert len(rows) == 1
+    assert rows[0].filename == "filled_bond.pdf"
+    assert rows[0].storage_key == str(pdf)
+    assert Path(rows[0].storage_key).is_file()
+
+
+def test_outbound_without_attachments_has_no_attachment_rows(session, world):
+    draft = _create_draft(session, world)
+    channel = FakeChannel()
+    approve_draft(session, draft.id, reviewer="reviewer", channel=channel)
+    outbound = session.query(Message).filter(Message.direction == "out").one()
+    assert session.query(Attachment).filter(Attachment.message_id == outbound.id).count() == 0

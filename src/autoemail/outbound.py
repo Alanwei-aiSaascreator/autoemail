@@ -3,6 +3,7 @@ import re
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 import hashlib
+from pathlib import Path
 
 from sqlalchemy import func, select
 from sqlalchemy.exc import IntegrityError
@@ -15,6 +16,7 @@ from .models import (
     AdcvdAttestation,
     Agent,
     AgentPolicy,
+    Attachment,
     AuditEvent,
     Case,
     Commission,
@@ -238,6 +240,28 @@ def send_draft(session: Session, draft: Draft, *, channel: MessageChannel, actor
     case.waiting_since = now
     outbound = Message(thread_id=draft.thread_id, direction="out", channel=channel.name, channel_msg_id=result.channel_msg_id, in_reply_to=source.channel_msg_id, references=(source.references or []) + ([source.channel_msg_id] if source.channel_msg_id else []), from_addr="", to_addrs=draft.to_addrs, cc_addrs=draft.cc_addrs, subject=draft.subject, body_text=draft.body, sent_at=now, dedupe_hash=hashlib.sha256(f"out|{draft.id}|{draft.version}|{result.channel_msg_id}".encode()).hexdigest())
     session.add(outbound)
+    session.flush()
+    # 出站附件落盘路径回填 attachment 表：网页可点开查看发出的文件
+    for path_str in list(draft.attachments or []):
+        p = Path(path_str)
+        if not p.is_file():
+            continue
+        try:
+            size = p.stat().st_size
+        except OSError:
+            size = 0
+        session.add(
+            Attachment(
+                message_id=outbound.id,
+                filename=p.name,
+                mime=None,
+                size=size,
+                sha256="",
+                storage_key=str(p),
+                doc_type="outbound",
+                model_visible=False,
+            )
+        )
     session.commit()
     audit.record(session, action="draft.sent", case_id=case.id, thread_id=thread.id, message_id=source.id, draft_id=draft.id, actor=actor, decision=DRAFT_SENT, reasons=["通过发送闸门并发送"])
     return OutboundResult(draft, AUTO_SEND, result)

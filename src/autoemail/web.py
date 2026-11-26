@@ -35,6 +35,7 @@ from .state import set_auto_mode
 from .textutil import normalize_text
 from .models import (
     Agent,
+    Attachment,
     AuditEvent,
     Case,
     Commission,
@@ -233,6 +234,50 @@ def _fmt_dt(value: datetime | None) -> str:
 
 def _tag(status: str) -> str:
     return f'<span class="tag {_e(status)}">{_e(status)}</span>'
+
+
+def _mime_for(name: str) -> str:
+    suffix = Path(name).suffix.lower()
+    return {
+        ".pdf": "application/pdf",
+        ".jpg": "image/jpeg",
+        ".jpeg": "image/jpeg",
+        ".png": "image/png",
+        ".webp": "image/webp",
+        ".gif": "image/gif",
+        ".txt": "text/plain; charset=utf-8",
+        ".csv": "text/csv; charset=utf-8",
+        ".xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        ".xls": "application/vnd.ms-excel",
+        ".doc": "application/msword",
+        ".docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        ".eml": "message/rfc822",
+    }.get(suffix, "application/octet-stream")
+
+
+def _attachment_links(session: Session, message_id: int) -> str:
+    """渲染一条邮件记录的附件为可点击链接（含大小）。"""
+    rows = session.scalars(
+        select(Attachment).where(Attachment.message_id == message_id).order_by(Attachment.id)
+    ).all()
+    if not rows:
+        return '<span class="muted">—</span>'
+    parts = []
+    for att in rows:
+        size = att.size or 0
+        parts.append(
+            f'<a href="/attachment/{att.id}" target="_blank" title="{_e(att.filename)}">'
+            f'{_e(att.filename)}</a> <span class="muted">({_e(_human_size(size))})</span>'
+        )
+    return "<br>".join(parts)
+
+
+def _human_size(size: int) -> str:
+    if size < 1024:
+        return f"{size} B"
+    if size < 1024 * 1024:
+        return f"{size / 1024:.1f} KB"
+    return f"{size / 1024 / 1024:.1f} MB"
 
 
 def _layout(title: str, active: str, content: str) -> str:
@@ -1524,6 +1569,7 @@ def render_case(
             _e(item.from_addr),
             _e(item.subject),
             f'<details><summary>查看正文</summary><pre>{_e(item.body_text)}</pre></details>',
+            _attachment_links(session, item.id),
             # 入站邮件可人工「重新处理」：作废旧草稿、回滚状态后按当前分类器重跑；
             # 已发出过回复的邮件只能「强制重跑」补发更正回复（二次确认）
             (
@@ -1684,7 +1730,7 @@ def render_case(
         ),
         _section(
             "邮件",
-            _table(["方向", "时间", "发件人", "主题", "正文", "操作"], message_rows),
+            _table(["方向", "时间", "发件人", "主题", "正文", "附件", "操作"], message_rows),
             len(messages),
         ),
         _section(
@@ -1869,6 +1915,18 @@ def render_draft(
     notices = _reasons(draft.notices)
     body = _e(draft.body)
     fields = html.escape(json.dumps(draft.controlled_fields or {}, ensure_ascii=False, indent=2, default=str))
+    # 草稿附件：填表产物与支持文件都在 filled_forms 目录，用 /filled/ 直接打开
+    draft_attachments = []
+    for path_str in list(draft.attachments or []):
+        name = Path(path_str).name
+        draft_attachments.append(
+            f'<a href="/filled/{quote(name)}" target="_blank">{_e(name)}</a>'
+        )
+    attachments_html = (
+        "<h2>附件</h2><ul class='reasons'>" + "".join(f"<li>{a}</li>" for a in draft_attachments) + "</ul>"
+        if draft_attachments
+        else ""
+    )
     edited = (
         f"<h2>人工修改记录</h2><pre>{_e(draft.edited_diff)}</pre>" if draft.edited_diff else ""
     )
@@ -1923,6 +1981,7 @@ def render_draft(
 {facts}
 <h2>主题</h2><p>{_e(draft.subject)}</p>
 <h2>正文</h2><pre>{body}</pre>
+{attachments_html}
 <h2>提示</h2>{notices}
 <h2>受控字段</h2><pre>{fields}</pre>
 {edited}
@@ -2021,6 +2080,15 @@ class Handler(BaseHTTPRequestHandler):
         # 填表产物下载：/filled/<filename> 直接回 PDF，不走 HTML 渲染
         if path.startswith("/filled/"):
             self._serve_filled(path.split("/", 2)[-1])
+            return
+        # 邮件附件下载：/attachment/<id>（入站从 .eml 解出，出站从 storage_key 路径读）
+        if path.startswith("/attachment/"):
+            try:
+                attachment_id = int(path.split("/", 2)[-1])
+            except ValueError:
+                self.send_error(404, "Not found")
+                return
+            self._serve_attachment(attachment_id)
             return
         query = parse_qs(parsed.query)
         flash_kind = (query.get("kind") or [None])[0]
@@ -2269,6 +2337,63 @@ class Handler(BaseHTTPRequestHandler):
         raw = self.rfile.read(length).decode("utf-8", errors="replace")
         parsed = parse_qs(raw, keep_blank_values=True)
         return {key: values[0] for key, values in parsed.items()}
+
+    def _serve_attachment(self, attachment_id: int) -> None:
+        """下载邮件附件。出站邮件附件落盘为 storage_key；入站附件从原始 .eml 解出。"""
+        session = get_session()
+        try:
+            att = session.get(Attachment, attachment_id)
+        finally:
+            session.close()
+        if att is None:
+            self.send_error(404, "Attachment not found")
+            return
+
+        data: bytes | None = None
+        filename = att.filename or "attachment.bin"
+        # 1) 出站附件：storage_key 指向落盘文件
+        if att.storage_key:
+            p = Path(att.storage_key)
+            if p.is_file():
+                data = p.read_bytes()
+        # 2) 入站附件：从原始 .eml 里按 sha256（兜底文件名）解出
+        if data is None:
+            from .ingest.parse import parse_email_bytes
+
+            session = get_session()
+            try:
+                msg_row = session.get(Message, att.message_id)
+            finally:
+                session.close()
+            if msg_row is not None and (msg_row.raw_path or "").strip():
+                raw_path = Path(msg_row.raw_path)
+                if raw_path.is_file():
+                    try:
+                        parsed = parse_email_bytes(raw_path.read_bytes(), channel="eml")
+                    except Exception:  # noqa: BLE001
+                        parsed = None
+                    if parsed is not None:
+                        for item in parsed.attachments:
+                            if att.sha256 and item.sha256 == att.sha256:
+                                data = item.content
+                                break
+                        if data is None:
+                            for item in parsed.attachments:
+                                if item.filename == att.filename:
+                                    data = item.content
+                                    break
+        if data is None:
+            self.send_error(404, "Attachment content unavailable")
+            return
+
+        mime = att.mime or _mime_for(filename)
+        self.send_response(200)
+        self.send_header("Content-Type", mime)
+        self.send_header("Content-Length", str(len(data)))
+        self.send_header("Content-Disposition", f'inline; filename="{Path(filename).name}"')
+        self.send_header("Cache-Control", "no-store")
+        self.end_headers()
+        self.wfile.write(data)
 
     def _serve_filled(self, filename: str) -> None:
         # 先 URL 解码（空格/中文会被编码成 %20/%XX），再只取文件名防路径穿越
