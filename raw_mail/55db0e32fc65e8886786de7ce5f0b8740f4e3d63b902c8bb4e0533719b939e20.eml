@@ -1,0 +1,113 @@
+Return-Path: <darin@tcustomsinc.com>
+Delivered-To: brianamartin@flywirecompany.online
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id QO+DFTHsBmvPVSMAQ1DlOA
+	(envelope-from <darin@tcustomsinc.com>)
+	for <brianamartin@flywirecompany.online>; Wed, 25 Nov 2026 09:09:53 -0500
+X-Original-To: brianamartin@flywirecompany.online
+Received: from vps116238.inmotionhosting.com (vps116238.inmotionhosting.com [216.194.173.120])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id 5DAB110B79A
+	for <brianamartin@flywirecompany.online>; Wed, 25 Nov 2026 09:09:52 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=tcustomsinc.com header.s=default header.b=FiU9Eoqa;
+	dmarc=pass (policy=quarantine) header.from=tcustomsinc.com;
+	spf=pass (mail.pony-it.com: domain of darin@tcustomsinc.com designates 216.194.173.120 as permitted sender) smtp.mailfrom=darin@tcustomsinc.com
+ARC-Seal: i=1; a=rsa-sha256; d=flywirecompany.online; s=dkim; cv=none;
+	t=1795615793;
+	b=PnThNkbbF7qoOI7y1UtSdAycobXNNJ4amQ8XlLo24AQdoFwstXgI2bTBGnSxnc1yyc7kCr
+	iLlhSnZgcH2pjXELklapTIVfkWyLKbKvjNodtNN5q10vm04v503nBT0mjD2po8JE0axYKL
+	hyZBi7SRWWGyg6+T/HDNKa3wnaDcuhQwSqy3D+Q2m+vPcaxe6B8N/kkQTRsRvwKDrBiXL/
+	Nk0H9YMIX9d6Z/QbTJxXgmWZZnlPj+RKb4lSp14x5iO6cBWLR1xb6uYapO0wQ5IJC1R8HM
+	jvcy9IwU4OhtX0BI7dRFq+L8h6zYbSQz+17jwflgQN3W49EGsl0Ob5hftHabig==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=flywirecompany.online; s=dkim; t=1795615793;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:dkim-signature;
+	bh=51zjVZybKzKS5BjR3uqxVP6fWdxTP/cZo7Tne5TlnOY=;
+	b=hekM2hUZg7EqQMvipdENNvmvS+WPsDgwNBjjZFKMsHhyKZNorEuCqvU+e+OKdjkwS4nChy
+	0gzCz2wb2oAYNFKXSsvNbV3I1bmAUVog3sJbVG8FeadRVrjIS5g+/YrBeDDCwWtZRCCrQI
+	i34qOtAMk/RcxVTofDrAT+tPur0/sjAAY+KfSiyCi2HLXvmyti0pgFL0T3rwXzYd/MJb4/
+	s+pvzNEp/GRdoy1+1t0QkwhmR9HWO6YRX4pI1QbfHtsZYkGKpu7thdu+CC7Iw67ds5p5+X
+	t9pnYHGoOvKmG8ZdNcK3kIyPuwTlBY+zd67im8Vpwwd8g/6F6dovowBOmiZLVw==
+ARC-Authentication-Results: i=1;
+	mail.pony-it.com;
+	dkim=pass header.d=tcustomsinc.com header.s=default header.b=FiU9Eoqa;
+	dmarc=pass (policy=quarantine) header.from=tcustomsinc.com;
+	spf=pass (mail.pony-it.com: domain of darin@tcustomsinc.com designates 216.194.173.120 as permitted sender) smtp.mailfrom=darin@tcustomsinc.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=tcustomsinc.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+	Mime-Version:To:Subject:Message-Id:From:Date:Sender:Reply-To:Cc:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+	List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=51zjVZybKzKS5BjR3uqxVP6fWdxTP/cZo7Tne5TlnOY=; b=FiU9EoqaGHk/SmS0Y2X8IwbTq/
+	tN1hyrbXdXHIiOeAoHBOdgYwNY5HU76vsQbVMZCsRaADMA2cvmeVXKMWnN5F72QNpRavDK8poebhU
+	5HqDLbQMIUYALCJgia2LgejU+E5AK4VOaj9Kjm4IxtNydtX6TbAynduT33MksF44tCmLI+kfe6m34
+	23o3ZS/CgSobnnf77vjYhcFwKCsy9re2VQ+2N7wdT2OmP4HPBnC519AMFjo4gGJsmie5iiD8dr3p9
+	G2FC4QkGCDBiic3zIJcAfkQghago44wj2/dPQuZyLrn+mUUcwnkDOAR2AqsuS23sMBx//wfefvuM1
+	4JAvngcA==;
+Received: from tcusto5 by vps116238.inmotionhosting.com with local (Exim 4.100.1)
+	(envelope-from <darin@tcustomsinc.com>)
+	id 1xWDgy-00000008qiS-12Ot
+	for brianamartin@flywirecompany.online;
+	Wed, 25 Nov 2026 06:09:48 -0800
+Date: Wed, 25 Nov 2026 14:09:48 GMT
+From: "Darin Wells" <darin@tcustomsinc.com>
+Message-Id: <1795615788._oQzpSFMLbsucfDy@vps116238.inmotionhosting.com>
+Precedence: auto_reply
+Subject: Thank you for reaching out to us.
+To: brianamartin@flywirecompany.online
+X-Autorespond: [BOND-2026-0537] Inquiry - Continuous Customs Bond
+X-Loop: brianamartin@flywirecompany.online
+X-Precedence: auto_reply
+Mime-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - vps116238.inmotionhosting.com
+X-AntiAbuse: Original Domain - flywirecompany.online
+X-AntiAbuse: Originator/Caller UID/GID - [1001 1002] / [47 12]
+X-AntiAbuse: Sender Address Domain - tcustomsinc.com
+X-Get-Message-Sender-Via: vps116238.inmotionhosting.com: authenticated_id: tcusto5/from_h
+X-Authenticated-Sender: vps116238.inmotionhosting.com: darin@tcustomsinc.com
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Result: default: False [-1.24 / 15.00];
+	IP_REPUTATION_HAM(-0.81)[asn: 22611(-0.24), country: US(-0.01), ip: 216.194.173.120(-0.55)];
+	MV_CASE(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[tcustomsinc.com,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:216.194.173.120];
+	ONCE_RECEIVED(0.20)[];
+	R_DKIM_ALLOW(-0.20)[tcustomsinc.com:s=default];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.10)[mail.tcustomsinc.com];
+	BAYES_HAM(-0.04)[53.38%];
+	HAS_X_AS(0.00)[darin@tcustomsinc.com];
+	HAS_X_GMSV(0.00)[tcusto5/from_h];
+	RCPT_COUNT_ONE(0.00)[1];
+	RCPT_MAILCOW_DOMAIN(0.00)[flywirecompany.online];
+	ARC_NA(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	ASN(0.00)[asn:22611, ipnet:216.194.172.0/23, country:US];
+	TO_DN_NONE(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_ONE(0.00)[1];
+	HAS_X_ANTIABUSE(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	DKIM_TRACE(0.00)[tcustomsinc.com:+];
+	ARC_SIGNED(0.00)[flywirecompany.online:s=dkim:i=1]
+X-Rspamd-Queue-Id: 5DAB110B79A
+
+Dear Valued Customers,=0D
+Due to an increased number of requests regarding IEEPA refunds, our respons=
+e times may be longer than usual. Our team is actively reviewing all inquir=
+ies and will respond to yours as soon as possible.=0D
+=0D
+We appreciate your patience and thank you for your understanding.=0D

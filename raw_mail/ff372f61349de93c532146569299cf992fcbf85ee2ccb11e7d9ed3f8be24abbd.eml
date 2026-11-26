@@ -1,0 +1,1142 @@
+Return-Path: <>
+Delivered-To: cynthiabulleck@jatendofoods.online
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id GKgRKd2xB2s/iQcAQ1DlOA
+	(envelope-from <>)
+	for <cynthiabulleck@jatendofoods.online>; Wed, 25 Nov 2026 23:13:17 -0500
+X-Original-To: cynthiabulleck@jatendofoods.online
+Received: from e226-241.smtp-out.us-east-2.amazonses.com (e226-241.smtp-out.us-east-2.amazonses.com [23.251.226.241])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id E33D410DF6F
+	for <cynthiabulleck@jatendofoods.online>; Wed, 25 Nov 2026 23:13:16 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=KrT6cEkU;
+	spf=pass (mail.pony-it.com: domain of e226-241.smtp-out.us-east-2.amazonses.com designates 23.251.226.241 as permitted sender) smtp.helo=e226-241.smtp-out.us-east-2.amazonses.com;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	arc=reject ("signature check failed: fail, {[1] = sig:microsoft.com:reject}")
+ARC-Seal: i=2; a=rsa-sha256; d=jatendofoods.online; s=dkim; cv=fail;
+	t=1795666397;
+	b=AOec4HjhBkQCtzs+rOUl19O6hAlBfLzijPIjXzmhLLIJkWhC/ycHsgBu8CcyuKIVNHFySP
+	+Vzn2kVbFlsyGlnf/bLvSm09EPSk/dP+NX6b4TmwnPcjDdu4BVIPMuJ1t12cCqjuW39Gyc
+	S2hJgl7AfBAbJCJI8YiukZHrJiI3j6yXkVeDOWa3sJ03XbQUulYL7XkNbe5TU5hvcaToP7
+	BRqSkAuoYx0z53a7yRGVWFO7XBnLu5UzigvbH0jzFB1Jq+knBMgXf5kVKHxMs6SOeIhdx7
+	t8FeAioxVGTWIOdYW68aCuN3yiBGHzaPLhH1OzZgJt6CvEC918W5fH+anSyn7Q==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed;
+	d=jatendofoods.online; s=dkim; t=1795666397;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references:dkim-signature;
+	bh=5hXz2kgKLA+K6SEVF4BJPsqTU2inf881NFyI0rKldzg=;
+	b=oY4RkeDIMi4KriORghpzqX3fMhg5ARjs1HkHDaHRrW7j5m9MTQwTC96MUQg9NeI/BjCDLn
+	klDjUCy4vQzrHLa/H4hibA4kDzl3Rb0DnHmiowETb7l5KGc7QRCvTuYEgYRzx3sI3xU/PZ
+	4ZdWPlIKJrp4ArmJ59bKvdkRCtqwnt9PMy+1CgBxQjSESIVSyXjg2RjgEdEW8pp2GL8x4n
+	vlFAVIlH/rG0v3Ta7S+R8XYwaBWnpSTsJGlSQ4GDwPNX59mn6CQc44qG3EDPlOrIygu91o
+	p0JdeMEAruS4g7P4XQWQAA6ohhzt72l6IfKYOM7MJHSG+5Ug8claIwYjpI5JOg==
+ARC-Authentication-Results: i=2;
+	mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=KrT6cEkU;
+	spf=pass (mail.pony-it.com: domain of e226-241.smtp-out.us-east-2.amazonses.com designates 23.251.226.241 as permitted sender) smtp.helo=e226-241.smtp-out.us-east-2.amazonses.com;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	arc=reject ("signature check failed: fail, {[1] = sig:microsoft.com:reject}")
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=kra23psoka5qyyh6gdejiiuof3nluwuz; d=amazonses.com; t=1795666396;
+	h=MIME-Version:From:To:Date:Content-Type:Message-ID:In-Reply-To:References:Subject:Feedback-ID;
+	bh=dwna5OPcFQovco3AKrSb/+W5bfC6ry3xvEVPwcdSW0M=;
+	b=KrT6cEkUhmObN3Zk8Ze1In+COPUSfAqLiTAvcX39cueOp2k1ZRp+Qe/+NgUQVWL1
+	2skQqlDxJB/4E0lIYCjKhSp7z9S4nTrwIrUz592YLdVO51PoFA6bpggQ3d31E2gJljf
+	MEXJuAzCk36cqk55teKWcvQAgmwPUEJApjfqeejg=
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=YlV8fncTrh+MjaMTCED2aykNr+n1OmmjFJ4Pi+HKKv7E3NtAT2VGsTFjPuoxLi5N/oUZ61jhfqMIyRQmnm0yPi43+9HYO+kmwIoR/DqYApbKpDXqmqaEzNvodcX7ZYJB7S2K2OX/aJIxghyibYMonpw5PUZYWo112EmL3Vi5j7MXCJ/GcbyV5izBlwBHl1EIY3PtAp2eCpkNAZt3yaSx0+W9JnfpkZ6OMJqz7MxI5H6ZZpnF5X+OOrTcYBooJ8MBf7sYcH1cf/1hN+88UIYj92NEc+SE+sEEMh/SMPvbJnM9bX8Qk73Nwr8KCm486kdaNJgGM0+Uu+kPt9MhkVYfQA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5hXz2kgKLA+K6SEVF4BJPsqTU2inf881NFyI0rKldzg=;
+ b=NoSBtvunJ3Jx5KelTZocjZwCMg/IXLRNhGpSNSmtBBoFBk+dDXICEelnKe/EtL5daLD8ZlhcU18U2IvFmy/sWUGko3y8BMu1ChuqriwKsF9y4rvXOc8MWOt3djpZz/ZBiTXjpW+2R7DUVN+m/rMo/5XesE5GJ1wHUwi3hR9o4CuMXKgI2O3bhkgcnashz6FifTZpuINt1kvsoEEsQvk8fMeKT8CDc0Ke41p0Px+evcfu2FVCFeNAY+dsPO8cVwFaVX+5UHMVn1cCdey3IVouy7YMoh45vsD8aumU83yrxpWK60+aUxAlDWbxUS7nUetu4O0HHxf0tW9+ohTLAXRzxQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=pass
+ action=none header.from=naturalnydeggertransport.onmicrosoft.com; dkim=pass
+ header.d=naturalnydeggertransport.onmicrosoft.com; arc=none
+MIME-Version: 1.0
+From: MAILER-DAEMON@us-east-2.amazonses.com
+To: cynthiabulleck@jatendofoods.online
+Date: Thu, 26 Nov 2026 04:13:15 +0000
+Content-Type: multipart/report; report-type=delivery-status;
+	boundary="a6a8834e-84e4-4db7-9bc5-0d9139584699"
+X-MS-Exchange-Message-Is-Ndr:
+Content-Language: en-US
+Message-ID: <010f01a2160ec308-76fa8428-e16c-41b2-8e49-b71797f49609-000000@us-east-2.amazonses.com>
+In-Reply-To:
+ <010f01a210e382fe-9bd085f3-8540-4a68-834a-f5d783aaabfb-000000@us-east-2.amazonses.com>
+References:
+ <010f01a210e382fe-9bd085f3-8540-4a68-834a-f5d783aaabfb-000000@us-east-2.amazonses.com>
+Subject: Undeliverable: [BOND-2026-0658] Inquiry - Continuous Customs Bond
+Auto-Submitted: auto-replied
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH8PR12MB7135:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|50650200027|366016|6049299003|376014|61400799027|1930700014|3613699012|261102123227099003|32400700002|10067099003|261009221727099003|261026140227099003|261021123027099003|261022115727099003|261009221227099003|260925022911599003|260925021311599003|260925021911599003|56012099006|261022105027099003|261009223027099003|261021133027099003|261009223327099003|261021130227099003|261026130827099003|261022075727099003|261022113327099003|261026135527099003|261009220027099003|261026121527099003|261028144727099003|261021135927099003|261021121427099003|16102099003|18002099003|22082099003|9143799003|6133799003|4053099003|8096899003|13003099007|4133799003|12063799003;
+X-Microsoft-Antispam-Message-Info:
+	m0Rzw+Yu8gx6ZAW+aGuDtWnt2NgKgd6kQg9yvRuYEFnpTvGsWUagi47PidAcYD7VKohtQ3xvsyRnUqUnq/h5imCHnSzSVAMdJfP3v8c5Y0fgNrUsCHO90lXGE7TQmvbeNbBhevTkwNi5R5fhcaP7xb0jeeZIXdut5a2yiQ3C6o8KWdjRk1t2zkHRQnbjlrD4LHSZrVwyg61xruCkA82+vSAoAPpgLDXLxv6IfcmCTrqhkizUrMcFhEwd6z/pIYWDLaFZbBn0fyCuvM5nyG9DtLhVF1NCiBv8VRmPf2+5ix8+dIq/AIDC9lK7A5LKW30ia8cSCFIoXu8OKJtZboFgbuRiRR8p7RIPD/bp9dJMWOqcWLpwFdLtkU3i7jR3QGGy+gYGd36R0XfE9vSNeWq80HY+A2IQZOjQSjfrBo1NraKmn4O9Rt6fnEYJ8WAUNCEOBLLaQKkJYXjn6cwfHyPisCWxDoRSTvbcea85b9NlrkcwxtGsetus2GrxbI0+Ii6hkXGW5kdtaOB47WD9xUsZ/boGqGknbfC0UG7S10041G9yrZrsNg+z1xAaJp1yqimx9357A4B7b9ApPjifxPLjKSKOoPM51o8OdTl2FO9VJWiuHcjycBrmzjz4cHVWjqVBakUCcDX/FcQcvFbajxWy/mUe2qGf9esZaLZ/KH7pYFMaFP+XMo2z9AjFJ+bKhgAOyJ62pKK31dItPjFkn3QuNyKO58T8/YzikyD5Te1njmsGRkidWzufl0vDRL1DJGXpqknl9AaaCrzgj+oatOV2+LcFCZiYCm94GyRv00/KjU6Zsp07CHaUv7XCv6MaLQbazHDeyVld6Na4ver+PTZ+0g==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:;PTR:;CAT:NONE;SFS:(13230040)(50650200027)(366016)(6049299003)(376014)(61400799027)(1930700014)(3613699012)(261102123227099003)(32400700002)(10067099003)(261009221727099003)(261026140227099003)(261021123027099003)(261022115727099003)(261009221227099003)(260925022911599003)(260925021311599003)(260925021911599003)(56012099006)(261022105027099003)(261009223027099003)(261021133027099003)(261009223327099003)(261021130227099003)(261026130827099003)(261022075727099003)(261022113327099003)(261026135527099003)(261009220027099003)(261026121527099003)(261028144727099003)(261021135927099003)(261021121427099003)(16102099003)(18002099003)(22082099003)(9143799003)(6133799003)(4053099003)(8096899003)(13003099007)(4133799003)(12063799003);DIR:OUT;SFP:1501;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	flCy2fPdoLSKTLEXFroNCLILape5ZnX/gDTE9qaOW2joFtx/yiW6va13IiabmW43tyB4yf7BfgcaecBCRsb9P7iKL1yq6Ai017pv0bYFFx70Zv82n1Ai15KPI8l/Ris3iJkyvMR9QtSD0H4Y8yowAxbHXpmriWbmnkrXEjCoiVmccdnPr+FY5BgLnep2n0YjUoLv2w7yMjjj2G0uRCohodHodJTyu2uQgxFMSfNgl5USW/ToaJw+LfmhUacD8/FcQvPdW90UyEaJ6VZpqpse4UJVc7XDaAYh8ZssIA90Ntxt0R6bPT4jz28aXHhIrf2wWRtToYqZjaxf7Fuk4WfLrw==
+X-OriginatorOrg: NaturalNydeggerTransport.onmicrosoft.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Nov 2026 04:13:13.1140
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-AuthSource: PH8PR12MB7135.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-Network-Message-Id:
+	577d15a5-6914-426d-3f6e-08df4b7396ad
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7135
+Feedback-ID: ::1.us-east-2.c0QCJwTJKDSb6mlKpIo5IpGwsngRMRBjZtJ48k4WYjY=:AmazonSES
+X-SES-Outgoing: 2026.11.26-23.251.226.241
+X-Last-TLS-Session-Version: TLSv1.3
+X-Rspamd-Queue-Id: E33D410DF6F
+X-Spamd-Result: default: False [-0.77 / 15.00];
+	BAYES_HAM(-5.49)[99.98%];
+	SEM_URIBL_FRESH15(3.00)[jatendofoods.online:email];
+	BAD_REP_POLICIES(2.00)[];
+	IP_REPUTATION_HAM(-1.17)[asn: 16509(-0.31), country: US(-0.01), ip: 23.251.226.241(-0.85)];
+	SUSPICIOUS_URL_IN_SUSPICIOUS_MESSAGE(1.00)[];
+	BOUNCE(-0.10)[DSN];
+	ONCE_RECEIVED(0.10)[];
+	ARC_REJECT(0.10)[signature check failed: fail, {[1] = sig:microsoft.com:reject}];
+	MIME_GOOD(-0.10)[multipart/alternative,text/plain];
+	MIME_FROM_MX_GOOD(-0.10)[feedback-smtp.us-east-2.amazonses.com];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	ARC_SIGNED(0.00)[jatendofoods.online:s=dkim:i=2];
+	SUBJ_BOUNCE_WORDS(0.00)[];
+	MIME_TRACE(0.00)[0:~,1:+,2:+,3:~,4:~,5:~,6:+];
+	URIBL_BLOCKED(0.00)[e226-241.smtp-out.us-east-2.amazonses.com:rdns,e226-241.smtp-out.us-east-2.amazonses.com:helo,us-east-2.amazonses.com:from_mime,us-east-2.amazonses.com:mid,amazonses.com:email,amazonses.com:dkim,nntc.com:email,aka.ms:url,jatendofoods.online:email];
+	RCPT_COUNT_ONE(0.00)[1];
+	R_DKIM_ALLOW(0.00)[amazonses.com:s=kra23psoka5qyyh6gdejiiuof3nluwuz];
+	RCPT_MAILCOW_DOMAIN(0.00)[jatendofoods.online];
+	DMARC_POLICY_ALLOW(0.00)[amazonses.com,quarantine];
+	DKIM_TRACE(0.00)[amazonses.com:+];
+	RCVD_COUNT_ZERO(0.00)[0];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_NONE(0.00)[];
+	DWL_DNSWL_NONE(0.00)[amazonses.com:dkim];
+	REDIRECTOR_URL(0.00)[aka.ms];
+	ASN(0.00)[asn:16509, ipnet:23.251.226.0/24, country:US];
+	R_SPF_ALLOW(0.00)[+ip4:23.251.226.241];
+	MISSING_XM_UA(0.00)[];
+	FROM_NO_DN(0.00)[];
+	RCVD_IN_DNSWL_NONE(0.00)[23.251.226.241:from]
+
+--a6a8834e-84e4-4db7-9bc5-0d9139584699
+Content-Type: multipart/alternative; differences=Content-Type;
+	boundary="ee355fe9-8c51-435e-9008-1b76b43da971"
+
+--ee355fe9-8c51-435e-9008-1b76b43da971
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+Delivery has failed to these recipients or groups:
+
+global@nntc.com<mailto:global@nntc.com>
+Your message wasn't delivered. Despite repeated attempts to deliver your me=
+ssage, a connection to the remote server couldn't be made.
+
+Contact the recipient by some other means (by phone, for example) and ask t=
+hem to tell their email admin that it appears that your email system is una=
+ble to connect to their email system. Give them the error details shown bel=
+ow. It's likely that the recipient's email admin is the only one who can fi=
+x this problem.
+
+For more information and tips to fix this issue see this article: https://g=
+o.microsoft.com/fwlink/?LinkId=3D389361.
+
+
+
+
+
+
+
+
+
+Diagnostic information for administrators:
+
+Generating server: PH8PR12MB7135.namprd12.prod.outlook.com
+Receiving server: PH8PR12MB7135.namprd12.prod.outlook.com
+
+global@nntc.com
+11/26/2026 4:13:13 AM - Server at PH8PR12MB7135.namprd12.prod.outlook.com r=
+eturned '550 5.4.317 Message expired, cannot connect to remote server(Subje=
+ctMismatch. Expected Subject: mail.nntc.com. Presented Subject: CN=3Dmail.p=
+rotection.outlook.com, O=3DMicrosoft Corporation, L=3DRedmond, S=3DWA, C=3D=
+US. Thumbprint: 2AB684F478C357001F7DB696D9C3CF7CAB74DC63.)'
+11/26/2026 4:03:11 AM - Server at nntc.com (52.101.9.34) returned '450 4.4.=
+317 Cannot establish session with remote server [Message=3DSubjectMismatch.=
+ Expected Subject: mail.nntc.com. Presented Subject: CN=3Dmail.protection.o=
+utlook.com, O=3DMicrosoft Corporation, L=3DRedmond, S=3DWA, C=3DUS. Thumbpr=
+int: 2AB684F478C357001F7DB696D9C3CF7CAB74DC63.] [LastAttemptedServerName=3D=
+nntc.com] [LastAttemptedIP=3D52.101.9.34:25] [SmtpSecurity=3D-1;-1] [CY7PEP=
+F00000033.namprd08.prod.outlook.com 2026-11-26T04:03:12.972Z 08DF4A8560A718=
+81](SubjectMismatch. Expected Subject: mail.nntc.com. Presented Subject: CN=
+=3Dmail.protection.outlook.com, O=3DMicrosoft Corporation, L=3DRedmond, S=
+=3DWA, C=3DUS. Thumbprint: 2AB684F478C357001F7DB696D9C3CF7CAB74DC63.)'
+
+Original message headers:
+
+Received: from MN0PR12MB5977.namprd12.prod.outlook.com (2603:10b6:208:37c::=
+22)
+ by PH8PR12MB7135.namprd12.prod.outlook.com (2603:10b6:510:22c::11) with
+ Microsoft SMTP Server (version=3DTLS1_2,
+ cipher=3DTLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.639.13; Wed, 25 N=
+ov
+ 2026 18:06:47 +0000
+Received: from LV8PR12MB9153.namprd12.prod.outlook.com (2603:10b6:408:185::=
+17)
+ by MN0PR12MB5977.namprd12.prod.outlook.com (2603:10b6:208:37c::22) with
+ Microsoft SMTP Server (version=3DTLS1_2,
+ cipher=3DTLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.662.6; Wed, 25 No=
+v
+ 2026 07:04:30 +0000
+ARC-Seal: i=3D1; a=3Drsa-sha256; s=3Darcselector10001; d=3Dmicrosoft.com; c=
+v=3Dnone;
+ b=3DQXRZgqWrMDvYfRd4hgaFqeY5nCJycHfkWDbA/Wopdu7dpKhrO8U/OLvg9B+OVc/tcTKrB8=
+KQNimWprXHo/ZvrJu8OwG4qhaU7a8HSHdqlQUZKFrHJJYODCQYy8w5lwrFofIsI1xqz37Jvvy4w=
+v1SmELllxkqvbxxjnifFK3Q8q775JjieOYo2YZkcbMSO+QcPJ/w8202x96v5oyPHYLyVv4vhNUZ=
+WVtZHt4grCpkp8oAlJMK0NTAa01L4dMo2VjY/2rVuhj67dARs148ZXbnHD1thZF1ryRf2xzeZlb=
+Xa+rz/yvXPE4u9nQk3+KBRZt9cETvQh3YVL/oX+SBjROHAQ=3D=3D
+ARC-Message-Signature: i=3D1; a=3Drsa-sha256; c=3Drelaxed/relaxed; d=3Dmicr=
+osoft.com;
+ s=3Darcselector10001;
+ h=3DFrom:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-A=
+ntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Ex=
+change-AntiSpam-MessageData-1;
+ bh=3DjowxYB50AbQuBWWjMo6VO9UCDKy0qDJICSXNjsSmA5k=3D;
+ b=3DDMs5QvodX+ieqdf4eg12wdUysj+CQfv6RaJBUrO7bO1/ifNqbwFSE8ORwJ1nsgg7N2C+m1=
+IQl5aJU793R98GUmpLhD7g9hWsHGccGVa+3JZNM79fLZ6Dzts+sU27EMnp2oUOSrRck52gaJ+BT=
+NuBkwnyP6PYbDIaOb5XUgnM5RavGsOiF+vYZbseS38SNTXKIsLOZe34Rj77PFztD13GjMmrtVF7=
+K2BmsgFQZ58K53UVt0GptY165epH1hP4nhJh6Sq7RwHJwQtUSgseIcUD3m0Z/+xtdq+KLPci+zp=
+OVBKKyVJ5rY6AOaF5XwUcvHrkakzZbd8qJbgLHyiuMRjLuA=3D=3D
+ARC-Authentication-Results: i=3D1; mx.microsoft.com 1; spf=3Dpass (sender i=
+p is
+ 23.251.226.6) smtp.rcpttodomain=3Dnntc.com
+ smtp.mailfrom=3Dses.jatendofoods.online; dmarc=3Dpass (p=3Dnone sp=3Dnone =
+pct=3D100)
+ action=3Dnone header.from=3Djatendofoods.online; dkim=3Dpass (signature wa=
+s
+ verified) header.d=3Djatendofoods.online; dkim=3Dpass (signature was verif=
+ied)
+ header.d=3Damazonses.com; dkim=3Dfail (signature did not verify)
+ header.d=3Djatendofoods.online; arc=3Dnone (0)
+Received: from BN9PR03CA0941.namprd03.prod.outlook.com (2603:10b6:408:108::=
+16)
+ by LV8PR12MB9153.namprd12.prod.outlook.com (2603:10b6:408:185::17) with
+ Microsoft SMTP Server (version=3DTLS1_2,
+ cipher=3DTLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.639.10; Wed, 25 N=
+ov
+ 2026 04:07:56 +0000
+Received: from BN5PEPF0004698C.namprd02.prod.outlook.com
+ (2603:10b6:408:108:cafe::4a) by BN9PR03CA0941.outlook.office365.com
+ (2603:10b6:408:108::16) with Microsoft SMTP Server (version=3DTLS1_3,
+ cipher=3DTLS_AES_256_GCM_SHA384) id 15.21.639.14 via Frontend Transport; W=
+ed,
+ 25 Nov 2026 04:07:56 +0000
+Authentication-Results: mx.microsoft.com 1; spf=3Dpass (sender IP is
+ 23.251.226.6) smtp.mailfrom=3Dses.jatendofoods.online; dkim=3Dpass (signat=
+ure was
+ verified) header.d=3Djatendofoods.online;dkim=3Dpass (signature was verifi=
+ed)
+ header.d=3Damazonses.com;dkim=3Dfail (signature did not verify)
+ header.d=3Djatendofoods.online;dmarc=3Dpass action=3Dnone
+ header.from=3Djatendofoods.online;compauth=3Dpass reason=3D100
+Received-SPF: Pass (protection.outlook.com: domain of ses.jatendofoods.onli=
+ne
+ designates 23.251.226.6 as permitted sender) receiver=3Dprotection.outlook=
+.com;
+ client-ip=3D23.251.226.6; helo=3De226-6.smtp-out.us-east-2.amazonses.com; =
+pr=3DC
+Received: from e226-6.smtp-out.us-east-2.amazonses.com (23.251.226.6) by
+ BN5PEPF0004698C.mail.protection.outlook.com (10.167.245.41) with Microsoft
+ SMTP Server (version=3DTLS1_3, cipher=3DTLS_AES_256_GCM_SHA384) id 15.21.6=
+62.3
+ via Frontend Transport; Wed, 25 Nov 2026 04:07:56 +0000
+DKIM-Signature: v=3D1; a=3Drsa-sha256; q=3Ddns/txt; c=3Drelaxed/simple;
+        s=3Dlwgkclnxmrgirntuinb2y4w7snr76liw; d=3Djatendofoods.online;
+        t=3D1795579675;
+        h=3DFrom:To:Subject:Message-ID:Content-Type:Content-Transfer-Encodi=
+ng:MIME-Version:Date;
+        bh=3D8xFfhgYfWcAMxnPy+FSKAaQsp1QpWX8sg18bbllrO6M=3D;
+        b=3DA0MwDK8omeYr1lxL+z9HWkX8O02OQ7uqsRg1/hceqszR81awVckbr7j7n6vm1FG=
+i
+        XSyuFJ3dQFpTa/RaxeI0M52ngBSDZNkW6teUolvw33cPPe3oU8RDlYbjuJRha5tm/Ds
+        yzL0H5bWgODy3NSDsuIK26ouy/GZ2HGBOV6Ro+WpBU72AUXs/Sqkr+3e6MAjj4TcJEQ
+        voMTZli0XV7KQSFPv4fJl+GqrTgYj7qjvDL7lHhzZ4mvRqb6H6/VZwX6EFDZUtw3qPL
+        dW34OahQCB04WhoeBvsVFUOtu6LEm3wOhofmSeo1KOQr/Q/M4qTzuKijeWqQtGA6ENo
+        1X5Cu+605w=3D=3D
+DKIM-Signature: v=3D1; a=3Drsa-sha256; q=3Ddns/txt; c=3Drelaxed/simple;
+        s=3Dkra23psoka5qyyh6gdejiiuof3nluwuz; d=3Damazonses.com; t=3D179557=
+9675;
+        h=3DFrom:To:Subject:Message-ID:Content-Type:Content-Transfer-Encodi=
+ng:MIME-Version:Date:Feedback-ID;
+        bh=3D8xFfhgYfWcAMxnPy+FSKAaQsp1QpWX8sg18bbllrO6M=3D;
+        b=3DZ93X9de4hdCHGtpwO+XkGgL2SyB6XJtMUuE82qEiKJe69z2p1cV+w6rCt3NkFop=
+J
+        5rrlgzXOK/gQWmQeEiQyG6lu8TjCdXU51i8XpId7TmPsoR5pIl9f/Vr9Akx4KJB/Jru
+        ywNpW4k+Ogkr/oYJ8i51CcNab7FVJqx6qcx35AQo=3D
+DKIM-Signature: v=3D1; a=3Drsa-sha256; c=3Drelaxed/relaxed; d=3Djatendofood=
+s.online;
+        s=3Ddkim; t=3D1795579674; h=3Dfrom:subject:message-id:to:mime-versi=
+on:content-type:
+         content-transfer-encoding; bh=3D8xFfhgYfWcAMxnPy+FSKAaQsp1QpWX8sg1=
+8bbllrO6M=3D;
+        b=3DSoaIb351ncWn+2HRrG7smK0+rjmH2s7V3lA9IQMVLlI6HQzXsQaqxt61N9+29cI=
+NaYUr5e
+        5hGvEz+eG1LjDeUL6imM1LcOcWXLhs0cbi6aO2wX5k8u9y5l/FcTFDYyZ/WKp8f0hMh=
+EuD
+        0sDrM5bFFGIbZdOgwhhifUecwhQP1frdQFkSEVgBJHNy4sIKTYJRgJLdN43uDO9erNA=
+lni
+        uARFgt31BtOVEW1u/kmKIW2JYk1N8RS/SPcUhgIHwc7blvT8kYCxROIjvrJTA1Wc1uC=
++Rb
+        wD1uP5QPOVh5zjJ7UTlXuHp9ymyB1a2vatWJWxckPHyJFZp15UucqghUvGpCyA=3D=
+=3D
+From: cynthiabulleck@jatendofoods.online
+To: global@nntc.com
+Subject: [BOND-2026-0658] Inquiry - Continuous Customs Bond
+Message-ID: <010f01a210e382fe-9bd085f3-8540-4a68-834a-f5d783aaabfb-000000@u=
+s-east-2.amazonses.com>
+Content-Type: text/plain; charset=3D"utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
+Date: Wed, 25 Nov 2026 04:07:55 +0000
+Feedback-ID: ::1.us-east-2.dnBLFQvZ7DBnA5nHg3QcqhG4UiG8AnTuix0bXTff/SU=3D:A=
+mazonSES
+X-SES-Outgoing: 2026.11.25-23.251.226.6
+Return-Path:
+        010f01a210e382fe-9bd085f3-8540-4a68-834a-f5d783aaabfb-000000@ses.ja=
+tendofoods.online
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: c23ec02b-083b-4e7f-887a-880f512b8a9e:0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic:
+        BN5PEPF0004698C:EE_|LV8PR12MB9153:EE_|MN0PR12MB5977:EE_|PH8PR12MB71=
+35:EE_
+X-MS-Office365-Filtering-Correlation-Id: f104a763-358e-48c2-b130-08df4aa9af=
+65
+X-LD-Processed: c23ec02b-083b-4e7f-887a-880f512b8a9e,ExtAddr,ExtAddr,ExtAdd=
+r
+X-MS-Exchange-AtpMessageProperties: SA|SL
+X-Forefront-Antispam-Report: CIP:23.251.226.6;CTRY:US;LANG:en;SCL:5;SRV:;IP=
+V:NLI;SFV:SPM;H:e226-6.smtp-out.us-east-2.amazonses.com;PTR:e226-6.smtp-out=
+.us-east-2.amazonses.com;CAT:SPM;SFTY:9.25;SFS:(13230040)(704160611799003)(=
+32142699015)(2069299003)(5009299003)(260918215300599003)(260918224100599003=
+)(3613699012)(10067099003)(5063699009)(56012099006)(260925022911599003)(260=
+925021311599003)(260925021911599003)(261022105027099003)(261022075727099003=
+)(261028144727099003)(261026140227099003)(261026121527099003)(2610211214270=
+99003)(261102123227099003)(55112099003)(16102099003)(18002099003)(411369900=
+3)(6133799003)(19002099009)(5042299003);DIR:INB;SFTY:9.25;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|704160611799003|32142699015|206929=
+9003|5009299003|260918215300599003|260918224100599003|3613699012|1006709900=
+3|5063699009|56012099006|260925022911599003|260925021311599003|260925021911=
+599003|261022105027099003|261022075727099003|261028144727099003|26102614022=
+7099003|261026121527099003|261021121427099003|261102123227099003|5511209900=
+3|16102099003|18002099003|4113699003|6133799003|19002099009|5042299003;
+X-Microsoft-Antispam-Message-Info: =3D?utf-8?B?VUFicUVMZUlONjl3QVdtUk9QcFh1=
+L0g1YVhWeStxQzVsY0JBRlVqMnZVNzdO?=3D
+ =3D?utf-8?B?TUxPZlhtem82OTNxbS93ZTNsVzVXdjArNHg1eWlLNE5nWkJaTnh1K2VjRFhD?=
+=3D
+ =3D?utf-8?B?aWhyUzR5VW1mbndCYmFCYXlZeWZRVGJmMktuZHhtbmFKa0ZUZ2lkNmVmT0Nx?=
+=3D
+ =3D?utf-8?B?b0F3Y1RkR3ZjMktmbEZabzRSc3o2RW9mY1dIUUhTQ2ZpbHRTOXBQL2l0cE1a?=
+=3D
+ =3D?utf-8?B?MExjUm40NjMrOTFwbEhLMUN4SWZKbUNzUG84cUdaRWhUS0ltUkhrRzcyZ3NT?=
+=3D
+ =3D?utf-8?B?NEE1QnJxU0tCQW9BT0ZnbmRDd1RidXV1aG9WVmtsYkFwNzNvQ2w2WTg4bUQ1?=
+=3D
+ =3D?utf-8?B?dll2eXdncmxBZktnbXVZQUNUdC9xbkU1ZkdxRFNhTVBpR2MvMVRENTA5YWs2?=
+=3D
+ =3D?utf-8?B?dUZlVFRqWjBFMkQ0Nll6dUpYSS92bCt4UmVoZ0lyRjJCUHlnbVY5QzB6MWFW?=
+=3D
+ =3D?utf-8?B?Q29GNmpYMEJPcThqRThPYU1pd2gzcjhRTEVmV1hLTzJEWGNIbmtMKzFUckZ4?=
+=3D
+ =3D?utf-8?B?eXZoOUlNdWFGMUlIVlJ5RDJCUzIxY051a2F0SGQvZzByaFFpYnZpbWZGUS9X?=
+=3D
+ =3D?utf-8?B?YW96OGdablFsOFlYWVZPZG1XYzBKdE80OHpRYnM1Q0RlUEJVRG1HajVQRyt0?=
+=3D
+ =3D?utf-8?B?ZjBwY0VESVFETlhPMXpvQldUTWRCSHJEaG84TndKZDBRQ2dGTEFLTUpXVnRH?=
+=3D
+ =3D?utf-8?B?M2IzREt3NDJ4TzQyN3FnNGFEaGlzTHQyZnNmQ3VqdjRiREc0ZnQ4N1RJRzRC?=
+=3D
+ =3D?utf-8?B?dDBleGxCYmQxMDFRR0liTmJTNWRXUklUMGduQnN1bWJtTDArZWMyWUhLWXJE?=
+=3D
+ =3D?utf-8?B?S3FwMnJ1VE8yYzk0eDRaSVNlWHNoNjIzY1BtaWcxQVJMMC9NS0pMMGNQZ01Y?=
+=3D
+ =3D?utf-8?B?R29HVndMNFFaM25qNFdDUWthVWVYaHlsTWk2bEdzZm1mZW15NWpuQkF5dUsy?=
+=3D
+ =3D?utf-8?B?MTFEVm82Qm1QMXAyR09pbUJDTlh2OHhrVTAvVEdjck1TeDdUa2ovL2lkRnl6?=
+=3D
+ =3D?utf-8?B?bWhYcTJHWXd6eWt1b2RBR2l6T2J3R3lyTG1GZHV4cHlpenA3bDlWK3ZUeVE3?=
+=3D
+ =3D?utf-8?B?VG40ZTNjVW9mK0kvNStMS25IOXlkcG9hRjR6WHh3bE8xZjZjeFVqUm9HVnU0?=
+=3D
+ =3D?utf-8?B?QTlWRDZld1NhdkQxNDljZ1NzVzQwdkpqaGZ4TENhQit4ZmRkWWpuWXlVYkJC?=
+=3D
+ =3D?utf-8?B?T2ZURzA3M3B4UUR4UUxkeW83enkyZE1MVDNFL3k4c3Z4Y0VkN1p5a04yN0xQ?=
+=3D
+ =3D?utf-8?B?VUI0QWx5Rm02U3puRU1wbzlub0hWeURmaFNuYlp1K1NadWtNbkF6RGtiSGlG?=
+=3D
+ =3D?utf-8?B?dUtNRTNENTZmU1JUUHlHQ1pna2ZaRkh5YlFtdGlsRk4xa2NSemUzZmdvbmxP?=
+=3D
+ =3D?utf-8?B?Q2NBbzVHUnFONjFKbXJ6NU93MnRpUE56WmpkU3hocWlhOFZZL3J3N1M4a3pm?=
+=3D
+ =3D?utf-8?B?K2c1UUFIdk0ra0RNYjA3Z1lBbnJjd3d2TmNsVzkraW93cTdyMXNtNGo2dXA5?=
+=3D
+ =3D?utf-8?B?R2w4aWZ6NC9rME52UTgrZlNSVUFJU2xWTUZiWEpRU08vQk5Xc0tUcHZQb1hi?=
+=3D
+ =3D?utf-8?B?ZWx2Tm90ajBuRmtMVUZ5cTFGNGxuNnc3MitCYTBRQjN1QTVaNncwUnlzWk52?=
+=3D
+ =3D?utf-8?B?ZWJZL0N4dy9VenNOTkhORW5sTU9YY2x2ZWtpRkhoSmRjUzFrQVZjM214UzNv?=
+=3D
+ =3D?utf-8?B?aFphaVFPMkdNWmM0Vnl0a29rd0gweWdDQ3p5c2pzeElTUWpPdFo4VWNHVk9S?=
+=3D
+ =3D?utf-8?B?R0Y1ZjIrbThDZ21aSGtYakdBOXlVTCt2c1kwQ2RQL3p2djZWSUo5bUErYURL?=
+=3D
+ =3D?utf-8?B?VEk3TmV4djJOdFJnelI3eU9Sc3R2NWQ4Kzd1V29iSDloWXZKRjk3c2VWUVlI?=
+=3D
+ =3D?utf-8?B?WTNpbEpzalBZT1FGY01KL3ZWZFVVbzBqaHlhWW1mMU9TdDh3VUtoQTFMWEdr?=
+=3D
+ =3D?utf-8?B?OUpJRDZyN2pQNkdqb0hGeFowMFpKbmIyMGNHSkJkOVFkTnZDNkJmSlVncHVx?=
+=3D
+ =3D?utf-8?B?aDNMV3A0TllYUXFQRTJxNzcxb2JGSGtFaHRYSGc5Q25ybm4xT0NkaGx0U2k4?=
+=3D
+ =3D?utf-8?B?V3FpaGhnMkVSTWNnT1pXUmhEbTBLMWNZRlkvL0lxRk9GZ3FiQkpZZXZqeEsv?=
+=3D
+ =3D?utf-8?B?dHdSQjZ1cjJObkxpSUs5dVpYY0k1OEJ1THBQN24vdTZxL0VtSGxwVHZpSVNm?=
+=3D
+ =3D?utf-8?B?MGR2QVZaSnpYU3BRWmNHMWdJMEQrNW1sSWdmeEJjTDJJYXlSRHdsakNDbVJR?=
+=3D
+ =3D?utf-8?B?d2p5QVFjV0tvd0ttTGlKY2hGNUpoY29JQkR0ZHp2M0haRXdzTnZXRk5MeVVj?=
+=3D
+ =3D?utf-8?B?WUI0MjVUWll1ZWZuUmJHU29ObENsUXdXYlBDb3ZjVWh1TFc2bkFIRzJrZEdt?=
+=3D
+ =3D?utf-8?B?YUVtM1FFSzQ5YkF5K3hNbzluTDNCRmVud3d2YnhROE01bmV0ellZWVRxMHhO?=
+=3D
+ =3D?utf-8?B?M0V5Ykl4UFVaZ3BVR0QzclMwcEthZG9vZjJpU0ZXSmFsWTNydnp4K3RSSFhp?=
+=3D
+ =3D?utf-8?B?bU1aa0FHWmpGU05tVlEyL2xKZnRrcjlsMkZQaWo0Y29pWDNhRTZ5NUtzSTJm?=
+=3D
+ =3D?utf-8?B?L01mTXE5S3RtTndHVnNNcTl5bWRrdU50dVNucDJiM3R4YXNlcStSckZJNEs5?=
+=3D
+ =3D?utf-8?B?azk3bXN4Rk1jYzJFQ3JXck9FRUU0Qk93QjZVdVNkeGpFTlhhWHF1UzNWZGkz?=
+=3D
+ =3D?utf-8?B?L2RSWkJaRzVLbGNqbWR3VUZQS0VvTTd6WXpSS0d1WWdTekdDdXF1d3gxbHRD?=
+=3D
+ =3D?utf-8?B?ZjFCeXdja0Eya05qRGdxUDMrS0wzYjM3enJjditYdXJFTTluVkl0M0ozZVZH?=
+=3D
+ =3D?utf-8?B?MHEyOEdBUWpYdXZ2THM1SlZTOERJZUFyTFZBVDdmOXMvM1RncDQ1aE1laG1S?=
+=3D
+ =3D?utf-8?B?blJ1WWlDMVBEZGcvalRQU1FFendHVjNKYTQ5aithenhOVkp2RVdYc2Y5M1I3?=
+=3D
+ =3D?utf-8?B?NmEzRTlxMWFVUzlyWFBHVVQ0UGVsNE9uMEhUUUtIM2FnbmhTeWlJVzJtV0ox?=
+=3D
+ =3D?utf-8?B?QWNsRTI5RCtKY0ducmozcHV5NmQ3NUxiM0ZQQlhKcEJJeWg3c2FQeGFKNksy?=
+=3D
+ =3D?utf-8?B?Mzlqc3pYTnZJQmlBRTRpajAvSVJJSHVRVHFxaVpRMTRYNkNZMGFKVnRKZ1Y5?=
+=3D
+ =3D?utf-8?B?MnV4eTkvbmRvRENseHZ1WFdsWXAycm5uaWdmOUN6VmFNemJBUTlxZEJOM2NF?=
+=3D
+ =3D?utf-8?B?emxBSmxqTU1Dckdod3pFZlZiUWdjSS9LM3l5Ukx2U0tGajkyU09RbDlKRkpj?=
+=3D
+ =3D?utf-8?B?Y2ZjcFZ2T0N3eG93ZTUyVTZiZ1l3czRwS0plWlE0VDB0TzZVZVR5ZjdnYmIv?=
+=3D
+ =3D?utf-8?B?Y0ZRM3RyZmtVMXEwejFzVjlCYmtCM0JpQ1pUazJDWjhWZDgvdVgvY3l5cmJo?=
+=3D
+ =3D?utf-8?B?TDZiODZ3TTJ6SXEzMkN2MjVGRUZsckNFK3hRNVNGSVdUUkJxdnYyWmYwMXow?=
+=3D
+ =3D?utf-8?B?RUpickZzL2hnOE90a3puNy9BNU4ra2FDaDd0OTR6UFo5U2hqSGhiWWt4dVhl?=
+=3D
+ =3D?utf-8?B?UU1kTXdwZ1BOUncrQUdTWG9GQTNGaUtTSmN6SjlXRStyNXc1d0l3UVppU3g2?=
+=3D
+ =3D?utf-8?B?UWd1UXNYRklxak5PWlFtaTJTMHkyTEhoUWgyOHBzTkJGbGlqM1NUL1Q2SlJX?=
+=3D
+ =3D?utf-8?B?TzZrY2wxMnhxb2VqYjBlTzczZHZnME1sWGx4SHo0SUFGWHpWTThFVWRld2dp?=
+=3D
+ =3D?utf-8?B?N3cyeGtkdUFweWllM3dYOGtJZVdNZnFBYlZlWXZMNXVYbnJKR2RReDlvcHZG?=
+=3D
+ =3D?utf-8?B?NVV0QTBPOHpTMlN4VTlQQTkyZzFxNGlacFpSbWpFdFo0Wloyai9tS21UQzY0?=
+=3D
+ =3D?utf-8?B?Uk5MdmdBMmplL3gvclR6QitGSW9KSkYxMEczVk5MOVpLSWtPSlEvZ3gwN0p1?=
+=3D
+ =3D?utf-8?B?Nk83bWdLRXZHOWo3QlF6T2NMbktUQnpJWitxYmFLMkZpSEthcXJJWUgxV3NS?=
+=3D
+ =3D?utf-8?B?aGdLWW0yN3JKekRCZTNGZGVKS0lldUI3R09XRjBsMEJOVUc1YytIMVU2d0xr?=
+=3D
+ =3D?utf-8?B?QjJHSVZ6ckV4ZWd4UHI0bmV6TjBqd1NBQ1ZtWUFSRWwyMTBxNkRMK3hUOURE?=
+=3D
+ =3D?utf-8?B?ekJMdHVPbFd6QTdLVC9BT1QwYXlDb3N3ZW51aFI2K2ZzbTBIdXNqVHBCb2th?=
+=3D
+ =3D?utf-8?B?dk9zbHQ0TFVsOVljUXZwMTcwcmlSZGxYcS83YUVGS1lLblJQdkxhYW42YktB?=
+=3D
+ =3D?utf-8?B?WlJRYjVheHJ4bkRnVml6TGZtNkRxbHdTNk0wdmR0d2hlQ2tpWjk2aVh1SlJU?=
+=3D
+ =3D?utf-8?B?SUlzaE1sS1g2TWt3dkc3anZNNndMbTIyM1J4QVNxQlQ4OE5JaHE1eTNaUlNa?=
+=3D
+ =3D?utf-8?B?Yi9CTWFPYXUyb200RjhMdjhQbmtYalEyWHhGZzlhd0FqQysyRGtIV0lwVFhn?=
+=3D
+ =3D?utf-8?B?aGhPaE1sSjNoRHpCaXc4TW8rVnVOQm5Vb2ZQemJWTXh3c0JubG05Rzk2b3gz?=
+=3D
+ =3D?utf-8?B?TitlV1VtK0h3OHllNDh2dVBPVnVOWlFFT09YNVBoV1p5bmEwZDhCMkVSMDBT?=
+=3D
+ =3D?utf-8?B?enpvdHU4djlNRjRuRjBJenVvZjJCMStDdE8wNVFCaGR5cWpXbjdhSEUyYytD?=
+=3D
+ =3D?utf-8?B?eGp0dzVDTlFhbXJUTGhVN2RXNFR3V0ZENERUQVI3elNvZTk3UWRjSWU1Vjl0?=
+=3D
+ =3D?utf-8?B?dmtOdCswL0Y3VUNNZnlNWWQwUjExL21YbGFhM3ZOakswa3JaTjkxMjBlNGlt?=
+=3D
+ =3D?utf-8?B?L0lxQlY3cHg2WFJmcXZYbUhxdnQ1THd3Z2hycDNwbC9ySFcrWVFTaG5OQkh6?=
+=3D
+ =3D?utf-8?B?eVVTbmV6VWdFcXFrZz09?=3D
+X-Exchange-RoutingPolicyChecked: GnWKq3oWThVqh1spuGs34aYaznB1N8N2zAgkF5cs1X=
+y6omURmkVz0dPJFCHe/lsyIbiISLwviC9cQbRuovFIOnBB4gOrpiOd5+5HXLg4XEX+oEEju1D8+=
+AcGc8gbh5IWCMPotPmkyhZ1Og+o+V8aUjr0eYrTnVYvIsDY+Q6d4QLJH8zNvKdgyeG1tNAN4747=
++GBWMhzgnS8CAsb9U6eDB4cRO9cS+r0J1jJl5Hs+P0KqwpZ5G7TUrEVM0d9I2BJNze4dUQMdtfQ=
+NtBVr4HYcPFHUUtw/oiSVN7FaU+nh0fd92G/BTuXxwsxWEcFkXkZKyjy0FxXA298hdEN8Q0ydCg=
+=3D=3D
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Nov 2026 04:07:56.1760
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f104a763-358e-48c2-b130-08df4=
+aa9af65
+X-MS-Exchange-CrossTenant-Id: c23ec02b-083b-4e7f-887a-880f512b8a9e
+X-MS-Exchange-CrossTenant-AuthSource: BN5PEPF0004698C.namprd02.prod.outlook=
+.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR12MB9153
+X-OrganizationHeadersPreserved: LV8PR12MB9153.namprd12.prod.outlook.com
+X-OriginatorOrg: NaturalNydeggerTransport.onmicrosoft.com
+X-CrossPremisesHeadersFilteredByDsnGenerator:
+        PH8PR12MB7135.namprd12.prod.outlook.com
+
+
+--ee355fe9-8c51-435e-9008-1b76b43da971
+Content-Type: text/html; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+<html>
+<Head></head><body>
+<p><b><font color=3D"#000066" size=3D"3" face=3D"Arial">Delivery has failed=
+ to these recipients or groups:</font></b></p>
+<font color=3D"#000000" size=3D"2" face=3D"Tahoma"><p><a href=3D"mailto:glo=
+bal@nntc.com">global@nntc.com</a><br>
+</font>
+<font color=3D"#000000" size=3D"3" face=3D"Arial">Your message wasn't deliv=
+ered. Despite repeated attempts to deliver your message, a connection to th=
+e remote server couldn't be made.<p>Contact the recipient by some other mea=
+ns (by phone, for example) and ask them to tell their email admin that it a=
+ppears that your email system is unable to connect to their email system. G=
+ive them the error details shown below. It's likely that the recipient's em=
+ail admin is the only one who can fix this problem.</p><p>For more informat=
+ion and tips to fix this issue see this article: https://go.microsoft.com/f=
+wlink/?LinkId=3D389361.</p><br>
+</font>
+<font color=3D"#000000" size=3D"2" face=3D"Tahoma"><br>
+</p>
+</font>
+<br><br><br><br><br><br>
+<font color=3D"#808080" size=3D"2" face=3D"Tahoma"><p><b>Diagnostic informa=
+tion for administrators:</b></p>
+<p>Generating server: PH8PR12MB7135.namprd12.prod.outlook.com<br>
+Receiving server: PH8PR12MB7135.namprd12.prod.outlook.com <br>
+</p>
+<p>global@nntc.com<br>
+11/26/2026 4:13:13 AM - Server at PH8PR12MB7135.namprd12.prod.outlook.com  =
+returned '550 5.4.317 Message expired, cannot connect to remote server(Subj=
+ectMismatch. Expected Subject: mail.nntc.com. Presented Subject: CN=3Dmail.=
+protection.outlook.com, O=3DMicrosoft Corporation, L=3DRedmond, S=3DWA, C=
+=3DUS. Thumbprint: 2AB684F478C357001F7DB696D9C3CF7CAB74DC63.)'<br>
+11/26/2026 4:03:11 AM - Server at nntc.com (52.101.9.34) returned '450 4.4.=
+317 Cannot establish session with remote server [Message=3DSubjectMismatch.=
+ Expected Subject: mail.nntc.com. Presented Subject: CN=3Dmail.protection.o=
+utlook.com, O=3DMicrosoft Corporation, L=3DRedmond, S=3DWA, C=3DUS. Thumbpr=
+int: 2AB684F478C357001F7DB696D9C3CF7CAB74DC63.] [LastAttemptedServerName=3D=
+nntc.com] [LastAttemptedIP=3D52.101.9.34:25] [SmtpSecurity=3D-1;-1] [CY7PEP=
+F00000033.namprd08.prod.outlook.com 2026-11-26T04:03:12.972Z 08DF4A8560A718=
+81](SubjectMismatch. Expected Subject: mail.nntc.com. Presented Subject: CN=
+=3Dmail.protection.outlook.com, O=3DMicrosoft Corporation, L=3DRedmond, S=
+=3DWA, C=3DUS. Thumbprint: 2AB684F478C357001F7DB696D9C3CF7CAB74DC63.)'</p>
+<p>Original message headers:</p>
+<pre>Received: from MN0PR12MB5977.namprd12.prod.outlook.com (2603:10b6:208:=
+37c::22)
+ by PH8PR12MB7135.namprd12.prod.outlook.com (2603:10b6:510:22c::11) with
+ Microsoft SMTP Server (version=3DTLS1_2,
+ cipher=3DTLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.639.13; Wed, 25 N=
+ov
+ 2026 18:06:47 +0000
+Received: from LV8PR12MB9153.namprd12.prod.outlook.com (2603:10b6:408:185::=
+17)
+ by MN0PR12MB5977.namprd12.prod.outlook.com (2603:10b6:208:37c::22) with
+ Microsoft SMTP Server (version=3DTLS1_2,
+ cipher=3DTLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.662.6; Wed, 25 No=
+v
+ 2026 07:04:30 +0000
+ARC-Seal: i=3D1; a=3Drsa-sha256; s=3Darcselector10001; d=3Dmicrosoft.com; c=
+v=3Dnone;
+ b=3DQXRZgqWrMDvYfRd4hgaFqeY5nCJycHfkWDbA/Wopdu7dpKhrO8U/OLvg9B+OVc/tcTKrB8=
+KQNimWprXHo/ZvrJu8OwG4qhaU7a8HSHdqlQUZKFrHJJYODCQYy8w5lwrFofIsI1xqz37Jvvy4w=
+v1SmELllxkqvbxxjnifFK3Q8q775JjieOYo2YZkcbMSO+QcPJ/w8202x96v5oyPHYLyVv4vhNUZ=
+WVtZHt4grCpkp8oAlJMK0NTAa01L4dMo2VjY/2rVuhj67dARs148ZXbnHD1thZF1ryRf2xzeZlb=
+Xa+rz/yvXPE4u9nQk3+KBRZt9cETvQh3YVL/oX+SBjROHAQ=3D=3D
+ARC-Message-Signature: i=3D1; a=3Drsa-sha256; c=3Drelaxed/relaxed; d=3Dmicr=
+osoft.com;
+ s=3Darcselector10001;
+ h=3DFrom:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-A=
+ntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Ex=
+change-AntiSpam-MessageData-1;
+ bh=3DjowxYB50AbQuBWWjMo6VO9UCDKy0qDJICSXNjsSmA5k=3D;
+ b=3DDMs5QvodX+ieqdf4eg12wdUysj+CQfv6RaJBUrO7bO1/ifNqbwFSE8ORwJ1nsgg7N2C+m1=
+IQl5aJU793R98GUmpLhD7g9hWsHGccGVa+3JZNM79fLZ6Dzts+sU27EMnp2oUOSrRck52gaJ+BT=
+NuBkwnyP6PYbDIaOb5XUgnM5RavGsOiF+vYZbseS38SNTXKIsLOZe34Rj77PFztD13GjMmrtVF7=
+K2BmsgFQZ58K53UVt0GptY165epH1hP4nhJh6Sq7RwHJwQtUSgseIcUD3m0Z/+xtdq+KLPci+zp=
+OVBKKyVJ5rY6AOaF5XwUcvHrkakzZbd8qJbgLHyiuMRjLuA=3D=3D
+ARC-Authentication-Results: i=3D1; mx.microsoft.com 1; spf=3Dpass (sender i=
+p is
+ 23.251.226.6) smtp.rcpttodomain=3Dnntc.com
+ smtp.mailfrom=3Dses.jatendofoods.online; dmarc=3Dpass (p=3Dnone sp=3Dnone =
+pct=3D100)
+ action=3Dnone header.from=3Djatendofoods.online; dkim=3Dpass (signature wa=
+s
+ verified) header.d=3Djatendofoods.online; dkim=3Dpass (signature was verif=
+ied)
+ header.d=3Damazonses.com; dkim=3Dfail (signature did not verify)
+ header.d=3Djatendofoods.online; arc=3Dnone (0)
+Received: from BN9PR03CA0941.namprd03.prod.outlook.com (2603:10b6:408:108::=
+16)
+ by LV8PR12MB9153.namprd12.prod.outlook.com (2603:10b6:408:185::17) with
+ Microsoft SMTP Server (version=3DTLS1_2,
+ cipher=3DTLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.639.10; Wed, 25 N=
+ov
+ 2026 04:07:56 +0000
+Received: from BN5PEPF0004698C.namprd02.prod.outlook.com
+ (2603:10b6:408:108:cafe::4a) by BN9PR03CA0941.outlook.office365.com
+ (2603:10b6:408:108::16) with Microsoft SMTP Server (version=3DTLS1_3,
+ cipher=3DTLS_AES_256_GCM_SHA384) id 15.21.639.14 via Frontend Transport; W=
+ed,
+ 25 Nov 2026 04:07:56 +0000
+Authentication-Results: mx.microsoft.com 1; spf=3Dpass (sender IP is
+ 23.251.226.6) smtp.mailfrom=3Dses.jatendofoods.online; dkim=3Dpass (signat=
+ure was
+ verified) header.d=3Djatendofoods.online;dkim=3Dpass (signature was verifi=
+ed)
+ header.d=3Damazonses.com;dkim=3Dfail (signature did not verify)
+ header.d=3Djatendofoods.online;dmarc=3Dpass action=3Dnone
+ header.from=3Djatendofoods.online;compauth=3Dpass reason=3D100
+Received-SPF: Pass (protection.outlook.com: domain of ses.jatendofoods.onli=
+ne
+ designates 23.251.226.6 as permitted sender) receiver=3Dprotection.outlook=
+.com;
+ client-ip=3D23.251.226.6; helo=3De226-6.smtp-out.us-east-2.amazonses.com; =
+pr=3DC
+Received: from e226-6.smtp-out.us-east-2.amazonses.com (23.251.226.6) by
+ BN5PEPF0004698C.mail.protection.outlook.com (10.167.245.41) with Microsoft
+ SMTP Server (version=3DTLS1_3, cipher=3DTLS_AES_256_GCM_SHA384) id 15.21.6=
+62.3
+ via Frontend Transport; Wed, 25 Nov 2026 04:07:56 +0000
+DKIM-Signature: v=3D1; a=3Drsa-sha256; q=3Ddns/txt; c=3Drelaxed/simple;
+	s=3Dlwgkclnxmrgirntuinb2y4w7snr76liw; d=3Djatendofoods.online;
+	t=3D1795579675;
+	h=3DFrom:To:Subject:Message-ID:Content-Type:Content-Transfer-Encoding:MIME=
+-Version:Date;
+	bh=3D8xFfhgYfWcAMxnPy+FSKAaQsp1QpWX8sg18bbllrO6M=3D;
+	b=3DA0MwDK8omeYr1lxL+z9HWkX8O02OQ7uqsRg1/hceqszR81awVckbr7j7n6vm1FGi
+	XSyuFJ3dQFpTa/RaxeI0M52ngBSDZNkW6teUolvw33cPPe3oU8RDlYbjuJRha5tm/Ds
+	yzL0H5bWgODy3NSDsuIK26ouy/GZ2HGBOV6Ro+WpBU72AUXs/Sqkr+3e6MAjj4TcJEQ
+	voMTZli0XV7KQSFPv4fJl+GqrTgYj7qjvDL7lHhzZ4mvRqb6H6/VZwX6EFDZUtw3qPL
+	dW34OahQCB04WhoeBvsVFUOtu6LEm3wOhofmSeo1KOQr/Q/M4qTzuKijeWqQtGA6ENo
+	1X5Cu+605w=3D=3D
+DKIM-Signature: v=3D1; a=3Drsa-sha256; q=3Ddns/txt; c=3Drelaxed/simple;
+	s=3Dkra23psoka5qyyh6gdejiiuof3nluwuz; d=3Damazonses.com; t=3D1795579675;
+	h=3DFrom:To:Subject:Message-ID:Content-Type:Content-Transfer-Encoding:MIME=
+-Version:Date:Feedback-ID;
+	bh=3D8xFfhgYfWcAMxnPy+FSKAaQsp1QpWX8sg18bbllrO6M=3D;
+	b=3DZ93X9de4hdCHGtpwO+XkGgL2SyB6XJtMUuE82qEiKJe69z2p1cV+w6rCt3NkFopJ
+	5rrlgzXOK/gQWmQeEiQyG6lu8TjCdXU51i8XpId7TmPsoR5pIl9f/Vr9Akx4KJB/Jru
+	ywNpW4k+Ogkr/oYJ8i51CcNab7FVJqx6qcx35AQo=3D
+DKIM-Signature: v=3D1; a=3Drsa-sha256; c=3Drelaxed/relaxed; d=3Djatendofood=
+s.online;
+	s=3Ddkim; t=3D1795579674; h=3Dfrom:subject:message-id:to:mime-version:cont=
+ent-type:
+	 content-transfer-encoding; bh=3D8xFfhgYfWcAMxnPy+FSKAaQsp1QpWX8sg18bbllrO=
+6M=3D;
+	b=3DSoaIb351ncWn+2HRrG7smK0+rjmH2s7V3lA9IQMVLlI6HQzXsQaqxt61N9+29cINaYUr5e
+	5hGvEz+eG1LjDeUL6imM1LcOcWXLhs0cbi6aO2wX5k8u9y5l/FcTFDYyZ/WKp8f0hMhEuD
+	0sDrM5bFFGIbZdOgwhhifUecwhQP1frdQFkSEVgBJHNy4sIKTYJRgJLdN43uDO9erNAlni
+	uARFgt31BtOVEW1u/kmKIW2JYk1N8RS/SPcUhgIHwc7blvT8kYCxROIjvrJTA1Wc1uC+Rb
+	wD1uP5QPOVh5zjJ7UTlXuHp9ymyB1a2vatWJWxckPHyJFZp15UucqghUvGpCyA=3D=3D
+From: cynthiabulleck@jatendofoods.online
+To: global@nntc.com
+Subject: [BOND-2026-0658] Inquiry - Continuous Customs Bond
+Message-ID: &lt;010f01a210e382fe-9bd085f3-8540-4a68-834a-f5d783aaabfb-00000=
+0@us-east-2.amazonses.com&gt;
+Content-Type: text/plain; charset=3D&quot;utf-8&quot;
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
+Date: Wed, 25 Nov 2026 04:07:55 +0000
+Feedback-ID: ::1.us-east-2.dnBLFQvZ7DBnA5nHg3QcqhG4UiG8AnTuix0bXTff/SU=3D:A=
+mazonSES
+X-SES-Outgoing: 2026.11.25-23.251.226.6
+Return-Path:
+	010f01a210e382fe-9bd085f3-8540-4a68-834a-f5d783aaabfb-000000@ses.jatendofo=
+ods.online
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: c23ec02b-083b-4e7f-887a-880f512b8a9e:0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic:
+	BN5PEPF0004698C:EE_|LV8PR12MB9153:EE_|MN0PR12MB5977:EE_|PH8PR12MB7135:EE_
+X-MS-Office365-Filtering-Correlation-Id: f104a763-358e-48c2-b130-08df4aa9af=
+65
+X-LD-Processed: c23ec02b-083b-4e7f-887a-880f512b8a9e,ExtAddr,ExtAddr,ExtAdd=
+r
+X-MS-Exchange-AtpMessageProperties: SA|SL
+X-Forefront-Antispam-Report: CIP:23.251.226.6;CTRY:US;LANG:en;SCL:5;SRV:;IP=
+V:NLI;SFV:SPM;H:e226-6.smtp-out.us-east-2.amazonses.com;PTR:e226-6.smtp-out=
+.us-east-2.amazonses.com;CAT:SPM;SFTY:9.25;SFS:(13230040)(704160611799003)(=
+32142699015)(2069299003)(5009299003)(260918215300599003)(260918224100599003=
+)(3613699012)(10067099003)(5063699009)(56012099006)(260925022911599003)(260=
+925021311599003)(260925021911599003)(261022105027099003)(261022075727099003=
+)(261028144727099003)(261026140227099003)(261026121527099003)(2610211214270=
+99003)(261102123227099003)(55112099003)(16102099003)(18002099003)(411369900=
+3)(6133799003)(19002099009)(5042299003);DIR:INB;SFTY:9.25;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|704160611799003|32142699015|206929=
+9003|5009299003|260918215300599003|260918224100599003|3613699012|1006709900=
+3|5063699009|56012099006|260925022911599003|260925021311599003|260925021911=
+599003|261022105027099003|261022075727099003|261028144727099003|26102614022=
+7099003|261026121527099003|261021121427099003|261102123227099003|5511209900=
+3|16102099003|18002099003|4113699003|6133799003|19002099009|5042299003;
+X-Microsoft-Antispam-Message-Info: =3D?utf-8?B?VUFicUVMZUlONjl3QVdtUk9QcFh1=
+L0g1YVhWeStxQzVsY0JBRlVqMnZVNzdO?=3D
+ =3D?utf-8?B?TUxPZlhtem82OTNxbS93ZTNsVzVXdjArNHg1eWlLNE5nWkJaTnh1K2VjRFhD?=
+=3D
+ =3D?utf-8?B?aWhyUzR5VW1mbndCYmFCYXlZeWZRVGJmMktuZHhtbmFKa0ZUZ2lkNmVmT0Nx?=
+=3D
+ =3D?utf-8?B?b0F3Y1RkR3ZjMktmbEZabzRSc3o2RW9mY1dIUUhTQ2ZpbHRTOXBQL2l0cE1a?=
+=3D
+ =3D?utf-8?B?MExjUm40NjMrOTFwbEhLMUN4SWZKbUNzUG84cUdaRWhUS0ltUkhrRzcyZ3NT?=
+=3D
+ =3D?utf-8?B?NEE1QnJxU0tCQW9BT0ZnbmRDd1RidXV1aG9WVmtsYkFwNzNvQ2w2WTg4bUQ1?=
+=3D
+ =3D?utf-8?B?dll2eXdncmxBZktnbXVZQUNUdC9xbkU1ZkdxRFNhTVBpR2MvMVRENTA5YWs2?=
+=3D
+ =3D?utf-8?B?dUZlVFRqWjBFMkQ0Nll6dUpYSS92bCt4UmVoZ0lyRjJCUHlnbVY5QzB6MWFW?=
+=3D
+ =3D?utf-8?B?Q29GNmpYMEJPcThqRThPYU1pd2gzcjhRTEVmV1hLTzJEWGNIbmtMKzFUckZ4?=
+=3D
+ =3D?utf-8?B?eXZoOUlNdWFGMUlIVlJ5RDJCUzIxY051a2F0SGQvZzByaFFpYnZpbWZGUS9X?=
+=3D
+ =3D?utf-8?B?YW96OGdablFsOFlYWVZPZG1XYzBKdE80OHpRYnM1Q0RlUEJVRG1HajVQRyt0?=
+=3D
+ =3D?utf-8?B?ZjBwY0VESVFETlhPMXpvQldUTWRCSHJEaG84TndKZDBRQ2dGTEFLTUpXVnRH?=
+=3D
+ =3D?utf-8?B?M2IzREt3NDJ4TzQyN3FnNGFEaGlzTHQyZnNmQ3VqdjRiREc0ZnQ4N1RJRzRC?=
+=3D
+ =3D?utf-8?B?dDBleGxCYmQxMDFRR0liTmJTNWRXUklUMGduQnN1bWJtTDArZWMyWUhLWXJE?=
+=3D
+ =3D?utf-8?B?S3FwMnJ1VE8yYzk0eDRaSVNlWHNoNjIzY1BtaWcxQVJMMC9NS0pMMGNQZ01Y?=
+=3D
+ =3D?utf-8?B?R29HVndMNFFaM25qNFdDUWthVWVYaHlsTWk2bEdzZm1mZW15NWpuQkF5dUsy?=
+=3D
+ =3D?utf-8?B?MTFEVm82Qm1QMXAyR09pbUJDTlh2OHhrVTAvVEdjck1TeDdUa2ovL2lkRnl6?=
+=3D
+ =3D?utf-8?B?bWhYcTJHWXd6eWt1b2RBR2l6T2J3R3lyTG1GZHV4cHlpenA3bDlWK3ZUeVE3?=
+=3D
+ =3D?utf-8?B?VG40ZTNjVW9mK0kvNStMS25IOXlkcG9hRjR6WHh3bE8xZjZjeFVqUm9HVnU0?=
+=3D
+ =3D?utf-8?B?QTlWRDZld1NhdkQxNDljZ1NzVzQwdkpqaGZ4TENhQit4ZmRkWWpuWXlVYkJC?=
+=3D
+ =3D?utf-8?B?T2ZURzA3M3B4UUR4UUxkeW83enkyZE1MVDNFL3k4c3Z4Y0VkN1p5a04yN0xQ?=
+=3D
+ =3D?utf-8?B?VUI0QWx5Rm02U3puRU1wbzlub0hWeURmaFNuYlp1K1NadWtNbkF6RGtiSGlG?=
+=3D
+ =3D?utf-8?B?dUtNRTNENTZmU1JUUHlHQ1pna2ZaRkh5YlFtdGlsRk4xa2NSemUzZmdvbmxP?=
+=3D
+ =3D?utf-8?B?Q2NBbzVHUnFONjFKbXJ6NU93MnRpUE56WmpkU3hocWlhOFZZL3J3N1M4a3pm?=
+=3D
+ =3D?utf-8?B?K2c1UUFIdk0ra0RNYjA3Z1lBbnJjd3d2TmNsVzkraW93cTdyMXNtNGo2dXA5?=
+=3D
+ =3D?utf-8?B?R2w4aWZ6NC9rME52UTgrZlNSVUFJU2xWTUZiWEpRU08vQk5Xc0tUcHZQb1hi?=
+=3D
+ =3D?utf-8?B?ZWx2Tm90ajBuRmtMVUZ5cTFGNGxuNnc3MitCYTBRQjN1QTVaNncwUnlzWk52?=
+=3D
+ =3D?utf-8?B?ZWJZL0N4dy9VenNOTkhORW5sTU9YY2x2ZWtpRkhoSmRjUzFrQVZjM214UzNv?=
+=3D
+ =3D?utf-8?B?aFphaVFPMkdNWmM0Vnl0a29rd0gweWdDQ3p5c2pzeElTUWpPdFo4VWNHVk9S?=
+=3D
+ =3D?utf-8?B?R0Y1ZjIrbThDZ21aSGtYakdBOXlVTCt2c1kwQ2RQL3p2djZWSUo5bUErYURL?=
+=3D
+ =3D?utf-8?B?VEk3TmV4djJOdFJnelI3eU9Sc3R2NWQ4Kzd1V29iSDloWXZKRjk3c2VWUVlI?=
+=3D
+ =3D?utf-8?B?WTNpbEpzalBZT1FGY01KL3ZWZFVVbzBqaHlhWW1mMU9TdDh3VUtoQTFMWEdr?=
+=3D
+ =3D?utf-8?B?OUpJRDZyN2pQNkdqb0hGeFowMFpKbmIyMGNHSkJkOVFkTnZDNkJmSlVncHVx?=
+=3D
+ =3D?utf-8?B?aDNMV3A0TllYUXFQRTJxNzcxb2JGSGtFaHRYSGc5Q25ybm4xT0NkaGx0U2k4?=
+=3D
+ =3D?utf-8?B?V3FpaGhnMkVSTWNnT1pXUmhEbTBLMWNZRlkvL0lxRk9GZ3FiQkpZZXZqeEsv?=
+=3D
+ =3D?utf-8?B?dHdSQjZ1cjJObkxpSUs5dVpYY0k1OEJ1THBQN24vdTZxL0VtSGxwVHZpSVNm?=
+=3D
+ =3D?utf-8?B?MGR2QVZaSnpYU3BRWmNHMWdJMEQrNW1sSWdmeEJjTDJJYXlSRHdsakNDbVJR?=
+=3D
+ =3D?utf-8?B?d2p5QVFjV0tvd0ttTGlKY2hGNUpoY29JQkR0ZHp2M0haRXdzTnZXRk5MeVVj?=
+=3D
+ =3D?utf-8?B?WUI0MjVUWll1ZWZuUmJHU29ObENsUXdXYlBDb3ZjVWh1TFc2bkFIRzJrZEdt?=
+=3D
+ =3D?utf-8?B?YUVtM1FFSzQ5YkF5K3hNbzluTDNCRmVud3d2YnhROE01bmV0ellZWVRxMHhO?=
+=3D
+ =3D?utf-8?B?M0V5Ykl4UFVaZ3BVR0QzclMwcEthZG9vZjJpU0ZXSmFsWTNydnp4K3RSSFhp?=
+=3D
+ =3D?utf-8?B?bU1aa0FHWmpGU05tVlEyL2xKZnRrcjlsMkZQaWo0Y29pWDNhRTZ5NUtzSTJm?=
+=3D
+ =3D?utf-8?B?L01mTXE5S3RtTndHVnNNcTl5bWRrdU50dVNucDJiM3R4YXNlcStSckZJNEs5?=
+=3D
+ =3D?utf-8?B?azk3bXN4Rk1jYzJFQ3JXck9FRUU0Qk93QjZVdVNkeGpFTlhhWHF1UzNWZGkz?=
+=3D
+ =3D?utf-8?B?L2RSWkJaRzVLbGNqbWR3VUZQS0VvTTd6WXpSS0d1WWdTekdDdXF1d3gxbHRD?=
+=3D
+ =3D?utf-8?B?ZjFCeXdja0Eya05qRGdxUDMrS0wzYjM3enJjditYdXJFTTluVkl0M0ozZVZH?=
+=3D
+ =3D?utf-8?B?MHEyOEdBUWpYdXZ2THM1SlZTOERJZUFyTFZBVDdmOXMvM1RncDQ1aE1laG1S?=
+=3D
+ =3D?utf-8?B?blJ1WWlDMVBEZGcvalRQU1FFendHVjNKYTQ5aithenhOVkp2RVdYc2Y5M1I3?=
+=3D
+ =3D?utf-8?B?NmEzRTlxMWFVUzlyWFBHVVQ0UGVsNE9uMEhUUUtIM2FnbmhTeWlJVzJtV0ox?=
+=3D
+ =3D?utf-8?B?QWNsRTI5RCtKY0ducmozcHV5NmQ3NUxiM0ZQQlhKcEJJeWg3c2FQeGFKNksy?=
+=3D
+ =3D?utf-8?B?Mzlqc3pYTnZJQmlBRTRpajAvSVJJSHVRVHFxaVpRMTRYNkNZMGFKVnRKZ1Y5?=
+=3D
+ =3D?utf-8?B?MnV4eTkvbmRvRENseHZ1WFdsWXAycm5uaWdmOUN6VmFNemJBUTlxZEJOM2NF?=
+=3D
+ =3D?utf-8?B?emxBSmxqTU1Dckdod3pFZlZiUWdjSS9LM3l5Ukx2U0tGajkyU09RbDlKRkpj?=
+=3D
+ =3D?utf-8?B?Y2ZjcFZ2T0N3eG93ZTUyVTZiZ1l3czRwS0plWlE0VDB0TzZVZVR5ZjdnYmIv?=
+=3D
+ =3D?utf-8?B?Y0ZRM3RyZmtVMXEwejFzVjlCYmtCM0JpQ1pUazJDWjhWZDgvdVgvY3l5cmJo?=
+=3D
+ =3D?utf-8?B?TDZiODZ3TTJ6SXEzMkN2MjVGRUZsckNFK3hRNVNGSVdUUkJxdnYyWmYwMXow?=
+=3D
+ =3D?utf-8?B?RUpickZzL2hnOE90a3puNy9BNU4ra2FDaDd0OTR6UFo5U2hqSGhiWWt4dVhl?=
+=3D
+ =3D?utf-8?B?UU1kTXdwZ1BOUncrQUdTWG9GQTNGaUtTSmN6SjlXRStyNXc1d0l3UVppU3g2?=
+=3D
+ =3D?utf-8?B?UWd1UXNYRklxak5PWlFtaTJTMHkyTEhoUWgyOHBzTkJGbGlqM1NUL1Q2SlJX?=
+=3D
+ =3D?utf-8?B?TzZrY2wxMnhxb2VqYjBlTzczZHZnME1sWGx4SHo0SUFGWHpWTThFVWRld2dp?=
+=3D
+ =3D?utf-8?B?N3cyeGtkdUFweWllM3dYOGtJZVdNZnFBYlZlWXZMNXVYbnJKR2RReDlvcHZG?=
+=3D
+ =3D?utf-8?B?NVV0QTBPOHpTMlN4VTlQQTkyZzFxNGlacFpSbWpFdFo0Wloyai9tS21UQzY0?=
+=3D
+ =3D?utf-8?B?Uk5MdmdBMmplL3gvclR6QitGSW9KSkYxMEczVk5MOVpLSWtPSlEvZ3gwN0p1?=
+=3D
+ =3D?utf-8?B?Nk83bWdLRXZHOWo3QlF6T2NMbktUQnpJWitxYmFLMkZpSEthcXJJWUgxV3NS?=
+=3D
+ =3D?utf-8?B?aGdLWW0yN3JKekRCZTNGZGVKS0lldUI3R09XRjBsMEJOVUc1YytIMVU2d0xr?=
+=3D
+ =3D?utf-8?B?QjJHSVZ6ckV4ZWd4UHI0bmV6TjBqd1NBQ1ZtWUFSRWwyMTBxNkRMK3hUOURE?=
+=3D
+ =3D?utf-8?B?ekJMdHVPbFd6QTdLVC9BT1QwYXlDb3N3ZW51aFI2K2ZzbTBIdXNqVHBCb2th?=
+=3D
+ =3D?utf-8?B?dk9zbHQ0TFVsOVljUXZwMTcwcmlSZGxYcS83YUVGS1lLblJQdkxhYW42YktB?=
+=3D
+ =3D?utf-8?B?WlJRYjVheHJ4bkRnVml6TGZtNkRxbHdTNk0wdmR0d2hlQ2tpWjk2aVh1SlJU?=
+=3D
+ =3D?utf-8?B?SUlzaE1sS1g2TWt3dkc3anZNNndMbTIyM1J4QVNxQlQ4OE5JaHE1eTNaUlNa?=
+=3D
+ =3D?utf-8?B?Yi9CTWFPYXUyb200RjhMdjhQbmtYalEyWHhGZzlhd0FqQysyRGtIV0lwVFhn?=
+=3D
+ =3D?utf-8?B?aGhPaE1sSjNoRHpCaXc4TW8rVnVOQm5Vb2ZQemJWTXh3c0JubG05Rzk2b3gz?=
+=3D
+ =3D?utf-8?B?TitlV1VtK0h3OHllNDh2dVBPVnVOWlFFT09YNVBoV1p5bmEwZDhCMkVSMDBT?=
+=3D
+ =3D?utf-8?B?enpvdHU4djlNRjRuRjBJenVvZjJCMStDdE8wNVFCaGR5cWpXbjdhSEUyYytD?=
+=3D
+ =3D?utf-8?B?eGp0dzVDTlFhbXJUTGhVN2RXNFR3V0ZENERUQVI3elNvZTk3UWRjSWU1Vjl0?=
+=3D
+ =3D?utf-8?B?dmtOdCswL0Y3VUNNZnlNWWQwUjExL21YbGFhM3ZOakswa3JaTjkxMjBlNGlt?=
+=3D
+ =3D?utf-8?B?L0lxQlY3cHg2WFJmcXZYbUhxdnQ1THd3Z2hycDNwbC9ySFcrWVFTaG5OQkh6?=
+=3D
+ =3D?utf-8?B?eVVTbmV6VWdFcXFrZz09?=3D
+X-Exchange-RoutingPolicyChecked: GnWKq3oWThVqh1spuGs34aYaznB1N8N2zAgkF5cs1X=
+y6omURmkVz0dPJFCHe/lsyIbiISLwviC9cQbRuovFIOnBB4gOrpiOd5+5HXLg4XEX+oEEju1D8+=
+AcGc8gbh5IWCMPotPmkyhZ1Og+o+V8aUjr0eYrTnVYvIsDY+Q6d4QLJH8zNvKdgyeG1tNAN4747=
++GBWMhzgnS8CAsb9U6eDB4cRO9cS+r0J1jJl5Hs+P0KqwpZ5G7TUrEVM0d9I2BJNze4dUQMdtfQ=
+NtBVr4HYcPFHUUtw/oiSVN7FaU+nh0fd92G/BTuXxwsxWEcFkXkZKyjy0FxXA298hdEN8Q0ydCg=
+=3D=3D
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Nov 2026 04:07:56.1760
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f104a763-358e-48c2-b130-08df4=
+aa9af65
+X-MS-Exchange-CrossTenant-Id: c23ec02b-083b-4e7f-887a-880f512b8a9e
+X-MS-Exchange-CrossTenant-AuthSource: BN5PEPF0004698C.namprd02.prod.outlook=
+.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR12MB9153
+X-OrganizationHeadersPreserved: LV8PR12MB9153.namprd12.prod.outlook.com
+X-OriginatorOrg: NaturalNydeggerTransport.onmicrosoft.com
+X-CrossPremisesHeadersFilteredByDsnGenerator:
+	PH8PR12MB7135.namprd12.prod.outlook.com
+</pre>
+</font>
+</body>
+</html>=
+
+--ee355fe9-8c51-435e-9008-1b76b43da971--
+
+--a6a8834e-84e4-4db7-9bc5-0d9139584699
+Content-Type: message/delivery-status
+
+Reporting-MTA: dns;PH8PR12MB7135.namprd12.prod.outlook.com
+Received-From-MTA: dns;MN0PR12MB5977.namprd12.prod.outlook.com
+Arrival-Date: Wed, 25 Nov 2026 18:06:47 +0000
+
+Final-Recipient: rfc822;global@nntc.com
+Action: failed
+Status: 5.4.317
+Diagnostic-Code: smtp;550 5.4.317 Message expired, cannot connect to remote server
+
+
+--a6a8834e-84e4-4db7-9bc5-0d9139584699
+Content-Type: message/rfc822
+
+Received: from MN0PR12MB5977.namprd12.prod.outlook.com (2603:10b6:208:37c::22)
+ by PH8PR12MB7135.namprd12.prod.outlook.com (2603:10b6:510:22c::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.639.13; Wed, 25 Nov
+ 2026 18:06:47 +0000
+Received: from LV8PR12MB9153.namprd12.prod.outlook.com (2603:10b6:408:185::17)
+ by MN0PR12MB5977.namprd12.prod.outlook.com (2603:10b6:208:37c::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.662.6; Wed, 25 Nov
+ 2026 07:04:30 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=QXRZgqWrMDvYfRd4hgaFqeY5nCJycHfkWDbA/Wopdu7dpKhrO8U/OLvg9B+OVc/tcTKrB8KQNimWprXHo/ZvrJu8OwG4qhaU7a8HSHdqlQUZKFrHJJYODCQYy8w5lwrFofIsI1xqz37Jvvy4wv1SmELllxkqvbxxjnifFK3Q8q775JjieOYo2YZkcbMSO+QcPJ/w8202x96v5oyPHYLyVv4vhNUZWVtZHt4grCpkp8oAlJMK0NTAa01L4dMo2VjY/2rVuhj67dARs148ZXbnHD1thZF1ryRf2xzeZlbXa+rz/yvXPE4u9nQk3+KBRZt9cETvQh3YVL/oX+SBjROHAQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jowxYB50AbQuBWWjMo6VO9UCDKy0qDJICSXNjsSmA5k=;
+ b=DMs5QvodX+ieqdf4eg12wdUysj+CQfv6RaJBUrO7bO1/ifNqbwFSE8ORwJ1nsgg7N2C+m1IQl5aJU793R98GUmpLhD7g9hWsHGccGVa+3JZNM79fLZ6Dzts+sU27EMnp2oUOSrRck52gaJ+BTNuBkwnyP6PYbDIaOb5XUgnM5RavGsOiF+vYZbseS38SNTXKIsLOZe34Rj77PFztD13GjMmrtVF7K2BmsgFQZ58K53UVt0GptY165epH1hP4nhJh6Sq7RwHJwQtUSgseIcUD3m0Z/+xtdq+KLPci+zpOVBKKyVJ5rY6AOaF5XwUcvHrkakzZbd8qJbgLHyiuMRjLuA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 23.251.226.6) smtp.rcpttodomain=nntc.com
+ smtp.mailfrom=ses.jatendofoods.online; dmarc=pass (p=none sp=none pct=100)
+ action=none header.from=jatendofoods.online; dkim=pass (signature was
+ verified) header.d=jatendofoods.online; dkim=pass (signature was verified)
+ header.d=amazonses.com; dkim=fail (signature did not verify)
+ header.d=jatendofoods.online; arc=none (0)
+Received: from BN9PR03CA0941.namprd03.prod.outlook.com (2603:10b6:408:108::16)
+ by LV8PR12MB9153.namprd12.prod.outlook.com (2603:10b6:408:185::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.639.10; Wed, 25 Nov
+ 2026 04:07:56 +0000
+Received: from BN5PEPF0004698C.namprd02.prod.outlook.com
+ (2603:10b6:408:108:cafe::4a) by BN9PR03CA0941.outlook.office365.com
+ (2603:10b6:408:108::16) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.639.14 via Frontend Transport; Wed,
+ 25 Nov 2026 04:07:56 +0000
+Authentication-Results: mx.microsoft.com 1; spf=pass (sender IP is
+ 23.251.226.6) smtp.mailfrom=ses.jatendofoods.online; dkim=pass (signature was
+ verified) header.d=jatendofoods.online;dkim=pass (signature was verified)
+ header.d=amazonses.com;dkim=fail (signature did not verify)
+ header.d=jatendofoods.online;dmarc=pass action=none
+ header.from=jatendofoods.online;compauth=pass reason=100
+Received-SPF: Pass (protection.outlook.com: domain of ses.jatendofoods.online
+ designates 23.251.226.6 as permitted sender) receiver=protection.outlook.com;
+ client-ip=23.251.226.6; helo=e226-6.smtp-out.us-east-2.amazonses.com; pr=C
+Received: from e226-6.smtp-out.us-east-2.amazonses.com (23.251.226.6) by
+ BN5PEPF0004698C.mail.protection.outlook.com (10.167.245.41) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.662.3
+ via Frontend Transport; Wed, 25 Nov 2026 04:07:56 +0000
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=lwgkclnxmrgirntuinb2y4w7snr76liw; d=jatendofoods.online;
+	t=1795579675;
+	h=From:To:Subject:Message-ID:Content-Type:Content-Transfer-Encoding:MIME-Version:Date;
+	bh=8xFfhgYfWcAMxnPy+FSKAaQsp1QpWX8sg18bbllrO6M=;
+	b=A0MwDK8omeYr1lxL+z9HWkX8O02OQ7uqsRg1/hceqszR81awVckbr7j7n6vm1FGi
+	XSyuFJ3dQFpTa/RaxeI0M52ngBSDZNkW6teUolvw33cPPe3oU8RDlYbjuJRha5tm/Ds
+	yzL0H5bWgODy3NSDsuIK26ouy/GZ2HGBOV6Ro+WpBU72AUXs/Sqkr+3e6MAjj4TcJEQ
+	voMTZli0XV7KQSFPv4fJl+GqrTgYj7qjvDL7lHhzZ4mvRqb6H6/VZwX6EFDZUtw3qPL
+	dW34OahQCB04WhoeBvsVFUOtu6LEm3wOhofmSeo1KOQr/Q/M4qTzuKijeWqQtGA6ENo
+	1X5Cu+605w==
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=kra23psoka5qyyh6gdejiiuof3nluwuz; d=amazonses.com; t=1795579675;
+	h=From:To:Subject:Message-ID:Content-Type:Content-Transfer-Encoding:MIME-Version:Date:Feedback-ID;
+	bh=8xFfhgYfWcAMxnPy+FSKAaQsp1QpWX8sg18bbllrO6M=;
+	b=Z93X9de4hdCHGtpwO+XkGgL2SyB6XJtMUuE82qEiKJe69z2p1cV+w6rCt3NkFopJ
+	5rrlgzXOK/gQWmQeEiQyG6lu8TjCdXU51i8XpId7TmPsoR5pIl9f/Vr9Akx4KJB/Jru
+	ywNpW4k+Ogkr/oYJ8i51CcNab7FVJqx6qcx35AQo=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jatendofoods.online;
+	s=dkim; t=1795579674; h=from:subject:message-id:to:mime-version:content-type:
+	 content-transfer-encoding; bh=8xFfhgYfWcAMxnPy+FSKAaQsp1QpWX8sg18bbllrO6M=;
+	b=SoaIb351ncWn+2HRrG7smK0+rjmH2s7V3lA9IQMVLlI6HQzXsQaqxt61N9+29cINaYUr5e
+	5hGvEz+eG1LjDeUL6imM1LcOcWXLhs0cbi6aO2wX5k8u9y5l/FcTFDYyZ/WKp8f0hMhEuD
+	0sDrM5bFFGIbZdOgwhhifUecwhQP1frdQFkSEVgBJHNy4sIKTYJRgJLdN43uDO9erNAlni
+	uARFgt31BtOVEW1u/kmKIW2JYk1N8RS/SPcUhgIHwc7blvT8kYCxROIjvrJTA1Wc1uC+Rb
+	wD1uP5QPOVh5zjJ7UTlXuHp9ymyB1a2vatWJWxckPHyJFZp15UucqghUvGpCyA==
+From: cynthiabulleck@jatendofoods.online
+To: global@nntc.com
+Subject: [BOND-2026-0658] Inquiry - Continuous Customs Bond
+Message-ID: <010f01a210e382fe-9bd085f3-8540-4a68-834a-f5d783aaabfb-000000@us-east-2.amazonses.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
+Date: Wed, 25 Nov 2026 04:07:55 +0000
+Feedback-ID: ::1.us-east-2.dnBLFQvZ7DBnA5nHg3QcqhG4UiG8AnTuix0bXTff/SU=:AmazonSES
+X-SES-Outgoing: 2026.11.25-23.251.226.6
+Return-Path:
+ 010f01a210e382fe-9bd085f3-8540-4a68-834a-f5d783aaabfb-000000@ses.jatendofoods.online
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: c23ec02b-083b-4e7f-887a-880f512b8a9e:0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic:
+ BN5PEPF0004698C:EE_|LV8PR12MB9153:EE_|MN0PR12MB5977:EE_|PH8PR12MB7135:EE_
+X-MS-Office365-Filtering-Correlation-Id: f104a763-358e-48c2-b130-08df4aa9af65
+X-LD-Processed: c23ec02b-083b-4e7f-887a-880f512b8a9e,ExtAddr,ExtAddr,ExtAddr
+X-MS-Exchange-AtpMessageProperties: SA|SL
+X-Forefront-Antispam-Report: CIP:23.251.226.6;CTRY:US;LANG:en;SCL:5;SRV:;IPV:NLI;SFV:SPM;H:e226-6.smtp-out.us-east-2.amazonses.com;PTR:e226-6.smtp-out.us-east-2.amazonses.com;CAT:SPM;SFTY:9.25;SFS:(13230040)(704160611799003)(32142699015)(2069299003)(5009299003)(260918215300599003)(260918224100599003)(3613699012)(10067099003)(5063699009)(56012099006)(260925022911599003)(260925021311599003)(260925021911599003)(261022105027099003)(261022075727099003)(261028144727099003)(261026140227099003)(261026121527099003)(261021121427099003)(261102123227099003)(55112099003)(16102099003)(18002099003)(4113699003)(6133799003)(19002099009)(5042299003);DIR:INB;SFTY:9.25;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|704160611799003|32142699015|2069299003|5009299003|260918215300599003|260918224100599003|3613699012|10067099003|5063699009|56012099006|260925022911599003|260925021311599003|260925021911599003|261022105027099003|261022075727099003|261028144727099003|261026140227099003|261026121527099003|261021121427099003|261102123227099003|55112099003|16102099003|18002099003|4113699003|6133799003|19002099009|5042299003;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?VUFicUVMZUlONjl3QVdtUk9QcFh1L0g1YVhWeStxQzVsY0JBRlVqMnZVNzdO?=
+ =?utf-8?B?TUxPZlhtem82OTNxbS93ZTNsVzVXdjArNHg1eWlLNE5nWkJaTnh1K2VjRFhD?=
+ =?utf-8?B?aWhyUzR5VW1mbndCYmFCYXlZeWZRVGJmMktuZHhtbmFKa0ZUZ2lkNmVmT0Nx?=
+ =?utf-8?B?b0F3Y1RkR3ZjMktmbEZabzRSc3o2RW9mY1dIUUhTQ2ZpbHRTOXBQL2l0cE1a?=
+ =?utf-8?B?MExjUm40NjMrOTFwbEhLMUN4SWZKbUNzUG84cUdaRWhUS0ltUkhrRzcyZ3NT?=
+ =?utf-8?B?NEE1QnJxU0tCQW9BT0ZnbmRDd1RidXV1aG9WVmtsYkFwNzNvQ2w2WTg4bUQ1?=
+ =?utf-8?B?dll2eXdncmxBZktnbXVZQUNUdC9xbkU1ZkdxRFNhTVBpR2MvMVRENTA5YWs2?=
+ =?utf-8?B?dUZlVFRqWjBFMkQ0Nll6dUpYSS92bCt4UmVoZ0lyRjJCUHlnbVY5QzB6MWFW?=
+ =?utf-8?B?Q29GNmpYMEJPcThqRThPYU1pd2gzcjhRTEVmV1hLTzJEWGNIbmtMKzFUckZ4?=
+ =?utf-8?B?eXZoOUlNdWFGMUlIVlJ5RDJCUzIxY051a2F0SGQvZzByaFFpYnZpbWZGUS9X?=
+ =?utf-8?B?YW96OGdablFsOFlYWVZPZG1XYzBKdE80OHpRYnM1Q0RlUEJVRG1HajVQRyt0?=
+ =?utf-8?B?ZjBwY0VESVFETlhPMXpvQldUTWRCSHJEaG84TndKZDBRQ2dGTEFLTUpXVnRH?=
+ =?utf-8?B?M2IzREt3NDJ4TzQyN3FnNGFEaGlzTHQyZnNmQ3VqdjRiREc0ZnQ4N1RJRzRC?=
+ =?utf-8?B?dDBleGxCYmQxMDFRR0liTmJTNWRXUklUMGduQnN1bWJtTDArZWMyWUhLWXJE?=
+ =?utf-8?B?S3FwMnJ1VE8yYzk0eDRaSVNlWHNoNjIzY1BtaWcxQVJMMC9NS0pMMGNQZ01Y?=
+ =?utf-8?B?R29HVndMNFFaM25qNFdDUWthVWVYaHlsTWk2bEdzZm1mZW15NWpuQkF5dUsy?=
+ =?utf-8?B?MTFEVm82Qm1QMXAyR09pbUJDTlh2OHhrVTAvVEdjck1TeDdUa2ovL2lkRnl6?=
+ =?utf-8?B?bWhYcTJHWXd6eWt1b2RBR2l6T2J3R3lyTG1GZHV4cHlpenA3bDlWK3ZUeVE3?=
+ =?utf-8?B?VG40ZTNjVW9mK0kvNStMS25IOXlkcG9hRjR6WHh3bE8xZjZjeFVqUm9HVnU0?=
+ =?utf-8?B?QTlWRDZld1NhdkQxNDljZ1NzVzQwdkpqaGZ4TENhQit4ZmRkWWpuWXlVYkJC?=
+ =?utf-8?B?T2ZURzA3M3B4UUR4UUxkeW83enkyZE1MVDNFL3k4c3Z4Y0VkN1p5a04yN0xQ?=
+ =?utf-8?B?VUI0QWx5Rm02U3puRU1wbzlub0hWeURmaFNuYlp1K1NadWtNbkF6RGtiSGlG?=
+ =?utf-8?B?dUtNRTNENTZmU1JUUHlHQ1pna2ZaRkh5YlFtdGlsRk4xa2NSemUzZmdvbmxP?=
+ =?utf-8?B?Q2NBbzVHUnFONjFKbXJ6NU93MnRpUE56WmpkU3hocWlhOFZZL3J3N1M4a3pm?=
+ =?utf-8?B?K2c1UUFIdk0ra0RNYjA3Z1lBbnJjd3d2TmNsVzkraW93cTdyMXNtNGo2dXA5?=
+ =?utf-8?B?R2w4aWZ6NC9rME52UTgrZlNSVUFJU2xWTUZiWEpRU08vQk5Xc0tUcHZQb1hi?=
+ =?utf-8?B?ZWx2Tm90ajBuRmtMVUZ5cTFGNGxuNnc3MitCYTBRQjN1QTVaNncwUnlzWk52?=
+ =?utf-8?B?ZWJZL0N4dy9VenNOTkhORW5sTU9YY2x2ZWtpRkhoSmRjUzFrQVZjM214UzNv?=
+ =?utf-8?B?aFphaVFPMkdNWmM0Vnl0a29rd0gweWdDQ3p5c2pzeElTUWpPdFo4VWNHVk9S?=
+ =?utf-8?B?R0Y1ZjIrbThDZ21aSGtYakdBOXlVTCt2c1kwQ2RQL3p2djZWSUo5bUErYURL?=
+ =?utf-8?B?VEk3TmV4djJOdFJnelI3eU9Sc3R2NWQ4Kzd1V29iSDloWXZKRjk3c2VWUVlI?=
+ =?utf-8?B?WTNpbEpzalBZT1FGY01KL3ZWZFVVbzBqaHlhWW1mMU9TdDh3VUtoQTFMWEdr?=
+ =?utf-8?B?OUpJRDZyN2pQNkdqb0hGeFowMFpKbmIyMGNHSkJkOVFkTnZDNkJmSlVncHVx?=
+ =?utf-8?B?aDNMV3A0TllYUXFQRTJxNzcxb2JGSGtFaHRYSGc5Q25ybm4xT0NkaGx0U2k4?=
+ =?utf-8?B?V3FpaGhnMkVSTWNnT1pXUmhEbTBLMWNZRlkvL0lxRk9GZ3FiQkpZZXZqeEsv?=
+ =?utf-8?B?dHdSQjZ1cjJObkxpSUs5dVpYY0k1OEJ1THBQN24vdTZxL0VtSGxwVHZpSVNm?=
+ =?utf-8?B?MGR2QVZaSnpYU3BRWmNHMWdJMEQrNW1sSWdmeEJjTDJJYXlSRHdsakNDbVJR?=
+ =?utf-8?B?d2p5QVFjV0tvd0ttTGlKY2hGNUpoY29JQkR0ZHp2M0haRXdzTnZXRk5MeVVj?=
+ =?utf-8?B?WUI0MjVUWll1ZWZuUmJHU29ObENsUXdXYlBDb3ZjVWh1TFc2bkFIRzJrZEdt?=
+ =?utf-8?B?YUVtM1FFSzQ5YkF5K3hNbzluTDNCRmVud3d2YnhROE01bmV0ellZWVRxMHhO?=
+ =?utf-8?B?M0V5Ykl4UFVaZ3BVR0QzclMwcEthZG9vZjJpU0ZXSmFsWTNydnp4K3RSSFhp?=
+ =?utf-8?B?bU1aa0FHWmpGU05tVlEyL2xKZnRrcjlsMkZQaWo0Y29pWDNhRTZ5NUtzSTJm?=
+ =?utf-8?B?L01mTXE5S3RtTndHVnNNcTl5bWRrdU50dVNucDJiM3R4YXNlcStSckZJNEs5?=
+ =?utf-8?B?azk3bXN4Rk1jYzJFQ3JXck9FRUU0Qk93QjZVdVNkeGpFTlhhWHF1UzNWZGkz?=
+ =?utf-8?B?L2RSWkJaRzVLbGNqbWR3VUZQS0VvTTd6WXpSS0d1WWdTekdDdXF1d3gxbHRD?=
+ =?utf-8?B?ZjFCeXdja0Eya05qRGdxUDMrS0wzYjM3enJjditYdXJFTTluVkl0M0ozZVZH?=
+ =?utf-8?B?MHEyOEdBUWpYdXZ2THM1SlZTOERJZUFyTFZBVDdmOXMvM1RncDQ1aE1laG1S?=
+ =?utf-8?B?blJ1WWlDMVBEZGcvalRQU1FFendHVjNKYTQ5aithenhOVkp2RVdYc2Y5M1I3?=
+ =?utf-8?B?NmEzRTlxMWFVUzlyWFBHVVQ0UGVsNE9uMEhUUUtIM2FnbmhTeWlJVzJtV0ox?=
+ =?utf-8?B?QWNsRTI5RCtKY0ducmozcHV5NmQ3NUxiM0ZQQlhKcEJJeWg3c2FQeGFKNksy?=
+ =?utf-8?B?Mzlqc3pYTnZJQmlBRTRpajAvSVJJSHVRVHFxaVpRMTRYNkNZMGFKVnRKZ1Y5?=
+ =?utf-8?B?MnV4eTkvbmRvRENseHZ1WFdsWXAycm5uaWdmOUN6VmFNemJBUTlxZEJOM2NF?=
+ =?utf-8?B?emxBSmxqTU1Dckdod3pFZlZiUWdjSS9LM3l5Ukx2U0tGajkyU09RbDlKRkpj?=
+ =?utf-8?B?Y2ZjcFZ2T0N3eG93ZTUyVTZiZ1l3czRwS0plWlE0VDB0TzZVZVR5ZjdnYmIv?=
+ =?utf-8?B?Y0ZRM3RyZmtVMXEwejFzVjlCYmtCM0JpQ1pUazJDWjhWZDgvdVgvY3l5cmJo?=
+ =?utf-8?B?TDZiODZ3TTJ6SXEzMkN2MjVGRUZsckNFK3hRNVNGSVdUUkJxdnYyWmYwMXow?=
+ =?utf-8?B?RUpickZzL2hnOE90a3puNy9BNU4ra2FDaDd0OTR6UFo5U2hqSGhiWWt4dVhl?=
+ =?utf-8?B?UU1kTXdwZ1BOUncrQUdTWG9GQTNGaUtTSmN6SjlXRStyNXc1d0l3UVppU3g2?=
+ =?utf-8?B?UWd1UXNYRklxak5PWlFtaTJTMHkyTEhoUWgyOHBzTkJGbGlqM1NUL1Q2SlJX?=
+ =?utf-8?B?TzZrY2wxMnhxb2VqYjBlTzczZHZnME1sWGx4SHo0SUFGWHpWTThFVWRld2dp?=
+ =?utf-8?B?N3cyeGtkdUFweWllM3dYOGtJZVdNZnFBYlZlWXZMNXVYbnJKR2RReDlvcHZG?=
+ =?utf-8?B?NVV0QTBPOHpTMlN4VTlQQTkyZzFxNGlacFpSbWpFdFo0Wloyai9tS21UQzY0?=
+ =?utf-8?B?Uk5MdmdBMmplL3gvclR6QitGSW9KSkYxMEczVk5MOVpLSWtPSlEvZ3gwN0p1?=
+ =?utf-8?B?Nk83bWdLRXZHOWo3QlF6T2NMbktUQnpJWitxYmFLMkZpSEthcXJJWUgxV3NS?=
+ =?utf-8?B?aGdLWW0yN3JKekRCZTNGZGVKS0lldUI3R09XRjBsMEJOVUc1YytIMVU2d0xr?=
+ =?utf-8?B?QjJHSVZ6ckV4ZWd4UHI0bmV6TjBqd1NBQ1ZtWUFSRWwyMTBxNkRMK3hUOURE?=
+ =?utf-8?B?ekJMdHVPbFd6QTdLVC9BT1QwYXlDb3N3ZW51aFI2K2ZzbTBIdXNqVHBCb2th?=
+ =?utf-8?B?dk9zbHQ0TFVsOVljUXZwMTcwcmlSZGxYcS83YUVGS1lLblJQdkxhYW42YktB?=
+ =?utf-8?B?WlJRYjVheHJ4bkRnVml6TGZtNkRxbHdTNk0wdmR0d2hlQ2tpWjk2aVh1SlJU?=
+ =?utf-8?B?SUlzaE1sS1g2TWt3dkc3anZNNndMbTIyM1J4QVNxQlQ4OE5JaHE1eTNaUlNa?=
+ =?utf-8?B?Yi9CTWFPYXUyb200RjhMdjhQbmtYalEyWHhGZzlhd0FqQysyRGtIV0lwVFhn?=
+ =?utf-8?B?aGhPaE1sSjNoRHpCaXc4TW8rVnVOQm5Vb2ZQemJWTXh3c0JubG05Rzk2b3gz?=
+ =?utf-8?B?TitlV1VtK0h3OHllNDh2dVBPVnVOWlFFT09YNVBoV1p5bmEwZDhCMkVSMDBT?=
+ =?utf-8?B?enpvdHU4djlNRjRuRjBJenVvZjJCMStDdE8wNVFCaGR5cWpXbjdhSEUyYytD?=
+ =?utf-8?B?eGp0dzVDTlFhbXJUTGhVN2RXNFR3V0ZENERUQVI3elNvZTk3UWRjSWU1Vjl0?=
+ =?utf-8?B?dmtOdCswL0Y3VUNNZnlNWWQwUjExL21YbGFhM3ZOakswa3JaTjkxMjBlNGlt?=
+ =?utf-8?B?L0lxQlY3cHg2WFJmcXZYbUhxdnQ1THd3Z2hycDNwbC9ySFcrWVFTaG5OQkh6?=
+ =?utf-8?B?eVVTbmV6VWdFcXFrZz09?=
+X-Exchange-RoutingPolicyChecked: GnWKq3oWThVqh1spuGs34aYaznB1N8N2zAgkF5cs1Xy6omURmkVz0dPJFCHe/lsyIbiISLwviC9cQbRuovFIOnBB4gOrpiOd5+5HXLg4XEX+oEEju1D8+AcGc8gbh5IWCMPotPmkyhZ1Og+o+V8aUjr0eYrTnVYvIsDY+Q6d4QLJH8zNvKdgyeG1tNAN4747+GBWMhzgnS8CAsb9U6eDB4cRO9cS+r0J1jJl5Hs+P0KqwpZ5G7TUrEVM0d9I2BJNze4dUQMdtfQNtBVr4HYcPFHUUtw/oiSVN7FaU+nh0fd92G/BTuXxwsxWEcFkXkZKyjy0FxXA298hdEN8Q0ydCg==
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Nov 2026 04:07:56.1760
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f104a763-358e-48c2-b130-08df4aa9af65
+X-MS-Exchange-CrossTenant-Id: c23ec02b-083b-4e7f-887a-880f512b8a9e
+X-MS-Exchange-CrossTenant-AuthSource: BN5PEPF0004698C.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR12MB9153
+X-OrganizationHeadersPreserved: LV8PR12MB9153.namprd12.prod.outlook.com
+X-OriginatorOrg: NaturalNydeggerTransport.onmicrosoft.com
+X-CrossPremisesHeadersFilteredByDsnGenerator:
+ PH8PR12MB7135.namprd12.prod.outlook.com
+
+[You don't often get email from cynthiabulleck@jatendofoods.online. Learn w=
+hy this is important at https://aka.ms/LearnAboutSenderIdentification ]
+
+Hello,
+
+JA Tendo Foods LLC is looking to purchase a customs bond and would like to =
+request a quote from your agency. Details below per our client application:
+
+01 / BOND REQUEST
+- Service requested: New bond
+- Bond coverage: Continuous Customs Bond
+- Activity code: 1 - Importer
+- Requested bond limit: USD 50,000
+
+02 / LEGAL ENTITY & IMPORTER ID
+- Exact legal entity: JA Tendo Foods LLC
+- Entity type: LLC
+- State of formation: CA
+- EIN: 43-2417637
+- Principal address: 7273 MURRAY DR STE 3, STOCKTON, CA, 95210
+
+03 / CONTACTS & AUTHORIZED SIGNER
+- Authorized signer: CYNTHIA MARIE BULLECK (Organizer)
+- Contact email: cynthiabulleck@jatendofoods.online
+- Phone: 16505378868
+
+Please reply with:
+1. Your price for this bond and the estimated processing time
+2. Your application requirements / intake checklist (entity & importer ID, =
+contacts & owners, merchandise & trade profile, customs operations, bond hi=
+story & compliance, and AD/CVD schedule if applicable)
+3. Documents you need from us - we have Articles of Formation, IRS EIN lett=
+er (CP575), W-9 and principal ID available
+
+Best regards,
+CYNTHIA MARIE BULLECK
+JA Tendo Foods LLC
+
+--a6a8834e-84e4-4db7-9bc5-0d9139584699--

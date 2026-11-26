@@ -35,6 +35,7 @@ from .models import (
     DRAFT_FAILED,
     DRAFT_PENDING,
     DRAFT_REJECTED,
+    DRAFT_SENT,
     Message,
     TERMINAL_STATES,
     Thread,
@@ -315,6 +316,7 @@ def generate_draft(
         select(Draft).where(
             Draft.source_message_id == source_message.id,
             Draft.intent == intent.label,
+            Draft.status != DRAFT_SENT,
         )
     )
     if existing:
@@ -469,6 +471,15 @@ def generate_draft(
                 f"supporting documents for {commission.legal_name}.\n\n"
             )
             notices.append(f"已自动填表并附上：{', '.join(attachments)}")
+        elif "application" in material_keys:
+            # 对方要求附申请表，但没能自动填（如发来的是不含可填写字段的平铺版）：
+            # 正文不能谎称「已附上」，改为如实标注待人工处理。
+            app_label = _MATERIAL_LABELS.get("application", "the application form")
+            notices.append("申请表无法自动填写，已如实标注需人工处理")
+            body = body.replace(
+                f"Completed and enclosed:\n- {app_label}",
+                f"The application form could not be auto-filled and will be handled manually: - {app_label}",
+            )
 
     status, rule_hits, reasons, gate_notices = _preview_gate(
         case=case,

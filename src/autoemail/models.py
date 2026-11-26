@@ -451,10 +451,6 @@ class Draft(Base):
     send_error: Mapped[str | None] = mapped_column(Text)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
 
-    __table_args__ = (
-        UniqueConstraint("source_message_id", "intent", name="uq_draft_source_intent"),
-    )
-
 
 class AdcvdAttestation(Base):
     """AD/CVD 声明的人工签署记录：Broker 审、IOR 担责（V0.2 §7.3）。"""

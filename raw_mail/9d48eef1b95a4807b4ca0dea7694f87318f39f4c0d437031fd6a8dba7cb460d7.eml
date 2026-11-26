@@ -1,0 +1,248 @@
+Return-Path: <ryan@crcustomsbrokers.com>
+Delivered-To: amanuelafeworktiku@enproinc.live
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id oNJXNbArB2v/ljcAQ1DlOA
+	(envelope-from <ryan@crcustomsbrokers.com>)
+	for <amanuelafeworktiku@enproinc.live>; Wed, 25 Nov 2026 13:40:48 -0500
+X-Original-To: amanuelafeworktiku@enproinc.live
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id 06D0410B86A
+	for <amanuelafeworktiku@enproinc.live>; Wed, 25 Nov 2026 13:40:47 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=crcustomsbrokers.com header.s=google header.b=RU+CbIkm;
+	dmarc=none;
+	spf=pass (mail.pony-it.com: domain of ryan@crcustomsbrokers.com designates 209.85.219.51 as permitted sender) smtp.mailfrom=ryan@crcustomsbrokers.com;
+	arc=pass ("google.com:s=arc-20260327:i=1")
+ARC-Seal: i=2; a=rsa-sha256; d=enproinc.live; s=dkim; cv=pass; t=1795632048;
+	b=ChnPVIyqpy1vFxD5dywKssSlEzmQ1UWorRpErCtMWp3C2y+onJZYh+b2kK5F3ikk2F8xps
+	h9+IyPeAXES2hLZ6D5hrPgLnwZDODsn+P5TZU/jiQhEYGwTSuELyQF975TBDFPr16jrYZN
+	UJlMcX6Tu2kFMUr5gwQkUnbwpIt42OasjAOm7veOEZy9NXX6JBUiEjEe7Ud6wh8nmr9716
+	q0ynMPVpf5+qfQQg2/lz5tf8tobwbSzjt0G0JN09hw6SYXojATpIQvCkcpTqJSvYZlPTvY
+	X04oKw7X+fbUEjjrtnmBOyVe4iZT4uQsJ0E2VjJqKKLoW8Vo261g08DrENzjSg==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=enproinc.live;
+	s=dkim; t=1795632048;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references:dkim-signature;
+	bh=V9sQuhUvfurRxBSsbqEESufKnVUUcGCmtTThuWax+R8=;
+	b=A/yqv2fcy3nG/dDi4uPZrkISk5v9kG4CEvRe6HWs2m+rq4hLezYQ81VIWc7oN9B7g1ZKpy
+	qMEvpWcV/Lb8vVxko1lj4ULGyB2LRjc4Nm5ZxWZSpFMGV4mq9uqZ6wyHiyqkUql2J5iMYg
+	E2eR0L82xaoATC+bVG7T3Jjq5StwSoj90XJT8Zb+DeFeizLNBcBC0tE9onxyDMXAQZI2md
+	3H5vScR1KzqkjOB16QUptzQnB7fEvTjVbJCwf7d6DzyQx/KDgKdBPKYp5KhHWPwniPtlqc
+	KqpsrizILcqjR//Mcm/EAu/TblUcoCQ6ZKgS8A5ryWPzcduzg5dFpDp0UcFHSw==
+ARC-Authentication-Results: i=2;
+	mail.pony-it.com;
+	dkim=pass header.d=crcustomsbrokers.com header.s=google header.b=RU+CbIkm;
+	dmarc=none;
+	spf=pass (mail.pony-it.com: domain of ryan@crcustomsbrokers.com designates 209.85.219.51 as permitted sender) smtp.mailfrom=ryan@crcustomsbrokers.com;
+	arc=pass ("google.com:s=arc-20260327:i=1")
+Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-921365696d9so43534296d6.1
+        for <amanuelafeworktiku@enproinc.live>; Wed, 25 Nov 2026 10:40:47 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795632047; cv=none;
+        d=google.com; s=arc-20260327;
+        b=fWD6o/jgrkF5MAykomWAuzjOkbPyHOAYIJSDo0AHjTzB915CIGfZ9gkDYd2Etzf8bt
+         rvdVHXSeH/6ST9eh0jm1feqmDyg0Cusi8FXZ9guD25Ij4Z/MiOeiM5DDwUI24xSmV9hY
+         Kfrtohpb4rU8RA/QoU9LTCo8s4gLBeUJ0AN9s+zeZfJT5N1Uh3ewWD+0ipcTWO0z2drd
+         7YUg1Tpxqq/HFTqh7kSDlNUO7/YhMC90nHgux3KToALuIN+Uo0sb0oeqyY7LQNv1HE1Q
+         I/UJePNAPrySfA3EbC4rU8M9JsyQFLnXI3qJDs4u/bXinDva+hCWqc+XhHAYfJqrGhVL
+         3djQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:references:in-reply-to:from
+         :mime-version:dkim-signature;
+        bh=V9sQuhUvfurRxBSsbqEESufKnVUUcGCmtTThuWax+R8=;
+        fh=guv5z6gEUqLZBtOV5rDDVIdgaNjZoP2M3By4eixlInA=;
+        b=Sd0FdgezNgz6hWEH/NDxUq3Q+JjZnmR5Rzv5NH+dEoA+L+Nfo3tgLR5gCa9ArSsWiJ
+         OEvHwMNZe2mz07SDl87aiGcMxdUWVpgdnhAfm1f1XCtnJ5GOQxnYxitt6w9/Ve+ULV9z
+         +Soaq3eDDRDcbqrD3kzodqqRZax6JX62lkQKW1h5A4qehn30yjb6bfi1qkIwhuSYrsDN
+         is3Hv8o7tMUMuVkiRSUzltZ77iNz7Lj1m6oZ8kdH92tjMOI5s4ZvO06v4+i1855BI9Wn
+         kA/xhz5c7lLUBX5jbMqdYs6eBoq46re5cdCvb89gBVuKYgBOas1wOJLRhpAGRY+pwdiy
+         BmSQ==;
+        darn=enproinc.live
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=crcustomsbrokers.com; s=google; t=1795632047; x=1796236847; darn=enproinc.live;
+        h=content-type:cc:to:subject:message-id:date:references:in-reply-to
+         :from:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=V9sQuhUvfurRxBSsbqEESufKnVUUcGCmtTThuWax+R8=;
+        b=RU+CbIkmgYTbe1BMo2/yXtolVpRDawsIo4sXwef/b062vVr0GSdq9YGF0m6AQ3IU5+
+         /L3qF0PBa1XXkG5UpNV1yWwgAAIL/mNn2loCMhVPRqjDWMPePil4T8rCXxfiqIrCc8hu
+         JS7A6G2H45ThFaHIt4Ya2bTgX+37cQPKiRROKCtCOlLa1Mzd8oAO+CAsiyjoRg2p4kyz
+         ORMnNrnHAhCGm3VNlZo9pNv3cnvh3R+itws6ltMG4IIfUr0AMRFxFwBIlYOxEHAwpqJY
+         a3NK6z/gt9HZ2OdBm8NWKpQWep7nvJQepadUBhW3K69UnR5B6bMyT2Hjs4hSHB91/0sY
+         dFJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795632047; x=1796236847;
+        h=content-type:cc:to:subject:message-id:date:references:in-reply-to
+         :from:mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=V9sQuhUvfurRxBSsbqEESufKnVUUcGCmtTThuWax+R8=;
+        b=nW6LAW1Por6Ea4EMV3nZbWBuh9ImN72+0r+KqwZs23DjwmX7btbRAFstZJJOT1M9Mb
+         1yFdBbkEUPNt3oqyhG5pX84nAojEKFH26DwhnONeP6EfjmfPVE72EGh4Pc3tfdqtea+y
+         VpBeP0EmQGugNuaP1CK5s1klGG7XE3Occg8mzjOLqxq+d6/q+3t+rLtpaTRar4JppeOd
+         LKY7KdA5qsQu+AVzSI7/Qzr7/H8kUcs7Po6KV5be35QrmRKJCdEU3qeiy9OMMvoigC2A
+         Z4tWGxJL0qsxfzDewZPfwQe33tunvuTijnreDw/DQMcwGK9n04fWlptfGcdN8WSkKKPG
+         nTIw==
+X-Gm-Message-State: APuU4Z9ObMfjpACHXjsZMWm5QfLfJho2gBlosUnIUCqfhOurX2C1P00d
+	l8zjiYz29fxEBDC9ulaGrt5caSchEiTP+p4f5bZ2/sulqexiJ+4DFrhBHMLOVTZY9Zybv2D5fS0
+	p5fdQpuHzpyLpcKKOQOO4VX4G/imaUMusxY22DTLY6kZAkLeoj/HZ
+X-Gm-Gg: AZFdTZdC5sgTnwxQz18L5rUzZDqmFu8oaKhAnaSFhFG9WNJbbj2rYaQkSP0hfRNoHKI
+	1QQhroxKUSeDjxnBn2bVRfiqNE6hX6cSgAYi++APcxorRINdR2zY3hum5yB/lSMlP/rlE8x26en
+	DRbsqTryhSdS1X6WHd22baQg6Zsk0jZatdg95SAjGGqvyLvwe6z6wAOfSF4nzCSy2aBfzOy/jBP
+	Q1ONInbyOKOQfLjS0/XGDM4I01ewW41MSQ+xWVo/Sjjhk7KApr8JxeolC+6tPhX07lMGVGoLuFD
+	05VjJSiBPfoCtMlBdMnWkFtCdyWsfMmW2LowYXNdPGY/CpBZueFmUjAUcQZHdbOqizPliGpiVNC
+	eH3UkVOgyr4n6hJIkME3ylnVCzFd4Eei1novjVQ==
+X-Received: by 2002:a05:6214:33c5:b0:921:65e5:5da8 with SMTP id
+ 6a1803df08f44-92165e568e4mr136438786d6.56.1795632047104; Wed, 25 Nov 2026
+ 10:40:47 -0800 (PST)
+Received: from 77377267392 named unknown by gmailapi.google.com with HTTPREST;
+ Wed, 25 Nov 2026 10:40:46 -0800
+MIME-Version: 1.0
+From: assistant@crcustomsbrokers.com
+In-Reply-To: <010f01a2130526d1-3fe3e583-853f-4162-8594-72fbdaf29245-000000@us-east-2.amazonses.com>
+References: <010f01a2130526d1-3fe3e583-853f-4162-8594-72fbdaf29245-000000@us-east-2.amazonses.com>
+X-Google-Nh-Sender: AW_J_Uqi2aTarPFolQNgrClfMZtuSBFbwuh8dUEYDPVXp181m9_zmyNo--VBSJgYhsEh5HeGdOFFs5D8JM8HjN89URn6nFo3e2Oy9WmNNKoyNXxR6Z5yWYauikL4ACQ6He4pb5ACWJlvLCM-nEnisN58pMacG0dDFMnUc0PqSj6bq2rg0SPctdTM7vp_kJFWd4t1P51SEFlma7Ye-a78lMEfI9euX3EM5vNP2AWArTrSosPAxOwxyI4AIi3hLSK2HhMSGGehYYc
+Date: Wed, 25 Nov 2026 10:40:46 -0800
+X-Gm-Features: Aa3M54oKqriJM0-r3p0Bg2iVXYScVBjDCUVjTIRoUHVAWSlROQsUxa4HxCOXPbs
+Message-ID: <nh-3413a3ea-5d73-469c-b8b8-49ffa2ee0a56@google.com>
+Subject: Re: [BOND-2026-0504] Inquiry - Continuous Customs Bond
+To: amanuelafeworktiku@enproinc.live
+Cc: office@crcustomsbrokers.com
+Content-Type: multipart/alternative; boundary="00000000000050c13c06611e2a15"
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Result: default: False [-7.06 / 15.00];
+	BAYES_HAM(-5.50)[100.00%];
+	ARC_ALLOW(-1.00)[google.com:s=arc-20260327:i=1];
+	FORGED_SENDER(0.30)[assistant@crcustomsbrokers.com,ryan@crcustomsbrokers.com];
+	IP_REPUTATION_HAM(-0.26)[asn: 15169(-0.25), country: US(-0.01), ip: 209.85.219.51(0.00)];
+	R_DKIM_ALLOW(-0.20)[crcustomsbrokers.com:s=google];
+	R_SPF_ALLOW(-0.20)[+ip4:209.85.128.0/17:c];
+	MX_GOOD(-0.10)[aspmx.l.google.com];
+	MIME_GOOD(-0.10)[multipart/alternative,text/plain];
+	ASN(0.00)[asn:15169, ipnet:209.85.128.0/17, country:US];
+	FROM_NEQ_ENVFROM(0.00)[assistant@crcustomsbrokers.com,ryan@crcustomsbrokers.com];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	FROM_NO_DN(0.00)[];
+	ARC_SIGNED(0.00)[enproinc.live:s=dkim:i=2];
+	MISSING_XM_UA(0.00)[];
+	RWL_MAILSPIKE_POSSIBLE(0.00)[209.85.219.51:from];
+	DMARC_NA(0.00)[crcustomsbrokers.com];
+	RCPT_MAILCOW_DOMAIN(0.00)[enproinc.live];
+	TO_DN_NONE(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	RCVD_IN_DNSWL_NONE(0.00)[209.85.219.51:from];
+	TO_MATCH_ENVRCPT_SOME(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	PREVIOUSLY_DELIVERED(0.00)[amanuelafeworktiku@enproinc.live];
+	RCPT_COUNT_TWO(0.00)[2];
+	DKIM_TRACE(0.00)[crcustomsbrokers.com:+]
+X-Rspamd-Queue-Id: 06D0410B86A
+
+--00000000000050c13c06611e2a15
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi Amanuel,
+
+Thanks for reaching out about the continuous importer bond for Enpro LLC.
+We have your legal name, business address, and signer details. To review
+the request, please confirm:
+
+   - Your company website and a company contact we can use to verify the
+   signer=E2=80=99s authority.
+   - What you plan to import, the countries of origin, expected shipment
+   frequency, and U.S. ports of entry.
+   - Estimated annual import value and annual duties, taxes, and fees,
+   including any anticipated antidumping or countervailing duties.
+   - Requested effective date, whether Enpro has an existing or prior bond,
+   and whether you also need customs clearance.
+
+For the application, please have the company formation documents, EIN
+confirmation, corporate financial statements, and a Customs Power of
+Attorney signed by an authorized company representative ready. Please do
+not email tax documents, IDs, or financial statements. We=E2=80=99ll coordi=
+nate
+secure submission and confirm the quote and processing time after review.
+
+Thank you,
+C&R Operations
+
+
+On Wed, 25 Nov 2026 14:03:54 +0000, amanuelafeworktiku@enproinc.live wrote:
+
+Hello, Enpro LLC is looking to purchase a customs bond and would like to
+request a quote from your agency. Details below per our client application:
+01 / BOND REQUEST - Service requested: New bond - Bond coverage: Continuous
+Customs Bond - Activity code: 1 - Importer - Requested bond limit: USD
+50,000 02 / LEGAL ENTITY & IMPORTER ID - Exact legal entity: Enpro LLC -
+Entity type: LLC - State of formation: CA - EIN: 43-2207391 - Principal
+address: 833 S SPRING ST STE 200, LOS ANGELES, CA, 90014 03 / CONTACTS &
+AUTHORIZED SIGNER - Authorized signer: AMANUEL AFEWORK TIKU (Organizer) -
+Contact email: amanuelafeworktiku@enproinc.live - Phone: 2097764668 Please
+reply with: 1. Your price for this bond and the estimated processing time
+2. Your application requirements / intake checklist (entity & importer ID,
+contacts & owners, merchandise & trade profile, customs operations, bond
+history & compliance, and AD/CVD schedule if applicable) 3. Documents you
+need from us - we have Articles of Formation, IRS EIN letter (CP575), W-9
+and principal ID available Best regards, AMANUEL AFEWORK TIKU Enpro LLC
+
+--00000000000050c13c06611e2a15
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<p>Hi Amanuel,</p><p>Thanks for reaching out about the continuous importer =
+bond for Enpro LLC. We have your legal name, business address, and signer d=
+etails. To review the request, please confirm:</p><ul><li>Your company webs=
+ite and a company contact we can use to verify the signer=E2=80=99s authori=
+ty.</li><li>What you plan to import, the countries of origin, expected ship=
+ment frequency, and U.S. ports of entry.</li><li>Estimated annual import va=
+lue and annual duties, taxes, and fees, including any anticipated antidumpi=
+ng or countervailing duties.</li><li>Requested effective date, whether Enpr=
+o has an existing or prior bond, and whether you also need customs clearanc=
+e.</li></ul><p>For the application, please have the company formation docum=
+ents, EIN confirmation, corporate financial statements, and a Customs Power=
+ of Attorney signed by an authorized company representative ready. Please d=
+o not email tax documents, IDs, or financial statements. We=E2=80=99ll coor=
+dinate secure submission and confirm the quote and processing time after re=
+view.</p><p>Thank you,<br>C&amp;R Operations</p><br><br><div class=3D"gmail=
+_quote">On Wed, 25 Nov 2026 14:03:54 +0000, amanuelafeworktiku@enproinc.liv=
+e wrote:<br><blockquote><div style=3D"white-space:pre-wrap">Hello,
+
+Enpro LLC is looking to purchase a customs bond and would like to request a=
+ quote from your agency. Details below per our client application:
+
+01 / BOND REQUEST
+- Service requested: New bond
+- Bond coverage: Continuous Customs Bond
+- Activity code: 1 - Importer
+- Requested bond limit: USD 50,000
+
+02 / LEGAL ENTITY &amp; IMPORTER ID
+- Exact legal entity: Enpro LLC
+- Entity type: LLC
+- State of formation: CA
+- EIN: 43-2207391
+- Principal address: 833 S SPRING ST STE 200, LOS ANGELES, CA, 90014
+
+03 / CONTACTS &amp; AUTHORIZED SIGNER
+- Authorized signer: AMANUEL AFEWORK TIKU (Organizer)
+- Contact email: amanuelafeworktiku@enproinc.live
+- Phone: 2097764668
+
+Please reply with:
+1. Your price for this bond and the estimated processing time
+2. Your application requirements / intake checklist (entity &amp; importer =
+ID, contacts &amp; owners, merchandise &amp; trade profile, customs operati=
+ons, bond history &amp; compliance, and AD/CVD schedule if applicable)
+3. Documents you need from us - we have Articles of Formation, IRS EIN lett=
+er (CP575), W-9 and principal ID available
+
+Best regards,
+AMANUEL AFEWORK TIKU
+Enpro LLC</div></blockquote></div>
+
+--00000000000050c13c06611e2a15--

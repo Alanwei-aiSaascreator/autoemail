@@ -1,0 +1,249 @@
+Return-Path: <dave@thebondpro.com>
+Delivered-To: chanrathanachouk@ordinaryusa.online
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id 4P65DC04B2vqgwAAQ1DlOA
+	(envelope-from <dave@thebondpro.com>)
+	for <chanrathanachouk@ordinaryusa.online>; Wed, 25 Nov 2026 14:34:05 -0500
+X-Original-To: chanrathanachouk@ordinaryusa.online
+Received: from sonic313-22.consmr.mail.bf2.yahoo.com (sonic313-22.consmr.mail.bf2.yahoo.com [74.6.133.196])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id 2EF1810D97E
+	for <chanrathanachouk@ordinaryusa.online>; Wed, 25 Nov 2026 14:34:04 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=yahoo.com header.s=s2048 header.b=MvAvAeUZ;
+	dmarc=none;
+	spf=softfail (mail.pony-it.com: 74.6.133.196 is neither permitted nor denied by domain of dave@thebondpro.com) smtp.mailfrom=dave@thebondpro.com
+ARC-Seal: i=1; a=rsa-sha256; d=ordinaryusa.online; s=dkim; cv=none;
+	t=1795635245;
+	b=0JR5opYuBE9wjQrqo72F1XnvJShum+hv5ODKo44e+N4DUk/l8cKKQs1+OfDGKBVeZJRCZQ
+	DDJxMU8k+Z/C9th3Y4FaW+yunBvrdIS94+zVhWAnb+lurGL/QrSoomLVa2FGakAFNEMeLL
+	MQEkymcEEUNi5YtHGIZCUW60uvCWyLOQ86D5BSbKW1aOP/srKhh0AZmpEVosF8uyVwLI1R
+	mRWnrHFHbCdD2BM7t0XyOrETmJ4sRB2gR8Ekxkx+aYIfs/NNVyBU5onQmj/DCrF8vhGIrT
+	q5zMwiPPKodwNKcxuOcddGGPZDG2uS6vJIf274gHHHfIH6GaffvjWS3dtuA1fQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=ordinaryusa.online; s=dkim; t=1795635245;
+	h=from:from:reply-to:reply-to:subject:subject:date:date:
+	 message-id:message-id:to:to:cc:mime-version:mime-version:
+	 content-type:content-type:in-reply-to:in-reply-to:
+	 references:references:dkim-signature;
+	bh=MdVGMojISxb5RBsKuce2c6pRA/ySDQE/KMgb2zzVrOA=;
+	b=SMzQ80Tqgk5rF5+5rXG8blCu9WgU7ueVb3BsMJODNQIYoba524Wdos2nUCuAdN8SHMtk54
+	5v91J8r7VxpU1di7+33Zpbj7b8s8bMNbHPo089eN4eXmQOR4RiA5h3KBoWZxDghSPI5Rbd
+	pVBlTT4L86TenxWlPm+tleR4DjS6XTutRd/+L46Nkv29bjU7WXkLh22Lc96/I4Ao5Rj2xY
+	mhOhsQ7CIAiBgpJ3v2vAbUgVoR3efyvMSHz6gFcV8IHveKq0sXvEfEkGWYuVLNVQXLWZvi
+	RWUc5oDalbTS7JhkFLVAyaTEqG/TbTgmxREOv19vHogAg+qesuGrUQNdjBvwFg==
+ARC-Authentication-Results: i=1;
+	mail.pony-it.com;
+	dkim=pass header.d=yahoo.com header.s=s2048 header.b=MvAvAeUZ;
+	dmarc=none;
+	spf=softfail (mail.pony-it.com: 74.6.133.196 is neither permitted nor denied by domain of dave@thebondpro.com) smtp.mailfrom=dave@thebondpro.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1795635243; bh=MdVGMojISxb5RBsKuce2c6pRA/ySDQE/KMgb2zzVrOA=; h=Date:From:Reply-To:To:In-Reply-To:References:Subject:Content-Type:From:Subject:Reply-To:Content-Type; b=MvAvAeUZyv28BS5Qb3isTNQubXqHPYpCbKROHmsimDJ4JSw0SmckcH+L48zh5j4Lwm/qbeYUC+wyWni60fpW723Qnxl2A/FahNyAVnBG13efflNVrFgcM7zQ+mRH1cmsWk0XVNExHhVyqSMWHqGVjEDVJr66lZMvDkJptQDu2RdzLOvcpTgvjAowXYzSHTdDLVBKyJbAWEwxs2I76aIDhiMftx4sLwryOWYRrf3dZ3002N+mLODBT3UmngUG7RwR1ge7KbKLUKezQ14CeU1XiPQavfjKBw0rqM2GvaDo//f71t5ghFAtM8bhhLZY5WzMibo/An45GkCS3W11lj2Sag==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1795635243; bh=uHgDI38FwmAEEathbU7caecaM6UE2BSzdGkjCe3uFWO=; h=X-Sonic-MF:Date:From:To:Subject:From:Subject; b=EmsVaB2YP/c3G3VQIf+o1JDATYXdNUHvYHFRrNe6FywUrshZ8ViwtV7JZMbXrriU8GV1iPWelB3oisLmNB6FfM0fIzhw96nQ+vUVRR7tl7NJsydGA2SwVpYFmDQcXrDf8ntHz9LBOH/4duXOGc86j/bTZTj+C++Y0DbGh9Xmv2XrkbmOetuR4W+flxCShFne4Mac3ADJnIGTatoOLfzzitM1iv7PhkcPwQcuo17yXlE45AV7UWf4rCmStIeaJpBAVOE0T44Tk224BUsNNnJBd8KXGVsSHbTiNLjAmj5tH9vgq0mnMM4vcGE7rdTV1d4QihljCUYdZUpCvI8g/c9yiQ==
+X-YMail-OSG: 1Z9.0NwVM1nECSsNZZrT.fD5Jb9VAFZfcv4P5A02S8lIINCq6h9hKpx0OwLAHbL
+ qc8nhNn66jvW8QgYZBB.pKTeroARBGhBgANsoLETwiDSF8BvUelNzRJrUj.Sh9mKYAUApEsKqiLy
+ oMK4s1BhfDLEpZr.jf4jHi86my4qsR4kZa0Pli885sdlD8NoMy1yRSfdosfSlolwzRAU65TvtVkQ
+ qcRqlia.5a13_KeP2isJNvVCCqLdw9N1CtbkgeV_jF99l_159ie2RhggpfiLUmA0o6_126el2wuW
+ kupy1XWOTkt4V8X0JUDP9vGhEvHIaZMa8GaQxcoQe.WxQ6h6YiqkR_uHQyDfMVo1LQXw0F2.3u7r
+ _o7338H4HgSlP5opeiVe4IZV5HxV1ZU..dRAxMKaTYRWSQR5YalQI6A4QAXibF9YnEyKjHjO9805
+ zYtvZ_u1GLvpAaaHRikrX0ICIPffrJt6JeVukaDoYCKbI9ayOXAq7h3vr_.WMRU14.EZQvV2gXWn
+ zpUUvReCAkXVNR5otnba0HGN3qKfsLPdl8PbsGS6mxq8pB6.Ipcg7BdLFy_MpvLww5ZQ6QhnUIz4
+ LPTMTlce9hNWTq8AiPYzWecKsOEQqwdbgWT_v0G6QjLtegyjHuLnstzw9lcaBOrdJBKQ0fXsgMTQ
+ Cmn9PHhkbSI2BTnuIZ2LOQaKQyhKx5xyYmBsjdcn4kVyXUPtcosqrQqo40VFZIP8cWGPBxbEq4Iu
+ 9VLi6VKRwlvscpFKlTnoXkkWTVBlc4UUbqDZvQEDI83nT4AQZ8JstGy5ETiSdNPycKTPhsg7o7kt
+ iCkbQeCcM37HJ.zXVrXFYNcB_.BsQmkBZHlWGW.k3VJRshDnuyrS4G9nRurhmgNVNvG_QeO3VBVA
+ c7tzEG2f79iQX1P_M6BVlXCiekggdVJHNKSCTRIHTqCj86wEFoTlMFOurogw.TllpkQH.7IVqWj5
+ J0YW4JjhEhkgWyhngavT_STMGRp9Q7IIqlEE7dFb6uhym0CoKgbSdJUvBbgU8_PqAVz9.m3o6O4e
+ 1DLK1a3U73WJt8FtF_VqnXLMM4zoP2EZ_pZlm4gYLas2b0Gi0XsZxCQiwuqEriGkv3NCMxjE8NzQ
+ YqcarXX0Sn0hBBw4aEw5AyWs7JgWyTrLNnveAu6FvXtDpJ2AStxTkYEwPOsFQjbiROJq772qpmZs
+ l6OwolweU2m_6d0D4GcHHQW3fF0bio4YTyg13lqOIvxr83Mv4jJjJhxCaCdaHn7TulK0BA_e1IxE
+ vcZGdJ.D.ZSsITcgT6ycpW38D4ZDvUd0aLVGxPNm2SSr7fclBNlq7QXjzgTxCFu.hA_sly7I1mY5
+ NBpS.vVbTai3fsGIJP27ddC2s26He4iSOGn2DdUcjtdvTgO79LaJYU6YIK76dVjFEBu92QL7dzA1
+ 9eu5ZkStBTVqGqig1ZNVQYXchsyYAxFxCrlp9o3czpKpWPJU2LcPMz59Zb0tmsdeiYwf_FYG6P0Y
+ 0YGc9FoY3T42HhI4IhJEOEe32vH0Nq8c4FNFtgM0SiFH1_FEatk7ryLjDf21PvitJT4jVBqmVlIf
+ WR7.yIqLbFKac_fo473YzE6DvAEIXCaNCGRiz4PHmWqAyx3uuHKhbd5YEIrysNJY76XJhgt9aQcf
+ BZeZYFZ7QIdoMhb2akotrHkzy.r70sBdCzDBO_krLD2Mw105Za.fuTkqGjKYorY21N2BLZcfpq1m
+ F4U2AJvx5Yh1kdeg9TI7_iLTuCLuUUdSeHi4vGrLTmcy8E.ThJ_1h8LJDdN0_6i7iM3pBhW5V88E
+ yFNmX_mCpHT_CYRo3_kDrCrpCdzOV_JmMMGGzXUGS78e77HP62aeVVXrSsIJF22uuspIeT1EPUrs
+ zSvgHszQ3NK_imiMCjcVuPg4IS77Gs00qgWj0_Wcb.h_uKRcpRlZFQQeezZcwlw8pwaN_43NpUwE
+ VL1dx4e.EhyKVHruh96pbUR5gSrrm7jfcKB5h2bn_sETAO3O2FqiM0Y1mYvtYqiLIADuy0.5hi_n
+ feqcKC31rNK7HmJh4fbgysQ.JwWAzYbO3i3EjkS27bChTtTtmiAn4gyxX8Nx48QluUuwGirGfWzt
+ dzOLOmjhaEWINIGDoCXijGEfpN4af7TnAL5coYq.1GXpVVrMa1gdZZfvjL6STopWVjUEW9M9Fnz6
+ EwkJIiaCvfyGoFUCsUvCE.vXq_a7OkrtZrUG0R8IiYEXouDLRVp4gpmj.g1zTmtl4YVDvOm7NRDi
+ C1bXdwnp_5Wokb2Obr6Lgo5.m59jqjxWJQnSqf31CV7zV7znEUw_YtyzspHG4mPKhAe34pAifD1s
+ t.rz_Unx_4qyZJMkldenPoiG2.TGM.gbiEMIyfOUTnSQEJxbNFzc5KA--
+X-Sonic-MF: <dave@thebondpro.com>
+X-Sonic-ID: fa5e098a-a227-4a4c-a816-58d6ebdc7d1a
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic313.consmr.mail.bf2.yahoo.com with HTTP; Wed, 25 Nov 2026 19:34:03 +0000
+Date: Wed, 25 Nov 2026 19:34:01 +0000 (UTC)
+From: David Faust <dave@thebondpro.com>
+Reply-To: David Faust <dave@thebondpro.com>
+To: 
+	"chanrathanachouk@ordinaryusa.online" <chanrathanachouk@ordinaryusa.online>
+Message-ID: <1432889801.822160.1795635241713@mail.yahoo.com>
+In-Reply-To: <010f01a2066f5f0d-ce89b354-7327-4981-a488-d4850fbeebce-000000@us-east-2.amazonses.com>
+References: <010f01a2066f5f0d-ce89b354-7327-4981-a488-d4850fbeebce-000000@us-east-2.amazonses.com>
+Subject: Re: [BOND-2026-0226] Inquiry - Continuous Customs Bond
+MIME-Version: 1.0
+Content-Type: multipart/alternative; 
+	boundary="----=_Part_822159_1596553663.1795635241712"
+X-Mailer: WebService/1.1.27100 YMailNorrin
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Result: default: False [0.39 / 15.00];
+	BAYES_HAM(-5.50)[100.00%];
+	SEM_URIBL_FRESH15(3.00)[ordinaryusa.online:email];
+	BAD_REP_POLICIES(2.00)[];
+	URI_COUNT_ODD(1.00)[1];
+	R_SPF_SOFTFAIL(0.10)[~all];
+	MIME_GOOD(-0.10)[multipart/alternative,text/plain];
+	MX_GOOD(-0.10)[mx-biz.mail.am0.yahoodns.net];
+	IP_REPUTATION_HAM(-0.01)[asn: 26101(0.00), country: US(-0.01), ip: 74.6.133.196(0.00)];
+	RCPT_MAILCOW_DOMAIN(0.00)[ordinaryusa.online];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	RCPT_COUNT_ONE(0.00)[1];
+	DWL_DNSWL_NONE(0.00)[yahoo.com:dkim];
+	ARC_SIGNED(0.00)[ordinaryusa.online:s=dkim:i=1];
+	DMARC_NA(0.00)[thebondpro.com: no valid DMARC record];
+	RCVD_TLS_LAST(0.00)[];
+	RCVD_IN_DNSWL_NONE(0.00)[74.6.133.196:from];
+	HAS_REPLYTO(0.00)[dave@thebondpro.com];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	R_DKIM_ALLOW(0.00)[yahoo.com:s=s2048];
+	ASN(0.00)[asn:26101, ipnet:74.6.128.0/21, country:US];
+	DKIM_TRACE(0.00)[yahoo.com:+];
+	RCVD_COUNT_ONE(0.00)[1];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	TO_DN_EQ_ADDR_ALL(0.00)[];
+	REPLYTO_EQ_FROM(0.00)[]
+X-Rspamd-Queue-Id: 2EF1810D97E
+
+------=_Part_822159_1596553663.1795635241712
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+I found this email in my spam folder, for customs bonds, look no further th=
+an CA Shea in NJ.
+BONDPRO, INC.1429 Valley Rd.=C2=A0=C2=A0Bartlesville, OK. 74003
+Phone: 918-337-4100Fax: 918-337-4101
+https://www.thebondpro.com
+=20
+
+    On Sunday, November 22, 2026 at 09:24:52 PM CST, <chanrathanachouk@ordi=
+naryusa.online> wrote: =20
+=20
+ Hello,
+
+The Ordinary LLC is looking to purchase a customs bond and would like to re=
+quest a quote from your agency. Details below per our client application:
+
+01 / BOND REQUEST
+- Service requested: New bond
+- Bond coverage: Continuous Customs Bond
+- Activity code: 1 - Importer
+- Requested bond limit: USD 50,000
+
+02 / LEGAL ENTITY & IMPORTER ID
+- Exact legal entity: The Ordinary LLC
+- Entity type: LLC
+- State of formation: CA
+- EIN: 43-2416938
+- Principal address: 1699 AIRLINE HWY, HOLLISTER, CA, 95023
+
+03 / CONTACTS & AUTHORIZED SIGNER
+- Authorized signer: CHANRATHANA JENNIFER CHOUK (Organizer)
+- Contact email: chanrathanachouk@ordinaryusa.online
+- Phone: 15599376472
+
+Please reply with:
+1. Your price for this bond and the estimated processing time
+2. Your application requirements / intake checklist (entity & importer ID, =
+contacts & owners, merchandise & trade profile, customs operations, bond hi=
+story & compliance, and AD/CVD schedule if applicable)
+3. Documents you need from us - we have Articles of Formation, IRS EIN lett=
+er (CP575), W-9 and principal ID available
+
+Best regards,
+CHANRATHANA JENNIFER CHOUK
+The Ordinary LLC
+ =20
+------=_Part_822159_1596553663.1795635241712
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><head></head><body><div class=3D"ydpcd0d04d4yahoo-style-wrap" style=
+=3D"font-family:times new roman, new york, times, serif;font-size:16px;"><d=
+iv><div dir=3D"ltr" data-setdir=3D"false">I found this email in my spam fol=
+der, for customs bonds, look no further than CA Shea in NJ.</div><div><br><=
+/div><div class=3D"ydpcd0d04d4signature"><div style=3D"font-family:new time=
+s, serif;font-size:16px;" dir=3D"ltr"><div><div style=3D"font-size:16px;col=
+or:rgb(0, 0, 0);font-family:Helvetica, Arial, sans-serif;" dir=3D"ltr"><i><=
+b>BONDPRO, INC.</b></i></div><div style=3D"font-size:16px;color:rgb(0, 0, 0=
+);font-family:Helvetica, Arial, sans-serif;" dir=3D"ltr"><b style=3D"font-f=
+amily:courier, monaco, monospace, sans-serif;"><b><span></span>1<span></spa=
+n>429 Valley Rd.&nbsp;&nbsp;</b></b></div><div style=3D"font-size:16px;colo=
+r:rgb(0, 0, 0);font-family:Helvetica, Arial, sans-serif;" dir=3D"ltr"><b st=
+yle=3D"font-family:courier, monaco, monospace, sans-serif;"><b>Bartlesville=
+, OK. 74003</b></b></div><div style=3D"font-size:16px;color:rgb(0, 0, 0);fo=
+nt-family:Helvetica, Arial, sans-serif;" dir=3D"ltr"><b style=3D"font-famil=
+y:courier, monaco, monospace, sans-serif;"><b><br></b></b></div><div style=
+=3D"font-size:16px;color:rgb(0, 0, 0);font-family:Helvetica, Arial, sans-se=
+rif;" class=3D"ydpfd8d73e8yiv7531629032ydpb3d16797signature"><div dir=3D"lt=
+r" style=3D"font-family:Helvetica, Arial, sans-serif;"><div dir=3D"ltr"></d=
+iv><div dir=3D"ltr"></div><div dir=3D"ltr"><div style=3D"font-family:courie=
+r, monaco, monospace, sans-serif;"><b>Phone: 918-337-4100</b></div><div sty=
+le=3D"font-family:courier, monaco, monospace, sans-serif;"><b>Fax: 918-337-=
+4101</b></div><div><b><br></b></div></div></div></div></div><span class=3D"=
+ydpa1d60d4cpasted-link"><a href=3D"https://www.thebondpro.com/index.html" s=
+tyle=3D"color:rgb(51, 143, 233);text-decoration-line:underline;font-family:=
+Helvetica, Arial, sans-serif;font-size:16px;" rel=3D"nofollow" target=3D"_b=
+lank">https://www.thebondpro.com</a></span><br></div></div></div>
+        <div><br></div><div><br></div>
+       =20
+        </div><div id=3D"ydp5a9b5007yahoo_quoted_5834556440" class=3D"ydp5a=
+9b5007yahoo_quoted">
+            <div style=3D"font-family:'Helvetica Neue', Helvetica, Arial, s=
+ans-serif;font-size:13px;color:#26282a;">
+               =20
+                <div>
+                        On Sunday, November 22, 2026 at 09:24:52 PM CST,  &=
+lt;chanrathanachouk@ordinaryusa.online&gt; wrote:
+                    </div>
+                    <div><br></div>
+                    <div><br></div>
+               =20
+               =20
+                <div><div dir=3D"ltr">Hello,<br></div><div dir=3D"ltr"><br>=
+</div><div dir=3D"ltr">The Ordinary LLC is looking to purchase a customs bo=
+nd and would like to request a quote from your agency. Details below per ou=
+r client application:<br></div><div dir=3D"ltr"><br></div><div dir=3D"ltr">=
+01 / BOND REQUEST<br></div><div dir=3D"ltr">- Service requested: New bond<b=
+r></div><div dir=3D"ltr">- Bond coverage: Continuous Customs Bond<br></div>=
+<div dir=3D"ltr">- Activity code: 1 - Importer<br></div><div dir=3D"ltr">- =
+Requested bond limit: USD 50,000<br></div><div dir=3D"ltr"><br></div><div d=
+ir=3D"ltr">02 / LEGAL ENTITY &amp; IMPORTER ID<br></div><div dir=3D"ltr">- =
+Exact legal entity: The Ordinary LLC<br></div><div dir=3D"ltr">- Entity typ=
+e: LLC<br></div><div dir=3D"ltr">- State of formation: CA<br></div><div dir=
+=3D"ltr">- EIN: 43-2416938<br></div><div dir=3D"ltr">- Principal address: 1=
+699 AIRLINE HWY, HOLLISTER, CA, 95023<br></div><div dir=3D"ltr"><br></div><=
+div dir=3D"ltr">03 / CONTACTS &amp; AUTHORIZED SIGNER<br></div><div dir=3D"=
+ltr">- Authorized signer: CHANRATHANA JENNIFER CHOUK (Organizer)<br></div><=
+div dir=3D"ltr">- Contact email: <a href=3D"mailto:chanrathanachouk@ordinar=
+yusa.online" rel=3D"nofollow" target=3D"_blank">chanrathanachouk@ordinaryus=
+a.online</a><br></div><div dir=3D"ltr">- Phone: 15599376472<br></div><div d=
+ir=3D"ltr"><br></div><div dir=3D"ltr">Please reply with:<br></div><div dir=
+=3D"ltr">1. Your price for this bond and the estimated processing time<br><=
+/div><div dir=3D"ltr">2. Your application requirements / intake checklist (=
+entity &amp; importer ID, contacts &amp; owners, merchandise &amp; trade pr=
+ofile, customs operations, bond history &amp; compliance, and AD/CVD schedu=
+le if applicable)<br></div><div dir=3D"ltr">3. Documents you need from us -=
+ we have Articles of Formation, IRS EIN letter (CP575), W-9 and principal I=
+D available<br></div><div dir=3D"ltr"><br></div><div dir=3D"ltr">Best regar=
+ds,<br></div><div dir=3D"ltr">CHANRATHANA JENNIFER CHOUK<br></div><div dir=
+=3D"ltr">The Ordinary LLC<br></div></div>
+            </div>
+        </div></body></html>
+------=_Part_822159_1596553663.1795635241712--

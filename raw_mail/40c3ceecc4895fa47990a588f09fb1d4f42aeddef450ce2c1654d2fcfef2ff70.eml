@@ -1,0 +1,117 @@
+Return-Path: <>
+Delivered-To: dinishafaulkner@donibrico.online
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id 0FqfOsDwBmvC4CUAQ1DlOA
+	(envelope-from <>)
+	for <dinishafaulkner@donibrico.online>; Wed, 25 Nov 2026 09:29:20 -0500
+X-Original-To: dinishafaulkner@donibrico.online
+Received: from e226-243.smtp-out.us-east-2.amazonses.com (e226-243.smtp-out.us-east-2.amazonses.com [23.251.226.243])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id 46505116CD1
+	for <dinishafaulkner@donibrico.online>; Wed, 25 Nov 2026 09:29:20 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=fGhP3VDv;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	spf=pass (mail.pony-it.com: domain of e226-243.smtp-out.us-east-2.amazonses.com designates 23.251.226.243 as permitted sender) smtp.helo=e226-243.smtp-out.us-east-2.amazonses.com
+ARC-Seal: i=1; a=rsa-sha256; d=donibrico.online; s=dkim; cv=none; t=1795616960;
+	b=ZiEbLs2/EifwAE6PzxC2IOk6uLu2A3ZMdvHUOOdQbakvff6ul9v2Aib8rBjyrmad46rRf9
+	83scT+D8YUuTOEeyE5thtGZY1gI/jown7xz9Rd2rm+VwSIWGwgcumBu62LifuC+EPsGKYB
+	YVpjImFKIcVVJNCxTalEUR82pqvBmKwNe9Qx89bc458qqoMtaZ40LH8Hm+hZS35to1olzv
+	IRR4SzyCuV93t69/Lw+QzY9rtc24tVMS0mj2HhmYcLe1lcyDFIlsUcMReGR5Sqrna1cDWK
+	MKeRAQmWURhKATeodj3vX0QEr0lOJknJ34oIpbTXoKmBD9VKRK0NJoJKUItbUw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=donibrico.online;
+	s=dkim; t=1795616960;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:dkim-signature;
+	bh=PPYlJHhqu7RSBEmGyVVKZi8CDmrDMEVJDZPqWGR/F74=;
+	b=Zo4sc0QNRyslv4OZVwhmPzyCbIPMg6PmHjK8oYV7NcH0GSvNZucmsgsDgDjQQ3/tnml+9B
+	aQWI4VxfhVqUKbbtlVQZGnzj7Xn8CkyHdN2EuWRNUz8ikB4eVb7VVHO7x65s+oxOWcp3w0
+	KxtExnGgw9DumqMyg9UCR1Epcu1xhseLyOWIwceuEjpfcU7/i7/o5wCuvgqt/YpUBgaksf
+	6Yb7KO//+56P3cyHFVG1Uyf8pvpODNweSDXHwgFK7cchZdvRGDcwXWWVKaZnLdSCKIo2z4
+	aVICo0o6zcCgpLREIE92YllVpLtX7GE2YF8OCYDZ+PSutXkC9S7TsnFb1mffAg==
+ARC-Authentication-Results: i=1;
+	mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=fGhP3VDv;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	spf=pass (mail.pony-it.com: domain of e226-243.smtp-out.us-east-2.amazonses.com designates 23.251.226.243 as permitted sender) smtp.helo=e226-243.smtp-out.us-east-2.amazonses.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=kra23psoka5qyyh6gdejiiuof3nluwuz; d=amazonses.com; t=1795616959;
+	h=Subject:To:From:In-Reply-To:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Feedback-ID;
+	bh=PPYlJHhqu7RSBEmGyVVKZi8CDmrDMEVJDZPqWGR/F74=;
+	b=fGhP3VDveLI3ifYSCVkOG6VvaklaznRIUTCcMNWKgyn+SNT16KXDt3vMoy0CrMvr
+	xoP/bZ75eV2KZVW42ODODksbg4aTuOTZ7jtvbJWSgRzK8xx1vu2nf6kRl8DaUXvKMvz
+	TgK1UQWaHPd6RUXkMapkgM/uwYqEW7ddd7UTtGps=
+X-Authority-Analysis: v=2.4 cv=OMkh3zaB c=1 sm=1 tr=0 ts=6b06f0be
+ a=eCgFnaI+2d5YQbmoFvOvrA==:117 a=kj9zAlcOel0A:10 a=7j0FZ4iXMVMA:10
+ a=Kd-FO9T5AAAA:8 a=T3cWNC6jA6oo6SsO09YA:9 a=CjuIK1q_8ugA:10 a=HfgA5y6Dz8UA:10
+ a=Qzt0FRFQUfIA:10 a=CGOBwzuDNZ6GGpVdzUSn:22
+Subject: Re: [BOND-2026-0637] Inquiry - Continuous Customs Bond
+To: dinishafaulkner@donibrico.online
+From: MAILER-DAEMON@us-east-2.amazonses.com
+In-Reply-To: <010f01a2131c61be-fc052d8b-78da-47ba-a8b8-5167af6b9328-000000@us-east-2.amazonses.com>
+Precedence: bulk
+Date: Wed, 25 Nov 2026 14:29:19 +0000
+Message-ID: <010f01a2131c6bc8-755cfc35-ad85-4a0c-b18e-6564344c653a-000000@us-east-2.amazonses.com>
+MIME-Version: 1.0
+Content-Type: text/plain;
+		charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfE7iQkV09+0Q7dl3FqUlQWVVCHNzNJHFHe00krhsxT+zwfARfNJ5InAw/jqDGyEGywfEt1MnGCZg515D2jDWqMm7qpQu3nbp/fNrFcnVIH+WvFduvt42
+ irJdNWG1JWZkaqi5GNhrFm55fwjlVmP+/458tNrxUvk34jrQBLuVpmNwuaqUjEu8QehN50R+b8YBPMf5LSSV+FEWVMFHdhZNbK6fZvO43wIlADLo40TGsXBC
+ Z1GZfs0lfeOhakgAS2UYhg==
+Feedback-ID: ::1.us-east-2.c0QCJwTJKDSb6mlKpIo5IpGwsngRMRBjZtJ48k4WYjY=:AmazonSES
+X-SES-Outgoing: 2026.11.25-23.251.226.243
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Result: default: False [-7.38 / 15.00];
+	BAYES_HAM(-5.49)[99.98%];
+	IP_REPUTATION_HAM(-0.89)[asn: 16509(-0.31), country: US(-0.01), ip: 23.251.226.243(-0.57)];
+	DMARC_POLICY_ALLOW(-0.50)[amazonses.com,quarantine];
+	R_DKIM_ALLOW(-0.20)[amazonses.com:s=kra23psoka5qyyh6gdejiiuof3nluwuz];
+	R_SPF_ALLOW(-0.20)[+ip4:23.251.226.243];
+	ONCE_RECEIVED(0.10)[];
+	MIME_GOOD(-0.10)[text/plain];
+	MIME_FROM_MX_GOOD(-0.10)[feedback-smtp.us-east-2.amazonses.com];
+	ASN(0.00)[asn:16509, ipnet:23.251.226.0/24, country:US];
+	RCPT_COUNT_ONE(0.00)[1];
+	MISSING_XM_UA(0.00)[];
+	DWL_DNSWL_NONE(0.00)[amazonses.com:dkim];
+	MIME_TRACE(0.00)[0:+];
+	FROM_NO_DN(0.00)[];
+	ARC_NA(0.00)[];
+	RCVD_COUNT_ZERO(0.00)[0];
+	RCVD_IN_DNSWL_NONE(0.00)[23.251.226.243:from];
+	TO_DN_NONE(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	RWL_MAILSPIKE_POSSIBLE(0.00)[23.251.226.243:from];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	ARC_SIGNED(0.00)[donibrico.online:s=dkim:i=1];
+	RCPT_MAILCOW_DOMAIN(0.00)[donibrico.online];
+	DKIM_TRACE(0.00)[amazonses.com:+]
+X-Rspamd-Queue-Id: 46505116CD1
+
+Please do not send any email to this address, it is no longer being used. My new "old" email address is now back in use because Spectrum is incompetent. Please send all email to:
+
+andy@bigapplecustoms.com
+
+
+
+Apologies for any inconvenience and
+
+Thank you!
+
+
+
+
+
+
+
+
+
+
+

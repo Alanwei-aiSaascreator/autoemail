@@ -1,0 +1,223 @@
+Return-Path: <>
+Delivered-To: dinishafaulkner@donibrico.online
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id +AsUAbXwBmvC4CUAQ1DlOA
+	(envelope-from <>)
+	for <dinishafaulkner@donibrico.online>; Wed, 25 Nov 2026 09:29:09 -0500
+X-Original-To: dinishafaulkner@donibrico.online
+Received: from dispatchb-us1.ppe-hosted.com (dispatchb-us1.ppe-hosted.com [148.163.129.58])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id 29CC8116CD1
+	for <dinishafaulkner@donibrico.online>; Wed, 25 Nov 2026 09:29:08 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=truittinsurance.com header.s=selector-1787081601 header.b=o92kvyN9;
+	dkim=pass header.d=truittinsurance.com header.s=selector1 header.b=A6QgEnzY;
+	dmarc=pass (policy=none) header.from=truittinsurance.com;
+	spf=pass (mail.pony-it.com: domain of dispatchb-us1.ppe-hosted.com designates 148.163.129.58 as permitted sender) smtp.helo=dispatchb-us1.ppe-hosted.com;
+	arc=pass ("microsoft.com:s=arcselector10001:i=1")
+ARC-Seal: i=2; a=rsa-sha256; d=donibrico.online; s=dkim; cv=pass; t=1795616948;
+	b=ldR8BNMRQ3OIUf8Sbsm8l8MQ/SeA3wnUEYB8KfkGWhzMyS9IAwKVaBKmCNwp1jvWPqXDLi
+	pnUT6p32B3iehW8A8cOcwIKkSWQ3gFEpVHqX5qt/9bQ9AH1Jic8iFVh/RjXmGHmCeRt9zS
+	/aK4RHldCxxGQcUxOgrZRG/w5lFnL2fakIm1xHNWtn9LLBHj3xPir/vv0RBuxAoAz+wloC
+	RJpzkJzXGvFHotpVWnzxjhTCLbVqC68cT4/3rlfWKGehQWK6ODLuii+Xc4LAUgJE7q/rG1
+	SKRVZ5UcPYcDZKE5MGrDR9zXQbemc0/7Jby263jSplp96u4MDPup3cerAzAkyg==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=donibrico.online;
+	s=dkim; t=1795616948;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references:dkim-signature;
+	bh=yHefv5+oZRqdvvMfEIQ2n25xcJU+ovu79gm9z8M7qO4=;
+	b=x5xYrFdh1jPaMwDOHInVNBQUUK2lzVgX2/bMtC2NfbpZBusZ/qxPFf9J4f3mVvIW7u9kIo
+	J7p/yPYVpV5OxwM/4oQlYSjRxsklBG7mChooXBlns03JiAka0HFrRLfDIEBi6Ch3a11xrC
+	sWzuZ0OracIKIzF5r48WrQCnxhxdOG+KZHpXduhndipEY4lgJfCuBFnoggDfMwbvpzjpy7
+	4qYvERM/zQ2rN5bQPFkseHFBldOVO555Zk1HXd2D0SJfDGhLkRCx0HGygtKkykmZbBO/Ia
+	qBerwy7sMYrG8C1rnFqbr0V9iwyOzFZ01vJkORTvKxN+kkZbkfFLWYyjPh3qFw==
+ARC-Authentication-Results: i=2;
+	mail.pony-it.com;
+	dkim=pass header.d=truittinsurance.com header.s=selector-1787081601 header.b=o92kvyN9;
+	dkim=pass header.d=truittinsurance.com header.s=selector1 header.b=A6QgEnzY;
+	dmarc=pass (policy=none) header.from=truittinsurance.com;
+	spf=pass (mail.pony-it.com: domain of dispatchb-us1.ppe-hosted.com designates 148.163.129.58 as permitted sender) smtp.helo=dispatchb-us1.ppe-hosted.com;
+	arc=pass ("microsoft.com:s=arcselector10001:i=1")
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=truittinsurance.com;
+ h=content-type:content-type:date:date:from:from:in-reply-to:in-reply-to:message-id:message-id:mime-version:mime-version:references:references:subject:subject:to:to;
+ s=selector-1787081601; bh=yHefv5+oZRqdvvMfEIQ2n25xcJU+ovu79gm9z8M7qO4=;
+ b=o92kvyN92I9rkCav4GudB/6NPZHtBCKdFbrq8TWX2CybtaDuwSEpTkl88+Vg1EOFU1864Vk+jY8+lQpCUICus3iQXyiLW1cLfCJlLixIRGvYMXnupmA1vF3ZXkP7hnTDNEQu3f0gRFJdFvpgd9Gs9y6CO2HnCbUT53uy6qpgKXlgudBJO3JinVRuILXQ2HcYmg+NEbfBaAYGGVFYQLtJ3PznMwufKPryaATwGOXBmv+iwwtoOxQVy53h9bZMIOkEObo9St9M7qk4k9rXe1jnaJeA3eVjYk8Xn/+jeW7cGI5erpt+sitT/VG7BKdGc0rbhcl1ZQ0l8aCRFTrh8t86vQ==
+X-Virus-Scanned: Proofpoint Essentials engine
+X-PPE-OUT-FORWARDED: us2-us1
+Received: from SA9PR02CU001.outbound.protection.outlook.com (mail-southcentralusazhn15013036.outbound.protection.outlook.com [52.102.140.36])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx1-us1.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTPS id C2CA9600075
+	for <dinishafaulkner@donibrico.online>; Wed, 25 Nov 2026 14:28:59 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=NwaS3+7dSN6sio3M9naIdK1w+l0lktS3gziSt7LtckWKEMkmR5BwcH4/0NDxUwdgBVZ9awDfkYCz0vOpx1Avc6lYgbaWymNrbtvhdYTN2A/pVhIsehe/bxFglLYoN76K5jHyDJZ1FL0x/iJjL4LRo4uiNXsgrLrWBI/4TQJ+dSf2cQB3sHg5X7dP+EoiW517FaXLPQy6c82mXlr/WGDsAU4JJPxBVF6oYt+5qkmuzDG8FjXpwo3jRDbp71l2nfoHwnNZ1YiCI+gjx287rYEeUEeZYJ9HOt64vwPy7/gBvwLC3dgb2Cq1t1yRpRRdv5R3RAJaVjgZWS/kmpwWeWjfRg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yHefv5+oZRqdvvMfEIQ2n25xcJU+ovu79gm9z8M7qO4=;
+ b=zLFrDm1hvQvLUjibA4btrhMo5nLO1PBPY1m8mcRsUzB0CSOkK4zUDZfFxqZt+Ljbr/Sed4sHdRcxb3pIXTc6/xYqPj/i6zYcdctnfGfa/mZLk/vCgsu2xAnTjeo8yVkq2kM9JsZHcsASrg2KoLiG7bI6sjuCiDr10eJH03t6gVU0rp8Gd5wTtQqCgf1g1McgzEanYYmJ9DBbDhD81yyQI68ZeDc2Ij3Xm6gqoJGkYAnPjrTphHu6JV+6R8lHSR8tTb4MVBIdsi/9ovYc64n6p1BtX7xfJCWGBUjaTnYmKIwsLhK4cwQkjYXWzrNksYZ0iM+4iHHBltkWOJz3fJ2u8g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=pass
+ action=none header.from=truittinsurance.com; dkim=pass
+ header.d=truittinsurance.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=truittinsurance.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yHefv5+oZRqdvvMfEIQ2n25xcJU+ovu79gm9z8M7qO4=;
+ b=A6QgEnzYvEdm8BldVE3tvVto4ZQjcKqQNQa5/XYJhHNj08TsXKlFocyS8p1E94Tk+3dOLI6suE49RVsHVf6cx6CGPOwTMhvBiBjpL0Kvdt/uOjFk85F2f6tSsLLYY7WRgc1Bf5SqsBEHM0Xh+w/p/KZCnsDwWXuU24NYHBoHUn8=
+Received: from DS2PR22MB486798.namprd22.prod.outlook.com (2603:10b6:8:3c3::8)
+ by IA0PR22MB4237.namprd22.prod.outlook.com (2603:10b6:208:48d::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.662.6; Wed, 25 Nov
+ 2026 14:28:55 +0000
+Received: from DS2PR22MB486798.namprd22.prod.outlook.com ([::1]) by
+ DS2PR22MB486798.namprd22.prod.outlook.com ([fe80::25ad:dd21:9a2f:5037%5])
+ with Microsoft SMTP Server id 15.21.0662.004; Wed, 25 Nov 2026 14:28:52 +0000
+From: Desiree Spies <desiree@truittinsurance.com>
+To: "dinishafaulkner@donibrico.online" <dinishafaulkner@donibrico.online>
+Subject: Automatic reply: [BOND-2026-0635] Inquiry - Continuous Customs Bond
+Thread-Topic: [BOND-2026-0635] Inquiry - Continuous Customs Bond
+Thread-Index: AQHdfOlK7WQVJC3BOk6VxBBtS7Lvbrc+2MSr
+Date: Wed, 25 Nov 2026 14:28:52 +0000
+Message-ID:
+ <714db2b2eed7436fb4280d55ca77ee0f@DS2PR22MB486798.namprd22.prod.outlook.com>
+References:
+ <010f01a2131bd990-eb131158-ec7d-4599-977a-ca1e92cfe034-000000@us-east-2.amazonses.com>
+In-Reply-To:
+ <010f01a2131bd990-eb131158-ec7d-4599-977a-ca1e92cfe034-000000@us-east-2.amazonses.com>
+X-MS-Has-Attach:
+X-Auto-Response-Suppress: All
+X-MS-Exchange-Inbox-Rules-Loop: desiree@truittinsurance.com
+X-MS-TNEF-Correlator:
+x-ms-exchange-parent-message-id:
+ <010f01a2131bd990-eb131158-ec7d-4599-977a-ca1e92cfe034-000000@us-east-2.amazonses.com>
+auto-submitted: auto-generated
+x-ms-exchange-generated-message-source: Mailbox Rules Agent
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DS2PR22MB486798:EE_|IA0PR22MB4237:EE_
+x-ms-office365-filtering-correlation-id: c887f46f-75ba-4cc8-412a-08df4b006e02
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|50650200027|376014|10070799003|1800799024|366016|3613699012|10067099003|56012099006|260925022911599003|260925021311599003|22082099003|18002099003|5133699003|8096899003|12063799003|80100003;
+x-microsoft-antispam-message-info:
+ +YzRhYewGuWCXl9z31ACuMMwjDiISFrOgfazB6jg6H8n+nQlQ/OkalkmQWXq0KKOw8qh+oSbf3/57pEIAFh8T13XHC+Fjwg2aUs2CNyKTV1JLI3vTBh/T17Aa+nVTz/KC1RJv9cbsGVAIij2I7vsCU4gYI9pulnvKNNZ8OZ1+nM2yqkbrkuXSkpLBEinmdgn5H/wYApgBJG+c5OScQWuCi4brDja3DrCDRtI1P0JV8ngjpify4Yv+qWdimOaWux7ZpNJIqMYB1w7KJzyktR7VHA7K23U2KKEb3y/hdEdRpu6JoVtxF0pNukxdL0i49hFlK6kw0yXZOH4czcwLW57PKaa7LmSb9oxG9xnpnQhe7s/WZnVrbgQqK68CFGc2J4Zb0k7dJCbQme8YmZXF4vzZNj5hhtxXiRhmYYd5BPeMJ39GfFnykoL9V48efuswtaWkycCr+sxEQkay2X4CvsbhpPkTXa5UTtvF9ASEaWyXLRMta8tMfrew0YELzSkBCse4Axr1gcDHKH/IlX4qrSmpp3Ih5EvePMMrNbYXvZKeX5Nkv/BhBgawcKORFTN4bijmZPMHfi7ngqAb7je4IFltN8bQxV+2EDppDxF0paLBog5tiWeCBjmf9FUir+lKSfxYaxNZSoldqnWuWo4AwjVtCrpkofK33lUdUKzeI11ug1i5BppLhD8CAcN42Rx3XMn9OgsUPqcVezYn5lpg9BpGFe3cCsHBA1TjvYKSMoZHqY=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS2PR22MB486798.namprd22.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(50650200027)(376014)(10070799003)(1800799024)(366016)(3613699012)(10067099003)(56012099006)(260925022911599003)(260925021311599003)(22082099003)(18002099003)(5133699003)(8096899003)(12063799003)(80100003);DIR:OUT;SFP:1501;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ nGqTr//ZURB2IMX76F3Z34ojowcLTAPJsy0uK4DkIgbdmXbLim+Y9JwKspDxYqF7TNI9GOJ3FgvjVSDO8s6pw7Itp1sTAyJ/UsLjXwU3hg6MukjjT5lo3CgGNbRTSyAsRocqaA9Z1PSVzLJEM3dwiqBuYbZT7Zwmx4GwQyW30NwRJQk/cKNoBjhlb8Jr8SMX7R4AvzXY6Lrv+zJjdbjHz5d7gaNvOdhir25nBFS/fiylzVTA5FFb2KtB8hVC3ODTIDkfujllrHEFmjDw13GApXjj2RGvakLyLwseYCLIDHU0Jq8KUaGuj4WLRtn8KFQpM58CDQpoB5/XZJa87tt3xxSJwbnFFpaVdwDoQZvhnX/dY8sbHDR4dvCbav/9LUdf8tg/bI1ImNQ0jGIqcjljC0TRsp6qEP58Q2Ac+Ixcbi9U84CsyehObEYSN2t88BPK
+Content-Type: multipart/alternative;
+	boundary="_000_714db2b2eed7436fb4280d55ca77ee0fDS2PR22MB486798namprd22_"
+MIME-Version: 1.0
+X-Exchange-RoutingPolicyChecked:
+	APwR8Qg/na/MM6CmEQPrHWfkQ7MYI6wTk0F0a7XKE6DslWxAjZtZfUxRDlQGprEJiIJJdspRw+yqEepd0qEQ75Xd9Nce7UZ02aeETZhyAV2bMi3WPe0eya1o+hgVTd6uo0sUWJCHIoTxNOiPDQA+KKMlO+IcB59WetKa9+uaP1Dgmrc0QzwDXTSow0ZKeMKCHFYCsPAN/8N4UGd1mOF1L5nSZDD9a5xlxbKikQoCMks4tS0w8FqOv0YhzKR1SLg6a18hZhffr6W0PB+0Ivu1+n6fqWBxiNzqy/ZCzLPB0RihO6ALuSx3TPRxo4C+JXvkq2HFIaRdpYw+oG5m8D0q1g==
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	8BWwAkFsSwnP+V4jaww9owswsahUy6otbMOjSK70sNILNwNehJX+Ss70aKfvc6h3hs5akdzCix7wr9WtkR+fdrJpa2apRExwFaEvUG6N/C2uuwG0xZb6S4xYINJ6N8RLfEGrFqFTfacnuYmoPJ89hghyvMWCMf6VRM/Zmc5J8IqP1V6HQT8USAWg1YR4P2bNAO2hRIaFeeyfv3Nd0BKAGlRb2p4hqHXpkJdNrI1hxr+JlrwC2UHePFdwpG7xPHHSc1IsKN/nVvAGb7MJCYuhC6os6Ci+gARv4LAtXiJvcevsLzrq9qy1JPVlB4IbsofQDKI4J+Fcw/4NVdeV08BOQvPjscT5qdEkBjtdT97wR1j8m3OPLWQCaVt15eRBe5YS5/Gla8p32YOFmheRjwaEO0aciQK1ZB2ZvFCbtFxAePM7EFnzcim7Wz/kmuElUEl5guMkbHHdBqtX/DjsN9NoYkwWdJ3XW6YQIz5M105Qs2RZ4p6tMAjDCPqgiOGV9Qv+R9/Qff6bOZbYj4DlqHkjNza5qJYx6UtHOI7KMz6PSgj9qsI3VXJR1oPWU43JlvWk4mcidkVgmsfKqjYdNiJ06gc91dF0UZBDOiNVFySrgcH914xBsqpe1jFUib5OP5D9Bmp+fUEWM7H19dJpkth0CTKlkm8INnYROmWpITNSB7sXkAsgNypqgc5TPg1LD7dF
+X-OriginatorOrg: truittinsurance.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DS2PR22MB486798.namprd22.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c887f46f-75ba-4cc8-412a-08df4b006e02
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Nov 2026 14:28:52.7500
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8d6ba60f-4b9a-41dc-9fb3-325fe2159e86
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR22MB4237
+X-MDID: 1795616940-mfx5KN8hVK7J
+X-PPE-STACK: {"stack":"us1"}
+X-MDID-O: us1;ut7;1795616940;mfx5KN8hVK7J;<>;215b646f0d0587784ae94ce8cee8113d
+X-PPE-TRUSTED: V=1;DIR=OUT;
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Result: default: False [-7.79 / 15.00];
+	BAYES_HAM(-5.37)[99.70%];
+	ARC_ALLOW(-1.00)[microsoft.com:s=arcselector10001:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[truittinsurance.com,none];
+	IP_REPUTATION_HAM(-0.33)[asn: 13916(-0.32), country: US(-0.01), ip: 148.163.129.58(0.00)];
+	R_SPF_ALLOW(-0.20)[+a:dispatch-us.ppe-hosted.com];
+	R_DKIM_ALLOW(-0.20)[truittinsurance.com:s=selector-1787081601,truittinsurance.com:s=selector1];
+	MIME_FROM_MX_GOOD(-0.10)[truittinsurance-com.mail.protection.outlook.com];
+	MIME_GOOD(-0.10)[multipart/alternative,text/plain];
+	ASN(0.00)[asn:13916, ipnet:148.163.129.0/24, country:US];
+	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_ONE(0.00)[1];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	RCPT_MAILCOW_DOMAIN(0.00)[donibrico.online];
+	RCVD_COUNT_THREE(0.00)[3];
+	RCVD_TLS_LAST(0.00)[];
+	ARC_SIGNED(0.00)[donibrico.online:s=dkim:i=2];
+	FROM_HAS_DN(0.00)[];
+	RCVD_IN_DNSWL_NONE(0.00)[148.163.129.58:from,52.102.140.36:received];
+	TO_DN_EQ_ADDR_ALL(0.00)[];
+	PREVIOUSLY_DELIVERED(0.00)[dinishafaulkner@donibrico.online];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_TRACE(0.00)[truittinsurance.com:+]
+X-Rspamd-Queue-Id: 29CC8116CD1
+
+--_000_714db2b2eed7436fb4280d55ca77ee0fDS2PR22MB486798namprd22_
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+"We have restructured our office a bit here at Truitt. Please send all futu=
+re requests to service@truittinsurance.com or to chrisw@truittinsurance.com=
+.
+
+
+Thank you so very much! And thank you for your business!"
+
+
+Chris Walker
+
+
+
+
+Chris Walker
+
+Chief Operations Officer
+
+Truitt World Headquarters
+
+1 (205) 254 3005 ext. 1126 (o)
+
+1 (205) 520 3651 (c)
+
+--_000_714db2b2eed7436fb4280d55ca77ee0fDS2PR22MB486798namprd22_
+Content-Type: text/html; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+<html>
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
+>
+</head>
+<body>
+&quot;We have restructured our office a bit here at Truitt. Please send all=
+ future requests to service@truittinsurance.com or to chrisw@truittinsuranc=
+e.com.<br>
+<br>
+<br>
+Thank you so very much! And thank you for your business!&quot;<br>
+<br>
+<br>
+Chris Walker<br>
+<br>
+<br>
+<br>
+<br>
+Chris Walker<br>
+<br>
+Chief Operations Officer<br>
+<br>
+Truitt World Headquarters<br>
+<br>
+1 (205) 254 3005 ext. 1126 (o)<br>
+<br>
+1 (205) 520 3651 (c)
+</body>
+</html>
+
+--_000_714db2b2eed7436fb4280d55ca77ee0fDS2PR22MB486798namprd22_--

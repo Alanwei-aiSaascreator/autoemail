@@ -1,0 +1,254 @@
+Return-Path: <mcastillo@ivglogistics.com>
+Delivered-To: chanrathanachouk@ordinaryusa.online
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id 4KFDA6bhBmsJqB8AQ1DlOA
+	(envelope-from <mcastillo@ivglogistics.com>)
+	for <chanrathanachouk@ordinaryusa.online>; Wed, 25 Nov 2026 08:24:54 -0500
+X-Original-To: chanrathanachouk@ordinaryusa.online
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id 2E3E710AD1E
+	for <chanrathanachouk@ordinaryusa.online>; Wed, 25 Nov 2026 08:24:51 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=ivglogistics-com.20260707.gappssmtp.com header.s=20260707 header.b=dvhVXXqj;
+	dmarc=none;
+	spf=pass (mail.pony-it.com: domain of mcastillo@ivglogistics.com designates 209.85.219.41 as permitted sender) smtp.mailfrom=mcastillo@ivglogistics.com
+ARC-Seal: i=1; a=rsa-sha256; d=ordinaryusa.online; s=dkim; cv=none;
+	t=1795613093;
+	b=jTBKFL9w9rSY2ketIc9VFhc7Y39eZGMIc0G1Y35o7fko4Vpi/VU1wifDbKMfscP/3t/5ra
+	o2v7UhKMckd7NOJJgU5RAFNOwjxXRe/afACxwyu2xvjbF7nBNaOfIDiU0xUmpxxvdRzDfT
+	+z3GuY4gwuh2GWMhUBStCu+rpZFF/n4bQ05LjQiTL8pt+mm2DWh5sN3rAYZ9Yqf5tF/vg/
+	BoEg/BgaSLyGrT6/xZ0kF/QXxO5zh00Y3heCgmUJiNuGuIBOU4MJqY5UeHjN06Rvdn1gcU
+	iwJffpXHLz+9PuX4WQH783AJt6UsaIr0q28Z4nMFjtPvGoHZWDgUPlKlA5ihlw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=ordinaryusa.online; s=dkim; t=1795613093;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:dkim-signature;
+	bh=SgVWVQkDUau2O8YJFRYlo1YfpfjZ8zO7kF2j0+1q+Gg=;
+	b=K+Rh2LQ6LMFyK0qD04046IG1VreqhjFuo3/1dqY5j9UuIW0+DNnpnJSEIaUkNiC5FO9Bai
+	Bbpp26Ws/LZcXyC1D6KW81xfTeJVdr7qeDIW+VgZjtalhzLPtG18hZHi7Qpih69oy1bqvs
+	hxWslmUm1OG5gL0UOIhFysN2y7vzn5S5J5t6VpOD3XaG+GNLDMOJeIIs0vGvnQJFtTvty3
+	yyDsOCD4DL1qhTxV9KKuuUXL38EL+l9Nijypo6vMhqbrn2OqYrmMn1H9Zf3AQS5W3uGWUF
+	lOR1WW6OF67uq0nPxZANMPvI6Ei9hHxQW+YmCjQurcLKq4s3HLYpFE4zZUC+qg==
+ARC-Authentication-Results: i=1;
+	mail.pony-it.com;
+	dkim=pass header.d=ivglogistics-com.20260707.gappssmtp.com header.s=20260707 header.b=dvhVXXqj;
+	dmarc=none;
+	spf=pass (mail.pony-it.com: domain of mcastillo@ivglogistics.com designates 209.85.219.41 as permitted sender) smtp.mailfrom=mcastillo@ivglogistics.com
+Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-9215934a14cso33529846d6.0
+        for <chanrathanachouk@ordinaryusa.online>; Wed, 25 Nov 2026 05:24:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ivglogistics-com.20260707.gappssmtp.com; s=20260707; t=1795613091; x=1796217891; darn=ordinaryusa.online;
+        h=content-language:thread-index:content-transfer-encoding
+         :content-type:mime-version:message-id:date:subject:in-reply-to
+         :references:to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=SgVWVQkDUau2O8YJFRYlo1YfpfjZ8zO7kF2j0+1q+Gg=;
+        b=dvhVXXqjLNG1ubqZvp7q4SS3dNddZ6qkNmlTGt6NdI3wEWqfl3SebydFU8A2qMjALd
+         Lv9NEh80NotD8moannYPfYp8OUS7+fvuiBPLzSn6B3WV4qC4971aBE22p5GM9fqrP+E3
+         j9gdJ4AwC19yVPYnGJJmdgX1VoYQadPwBqloHFcYKleGCwhbbVEVrwYoYxr4c7JH+PoY
+         efj1awvgJmdTQCgr78DxdOOD3DE57Pk9Tl+xwNxfopxHldA2QCuxH8rrMWmm5D/cxKUm
+         +daotJOgujWRTj3TKOdOS9xGFo1pxGMDWjJfz3e1uH7WbOPTTd0ZnDATuRuQL558q2FO
+         1+wQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795613091; x=1796217891;
+        h=content-language:thread-index:content-transfer-encoding
+         :content-type:mime-version:message-id:date:subject:in-reply-to
+         :references:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=SgVWVQkDUau2O8YJFRYlo1YfpfjZ8zO7kF2j0+1q+Gg=;
+        b=psqtz31wb3QsaNTeDfe3+nGoMcLrQeNjGzYTLNQ9EU1X3qsNZTuaK5iniDAFN2Bihb
+         N9aeQFziUlXD0EdpoaxaYmxB675inJgJCG2fs6AKh8tSpkDlHAeyYYOsC5xq4WwRnP9a
+         1Ba5h5Oje9+rJODBXYpYOTvCfa6AY04eb8h4wL4p9ytRWH1jtoADcfaAe6V+v7gKH67S
+         yNLUbMQvK7+b0/qDMgHB3BR+3FIxztDW/wbOwTFPVxv7yCOrYOGTLHKhucJFq7GR39gF
+         VDiyBMgCyNQIJNjAilT1orHBQpXw3zmUWEB+6WZUx6wDqIfVM6h1BnzuNJY++u2IcOCt
+         qlCQ==
+X-Gm-Message-State: APuU4Z9MV+7DMvXGYxHRr7hQv2j5adIDykkAzfgFryRkv9S2N7veSJMj
+	pxHSpq3bdUosfE9c/92ont2ehrdE4Iw7bsnZ1h9sIeFJjs1YxSNkAgYtndld9NClb1W3iQOWw3K
+	h7rzP
+X-Gm-Gg: AZFdTZcNqpqoSWspDkR7ZvXvO9nkpaxvPEGNLDXYSd/IzQep6DWzNX5tMS/7/mBt4li
+	9e7nnelGvw7xv+BZYO8nHf4QPvNrFNiXg6TWilFPLWFvsnEGurycWMpQIq7z2lSuE5EodZqOM5b
+	DenbSt8WTXzL0rcYUllPoEEC4BhJSEBnBdb+3J6mTzi6sFD2O6iN+wB4gvn0wVdqtzWOTUrak9J
+	+AcO9pTdEG92yFPqgjhiT1GHal//vvr4giXR714pwHi+YRo3nbq3YgmQJKeaz2znjfPniZ3Vh5O
+	IDvA5IO6TQ4fBNHLSE5QaxS/KCprqVM0g1UGDen94uZmUogAZddYy/2jRzY11RxzDKsPlUViRyE
+	BUy4rjVty3acZGp6pew6M/IC/iKJT4lFmy5s3FjD0pIGRcHt9ID+IGzk1OoYokQ9GSuflGEJApE
+	BoIgIhWcZTqoe8hZnGVXTfiXnzfu/jnuAzT14f+0WyFb2FNd3wwCV9XeVGtL7Mm5LMWy00WHT+B
+	r0pKjnuuuGXbIu2MNTmKXolINHZQ7omLaNC7E5CM4Jis/f3AlTCcMO2Rk3p9alvIJlAAGspPXus
+	wVi0yDU6Hi37sJzxkLAFaA6mNUBWbXWjmqoxio31M1gPamMM8nExAny6gAwP1zSXm9wpWzidPM0
+	dKvXribA=
+X-Received: by 2002:a05:620a:46a5:b0:93f:6c76:215 with SMTP id af79cd13be357-949bab157e4mr3146168085a.50.1795613091108;
+        Wed, 25 Nov 2026 05:24:51 -0800 (PST)
+Received: from DESKTOPS60OD38 (ool-2f17401e.static.optonline.net. [47.23.64.30])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-949bb34a8d3sm1314097885a.10.2026.11.25.05.24.50
+        for <chanrathanachouk@ordinaryusa.online>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 25 Nov 2026 05:24:50 -0800 (PST)
+From: <mcastillo@ivglogistics.com>
+To: <chanrathanachouk@ordinaryusa.online>
+References: <010f01a210dd8d34-e6b0b64a-6066-447b-adcf-32cba3100383-000000@us-east-2.amazonses.com>
+In-Reply-To: <010f01a210dd8d34-e6b0b64a-6066-447b-adcf-32cba3100383-000000@us-east-2.amazonses.com>
+Subject: RE: [BOND-2026-0616] Inquiry - Continuous Customs Bond
+Date: Wed, 25 Nov 2026 08:24:51 -0500
+Message-ID: <3c4301dd7ce0$5a2ab610$0e802230$@ivglogistics.com>
+MIME-Version: 1.0
+Content-Type: text/plain;
+	charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQJ686H8m9IUCADkP5jHpHKgSegW/7YD2Vxw
+Content-Language: en-us
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Result: default: False [-0.96 / 15.00];
+	BAYES_HAM(-5.50)[100.00%];
+	SEM_URIBL_FRESH15(3.00)[ordinaryusa.online:email];
+	BAD_REP_POLICIES(2.00)[];
+	IP_REPUTATION_HAM(-0.26)[asn: 15169(-0.25), country: US(-0.01), ip: 209.85.219.41(0.00)];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.10)[aspmx.l.google.com];
+	RCPT_COUNT_ONE(0.00)[1];
+	RCVD_TLS_LAST(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCPT_MAILCOW_DOMAIN(0.00)[ordinaryusa.online];
+	R_DKIM_ALLOW(0.00)[ivglogistics-com.20260707.gappssmtp.com:s=20260707];
+	MIME_TRACE(0.00)[0:+];
+	DMARC_NA(0.00)[ivglogistics.com];
+	ARC_NA(0.00)[];
+	DKIM_TRACE(0.00)[ivglogistics-com.20260707.gappssmtp.com:+];
+	FROM_NO_DN(0.00)[];
+	TO_DN_NONE(0.00)[];
+	PREVIOUSLY_DELIVERED(0.00)[chanrathanachouk@ordinaryusa.online];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	ARC_SIGNED(0.00)[ordinaryusa.online:s=dkim:i=1];
+	MID_RHS_MATCH_FROM(0.00)[];
+	R_SPF_ALLOW(0.00)[+ip4:209.85.128.0/17];
+	RWL_MAILSPIKE_POSSIBLE(0.00)[209.85.219.41:from];
+	ASN(0.00)[asn:15169, ipnet:209.85.128.0/17, country:US];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_IN_DNSWL_NONE(0.00)[209.85.219.41:from]
+X-Rspamd-Queue-Id: 2E3E710AD1E
+
+Hello team,
+
+As per we are CTPAT certified, please see below regarding the Executive =
+order 14411.=20
+
+Executive Order 14411, signed on June 3, 2026, will fundamentally change =
+the responsibilities of CTPAT-validated customs brokers (CVCB) by =
+mandating a higher standard of due diligence when they represent foreign =
+Importers of Record (IORs). Under Section 2(c)(i) of the order, foreign =
+IORs will be required to be validated in the CTPAT program; if they are =
+not, they will be required to utilize a licensed CVCB to file entries =
+with CBP. This CVCB requirement will ensure that foreign entities are =
+held to the same rigorous standards as U.S.-based importers, which will =
+help protect national security and the domestic economy from systemic =
+inefficiencies and bad actors.  To implement this requirement, CBP will =
+take steps to revise importer eligibility regulations, guidance, and =
+policies.
+
+To comply with these upcoming heightened expectations, in the near =
+future, CVCB will need to perform comprehensive vetting of their foreign =
+clients before they conduct any customs business. CBP foresees that =
+during vetting, CVCB will verify critical information, such as the =
+IOR=E2=80=99s legal identity, ownership structure, business =
+affiliations, U.S. assets, and their history of compliance and import =
+activity. Furthermore, brokers will need to assess the IOR=E2=80=99s =
+ability to pay duties, taxes, and fees, and verify details regarding the =
+supply chain, product classification, valuation, and country of origin.  =
+CVCB will be expected to maintain thorough records of this vetting =
+process powers of attorney, and all relevant communications, to =
+demonstrate that they have exercised appropriate due diligence.
+
+The order also directs that all IORs will be required to maintain "good =
+standing" with CBP, as outlined in Section 2(d). Consistent with future =
+regulatory requirements, IORs who lose their good standing with CBP, may =
+be prohibited from importing goods or designating a broker to act on =
+their behalf. To further reinforce compliance with U.S. customs and =
+trade laws, Section 4(a) directs the imposition of significant penalties =
+on brokers who fail to conduct required due diligence, repeatedly =
+represent non-compliant or unverifiable clients, or fail to cooperate =
+with CBP requests for information. These consequences will include =
+financial penalties, increased audit frequency, and the potential =
+suspension or removal of the CVCB from the CTPAT program. Additionally, =
+Section 4(c) establishes a minimum penalty floor of 50 percent of the =
+assessed penalty for violations, while eliminating mitigation options =
+for repeat offenders, which will further underscore the commitment to =
+strict customs enforcement.
+
+The new requirements under the order will create a distinct competitive =
+advantage for CVCB. By positioning themselves as the preferred partners =
+for foreign IORs as the order is implemented by CBP, these brokers will =
+be able to market their services as a necessary solution for certain =
+clients. Because foreign IORs will be required to use a CVCB to file =
+entries if they are not validated themselves, brokers who have already =
+achieved this status will become the primary, and perhaps only, viable =
+option for an increased market share of U.S imports. CTPAT validation =
+will serve as a powerful badge of trust and reliability for brokers in =
+an increasingly more secure trade environment.
+
+
+Please note the foreign and domestics importers should contact us =
+directly for the requirements and also for the Power of Attorney.
+
+Please keep us posted.
+
+
+Thank you!
+
+Best regards,
+
+Monica Castillo
+J. VEROLA CUSTOMS BROKERAGE  D/B/A  IVG LOGISTICS, LLC=20
+30 Enterprise Avenue N
+Secaucus, NJ 07094
+https://ivglogistics.com/
+
+
+-----Original Message-----
+From: chanrathanachouk@ordinaryusa.online =
+<chanrathanachouk@ordinaryusa.online>=20
+Sent: Tuesday, November 24, 2026 11:01 PM
+To: mcastillo@ivglogistics.com
+Subject: [BOND-2026-0616] Inquiry - Continuous Customs Bond
+
+Hello,
+
+The Ordinary LLC is looking to purchase a customs bond and would like to =
+request a quote from your agency. Details below per our client =
+application:
+
+01 / BOND REQUEST
+- Service requested: New bond
+- Bond coverage: Continuous Customs Bond
+- Activity code: 1 - Importer
+- Requested bond limit: USD 50,000
+
+02 / LEGAL ENTITY & IMPORTER ID
+- Exact legal entity: The Ordinary LLC
+- Entity type: LLC
+- State of formation: CA
+- EIN: 43-2416938
+- Principal address: 1699 AIRLINE HWY, HOLLISTER, CA, 95023
+
+03 / CONTACTS & AUTHORIZED SIGNER
+- Authorized signer: CHANRATHANA JENNIFER CHOUK (Organizer)
+- Contact email: chanrathanachouk@ordinaryusa.online
+- Phone: 15599376472
+
+Please reply with:
+1. Your price for this bond and the estimated processing time 2. Your =
+application requirements / intake checklist (entity & importer ID, =
+contacts & owners, merchandise & trade profile, customs operations, bond =
+history & compliance, and AD/CVD schedule if applicable) 3. Documents =
+you need from us - we have Articles of Formation, IRS EIN letter =
+(CP575), W-9 and principal ID available
+
+Best regards,
+CHANRATHANA JENNIFER CHOUK
+The Ordinary LLC
+

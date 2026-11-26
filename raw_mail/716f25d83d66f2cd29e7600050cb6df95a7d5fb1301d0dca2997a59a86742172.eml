@@ -1,0 +1,238 @@
+Return-Path: <mike.diaz@amer.allianz-trade.com>
+Delivered-To: amanuelafeworktiku@enproinc.live
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id UCtyDUzsBmvPVSMAQ1DlOA
+	(envelope-from <mike.diaz@amer.allianz-trade.com>)
+	for <amanuelafeworktiku@enproinc.live>; Wed, 25 Nov 2026 09:10:20 -0500
+X-Original-To: amanuelafeworktiku@enproinc.live
+Received: from esa.hc5965-30.iphmx.com (esa.hc5965-30.iphmx.com [68.232.149.166])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id D4E2710B79A
+	for <amanuelafeworktiku@enproinc.live>; Wed, 25 Nov 2026 09:10:18 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=amer.allianz-trade.com header.s=dkimata header.b="cuY6/x3c";
+	dkim=fail ("body hash did not verify") header.d=allianzms.onmicrosoft.com header.s=selector1-allianzms-onmicrosoft-com header.b=If0OoBeP;
+	dmarc=pass (policy=reject) header.from=amer.allianz-trade.com;
+	spf=pass (mail.pony-it.com: domain of mike.diaz@amer.allianz-trade.com designates 68.232.149.166 as permitted sender) smtp.mailfrom=mike.diaz@amer.allianz-trade.com;
+	arc=reject ("signature check failed: fail, {[1] = sig:microsoft.com:reject}")
+ARC-Seal: i=2; a=rsa-sha256; d=enproinc.live; s=dkim; cv=fail; t=1795615819;
+	b=TwzBD4CJqxFHglfiXo2Az9pnGfyPP0aX0FOw90wnT0d/4XqnYNFk0tCtALtyZmgUt6TopM
+	DHCTfHWlkITHKDCgJ2jmtZJKc1jOYGTbzXnGS2wO53dYq5ys/hHXgqHJ5JH5Ak2HcHVaWf
+	uEB9VfncXgLwKJiGGXwNPZ9qZM4LXqoZ1kDoZp0ZDY0RRtgcumO/fhzXjI4k5SUrTZd/8z
+	IkncJFeVTLXBlF9+RRA+pyVUKZwv6IaB1G8q+IcfbAjq64CajjSPUmBn+fJfzuzh2W0drx
+	q5+rR146341UC1Z5zv/KCUy7UJ1bebCNoJELO8qalYpVR3BXT1E6t8Eb5/6VfA==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=enproinc.live;
+	s=dkim; t=1795615819;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:dkim-signature;
+	bh=umebtN0kPbZj8AFATX7Y5c0MvPoIbk2oLOUKjUMuP+M=;
+	b=Aqp5mlSuyHnyG5g+WrLcw6KiuAXK8/o497kswj4Z1ZqeLCWL8RKLX7IWZuhhqhjBF4mVo8
+	SB4ApB4eC4l8oT9OrfoITmVNhSFX1Bky/towkWKC7TxxjfVySo59THjwvO9DW5TqoR07CF
+	BoQ+/Ga3Bk1UTVe4PSjxVrGfc2qePgZD5N5vYcXpJvBbdHabjoVHX/u+rTNECnD+aypl8Y
+	0yNG1Vq+4MIwBfUkdmgVO1pIXvblHadf1wsXcUemorwSBrwYWNTsUhoZaAZSdsWxV2kGDc
+	RkXSblt/rIdzErHu9NNscGJpWnaEd3RNmZPKIkXhwv0/mXkH2DodsMFTiQ1Ehg==
+ARC-Authentication-Results: i=2;
+	mail.pony-it.com;
+	dkim=pass header.d=amer.allianz-trade.com header.s=dkimata header.b="cuY6/x3c";
+	dkim=fail ("body hash did not verify") header.d=allianzms.onmicrosoft.com header.s=selector1-allianzms-onmicrosoft-com header.b=If0OoBeP;
+	dmarc=pass (policy=reject) header.from=amer.allianz-trade.com;
+	spf=pass (mail.pony-it.com: domain of mike.diaz@amer.allianz-trade.com designates 68.232.149.166 as permitted sender) smtp.mailfrom=mike.diaz@amer.allianz-trade.com;
+	arc=reject ("signature check failed: fail, {[1] = sig:microsoft.com:reject}")
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amer.allianz-trade.com; i=@amer.allianz-trade.com;
+  q=dns/txt; s=dkimata; t=1795615818; x=1827151818;
+  h=from:to:date:message-id:references:in-reply-to:
+   mime-version:content-transfer-encoding:subject;
+  bh=umebtN0kPbZj8AFATX7Y5c0MvPoIbk2oLOUKjUMuP+M=;
+  b=cuY6/x3cwSfpL6gDKvJxykkUGNhhG1ZFHF3qRDvuVKGrUO4mcLuK40uy
+   0mxDjexjB8MK3+Wget/P+YXRzmt8jXB7dN0nfsfAMs8Tg2rX/ozO7CSwa
+   pyS352+Assmmeb/6E8sguvsBhpe+r0byw1uAnXCHyrcvX5lOw4ZRuSE1t
+   hV/0wzdLXwasi24uBuACAlDwKvBQaSQAzJLZxn6b5vtMBO4JxW2G755wL
+   pFVhU+DbSTJkwXeT+lg3uuFipjID/vTjptz9myDJE067rvPU35ng65xKD
+   5OTSgd0gQXPny56V4zCx+suLL3DDFWeGhVIj22sfVcW9PnyqkjknMH8qU
+   g==;
+X-CSE-ConnectionGUID: gL5dkRRCT+m0W2XBHERnig==
+X-CSE-MsgGUID: P8AddoeuR4aiAjL1E3GtoQ==
+Subject: RE: [BOND-2026-0497] Inquiry - Continuous Customs Bond
+Received: from mx0a-0022cc01.pphosted.com ([67.231.148.159])
+  by ob1.hc5965-30.iphmx.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384; 25 Nov 2026 14:10:14 +0000
+Received: from pps.filterd (m0098252.ppops.net [127.0.0.1])
+	by mx0a-0022cc01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6APDZt8a3490674
+	for <amanuelafeworktiku@enproinc.live>; Wed, 25 Nov 2026 14:10:14 GMT
+Received: from mailgw.allianz.net ([205.167.40.212])	by mx0a-0022cc01.pphosted.com
+ (PPS) with ESMTPS id 4j34mma91d-3	(version=TLSv1.2
+ cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)	for
+ <amanuelafeworktiku@enproinc.live>; Wed, 25 Nov 2026 14:10:14 +0000 (GMT)
+Received: from mailgw.allianz.net (10.1.1.1) by mailgw.allianz.net (10.1.1.1) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37;
+ Wed, 25 Nov 2026 08:10:14 -0600
+Received: from DM2PR0701CU001.outbound.protection.outlook.com (10.1.1.1) by
+ mailgw.allianz.net (10.1.1.1) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.37 via Frontend
+ Transport; Wed, 25 Nov 2026 08:10:14 -0600
+Received: from DS2PR04MB994268.namprd04.prod.outlook.com (2603:10b6:8:4ab::16)
+ by SN7PR04MB8644.namprd04.prod.outlook.com (2603:10b6:806:2ef::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.662.4; Wed, 25 Nov
+ 2026 14:09:58 +0000
+Received: from DS2PR04MB994268.namprd04.prod.outlook.com
+ ([fe80::8754:e6ae:2023:2a8c]) by DS2PR04MB994268.namprd04.prod.outlook.com
+ ([fe80::8754:e6ae:2023:2a8c%5]) with mapi id 15.21.0662.001; Wed, 25 Nov 2026
+ 14:09:58 +0000
+X-ExtLoop1: 1
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=yDj1+k5w5utJvQ1y0gHHGjQEjd2fTo/9FMeXq29xrPYwa4UKmfA7xmgjhB8/JyYBRrQhB+t5m4hNt5MhrY+ahgIyaDUr3OsntwWapgDmsraD66CrhDxGgRuz14eaYpkb8hGGsl3nUOKIz8f7M2P26L3UQ3toTyYsq5Nq4hVjypqXGuf/pJQfcrv5CgRkYQN0mknMmGVkny/HdtGV5CUcizZ/boFQp1QvxUJBUApYXw5OELC57SVWlN6tgGufzGCxw4HxfVen1aksB4ciWWtwUAJnbuwf9Icm+pY5EF9CCVTI0SFdXkFW7zvgSMn7/eleMSBl98740Jynro6CoWhLTQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+ct1sjCTa9DEW2Gvqy2/VI+7yLCF9ZEOwzb05QIjcIU=;
+ b=oYTTN5z/H50CvctoqT6ET/k48uhFSDwXzd04PuxolOEmQ9zYAhqsuO4rKHXkQn76OgMtoHvIn5m5j0hbYeMkJRYZSeAq6sriNtEQSZFp+ZThXWn4M6YT2QalhuAzbgzVNQGNp/JWXvsAPGPchlFwOyWJLIG/uXDzzrMX7tedooQq2BfBPSdfJxCEnTjnv7iLI4wkMTEw4T/VnCQg04bSBVYKOI87vmbOcW7kKNB3F2SY8z05ccz/tMI2ALn9BXtzUFZd3DGJz6eLUItpkvPhzV9iPAruTl9zH75JPX6bKsEm7hl5+XPb36xeqVTBfm3Emqo9UKxVMhFFLS0/Vxoj0A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amer.allianz-trade.com; dmarc=pass action=none
+ header.from=amer.allianz-trade.com; dkim=pass
+ header.d=amer.allianz-trade.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=allianzms.onmicrosoft.com; s=selector1-allianzms-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+ct1sjCTa9DEW2Gvqy2/VI+7yLCF9ZEOwzb05QIjcIU=;
+ b=If0OoBeP9QpBYz1ZiVEu8QjpCnU/TteNc8Seo4RjF3xDMHvnl9dPs1RGuhLJsJiWfPlLweErzHiCBEm1uuych695md2v+RVwX594u7YEvGyWeHmAax7Mab3pcXPOyuvSx4MmYEo7o5L3lTIIK1RgiaxgOhpWnNQTcuC62reX/QANqJtGTMu+9iV77tcKwdeCBn/sfiePbp0tr+zEnDyafpc8Ggh9vLsHCR/dRIBxvGblh0MFV9AmDKAc9lCE4sxsgROMvbLAKyp1lRBuDhcHC7n1ZRHL4qv+m8ErLl3K3JP4HIQdAARc5cZyl6k8H3LET+KMmtgRZW0qxqCn2dxmiw==
+From: "Diaz, Michael (Allianz Trade)" <mike.diaz@amer.allianz-trade.com>
+To: "amanuelafeworktiku@enproinc.live" <amanuelafeworktiku@enproinc.live>
+Thread-Topic: [EXT] [BOND-2026-0497] Inquiry - Continuous Customs Bond
+Thread-Index: AQHdfOXKe5bMKDgZBUex+Tj4IfjKtLc+02nw
+Date: Wed, 25 Nov 2026 14:09:58 +0000
+Message-ID: <DS2PR04MB9942684E16EE5D2215F420269884432@DS2PR04MB994268.namprd04.prod.outlook.com>
+References: <010f01a213041248-af0e2506-fa16-4fb3-87ca-1c3407eb1854-000000@us-east-2.amazonses.com>
+In-Reply-To: <010f01a213041248-af0e2506-fa16-4fb3-87ca-1c3407eb1854-000000@us-east-2.amazonses.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|23010399003|376014|366016|18002099003|22082099003|6133799003|3613699012|260925021311599003|260925021911599003|260925022911599003|56012099006|11063799006|261102123227099003|261028144727099003|261021121427099003|261026140227099003|261022075727099003|261026121527099003|261022105027099003|38070700021|10067099003;
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS2PR04MB994268.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(23010399003)(376014)(366016)(18002099003)(22082099003)(6133799003)(3613699012)(260925021311599003)(260925021911599003)(260925022911599003)(56012099006)(11063799006)(261102123227099003)(261028144727099003)(261021121427099003)(261026140227099003)(261022075727099003)(261026121527099003)(261022105027099003)(38070700021)(10067099003);DIR:OUT;SFP:1101;
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+X-Exchange-RoutingPolicyChecked: h6eNb+9aHaQepx5ihiXxxuFq/IeZW3F39/YEm8/X+a70fcHiphBzL1qOkaOEJgTPqe0tsoxQI1WmXFnJZH6uDjyRq5yulT6ENU0XpVS4YbCkCK7ZQ6vavaGC7a6oQbCd3fjjaKxqSSHmTOtXyEl70fyca6OCiJhSpE8C/3Yemxbe6zTO4vtRtBglyOOOOp65eiqWXNZIMK1qbpZ08+JqlMkcsN7FxWY8VmUnzdIfryWwDvWGhOsXb4pwQZOgK1/rJZEpBPFzsH8ZMWm+CPbCu0ntOIxL6x7Yc7pOeRnTFqvfSKnhp8QgLRsXYRq4mopZiRbSeynaKwa77hn8vOrNTg==
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: pBTzmzP+c1SkIrpbMV7j1PZONPPCf6aZ9sOO8fAorTpQO3kJMpt7hWkxkgwtCEnGX0VItVnXrjr+vLaMEiE1HM8sW3W8IwEm+L/cu0mMQkiqrFXekY26IwS95GixnY+C+NCD/aAHzs3XWsCfp/vqf6bSYrRQE4vL5aH1xH+bhiQwRmQFZ8wAv6PLc+Y9KgGvjRwByh9uk8/AeLg9Ae5FSiKxNNFHEE4s4iNBlOAck43EDQnl9fjRBSQFmntFrM66I/z2Ne1vhN0wsx7oLzN0GsmwghpnXuy9JTbg/PAfmaaULOJKWdqcTtjhLqi3QhhCrslG6/qJW341l7LwsJxtvVYdUlTDx8taQs0ucX4Nzl8RW0Ymkg5cwTOfmPFPzGtXNTpmI4HmLW22BmMw3ulyoaqFAKGIwcRcJmh0IqJsd0kqDWl6cYkxP4Sf9DtfOksWUDz6FEYu49LolkmgNiTFJrXks1037umoygHDeawKviHxqyX+keYwwvfR1WMetLeyNBlwdQp9bphno10y064utVL/N+q3gQs2QCskAjlaVTNGI9iIq45PtqoFIYHBJ/DPNtDI1bP3j9+3GJUgpIviw8xNOoYk0Xf82NugF3jo98OP6f0VSO10Rk0Dut2XmlP093HiPue5DSTFBKYAp68ZZrs241xgJLjAEzx+86j1rCHt/fqU/XOIQ+A62BFGas8u
+X-MS-Exchange-CrossTenant-AuthSource: DS2PR04MB994268.namprd04.prod.outlook.com
+Content-Transfer-Encoding: base64
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Result: default: False [-7.21 / 15.00];
+	BAYES_HAM(-5.50)[100.00%];
+	RCVD_DKIM_ARC_DNSWL_MED(-0.50)[];
+	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
+	R_DKIM_ALLOW(-0.20)[amer.allianz-trade.com:s=dkimata];
+	R_SPF_ALLOW(-0.20)[+ip4:68.232.149.166];
+	RCVD_IN_DNSWL_MED(-0.20)[68.232.149.166:from];
+	MIME_BASE64_TEXT(0.10)[];
+	MX_GOOD(-0.10)[mx1.hc5965-30.iphmx.com];
+	ARC_REJECT(0.10)[signature check failed: fail, {[1] = sig:microsoft.com:reject}];
+	MIME_GOOD(-0.10)[text/plain];
+	RCVD_IN_DNSWL_LOW(-0.10)[67.231.148.159:received];
+	IP_REPUTATION_HAM(-0.01)[asn: 16417(0.00), country: US(-0.01), ip: 68.232.149.166(0.00)];
+	ARC_SIGNED(0.00)[enproinc.live:s=dkim:i=2];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_MAILCOW_DOMAIN(0.00)[enproinc.live];
+	RCPT_COUNT_ONE(0.00)[1];
+	RCVD_TLS_LAST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_EQ_ADDR_ALL(0.00)[];
+	ASN(0.00)[asn:16417, ipnet:68.232.148.0/23, country:US];
+	PREVIOUSLY_DELIVERED(0.00)[amanuelafeworktiku@enproinc.live];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	DKIM_TRACE(0.00)[amer.allianz-trade.com:+,allianzms.onmicrosoft.com:-];
+	DKIM_MIXED(0.00)[];
+	R_DKIM_REJECT(0.00)[allianzms.onmicrosoft.com:s=selector1-allianzms-onmicrosoft-com];
+	DMARC_POLICY_ALLOW(0.00)[amer.allianz-trade.com,reject];
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: D4E2710B79A
+
+SW50ZXJuYWwNCg0KR3JlZXRpbmdzLA0KDQpUaGFuayB5b3UgZm9yIGNvbnRhY3RpbmcgQWxsaWFu
+eiBUcmFkZSBTdXJldHkuDQoNClNpbmNlIHdlIGRvIGFsbCBidXNpbmVzcyB0aHJvdWdoIGJyb2tl
+cnMsIHdlIHdvdWxkIG5lZWQgdG8gd29yayB3aXRoIGEgc3VyZXR5IGJyb2tlciB0byB1bmRlcndy
+aXRlIHlvdXIgc3VyZXR5IGJvbmQgcHJvZ3JhbS4gIElmIHlvdSBkbyBub3QgaGF2ZSBhIHN1cmV0
+eSBicm9rZXIsIHdlIHJlY29tbWVuZCBmaW5kaW5nIGEgbG9jYWwgYnJva2VyIHRocm91Z2ggdGhp
+cyB3ZWJzaXRlOiBOYXRpb25hbCBBc3NvY2lhdGlvbiBvZiBTdXJldHkgQm9uZCBQcm9kdWNlcnMg
+LSBTdXJldHkgUHJvIExvY2F0b3IgaHR0cHM6Ly9zdXJldHlwcm9sb2NhdG9yLm5hc2JwLm9yZy8g
+dG8gYXNzaXN0IGluIHBsYWNpbmcgeW91ciBib25kIG5lZWRzLg0KDQpCZXN0IHJlZ2FyZHMsDQoN
+Ck1pa2UgRGlheg0KU3IuIEZpbmFuY2lhbCBBbmFseXN0IHwgQW1lcmljYXMNCkFsbGlhbnogVHJh
+ZGUNCg0KU3VyZXR5IHwgMTAwIEludGVybmF0aW9uYWwgRHJpdmUsIDIybmQgRmxvb3IgfCBCYWx0
+aW1vcmUsIE1EIDIxMjAyDQpNb2JpbGU6ICsxICg0MTApIDY5OCA3MjMyDQpNaWtlLkRpYXpAYWxs
+aWFuei10cmFkZS5jb20gfCBhbGxpYW56LXRyYWRlLnVzDQoNCkV1bGVyIEhlcm1lcyBOb3J0aCBB
+bWVyaWNhIEluc3VyYW5jZSBDb21wYW55IGFuZCBpdHMgYWZmaWxpYXRlZCBkZWJ0IGNvbGxlY3Rp
+b24gY29tcGFueSBhcmUgcGFydCBvZiB0aGUgQWxsaWFueiBncm91cCBhbmQgbWFya2V0IHRoZWly
+IHByb2R1Y3RzIGFuZCBzZXJ2aWNlcyB1c2luZyB0aGUg4oCYQWxsaWFueiBUcmFkZeKAmSB0cmFk
+ZW1hcmsuDQoNCg0KDQpGb2xsb3cgdXMgb24NCg0KLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0N
+CkZyb206IGFtYW51ZWxhZmV3b3JrdGlrdUBlbnByb2luYy5saXZlIDxhbWFudWVsYWZld29ya3Rp
+a3VAZW5wcm9pbmMubGl2ZT4NClNlbnQ6IFdlZG5lc2RheSwgTm92ZW1iZXIgMjUsIDIwMjYgOTow
+MyBBTQ0KVG86IERpYXosIE1pY2hhZWwgKEFsbGlhbnogVHJhZGUpIDxtaWtlLmRpYXpAYW1lci5h
+bGxpYW56LXRyYWRlLmNvbT4NClN1YmplY3Q6IFtFWFRdIFtCT05ELTIwMjYtMDQ5N10gSW5xdWly
+eSAtIENvbnRpbnVvdXMgQ3VzdG9tcyBCb25kDQoNCkhlbGxvLA0KDQpFbnBybyBMTEMgaXMgbG9v
+a2luZyB0byBwdXJjaGFzZSBhIGN1c3RvbXMgYm9uZCBhbmQgd291bGQgbGlrZSB0byByZXF1ZXN0
+IGEgcXVvdGUgZnJvbSB5b3VyIGFnZW5jeS4gRGV0YWlscyBiZWxvdyBwZXIgb3VyIGNsaWVudCBh
+cHBsaWNhdGlvbjoNCg0KMDEgLyBCT05EIFJFUVVFU1QNCi0gU2VydmljZSByZXF1ZXN0ZWQ6IE5l
+dyBib25kDQotIEJvbmQgY292ZXJhZ2U6IENvbnRpbnVvdXMgQ3VzdG9tcyBCb25kDQotIEFjdGl2
+aXR5IGNvZGU6IDEgLSBJbXBvcnRlcg0KLSBSZXF1ZXN0ZWQgYm9uZCBsaW1pdDogVVNEIDUwLDAw
+MA0KDQowMiAvIExFR0FMIEVOVElUWSAmIElNUE9SVEVSIElEDQotIEV4YWN0IGxlZ2FsIGVudGl0
+eTogRW5wcm8gTExDDQotIEVudGl0eSB0eXBlOiBMTEMNCi0gU3RhdGUgb2YgZm9ybWF0aW9uOiBD
+QQ0KLSBFSU46IDQzLTIyMDczOTENCi0gUHJpbmNpcGFsIGFkZHJlc3M6IDgzMyBTIFNQUklORyBT
+VCBTVEUgMjAwLCBMT1MgQU5HRUxFUywgQ0EsIDkwMDE0DQoNCjAzIC8gQ09OVEFDVFMgJiBBVVRI
+T1JJWkVEIFNJR05FUg0KLSBBdXRob3JpemVkIHNpZ25lcjogQU1BTlVFTCBBRkVXT1JLIFRJS1Ug
+KE9yZ2FuaXplcikNCi0gQ29udGFjdCBlbWFpbDogYW1hbnVlbGFmZXdvcmt0aWt1QGVucHJvaW5j
+LmxpdmUNCi0gUGhvbmU6IDIwOTc3NjQ2NjgNCg0KUGxlYXNlIHJlcGx5IHdpdGg6DQoxLiBZb3Vy
+IHByaWNlIGZvciB0aGlzIGJvbmQgYW5kIHRoZSBlc3RpbWF0ZWQgcHJvY2Vzc2luZyB0aW1lIDIu
+IFlvdXIgYXBwbGljYXRpb24gcmVxdWlyZW1lbnRzIC8gaW50YWtlIGNoZWNrbGlzdCAoZW50aXR5
+ICYgaW1wb3J0ZXIgSUQsIGNvbnRhY3RzICYgb3duZXJzLCBtZXJjaGFuZGlzZSAmIHRyYWRlIHBy
+b2ZpbGUsIGN1c3RvbXMgb3BlcmF0aW9ucywgYm9uZCBoaXN0b3J5ICYgY29tcGxpYW5jZSwgYW5k
+IEFEL0NWRCBzY2hlZHVsZSBpZiBhcHBsaWNhYmxlKSAzLiBEb2N1bWVudHMgeW91IG5lZWQgZnJv
+bSB1cyAtIHdlIGhhdmUgQXJ0aWNsZXMgb2YgRm9ybWF0aW9uLCBJUlMgRUlOIGxldHRlciAoQ1A1
+NzUpLCBXLTkgYW5kIHByaW5jaXBhbCBJRCBhdmFpbGFibGUNCg0KQmVzdCByZWdhcmRzLA0KQU1B
+TlVFTCBBRkVXT1JLIFRJS1UNCkVucHJvIExMQw0KQ09ORklERU5USUFMSVRZIE5PVElDRTogVGhl
+IGluZm9ybWF0aW9uIGluIHRoaXMgbWVzc2FnZSwgYW5kIGFueSBmaWxlcyB0cmFuc21pdHRlZCB3
+aXRoIGl0LCBpcyBjb25maWRlbnRpYWwsIG1heSBiZSBsZWdhbGx5IHByaXZpbGVnZWQsIGFuZCBp
+bnRlbmRlZCBvbmx5IGZvciB0aGUgdXNlIG9mIHRoZSBpbmRpdmlkdWFsKHMpIG5hbWVkIGFib3Zl
+LiBCZSBhd2FyZSB0aGF0IHRoZSB1c2Ugb2YgYW55IGNvbmZpZGVudGlhbCBvciBwZXJzb25hbCBp
+bmZvcm1hdGlvbiBtYXkgYmUgcmVzdHJpY3RlZCBieSBzdGF0ZSBhbmQgZmVkZXJhbCBwcml2YWN5
+IGxhd3MuIElmIHlvdSBhcmUgbm90IHRoZSBpbnRlbmRlZCByZWNpcGllbnQsIGRvIG5vdCBmdXJ0
+aGVyIGRpc3NlbWluYXRlIHRoaXMgbWVzc2FnZS4gSWYgdGhpcyBtZXNzYWdlIHdhcyByZWNlaXZl
+ZCBpbiBlcnJvciwgcGxlYXNlIG5vdGlmeSB0aGUgc2VuZGVyIGFuZCBkZWxldGUgaXQuCgpBVklT
+IERFIENPTkZJREVOVElBTElUw4k6IExlcyBpbmZvcm1hdGlvbnMgY29udGVudWVzIGRhbnMgY2Ug
+bWVzc2FnZSwgYWluc2kgcXVlIGxlcyBmaWNoaWVycyBxdWkgeSBzb250IGpvaW50cywgc29udCBj
+b25maWRlbnRpZWxsZXMsIHBldXZlbnQgw6p0cmUgY291dmVydGVzIHBhciBsZSBzZWNyZXQgcHJv
+ZmVzc2lvbm5lbCBldCBzb250IGRlc3RpbsOpZXMgZXhjbHVzaXZlbWVudCDDoCBsYSBvdSBhdXgg
+cGVyc29ubmVzIG1lbnRpb25uw6llcyBjaS1kZXNzdXMuIFZldWlsbGV6IG5vdGVyIHF1ZSBsJ3V0
+aWxpc2F0aW9uIGRlIHRvdXRlIGluZm9ybWF0aW9uIGNvbmZpZGVudGllbGxlIG91IHBlcnNvbm5l
+bGxlIHBldXQgw6p0cmUgc291bWlzZSBhdXggbG9pcyBmw6lkw6lyYWxlcyBldCDDqXRhdGlxdWVz
+IHN1ciBsYSBwcm90ZWN0aW9uIGRlIGxhIHZpZSBwcml2w6llLiBTaSB2b3VzIG4nw6p0ZXMgcGFz
+IGxlIGRlc3RpbmF0YWlyZSBwcsOpdnUsIHZldWlsbGV6IG5lIHBhcyBkaWZmdXNlciBjZSBtZXNz
+YWdlLiBTaSB2b3VzIGF2ZXogcmXDp3UgY2UgbWVzc2FnZSBwYXIgZXJyZXVyLCB2ZXVpbGxleiBl
+biBpbmZvcm1lciBsJ2V4cMOpZGl0ZXVyIGV0IGxlIHN1cHByaW1lci4KCkFWSVNPIERFIENPTkZJ
+REVOQ0lBTElEQURFOiBBcyBpbmZvcm1hw6fDtWVzIGNvbnRpZGFzIG5lc3RhIG1lbnNhZ2VtLCBl
+IHF1YWlzcXVlciBhcnF1aXZvcyBhbmV4b3MsIHPDo28gY29uZmlkZW5jaWFpcywgcG9kZW0gc2Vy
+IGxlZ2FsbWVudGUgcHJvdGVnaWRhcyBwb3Igc2lnaWxvIGUgZGVzdGluYW0tc2UgZXhjbHVzaXZh
+bWVudGUgYW8ocykgZGVzdGluYXTDoXJpbyhzKSBub21lYWRvKHMpIGFjaW1hLiBFc3RlamEgY2ll
+bnRlIGRlIHF1ZSBvIHVzbyBkZSBxdWFscXVlciBpbmZvcm1hw6fDo28gY29uZmlkZW5jaWFsIG91
+IHBlc3NvYWwgcG9kZSBzZXIgcmVzdHJpdG8gcG9yIGxlaXMgZGUgcHJpdmFjaWRhZGUgZXN0YWR1
+YWlzIGUgZmVkZXJhaXMuIFNlIHZvY8OqIG7Do28gZm9yIG8gZGVzdGluYXTDoXJpbyBwcmV0ZW5k
+aWRvLCBuw6NvIGRpdnVsZ3VlIGVzdGEgbWVuc2FnZW0uIENhc28gdGVuaGEgcmVjZWJpZG8gZXN0
+YSBtZW5zYWdlbSBwb3IgZW5nYW5vLCBwb3IgZmF2b3IsIG5vdGlmaXF1ZSBvIHJlbWV0ZW50ZSBl
+IGV4Y2x1YS1hLgoKQVZJU08gREUgQ09ORklERU5DSUFMSURBRDogTGEgaW5mb3JtYWNpw7NuIGNv
+bnRlbmlkYSBlbiBlc3RlIG1lbnNhamUsIGFzw60gY29tbyBjdWFscXVpZXIgYXJjaGl2byBhZGp1
+bnRvLCBlcyBjb25maWRlbmNpYWwsIHB1ZWRlIGVzdGFyIHByb3RlZ2lkYSBwb3IgZWwgc2VjcmV0
+byBwcm9mZXNpb25hbCB5IGVzdMOhIGRlc3RpbmFkYSDDum5pY2FtZW50ZSBhIGxhKHMpIHBlcnNv
+bmEocykgbWVuY2lvbmFkYShzKSBhbnRlcmlvcm1lbnRlLiBUZW5nYSBlbiBjdWVudGEgcXVlIGVs
+IHVzbyBkZSBjdWFscXVpZXIgaW5mb3JtYWNpw7NuIGNvbmZpZGVuY2lhbCBvIHBlcnNvbmFsIHB1
+ZWRlIGVzdGFyIHJlc3RyaW5naWRvIHBvciBsYXMgbGV5ZXMgZGUgcHJpdmFjaWRhZCBlc3RhdGFs
+ZXMgeSBmZWRlcmFsZXMuIFNpIG5vIGVzIGVsIGRlc3RpbmF0YXJpbyBwcmV2aXN0bywgbm8gZGlm
+dW5kYSBlc3RlIG1lbnNhamUuIFNpIGhhIHJlY2liaWRvIGVzdGUgbWVuc2FqZSBwb3IgZXJyb3Is
+IG5vdGlmaXF1ZSBhbCByZW1pdGVudGUgeSBlbGltw61uZWxvLgo=
+

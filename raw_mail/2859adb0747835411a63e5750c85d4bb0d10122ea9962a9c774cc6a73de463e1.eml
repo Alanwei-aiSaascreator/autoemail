@@ -1,0 +1,183 @@
+Return-Path: <>
+Delivered-To: contact@weaveorasocial.com
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id YKieJgd6B2shmhkAQ1DlOA
+	(envelope-from <>)
+	for <contact@weaveorasocial.com>; Wed, 25 Nov 2026 19:15:03 -0500
+X-Original-To: contact@weaveorasocial.com
+Received: from e226-244.smtp-out.us-east-2.amazonses.com (e226-244.smtp-out.us-east-2.amazonses.com [23.251.226.244])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id 1211610B760
+	for <contact@weaveorasocial.com>; Wed, 25 Nov 2026 19:15:02 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=B2zrOh3q;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	spf=pass (mail.pony-it.com: domain of e226-244.smtp-out.us-east-2.amazonses.com designates 23.251.226.244 as permitted sender) smtp.helo=e226-244.smtp-out.us-east-2.amazonses.com
+ARC-Seal: i=1; a=rsa-sha256; d=weaveorasocial.com; s=dkim; cv=none;
+	t=1795652103;
+	b=IWNsJWxfDwaS07r3E5ghhA4GQ18iieHMx9nKd7zMy5a247OniMM57EVGxPuslIhrFlmmvh
+	jNGFjFdN2w/nOsDwsX6L/eXbEb89ZR3a3Jx5LOwCddITv1XdntCNwWVtBzXVbq5ihqvHQF
+	HLcZ43DhD6djaKJnTvR760H8aHCHu3G1328lvL7fJfJibI9U8Z9E+JjVx2VAl8hlkjky/p
+	vHYUGBtEjoIdVMuVjUOUldDQqOo8OX5izDj7n3NdkhxNJ4ShZo5oso9OKEONIkF/rSD0Zh
+	BFFll1VJfeZHzNTG6iw8YEU2R6aQw4+x5tAVLYGd5p1UPruicNzAQPUFJ37qrw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=weaveorasocial.com; s=dkim; t=1795652103;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 dkim-signature; bh=uqrK6RY1e4UtyOXT5/yS/jdsM/QACVmpz6xrXcWI+vA=;
+	b=AxV/ICwuGLmyB7wkqE2nCF3+V77hK3a74MxPrDX1bviWOhL9/liiBV/5RZKX9jFeX6iTS2
+	//50I1vvE/g4JDcGBX5cehcMlrLI0MbrVKja7+w5ia86lfKpQdyAF/TnNrggl6MB4CMIzP
+	ojAg6K68tCj967ctnupEptG3x8L8ngXXauA8q9cvhttzod/bEmzVocEZql1vjkONRQBDPv
+	tWgTx2S73dr8ccaEKm2HIcE0wKiBaLlFoaiM9Z92QAyhtLQU2xCkYR1ouhqq2ZLsMV8ypY
+	UwAe5KdgLBnKzKJz1yv2WuLaUqU7A4qKOKH8cUVEZF2Vh1ebFkvOx0UKYTsXmA==
+ARC-Authentication-Results: i=1;
+	mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=B2zrOh3q;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	spf=pass (mail.pony-it.com: domain of e226-244.smtp-out.us-east-2.amazonses.com designates 23.251.226.244 as permitted sender) smtp.helo=e226-244.smtp-out.us-east-2.amazonses.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=kra23psoka5qyyh6gdejiiuof3nluwuz; d=amazonses.com; t=1795652102;
+	h=Date:From:To:Message-ID:Subject:MIME-Version:Content-Type:Feedback-ID;
+	bh=tFT6HPixbQGWNelyxm3sOaeHfYu7GbOKDpZ4wzFil+w=;
+	b=B2zrOh3qxaTj0sQEGhdajb8UUWgU/3y7I13Gnua9PgyUIHLA333OWp73Uw9i9fo5
+	f/i/pf3UlrIuYgn3qhOmkDsc6ZZPGTvslT3ane0eht/sQMHjiMH1Ea2mm2sqKN2xFYt
+	wGu1l/y5xVC+NltIGIM9/1jAnK9gFnh0JqMvQeDI=
+Date: Thu, 26 Nov 2026 00:15:02 +0000
+From: MAILER-DAEMON@us-east-2.amazonses.com
+To: contact@weaveorasocial.com
+Message-ID: <010f01a21534a919-580400ed-ea74-4888-9188-33d66ca7afb0-000000@us-east-2.amazonses.com>
+Subject: Delivery Status Notification (Failure)
+MIME-Version: 1.0
+Content-Type: multipart/report; 
+	boundary="----=_Part_1496311_2098533579.1795652102455"; 
+	report-type=delivery-status
+Feedback-ID: ::1.us-east-2.c0QCJwTJKDSb6mlKpIo5IpGwsngRMRBjZtJ48k4WYjY=:AmazonSES
+X-SES-Outgoing: 2026.11.26-23.251.226.244
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Result: default: False [-2.28 / 15.00];
+	IP_REPUTATION_HAM(-1.18)[asn: 16509(-0.31), country: US(-0.01), ip: 23.251.226.244(-0.86)];
+	DMARC_POLICY_ALLOW(-0.50)[amazonses.com,quarantine];
+	R_DKIM_ALLOW(-0.20)[amazonses.com:s=kra23psoka5qyyh6gdejiiuof3nluwuz];
+	R_SPF_ALLOW(-0.20)[+ip4:23.251.226.244:c];
+	MIME_FROM_MX_GOOD(-0.10)[feedback-smtp.us-east-2.amazonses.com];
+	MIME_GOOD(-0.10)[text/plain];
+	ONCE_RECEIVED(0.10)[];
+	BOUNCE(-0.10)[DSN];
+	BAYES_HAM(-0.00)[38.45%];
+	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_ONE(0.00)[1];
+	ARC_NA(0.00)[];
+	RCPT_MAILCOW_DOMAIN(0.00)[weaveorasocial.com];
+	MIME_TRACE(0.00)[0:~,1:+,2:~,3:~,4:+];
+	DWL_DNSWL_NONE(0.00)[amazonses.com:dkim];
+	TO_DN_NONE(0.00)[];
+	FROM_NO_DN(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	URIBL_BLOCKED(0.00)[us-east-2.amazonses.com:from_mime,us-east-2.amazonses.com:mid,amazonses.com:url,amazonses.com:dkim,e226-244.smtp-out.us-east-2.amazonses.com:helo,e226-244.smtp-out.us-east-2.amazonses.com:rdns];
+	ASN(0.00)[asn:16509, ipnet:23.251.226.0/24, country:US];
+	DKIM_TRACE(0.00)[amazonses.com:+];
+	RCVD_COUNT_ZERO(0.00)[0];
+	ARC_SIGNED(0.00)[weaveorasocial.com:s=dkim:i=1];
+	SUBJ_BOUNCE_WORDS(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_IN_DNSWL_NONE(0.00)[23.251.226.244:from]
+X-Rspamd-Queue-Id: 1211610B760
+
+------=_Part_1496311_2098533579.1795652102455
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Content-Description: Notification
+
+An error occurred while trying to deliver the mail to the following recipients:
+syrstadschweizer@gmail.com
+------=_Part_1496311_2098533579.1795652102455
+Content-Type: message/delivery-status
+Content-Transfer-Encoding: 7bit
+Content-Description: Delivery Status Notification
+
+Reporting-MTA: dns; e226-6.smtp-out.us-east-2.amazonses.com
+
+Action: failed
+Final-Recipient: rfc822; syrstadschweizer@gmail.com
+Diagnostic-Code: smtp; 550-5.2.1 The email account that you tried to reach is inactive. For more
+ 550-5.2.1 information, go to
+ 550 5.2.1  https://support.google.com/mail/?p=DisabledUser 006d021491bc7-71b3825a87dsi27569831eaf.42 - gsmtp
+Status: 5.2.1
+
+
+------=_Part_1496311_2098533579.1795652102455
+Content-Type: message/rfc822
+Content-Description: Undelivered Message
+
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=weaveorasocial.com;
+	s=dkim; t=1795652101; h=from:subject:date:message-id:to:mime-version:content-type;
+	bh=k+T6Ega/mtqnUZr42uFjpD5oqqbatss8L4RnGPqAbNI=;
+	b=IcrEp6IqWlgKhHVQi9ZwPPTHNn0mC7fajx55PJTWxF6M5obhyND15Lk2UU4wJUHxmSgoux
+	cN8bOO5ZueoOWw0pgBluXBv8mQFElJ7A7ANIfhAdOGb5QmuT01s1zKUgvi/SEp3k4IsZR1
+	BbJ0deIN9z61RN8xskcABjJOoCm9/1sCbHnA52ngx5Y7/SY1mT8iEXRSHn6rUtRKBAGstQ
+	G3ve7+rZjjMoIxPA4DQA1pa1a98/GUJ6hkoIY6MaysZO/Ad5IOw0ZxPSiTTx/8G+W1uQ0u
+	H+Lzc5F3BwQ/7gUW0p5FSbgX6KznZaGhioz3N09ZcTCUU4hKwex0eeFIGWVLjg==
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=kra23psoka5qyyh6gdejiiuof3nluwuz; d=amazonses.com; t=1795652102;
+	h=Date:To:From:Subject:Message-ID:MIME-Version:Content-Type:Feedback-ID;
+	bh=k+T6Ega/mtqnUZr42uFjpD5oqqbatss8L4RnGPqAbNI=;
+	b=XWyz5suvocgtMebqj/OTFhp/gUOSox/Vjc6ZS1LVRoV77NCS1FFJNwEeCbhs9bZq
+	e41JDxOpBWPbf+3vntnP4IIaWjJRGo8ZuFBuGCHZRs73Wb1swthr8mjSa7wk124mVXj
+	HOmCa0454Ap01JnQh5+VUzI3kMIo/CN3r8vvRhU8=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=gmoggt6rpzc2mlwxcfh3fnqlfpssnnqy; d=weaveorasocial.com;
+	t=1795652102;
+	h=Date:To:From:Subject:Message-ID:MIME-Version:Content-Type;
+	bh=k+T6Ega/mtqnUZr42uFjpD5oqqbatss8L4RnGPqAbNI=;
+	b=ZEnl0qVy3l3w1qprOi8nLTQDMvELka1FJA0Wf+/0xpbrX6Rqad29Ykdq6jWUb+Cw
+	v9vjGaewZK4fWv5YR86KMhbscSqpcLNG1tt9H/gVr4OYbXVwFa8LL+1FsnFaz/6GhS6
+	1oKKyHkN0pneCv8V29DmSfSs7CXAYi/r3zQ8n/M+aqH4bD0/brsPHeAn1QpwMuHvIYc
+	7w9LheZcVs3SxIb1YY2o0V4gOUHuRFomxIIqpI5wso0B9IfWNVWLFuswaHKZyC02afg
+	zgqBdK9X7RKd7+Ej9KM2av7HQKVaK4Mmp5UPxQFEJaMh4qREkZiiO6S9tD2lBLtokyo
+	RELn90Ox4g==
+Authentication-Results: mail.pony-it.com;
+	none
+Date: Thu, 26 Nov 2026 00:15:01 +0000
+To: syrstadschweizer@gmail.com
+From: "weaveorasocial.com" <contact@weaveorasocial.com>
+Subject: Quick note from weaveorasocial.com (ref WUQWP9GVX43M)
+Message-ID: <010f01a21534a6c5-52caae06-014a-443c-9c2f-efd6209a8cdf-000000@us-east-2.amazonses.com>
+X-Mailer: PHPMailer 6.6.0 (https://github.com/PHPMailer/PHPMailer)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+X-Last-TLS-Session-Version: None
+X-Spamd-Result: default: False [-4.81 / 15.00];
+	BAYES_HAM(-4.71)[98.07%];
+	MIME_GOOD(-0.10)[text/plain];
+	RCVD_COUNT_ZERO(0.00)[0];
+	FREEMAIL_TO(0.00)[gmail.com];
+	MID_RHS_MATCH_FROM(0.00)[];
+	URIBL_BLOCKED(0.00)[646c89045104:helo,mailcowdockerized-php-fpm-mailcow-1.mailcowdockerized_mailcow-network:rdns];
+	ARC_NA(0.00)[];
+	DKIM_SIGNED(0.00)[weaveorasocial.com:s=dkim];
+	MAILCOW_DOMAIN_HEADER_FROM(0.00)[weaveorasocial.com];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	HAS_PHPMAILER_SIG(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_ONE(0.00)[1];
+	LOCAL_OUTBOUND(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	TO_DN_NONE(0.00)[];
+	MIME_TRACE(0.00)[0:+]
+X-Rspamd-Queue-Id: 4142110B760
+Feedback-ID: ::1.us-east-2.dnBLFQvZ7DBnA5nHg3QcqhG4UiG8AnTuix0bXTff/SU=:AmazonSES
+
+Hi,
+
+This is a routine note from our team at weaveorasocial.com.
+If you need anything, just reply to this email.
+
+Thanks,
+contact@weaveorasocial.com
+
+
+------=_Part_1496311_2098533579.1795652102455--

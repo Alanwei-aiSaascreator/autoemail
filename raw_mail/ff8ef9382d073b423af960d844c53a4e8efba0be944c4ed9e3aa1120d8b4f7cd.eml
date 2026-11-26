@@ -1,0 +1,175 @@
+Return-Path: <>
+Delivered-To: marywladkowski@underarmourco.online
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id QIEFNFDrBmvPVSMAQ1DlOA
+	(envelope-from <>)
+	for <marywladkowski@underarmourco.online>; Wed, 25 Nov 2026 09:06:08 -0500
+X-Original-To: marywladkowski@underarmourco.online
+Received: from e226-243.smtp-out.us-east-2.amazonses.com (e226-243.smtp-out.us-east-2.amazonses.com [23.251.226.243])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id 6B95410B79A
+	for <marywladkowski@underarmourco.online>; Wed, 25 Nov 2026 09:06:08 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=UtCVUuq6;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	spf=pass (mail.pony-it.com: domain of e226-243.smtp-out.us-east-2.amazonses.com designates 23.251.226.243 as permitted sender) smtp.helo=e226-243.smtp-out.us-east-2.amazonses.com
+ARC-Seal: i=1; a=rsa-sha256; d=underarmourco.online; s=dkim; cv=none;
+	t=1795615568;
+	b=TNuKQhU0jXF6jEeymfSUyVVVf6j51YMBdnuQLiKOk9Iul6hFIGPncY4g0RviSmZOMImJ51
+	uwBuM/jxu6qbHUadR2LbHJlre2eJE8kubakvhZEMpUQ21lxlivvBna41kfrqMvuInqO4Q5
+	FFeFdfDTX8Qme09oHK7O7GZXvZv8tPT6roo+fxHP/8V5a228ajmKjGBFTZ4OEwUv9olUTz
+	G4RpqmwLQa0YxUMcUKulwI3aDzLHmDOYi3cT1L9UjSCGARqinPLvDpE408QJGF78pQ1fa+
+	0uNE9hHEuJ+U92j2+LYVLBY9bc/QpbhTtdDfnYnBMDMKdPw7X43jaQtnBkGRLA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=underarmourco.online; s=dkim; t=1795615568;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 dkim-signature; bh=MMKwUXWAM5cNv+XEIfBvQ35YP276Rp5NTHMRdAv9hBc=;
+	b=zk7eFag4SGNwyF1NdbUz7j1wi9u3m8QCMxX7U5FO8b4LoTC/HOcTvKTmRs3/QuEwZUP3a2
+	GLIbiZQkv5E5KvW+mayhnMmPHHZJHe9mLeOTt8PCNxGb2nkWZeKXQ09s6af1GU/Og7I23L
+	CQG7qBapv3Xq4xq9F3jmyjTdNuS6PzPQ4RDSjtpNOK0NaUvsUrtT04yUiWroyX27pXUXF8
+	0J2KBbjGnyGr/LsqffVSOR97Bp5Hyfet5KpGhZoT0/1sA5GrL0YCKxcSdt9b0tVwPfijfz
+	06lXhLorkPfxgNxk0EdphLcR1dOK7qIZOAJsXYg8Z78TTBIInRVqZK/Kkyy93A==
+ARC-Authentication-Results: i=1;
+	mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=UtCVUuq6;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	spf=pass (mail.pony-it.com: domain of e226-243.smtp-out.us-east-2.amazonses.com designates 23.251.226.243 as permitted sender) smtp.helo=e226-243.smtp-out.us-east-2.amazonses.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=kra23psoka5qyyh6gdejiiuof3nluwuz; d=amazonses.com; t=1795615568;
+	h=Date:From:To:Message-ID:Subject:MIME-Version:Content-Type:Feedback-ID;
+	bh=su1b+ZDbEyhVyw4KCYQFL+uVwJJEK37VpgKHfFMtLgg=;
+	b=UtCVUuq6enXAS+ATgJ7UgQ+GAZp4pIKObdS9pZW+lrP1pd0kNFbtafC8u1JhOnmN
+	o0PMU93BkbB0h6w89HT2PW9+b7hPf2oxnz8p9edEPWZwSj0XM4kCAsBnzYmhruHF68I
+	Rj8IPr6XCkWDaw2UaN+Ab4Yc8/QqQRHhptJ7lNiM=
+Date: Wed, 25 Nov 2026 14:06:07 +0000
+From: MAILER-DAEMON@us-east-2.amazonses.com
+To: marywladkowski@underarmourco.online
+Message-ID: <010f01a213072fce-4fb15f09-2a90-4208-97ad-050a051abae2-000000@us-east-2.amazonses.com>
+Subject: Delivery Status Notification (Failure)
+MIME-Version: 1.0
+Content-Type: multipart/report; 
+	boundary="----=_Part_4046542_1581566256.1795615567850"; 
+	report-type=delivery-status
+Feedback-ID: ::1.us-east-2.c0QCJwTJKDSb6mlKpIo5IpGwsngRMRBjZtJ48k4WYjY=:AmazonSES
+X-SES-Outgoing: 2026.11.25-23.251.226.243
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Result: default: False [-1.59 / 15.00];
+	BAYES_HAM(-5.50)[100.00%];
+	SEM_URIBL_FRESH15(3.00)[underarmourco.online:email];
+	BAD_REP_POLICIES(2.00)[];
+	IP_REPUTATION_HAM(-0.89)[asn: 16509(-0.31), country: US(-0.01), ip: 23.251.226.243(-0.57)];
+	ONCE_RECEIVED(0.10)[];
+	BOUNCE(-0.10)[DSN];
+	MIME_GOOD(-0.10)[text/plain];
+	MIME_FROM_MX_GOOD(-0.10)[feedback-smtp.us-east-2.amazonses.com];
+	ARC_SIGNED(0.00)[underarmourco.online:s=dkim:i=1];
+	SUBJ_BOUNCE_WORDS(0.00)[];
+	R_DKIM_ALLOW(0.00)[amazonses.com:s=kra23psoka5qyyh6gdejiiuof3nluwuz];
+	RCPT_COUNT_ONE(0.00)[1];
+	RCPT_MAILCOW_DOMAIN(0.00)[underarmourco.online];
+	MIME_TRACE(0.00)[0:~,1:+,2:~,3:~,4:+];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	ARC_NA(0.00)[];
+	DKIM_TRACE(0.00)[amazonses.com:+];
+	DWL_DNSWL_NONE(0.00)[amazonses.com:dkim];
+	RCVD_COUNT_ZERO(0.00)[0];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_NONE(0.00)[];
+	DMARC_POLICY_ALLOW(0.00)[amazonses.com,quarantine];
+	RWL_MAILSPIKE_POSSIBLE(0.00)[23.251.226.243:from];
+	ASN(0.00)[asn:16509, ipnet:23.251.226.0/24, country:US];
+	R_SPF_ALLOW(0.00)[+ip4:23.251.226.243:c];
+	MISSING_XM_UA(0.00)[];
+	FROM_NO_DN(0.00)[];
+	RCVD_IN_DNSWL_NONE(0.00)[23.251.226.243:from]
+X-Rspamd-Queue-Id: 6B95410B79A
+
+------=_Part_4046542_1581566256.1795615567850
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Content-Description: Notification
+
+An error occurred while trying to deliver the mail to the following recipients:
+contacto@cromex.net
+------=_Part_4046542_1581566256.1795615567850
+Content-Type: message/delivery-status
+Content-Transfer-Encoding: 7bit
+Content-Description: Delivery Status Notification
+
+Reporting-MTA: dns; amazonses.com
+
+Action: failed
+Remote-MTA: dns; amazonses.com
+Final-Recipient: rfc822; contacto@cromex.net
+Diagnostic-Code: Amazon SES did not send the message to this address because it is on the suppression list for your account. For more information about removing addresses from the suppression list, see the Amazon SES Developer Guide at https://docs.aws.amazon.com/ses/latest/dg/sending-email-suppression-list.html
+Status: 5.1.1
+
+
+------=_Part_4046542_1581566256.1795615567850
+Content-Type: message/rfc822
+Content-Description: Undelivered Message
+
+Received: from mail.pony-it.com (mail.pony-it.com [15.204.205.80])
+        by email-smtp.amazonaws.com
+        with SMTP (SimpleEmailService-d-073OR46QL) id 4eEyiEoiSVXjMJ6PgxIl
+        for contacto@cromex.net;
+        Wed, 25 Nov 2026 14:06:07 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 727E110B79A
+	for <contacto@cromex.net>; Wed, 25 Nov 2026 09:06:05 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=underarmourco.online;
+	s=dkim; t=1795615567; h=from:subject:message-id:to:mime-version:content-type:
+	 content-transfer-encoding; bh=O2lEbQBejFtG/XCNkCJsh723++/9rsv5Lb/QOZpVfm8=;
+	b=uKEDtbOFtBZa8YHtpVdspNEjjX+dLaoiL88vUPE+P+uDdg8F8A/HDGDkmkX6BTZEVt6fWF
+	dhdI+47h22cIIMkcOiBX9p9x5WJOPv08FK+/+Aa0c64XCo4zMKS+mXIFvDVK/krEC/Wx5t
+	4Ih4Sp9YsVmzt6p/bGEZqmMllTJizoyDREZcJ8qBN8HTvzdDFpCvmtobXYDDXkEgwzhAXL
+	ZeIdEvRhAxoiYKOI9b/p72dt2+FdNvjO9UssuD01mdSRONfYFB0ZyfiCGgJD5jCm7pHEUG
+	Ykh6cy4Y5uSm0QdiCRuh5UdScLIZz1/BcYHPi+U9l63ZvlLBCftCQQAQFqTwqw==
+From: marywladkowski@underarmourco.online
+To: contacto@cromex.net
+Subject: [BOND-2026-0518] Inquiry - Continuous Customs Bond
+Message-ID: <010f01a213072e9a-25176ca6-219f-44ea-836e-5f13cdca8f53-000000@us-east-2.amazonses.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
+
+Hello,
+
+Under Armour LLC is looking to purchase a customs bond and would like to requ=
+est a quote from your agency. Details below per our client application:
+
+01 / BOND REQUEST
+- Service requested: New bond
+- Bond coverage: Continuous Customs Bond
+- Activity code: 1 - Importer
+- Requested bond limit: USD 50,000
+
+02 / LEGAL ENTITY & IMPORTER ID
+- Exact legal entity: Under Armour LLC
+- Entity type: LLC
+- State of formation: CA
+- EIN: 43-2222338
+- Principal address: 2150 E SOUTH ST STE 108, LONG BEACH, CA, 90805
+
+03 / CONTACTS & AUTHORIZED SIGNER
+- Authorized signer: MARY HEBERT WLADKOWSKI (Organizer)
+- Contact email: marywladkowski@underarmourco.online
+- Phone: 15599376468
+
+Please reply with:
+1. Your price for this bond and the estimated processing time
+2. Your application requirements / intake checklist (entity & importer ID, co=
+ntacts & owners, merchandise & trade profile, customs operations, bond histor=
+y & compliance, and AD/CVD schedule if applicable)
+3. Documents you need from us - we have Articles of Formation, IRS EIN letter=
+ (CP575), W-9 and principal ID available
+
+Best regards,
+MARY HEBERT WLADKOWSKI
+Under Armour LLC
+
+------=_Part_4046542_1581566256.1795615567850--

@@ -1,0 +1,1558 @@
+Return-Path: <>
+Delivered-To: marywladkowski@underarmourco.online
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id 6Ln/CI7rBmvPVSMAQ1DlOA
+	(envelope-from <>)
+	for <marywladkowski@underarmourco.online>; Wed, 25 Nov 2026 09:07:10 -0500
+X-Original-To: marywladkowski@underarmourco.online
+Received: from e226-245.smtp-out.us-east-2.amazonses.com (e226-245.smtp-out.us-east-2.amazonses.com [23.251.226.245])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id 5D9CF10B7A5
+	for <marywladkowski@underarmourco.online>; Wed, 25 Nov 2026 09:07:09 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=NZyql8UA;
+	dkim=fail ("headers rsa verify failed") header.d=k2ins.onmicrosoft.com header.s=selector2-k2ins-onmicrosoft-com header.b=Iht2TzY9;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	spf=pass (mail.pony-it.com: domain of e226-245.smtp-out.us-east-2.amazonses.com designates 23.251.226.245 as permitted sender) smtp.helo=e226-245.smtp-out.us-east-2.amazonses.com;
+	arc=reject ("signature check failed: fail, {[1] = sig:microsoft.com:reject}")
+ARC-Seal: i=2; a=rsa-sha256; d=underarmourco.online; s=dkim; cv=fail;
+	t=1795615629;
+	b=wN8RJdxQaoC0gd7mOU9rBZez7ckrAhzVaSiMj/mjCvHYOtOJfqypDGgd8C1FWf7b7q8kXN
+	tv9eZmFmZsTDJtIIqax8n+eZy5CqryFHqCgfDOumxoa97n46z3pgI2gAS9u5M4bazgeMUT
+	BP3SMmEbAnKzFV/2IMfnCORmyQV55rKrF2sOSXESLgsk9F334r8GlS0qK1aNuDAP71VLmF
+	Ui9ssZ45o5fLDaWKYrM+j22DJmdqkscpq6iNaNXVhtwNA0MxRfLu+X0VdBC1rvV/3WE/MT
+	GZB1WkT0ClUXWxQr/6B1yTecLWF62jT5gx7H+/ZiK8rqswgUjg832rkRBxDjOA==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed;
+	d=underarmourco.online; s=dkim; t=1795615629;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references:dkim-signature;
+	bh=0SFytAInXqkzDIBoiR7CalpnnXusk10GEWfLK/PNPCk=;
+	b=nunR5UMW0t/YhakYNbrZwcRiHuyFDQKzswOEets0pCYITqYA1XQ0EOuVPF7eFmSQg0mSxT
+	HgVbthmiLVYtIEsve137wM2maLFkLOMTraHqJbDemOW6uNCWPbU/Y8V5RV4BFDWOci/hZ1
+	B41tMdpCVq4a5mOh8VlqBQe+lPhCCRssQPJC1gTEbOkSagp400G1Hyh8otmvrf81yFJyvx
+	vo1ZBV1ElCrDpXHhVeS6S/SVUStIDcn1tZbUX6EHQpVs1kjiS0w83VlO6huBNg99wJyJUb
+	sgC5aWTgk2RJ5txIzxFmP377NrZ7wnpNgYsjUMpxVSmgECOzbPwXsGJHcZTnPA==
+ARC-Authentication-Results: i=2;
+	mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=NZyql8UA;
+	dkim=fail ("headers rsa verify failed") header.d=k2ins.onmicrosoft.com header.s=selector2-k2ins-onmicrosoft-com header.b=Iht2TzY9;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	spf=pass (mail.pony-it.com: domain of e226-245.smtp-out.us-east-2.amazonses.com designates 23.251.226.245 as permitted sender) smtp.helo=e226-245.smtp-out.us-east-2.amazonses.com;
+	arc=reject ("signature check failed: fail, {[1] = sig:microsoft.com:reject}")
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=kra23psoka5qyyh6gdejiiuof3nluwuz; d=amazonses.com; t=1795615628;
+	h=MIME-Version:From:To:Date:Content-Type:Message-ID:In-Reply-To:References:Subject:Feedback-ID;
+	bh=fKNVpCBHs4zAWyh4HBdVTIhADdb7SKdj2Wv/Dx1qRJw=;
+	b=NZyql8UAjD0M3xXbqlAKt5x1QbEM7m+ll30eExeqWhR94Ca2+hjjk8wQUq2LWv2y
+	tjpz7riqHLJQfPNWhA9uqfAJr3UmRAh14UYJsAQr3NC6AsgoJNRPqJikxU5CdVRnQWW
+	I6K2Er8o6Rzne47RsXck7WL9gMLFXiHUpZLfpT9g=
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=A3k4fZVL/dEbEh+hFdltw3ukWLOG4vg/xaM0/O0VEhsKK6fF9bT9JN1gqPpgDdgA+aIvbz7wExqQGeYoHbfjglBs7l560Rdj+kf/sf/2DrB5IGLmM50tAqCrt+p4GIJiDKsCfftBLwH9rlFTr8Q7tX857AwoCy3mTLY/SqXOr4Ma+3PVh7CjCw0Yu8Fm7U46UqHRvw+UusmWcTf8S98T1cV+BGZMCay/vdQLPLOVn2X122G4xm+4nHgma1q7cRIb3i2buwBakxQ6sh7w4A414z+AFlOcEDrXSWFLhqq4dUyPfAiJCECDY+btTWMwtHLijwOnbgU1KqQQspBott1ccQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0SFytAInXqkzDIBoiR7CalpnnXusk10GEWfLK/PNPCk=;
+ b=cgvOHMyvs91FWY22QGJ42rPFeLiZ/1xQ2PvN7MeVNembipQHT5hUXbrq6q5nf1UpPkT5wCoVwgQ43QrbW5C/dKxPUc8N8rBUQhbvRfO8Lw0uhpNZaoZqLNzWOpgQ/xlWLLkZpde4gUCbPO/bIOrqavMu1nUvwIIcLkIEEU5fbydqs556oZr4WGzDrawLekdk9okWa8/2zx+AIIIusQxcD1qp2ayeAInUcBBiAoeaCRI8pbPhokd3A8xAHxAY7xVF6EsnIFdGJsnukiHENv8gF9rC1qqTVaA1mjqmmroESXF0Le+AkQFhd5ukDHp/UWwX9kHpWQBrGsFUE217JZrdRg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=pass
+ action=none header.from=k2ins.onmicrosoft.com; dkim=pass
+ header.d=k2ins.onmicrosoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=k2ins.onmicrosoft.com;
+ s=selector2-k2ins-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0SFytAInXqkzDIBoiR7CalpnnXusk10GEWfLK/PNPCk=;
+ b=Iht2TzY9AzLbn3iziBMvy2sVMUzXGBA9ZXKyF0ts96UrKoWsIHMY4cnfecNRhdmcOfVo6e+BZLMjRC1MsJ6Iqh0+p+jUB7RzlQ9kPbgcFuEQic9M9wT2aSuKMuaVFAzwDajUHcIkR+Qbwvsd5PRayJD2Xi/VzFmkesvutlQhpmU=
+MIME-Version: 1.0
+From: MAILER-DAEMON@us-east-2.amazonses.com
+To: marywladkowski@underarmourco.online
+Date: Wed, 25 Nov 2026 14:07:08 +0000
+Content-Type: multipart/report; report-type=delivery-status;
+	boundary="62804427-5cc1-4a8c-bd27-6ef740a7a959"
+X-MS-Exchange-Message-Is-Ndr:
+Content-Language: en-US
+Message-ID: <010f01a213081d39-4a958131-a4ca-42c3-87b2-194108b0d026-000000@us-east-2.amazonses.com>
+In-Reply-To:
+ <010f01a21307ee07-7a41de4e-f845-422a-81ed-c75581fc9136-000000@us-east-2.amazonses.com>
+References:
+ <010f01a21307ee07-7a41de4e-f845-422a-81ed-c75581fc9136-000000@us-east-2.amazonses.com>
+Subject: Undeliverable: [BOND-2026-0522] Inquiry - Continuous Customs Bond
+Auto-Submitted: auto-replied
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR04MB9439:EE_
+X-MS-Exchange-AtpMessageProperties: SA
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|50650200027|3109299003|7049299003|6049299003|376014|7149299003|366016|69100299015|1930700014|1800799024|3613699012|32400700002|10067099003|56012099006|11063799006|260925022911599003|260925021311599003|260925021911599003|261022075727099003|261022115727099003|261022105027099003|261026121527099003|261021123027099003|261026140227099003|261021121427099003|261028144727099003|261102123227099003|261009223027099003|261009221227099003|22082099003|55112099003|18002099003|9143799003|6133799003|13003099007|4053099003|8096899003|4076899003|12063799003|4133799003;
+X-Microsoft-Antispam-Message-Info:
+	CDsgnGcTJ83+wTalxwoGoqu9mMYi6IN9Z7+gnJ5csx9BuKtjh4/kbz3wccUn5CQUcIuL73RyEoIt2BUQx0+6unzBHkV8jitKKIofJPLr3AZbPoJOVkd0Vqe54HYlqQ/I1RHoe2nHLpbO0FYJWG2X5+rIPzUSth9sC7/ijaeWiRjZoyumVYWdZHBBUkhzsUS7IwvKxT8dFgbGDTa7iADlUP8j+EGQ1UiGOmy6f70daee5J7fIccEn0nzOQrXijLMfEwcj4EOHxV8ENFBl2XLp4c0dx12VwHZoRKw/U7PFZm1AEz8+2cPACpliKBlNKf5gm199QK43wfks4l/t0Xh15PxsgiUbOuKw/CIGxQdsmadjBIAnR00H9vAPRDl7sW/YEPAeLGvo59fkke1pCTmtNtKZIHrD6KFcupU18+Rz9LnOK2RxJbcC59vi6ujfKBn95DoZK/9j1kyFB5rKsAy/SXF4AHX73ecwKiXD6WbX253s7KRvaus2iJ6+eFnb2eYAttV96iefoFR5lZELxsulfizbXaqhTTW+ItFH2EHqfq3/itK9XgBjWODIS3NfQAfXdxDq070hiqZ9/Ntqx35NXpaR/PQ7AJ7E6gso3yPe2gh7nveB6EPbrrWfTM6sWBTfac0ogXe8PYC+Wt/lTF8OUF2m7gkscDBCcSCg2M88gPOHCsrP278CKSP5n5rY8Li2ERfAiO6TjMkOBkBJ8+jkE3zyyd7z4AbXPXKqriy1fpPT8ylPJkjvKtTXRLS7zBa6lzTVT2S1XMloZEbQOiRq4Hiuvokw6uyZv4ajENkYGiOcMe3x3dfqDAIpO+xgVSAEolre0IRxeVUIIZfwm7DQ/g==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:;PTR:;CAT:NONE;SFS:(13230040)(50650200027)(3109299003)(7049299003)(6049299003)(376014)(7149299003)(366016)(69100299015)(1930700014)(1800799024)(3613699012)(32400700002)(10067099003)(56012099006)(11063799006)(260925022911599003)(260925021311599003)(260925021911599003)(261022075727099003)(261022115727099003)(261022105027099003)(261026121527099003)(261021123027099003)(261026140227099003)(261021121427099003)(261028144727099003)(261102123227099003)(261009223027099003)(261009221227099003)(22082099003)(55112099003)(18002099003)(9143799003)(6133799003)(13003099007)(4053099003)(8096899003)(4076899003)(12063799003)(4133799003);DIR:OUT;SFP:1501;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	xkK1RhzjO2l1mVctaXsSxodQd43t9+q35F2RSR9lRxnrU7PUFlwKX+8VTHZ6eXOW5RZ8Av/3X0/vAR+2Hf7cOE8+nFoaKBg3npig88DTeycE7x+toqpJfkRAjoLIEUyJhrAD5SeRdfh1h04e3Ys6/o4Obd743KOYpmQ6PcPEgawijPnP69Z/SQUtLi3jqAwRMwu6koh1lm0hrBf2Ek8umloIaq2c3jN/1WGS8/JPu976fmfxJyCbCNvLQkbz6Wpg1hqDaxpBOILgQDT+nPbdw3i1TRtfJl+UDHr7wWmI6A2MscBRPw7sCqkDm0B3GzEuIYVk88eAxdCuDNwzY0nHZg==
+X-OriginatorOrg: k2ins.onmicrosoft.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Nov 2026 14:07:06.4192
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR04MB9439.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-Network-Message-Id:
+	c07cc697-22f8-41e6-6313-08df4afd635e
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR04MB9439
+Feedback-ID: ::1.us-east-2.c0QCJwTJKDSb6mlKpIo5IpGwsngRMRBjZtJ48k4WYjY=:AmazonSES
+X-SES-Outgoing: 2026.11.25-23.251.226.245
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Result: default: False [-1.49 / 15.00];
+	BAYES_HAM(-5.01)[98.84%];
+	SEM_URIBL_FRESH15(3.00)[underarmourco.online:email];
+	BAD_REP_POLICIES(2.00)[];
+	IP_REPUTATION_HAM(-1.18)[asn: 16509(-0.31), country: US(-0.01), ip: 23.251.226.245(-0.86)];
+	R_DKIM_ALLOW(-0.20)[amazonses.com:s=kra23psoka5qyyh6gdejiiuof3nluwuz];
+	BOUNCE(-0.10)[DSN];
+	ONCE_RECEIVED(0.10)[];
+	ARC_REJECT(0.10)[signature check failed: fail, {[1] = sig:microsoft.com:reject}];
+	MIME_FROM_MX_GOOD(-0.10)[feedback-smtp.us-east-2.amazonses.com];
+	MIME_GOOD(-0.10)[multipart/alternative,text/plain];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	SUBJ_BOUNCE_WORDS(0.00)[];
+	RCPT_MAILCOW_DOMAIN(0.00)[underarmourco.online];
+	MIME_TRACE(0.00)[0:~,1:+,2:+,3:~,4:~,5:~,6:+];
+	RCPT_COUNT_ONE(0.00)[1];
+	ARC_SIGNED(0.00)[underarmourco.online:s=dkim:i=2];
+	R_DKIM_REJECT(0.00)[k2ins.onmicrosoft.com:s=selector2-k2ins-onmicrosoft-com];
+	DMARC_POLICY_ALLOW(0.00)[amazonses.com,quarantine];
+	DKIM_TRACE(0.00)[amazonses.com:+,k2ins.onmicrosoft.com:-];
+	RCVD_COUNT_ZERO(0.00)[0];
+	R_SPF_ALLOW(0.00)[+ip4:23.251.226.245];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_NONE(0.00)[];
+	DWL_DNSWL_NONE(0.00)[amazonses.com:dkim];
+	ASN(0.00)[asn:16509, ipnet:23.251.226.0/24, country:US];
+	MISSING_XM_UA(0.00)[];
+	FROM_NO_DN(0.00)[];
+	DKIM_MIXED(0.00)[];
+	DMARC_POLICY_ALLOW_WITH_FAILURES(0.00)[];
+	RCVD_IN_DNSWL_NONE(0.00)[23.251.226.245:from]
+X-Rspamd-Queue-Id: 5D9CF10B7A5
+
+--62804427-5cc1-4a8c-bd27-6ef740a7a959
+Content-Type: multipart/alternative; differences=Content-Type;
+	boundary="7d1cca41-d951-4304-a651-e60544ec2fdd"
+
+--7d1cca41-d951-4304-a651-e60544ec2fdd
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+[https://products.office.com/en-us/CMSImages/Office365Logo_Orange.png?versi=
+on=3Db8d100a9-0a8b-8e6a-88e1-ef488fee0470]
+Your message to dmorse@aegisfirst.com couldn't be delivered.
+The group dmorse only accepts messages from people in its organization or o=
+n its allowed senders list, and your email address isn't on the list.
+010f01a21307ee07-7a4. . .       Office 365      dmorse
+Sender          Action Required
+Sender not allowed
+
+How to Fix It
+It appears you aren't in the same organization as the group (or a sub-group=
+) you're sending to or your email address isn't on the group's allowed send=
+ers list. Ask the owner of the group to grant you permission to send to it,=
+ and then try again. If the group belongs to a different organization than =
+yours, contact the organization's customer service department for assistanc=
+e. If the group is in your organization and you don't know who the group ow=
+ner is, you can find it by doing the following in either Outlook on the web=
+ or Outlook:
+
+  *   Open your Sent folder and select the original message.
+  *   If you're using Outlook on the web, select the group name located on =
+the To or CC line. If you're using Outlook, double-click the group name loc=
+ated on the To or CC line.
+  *   In Outlook on the web, from the pop-up dialog box, choose Owner. In O=
+utlook, choose Contact. The owner's name is listed under Owner.
+
+The owner of the group may have intentionally chosen to restrict who can se=
+nd messages to it, and they may not want to adjust the existing restriction=
+. In this case, you'll have to contact the group members by some other mean=
+s, such as sending an email message to their individual email addresses or =
+contacting them by phone.
+
+Was this helpful? Send feedback to Microsoft<https://go.microsoft.com/fwlin=
+k/?LinkId=3D615007>.
+________________________________
+
+More Info for Email Admins
+Status code: 550 5.7.133
+
+This error occurs when the distribution group, security group, or Microsoft=
+ 365 group is configured to accept messages only from authenticated senders=
+ (senders in the same organization or those added to the group's allowed se=
+nders list).
+
+To fix the issue, the recipient's email admin or the group owner must add t=
+he sender's email address to the group's allowed senders list or change the=
+ group's delivery management setting to accept messages from senders inside=
+ and outside of the organization.
+
+Usually this issue can only be fixed by the recipient's email admin or the =
+group owner.
+
+For more information and steps to fix this error, see Fix email delivery is=
+sues for error code 5.7.133 in Office 365<https://go.microsoft.com/fwlink/p=
+/?LinkId=3D615127>.
+
+Original Message Details
+Created Date:   11/25/2026 2:06:56 PM
+Sender Address: 010f01a21307ee07-7a41de4e-f845-422a-81ed-c75581fc9136-00000=
+0@ses.underarmourco.online
+Recipient Address:      dmorse@aegisfirst.com
+Subject:        [BOND-2026-0522] Inquiry - Continuous Customs Bond
+
+Error Details
+Error:  550 5.7.133 RESOLVER.RST.SenderNotAuthenticatedForGroup; authentica=
+tion required; Delivery restriction check failed because the sender was not=
+ authenticated when sending to this group
+Message rejected by:    DS0PR04MB9439.namprd04.prod.outlook.com
+
+Notification Details
+Sent by:        DS0PR04MB9439.namprd04.prod.outlook.com
+
+Message Hops
+HOP     TIME (UTC)      FROM    TO      WITH    RELAY TIME
+1       11/25/2026
+2:06:56 PM      e226-6.smtp-out.us-east-2.amazonses.com mx-inbound46-235.us=
+-east-2c.ess.aws.cudaops.com         *
+2       11/25/2026
+2:06:58 PM      outbound-ip62b.ess.barracuda.com        BN2PEPF0000A992.mai=
+l.protection.outlook.com     Microsoft SMTP Server (version=3DTLS1_2, ciphe=
+r=3DTLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384)    2 sec
+3       11/25/2026
+2:06:58 PM      BN2PEPF0000A992.namprd04.prod.outlook.com       BN9PR03CA00=
+98.outlook.office365.com     Microsoft SMTP Server (version=3DTLS1_3, ciphe=
+r=3DTLS_AES_256_GCM_SHA384)   *
+4       11/25/2026
+2:06:58 PM      BN9PR03CA0098.namprd03.prod.outlook.com DS0PR04MB9439.nampr=
+d04.prod.outlook.com Microsoft SMTP Server (version=3DTLS1_2, cipher=3DTLS_=
+ECDHE_RSA_WITH_AES_256_GCM_SHA384)    *
+
+Original Message Headers
+
+Received: from BN9PR03CA0098.namprd03.prod.outlook.com (2603:10b6:408:fd::1=
+3)
+ by DS0PR04MB9439.namprd04.prod.outlook.com (2603:10b6:8:1fd::6) with
+ Microsoft SMTP Server (version=3DTLS1_2,
+ cipher=3DTLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.662.6; Wed, 25 No=
+v
+ 2026 14:06:58 +0000
+Received: from BN2PEPF0000A992.namprd04.prod.outlook.com
+ (2603:10b6:408:fd:cafe::3) by BN9PR03CA0098.outlook.office365.com
+ (2603:10b6:408:fd::13) with Microsoft SMTP Server (version=3DTLS1_3,
+ cipher=3DTLS_AES_256_GCM_SHA384) id 15.21.662.6 via Frontend Transport; We=
+d, 25
+ Nov 2026 14:06:58 +0000
+Authentication-Results: mx.microsoft.com 1; spf=3Dpass (sender IP is
+ 23.251.226.6) smtp.mailfrom=3Dses.underarmourco.online; dkim=3Dfail (body =
+hash
+ did not verify) header.d=3Dunderarmourco.online;dkim=3Dfail (body hash did=
+ not
+ verify) header.d=3Damazonses.com;dkim=3Dfail (signature did not verify)
+ header.d=3Dunderarmourco.online;dmarc=3Dpass action=3Dnone
+ header.from=3Dunderarmourco.online;compauth=3Dpass reason=3D100
+Received-SPF: Pass (protection.outlook.com: domain of ses.underarmourco.onl=
+ine
+ designates 23.251.226.6 as permitted sender) receiver=3Dprotection.outlook=
+.com;
+ client-ip=3D23.251.226.6; helo=3De226-6.smtp-out.us-east-2.amazonses.com; =
+pr=3DC
+Received: from outbound-ip62b.ess.barracuda.com (209.222.82.239) by
+ BN2PEPF0000A992.mail.protection.outlook.com (10.167.248.134) with Microsof=
+t
+ SMTP Server (version=3DTLS1_2, cipher=3DTLS_ECDHE_RSA_WITH_AES_256_GCM_SHA=
+384) id
+ 15.21.662.3 via Frontend Transport; Wed, 25 Nov 2026 14:06:58 +0000
+Received: from e226-6.smtp-out.us-east-2.amazonses.com (e226-6.smtp-out.us-=
+east-2.amazonses.com [23.251.226.6]) by mx-inbound46-235.us-east-2c.ess.aws=
+.cudaops.com (version=3DTLSv1.2 cipher=3DECDHE-RSA-AES256-GCM-SHA384 bits=
+=3D256 verify=3DNO); Wed, 25 Nov 2026 14:06:56 +0000
+DKIM-Signature: v=3D1; a=3Drsa-sha256; q=3Ddns/txt; c=3Drelaxed/simple;
+        s=3D7snkno5idcr4dyz77r3ckp245kr6fxqd; d=3Dunderarmourco.online;
+        t=3D1795615616;
+        h=3DFrom:To:Subject:Message-ID:Content-Type:Content-Transfer-Encodi=
+ng:MIME-Version:Date;
+        bh=3DO2lEbQBejFtG/XCNkCJsh723++/9rsv5Lb/QOZpVfm8=3D;
+        b=3DHII6rcEBaBQuaBVSIoTrw7YLsyIEmHwYMc39YIsbN0NlZiLP0X5hIod/1X9DH9I=
+U
+        g38trfA3KUtp5G9+M6i1Cf4ERg6G+1/llYdQX7Y2qF/M40Z4w3jJ1JnDdNp7+PY3gLa
+        9LUjWzwPntUxOztFgm2YOBXhG4QMsVucZFFFXhBL9DJ2VSnW6a+t486z54SQVb3pQZt
+        LMilgeK2PoEYCEg9kF+NTSuSB37l9cSWHZHDqygtos9EMQwQzBc91eMszGTnEmDGSOx
+        DNlqeh8nY33CW0izr0M33gfb0IZ5i8EvgH3ua5uGQeeJ+ozc4VbLvM0FX9f5ijhLw75
+        zD8gGw2d2w=3D=3D
+DKIM-Signature: v=3D1; a=3Drsa-sha256; q=3Ddns/txt; c=3Drelaxed/simple;
+        s=3Dkra23psoka5qyyh6gdejiiuof3nluwuz; d=3Damazonses.com; t=3D179561=
+5616;
+        h=3DFrom:To:Subject:Message-ID:Content-Type:Content-Transfer-Encodi=
+ng:MIME-Version:Date:Feedback-ID;
+        bh=3DO2lEbQBejFtG/XCNkCJsh723++/9rsv5Lb/QOZpVfm8=3D;
+        b=3DU80eZg6ertokejcm6eVam+gwU7fASk53WCslKFgtBpOcwwqF3INJQFyrS8WTBl6=
+Z
+        xLlw+2Hbh+9NCLnoKwZ+xc5Rp9eOGubDUekRLETP94cOVuODxUF67TIeU6nBIJdJ34y
+        8pSPiMXWSWcet+FekNTfGn6yA9VCzBdrm3w1Lefg=3D
+DKIM-Signature: v=3D1; a=3Drsa-sha256; c=3Drelaxed/relaxed; d=3Dunderarmour=
+co.online;
+        s=3Ddkim; t=3D1795615615; h=3Dfrom:subject:message-id:to:mime-versi=
+on:content-type:
+         content-transfer-encoding; bh=3DO2lEbQBejFtG/XCNkCJsh723++/9rsv5Lb=
+/QOZpVfm8=3D;
+        b=3Doz/nzBV+wd4nT89cjGU3LXRWYJ9YhW3V6uLVfwuS7sANKmCSRJy10fK6QgxvvIw=
+bZvOnO5
+        /mIhGmyTA5uybNBom4tLSdhclaWniyvkS45C4ovlixBgILcR0FZ6HqEIjdruoe+fkJ1=
+uiz
+        fJb7usvq2KwXmCC5QOaT2n5tEH+pjgeJgVqu3I67Zq+IjFp6gTr09C76PSLdN6C755v=
+Vc0
+        YRtVIr22s/qWtqrXqnWkmTpTNdKIYT436EPGhvv1FSt+X7Glrm04aYQh/Nk27+fkELO=
+Ygk
+        h4I2wJekop7H0u3TV085HUDNL98ulGDZ2I0qpW34IoO9YlbJjvpwqJk86pp2gA=3D=
+=3D
+From: marywladkowski@underarmourco.online
+To: dmorse@aegisfirst.com
+Subject: [BOND-2026-0522] Inquiry - Continuous Customs Bond
+Message-ID: <010f01a21307ee07-7a41de4e-f845-422a-81ed-c75581fc9136-000000@u=
+s-east-2.amazonses.com>
+Content-Type: text/plain; charset=3D"utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
+Date: Wed, 25 Nov 2026 14:06:56 +0000
+Feedback-ID: ::1.us-east-2.dnBLFQvZ7DBnA5nHg3QcqhG4UiG8AnTuix0bXTff/SU=3D:A=
+mazonSES
+X-SES-Outgoing: 2026.11.25-23.251.226.6
+X-BESS-ID: 1795615616-112011-7750-3551-1
+X-BESS-VER: 2019.1_20261116.1548
+X-BESS-Apparent-Source-IP: 23.251.226.6
+X-BESS-Parts: H4sIAAAAAAACA4uuVkqtKFGyUioBkjpK+cVKVoaGxpZAVgZQ0MLcKNky2cLSK=
+N
+        XQ1Mzc0tDE0MDUxMzM1NzYwtw0xShRqTYWAL6keTNBAAAA
+X-BESS-Spam-Status: SCORE=3D0.00 using account:ESS61230 scores of QUARANTIN=
+E_LEVEL=3D6.0 KILL_LEVEL=3D9.0 tests=3DMIME_QP_LONG_LINE, NO_REAL_NAME
+Received-SPF: pass (mx-inbound46-235.us-east-2c.ess.aws.cudaops.com: domain=
+ of 010f01a21307ee07-7a41de4e-f845-422a-81ed-c75581fc9136-000000@ses.undera=
+rmourco.online designates 23.251.226.6 as permitted sender)
+X-BESS-Spam-Score: 0.00
+Authentication-Results-Original: mx-inbound46-235.us-east-2c.ess.aws.cudaop=
+s.com; spf=3Dpass (sender IP is
+ 23.251.226.6)
+ smtp.mailfrom=3D010f01a21307ee07-7a41de4e-f845-422a-81ed-c75581fc9136-0000=
+00@ses.underarmourco.online;
+ dkim=3Dnone header.d=3D; dmarc=3Dnone
+ header.from=3Dmarywladkowski@underarmourco.online
+X-BESS-Spam-Report: Code version 3.2, rules version 3.2.2.277837 [from clou=
+dscan16-
+        28.us-east-2b.ess.aws.cudaops.com]
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------
+        0.00 MIME_QP_LONG_LINE      RAWBODY: Quoted-printable line longer t=
+han 76 chars
+        0.00 NO_REAL_NAME           HEADER: From: does not include a real n=
+ame
+X-BESS-BRTS-Status: 1
+X-BESS-Info: H4sIAAAAAAACA6tWSslMUbIyMjQ0t7DQUUrJU7JSSkxNzyxOyywqLtFLzs9Vqg=
+U
+        AVfj5rCQAAAA=3D
+Return-Path:
+        010f01a21307ee07-7a41de4e-f845-422a-81ed-c75581fc9136-000000@ses.un=
+derarmourco.online
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: da3eb838-b263-4153-afc2-61dca27ab131:0
+X-MS-Exchange-SkipListedInternetSender: ip=3D[23.251.226.6];domain=3De226-6=
+.smtp-out.us-east-2.amazonses.com
+X-MS-Exchange-ExternalOriginalInternetSender: ip=3D[23.251.226.6];domain=3D=
+e226-6.smtp-out.us-east-2.amazonses.com
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN2PEPF0000A992:EE_|DS0PR04MB9439:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2a29ef81-6faa-4e2f-c168-08df4afd5e=
+74
+X-MS-Exchange-AtpMessageProperties: SA|SL
+X-Forefront-Antispam-Report:
+        CIP:209.222.82.239;CTRY:US;LANG:en;SCL:5;SRV:;IPV:NLI;SFV:SPM;H:e22=
+6-6.smtp-out.us-east-2.amazonses.com;PTR:e226-6.smtp-out.us-east-2.amazonse=
+s.com;CAT:SPM;SFS:(13230040)(704160611799003)(5009299003)(2069299003)(32142=
+699015)(260918224100599003)(260918215300599003)(82310400026)(3613699012)(10=
+067099003)(5063699009)(56012099006)(11063799006)(260925022911599003)(260925=
+021311599003)(260925021911599003)(261022075727099003)(261022105027099003)(2=
+61026121527099003)(261026140227099003)(261021121427099003)(2610281447270990=
+03)(261102123227099003)(16102099003)(55112099003)(18002099003)(4113699003)(=
+6133799003)(19002099009)(5042299003);DIR:INB;
+X-Microsoft-Antispam:
+        BCL:0;ARA:13230040|704160611799003|5009299003|2069299003|3214269901=
+5|260918224100599003|260918215300599003|82310400026|3613699012|10067099003|=
+5063699009|56012099006|11063799006|260925022911599003|260925021311599003|26=
+0925021911599003|261022075727099003|261022105027099003|261026121527099003|2=
+61026140227099003|261021121427099003|261028144727099003|261102123227099003|=
+16102099003|55112099003|18002099003|4113699003|6133799003|19002099009|50422=
+99003;
+X-Microsoft-Antispam-Message-Info:
+        =3D?us-ascii?Q?yq0ZxgISx0z+EhSkLV37fuqhtHD9Td6749FosFbGTxcCXHfjPko+=
+HOOicD+x?=3D
+ =3D?us-ascii?Q?qfuhk7W6jGqw6mBgs8vR0Cx3r1wCwTLP0yKOva40avqf8PG3heBRp89a6Dw=
+I?=3D
+ =3D?us-ascii?Q?wGz+TOC5edXz7SEDi1nslM1FoSo03IntRC0NqW2wxSaC8CwYkecbWpox8Mr=
+8?=3D
+ =3D?us-ascii?Q?fPnz3X9WRW7LHo+KI7ao+7VpVG7cueJIFCkVjZjmgbWzWTsuODC5qsfduFZ=
+Z?=3D
+ =3D?us-ascii?Q?TaPCKMURJd0SRsLe6PtEDRcbxwU/bkIDW9sLAzKw7N4ErTsHDkkRh7nsOiB=
+x?=3D
+ =3D?us-ascii?Q?8Ik3hFwIYwkLGKjQ801W4UyIr8FrUth06j4sj9Ko2txb/pk4qDBmXWPlH1x=
+3?=3D
+ =3D?us-ascii?Q?DwU5KwCm1HCVnhG09BgnJLlwzY9rfAVlH9KXOE9hsE/KclRNEBW2BU/FPdp=
+L?=3D
+ =3D?us-ascii?Q?iyXaJSd3edle3mrPFQwd5uJx4O9+Em+d/R/K6pudJ2dZMNf45hWnOREOTpy=
+o?=3D
+ =3D?us-ascii?Q?vEpxtC+H8pbN2a6HdPbG4NggUERrGC7/6yd7bWvLGEkb98L9Mm4VkTTszb0=
+Q?=3D
+ =3D?us-ascii?Q?oOMkaghEVtY9A4rjjkzBDHpxRUFDafFACNqHPSD1VIsmoDs0B6YKmpJGGpm=
+/?=3D
+ =3D?us-ascii?Q?PmHyapja4nQmXlmSaMXhYy9ceTvH6aS43e9buExRcP3UdnsCJJ0608HmrR7=
+X?=3D
+ =3D?us-ascii?Q?w5XB6pIysUrFEMn5/9tlzHKQLSltgQ9lFU+qq0zpyVwu9siJahDs+lUtWMB=
+z?=3D
+ =3D?us-ascii?Q?EVcrQrE5UZAOZZTCP/rSileavY6QlGujNg/AOrHmuaAPUce5uYb8t2ndBgZ=
+d?=3D
+ =3D?us-ascii?Q?b3XFUxH+FMRdu8JPuyh1uQ6ZijrypMn6QRNft9lFULCfXiFRHDqvbe0IXOn=
+n?=3D
+ =3D?us-ascii?Q?1Pe1nqLt+ukx16Zo0ZL10Nw8CaTU0JFyMg09+iAlzfFTNXA46ZXGmefxVjU=
+n?=3D
+ =3D?us-ascii?Q?JKf/8PKts83iT9YA4pgD1RCKwWPdbEam0jIcEdo/o4vSVsWNpkExfoUnmsR=
+c?=3D
+ =3D?us-ascii?Q?mDFNAkoVlqkSCKlPkP14mXeSXs40pIuPt2gIsP2OeSJvok4PH+RpSs3Cix1=
+T?=3D
+ =3D?us-ascii?Q?am3u8j8lDcyDD79n9hxY9J71KZWHKjIqAUMVa7ShD5+xDN5ERkcswhd3bMR=
+d?=3D
+ =3D?us-ascii?Q?iAMMQdAV8hccV4KRbscmewtS2PRsVJwxSDr3gU+2soGsqneAUmIKhMMl4qx=
+L?=3D
+ =3D?us-ascii?Q?IUwcpqOT0lt7f/Jk2X8XZIuBHJCwkWSh4QU5EyZ6DNBJtuv/xWgiSCaRQhG=
+1?=3D
+ =3D?us-ascii?Q?SKQcGDcOJ3DhlhmNafsIwjgSHMRW/6xAGo4ngZQpc57+K6E3Hocaq3i2Aik=
+2?=3D
+ =3D?us-ascii?Q?jjYieveJ/xRllATrlzcpeEsmS6cYclCQ5368uCMNx0m7jg9MFouAWtSqchl=
+v?=3D
+ =3D?us-ascii?Q?HyllSGojAKyzG2kzQ/0AN0dJbq8S+prPnJYUmwwnb5Mp5P7SoB67vrJ9PgP=
+/?=3D
+ =3D?us-ascii?Q?dmmero5oGi+PzZh2eaWppLEcC2/0MAhIIgZplCt/DM5+k1D+u6f13UPTUxM=
+7?=3D
+ =3D?us-ascii?Q?gnPaiQOam6vMGgeAwHjTyK8Q/e/G34ndov65GA+MKpGGYF2lOi1e6ym2yqR=
+R?=3D
+ =3D?us-ascii?Q?Wu+YQ5ZwnnDDYf6/59Z50l8GUDKGmqSTcfu4Bi1edktaG46/YWwdVO/vyux=
+g?=3D
+ =3D?us-ascii?Q?owy4g+nD9htwjmPXGZIsO9LPaV57p/l7ltLB2uISEWKUGeho220VYj0ABR6=
+Z?=3D
+ =3D?us-ascii?Q?+VD+mLn4HIuN6Tg2tIcLjbQidygF3vAyICiPP2ww7tqZxzCuVziccP4++43=
+H?=3D
+ =3D?us-ascii?Q?tpD3eMcKSpC1UK2uaUEuVzBaGbxPR5QO5fNFgHMa9QUJM1+toZlqNckyz7i=
+S?=3D
+ =3D?us-ascii?Q?encp3Tqsv759yAGeBa4vB6SM2kwj7VmvGyWXk5aIcMEXZ6Wsg/bv6ZGspU8=
+R?=3D
+ =3D?us-ascii?Q?alLxX2wVRjmY2RJB7hSiRQOBWycIcvZOOK0TO1/7mMg9syNYuSm8zJIOAJS=
+S?=3D
+ =3D?us-ascii?Q?EgKJ+n7RwdVBBN+Z7MlN/TT8zJCO2IeV2LzPCG3y4/wqUrVhGLADnYiOZsD=
+m?=3D
+ =3D?us-ascii?Q?ggD7PaXd4v1oWXIcxQY5y1qtHdKkrJWtLJHeEyJRgE3vVFllhspSXIuJjZM=
+F?=3D
+ =3D?us-ascii?Q?0hud3GlqSDZ/umB9c70Fv7x25+QLlGstUqTUsBcLjM+bBiwStnRfKusZpi3=
+J?=3D
+ =3D?us-ascii?Q?CTAkmqA0yYlrpTI9qbirtTs+wPf9uknOLGf4BFuw4rKsE0hJbr3lwJYqdxQ=
+s?=3D
+ =3D?us-ascii?Q?MGNmUw7Ay8wwujxRc/aw04GTqzUXu7w9gQIEtK38yzYI7gPfWIZxa+pKNFx=
+4?=3D
+ =3D?us-ascii?Q?szIlpWHQ3GlTrfKXkY9SGmjRHGTm4wd5qavA1c3GTeY3cCFDI/pmh+VN0Pi=
+m?=3D
+ =3D?us-ascii?Q?aDrRYciV73mijMA5GCrrp5nXgaYZc6xaePlz6VvaMsq8at8HCstsx8eqe8x=
+g?=3D
+ =3D?us-ascii?Q?i3e99UOgG13S94r5qPTDxw7A/RwbPOjT+yrGWR8gNn2vpFM127UC+bBYmsl=
+c?=3D
+ =3D?us-ascii?Q?4UYGG/MtY18sf9IgOjglz4Fjz/FA4NWpMxYgoQkD6wqlh4+Yk+BeSlo7BZB=
+p?=3D
+ =3D?us-ascii?Q?i9biq1IWboeOWqg7mZKWt5GLp8UFezj+9+YMBd7aTigKKE+oj4qvAZuzncJ=
+5?=3D
+ =3D?us-ascii?Q?r62oM2pa9/J1yu+GFK6dGdAzfic/Y4ExDThHc8DOOrakampyVmwe2JCoSOM=
+j?=3D
+ =3D?us-ascii?Q?jBhKIE4LnQti2Q7Qw9HQAnpgRve8vTmi2He9Mg+IGjG6a/JrSCuMPxeU5vq=
+t?=3D
+ =3D?us-ascii?Q?TL1Lc8VwCTTnBIiIs6gl8Zesktn51uQSvHkAqikojYJ2gzJlDOH6BQBnHs0=
+H?=3D
+ =3D?us-ascii?Q?8n0n4qs62ByO926y9OyN4+9UzOE6GT1iBZ+m/m/EPC6ncNillCO6LZlploQ=
+5?=3D
+ =3D?us-ascii?Q?ESwnJuOJfmdJMsWHuWRzDBVJ9am6fbgdbsvymRlxN2Rh0Y5bbC2jaDwHbGy=
+o?=3D
+ =3D?us-ascii?Q?D1W9QQu2vkZWK/Md2+x8aUolcReWfjk9OhKBpCsDq8P1jqior/NZXSCIJfe=
+m?=3D
+ =3D?us-ascii?Q?6yE0ScaMBfVm/Ikjkj7YbnEiOn4fGCIOssuc4QTi6QDycn+rlH0nU1EXdKQ=
+n?=3D
+ =3D?us-ascii?Q?CvhmpFOzmqQaKvchZW8fX1ijFa1XTAn0dInSE1/QxhD5Rq9plrPFyslManZ=
+q?=3D
+ =3D?us-ascii?Q?eDw43gul1AUBI2AvLlbhmsmZ2Fnr3PQQ0Guaiog6fioZW8B9tbliCOxRTFU=
+F?=3D
+ =3D?us-ascii?Q?72wbx648nxmxwVAMrKEWT5PtnYIaPRm2m2MQKhA9jKomW7cYG/Zr2F3R0aK=
+5?=3D
+ =3D?us-ascii?Q?t7JwsejtkB0g1iZcZZ3hrtSQ7XNxYjEMmkWkHxkgq+1x7PRyjWVo8f3+Vep=
+Q?=3D
+ =3D?us-ascii?Q?c0nqpSFpZvZ7Ke0/bk0XXffu8C1wPjkINE7XB8ZpSJ48J0vrMUxFATbiAbb=
+N?=3D
+ =3D?us-ascii?Q?i7f5rMHgM4rdwZ+nqZAYCUL2ts/Gvzr3SSxma8JxcM8rM0U/vTi7a0Z7rnX=
+k?=3D
+ =3D?us-ascii?Q?UoxX02n67XCzFsSX3ZbbP81DCMWf1Uud0C3tPWFVpPDVYMJ5ljAQcRlZ+wf=
+S?=3D
+ =3D?us-ascii?Q?TSuskYoL/h1SoDTGc4GFuwmjl27s1wzbdi0PgvFgmTU8sg7MG/BvaTwEX80=
+f?=3D
+ =3D?us-ascii?Q?BjKIUBMLUEsF9rEYaci4t5Ko2h3c8SPGE+iKliHPkbgwYuUcX72C/C+uQF+=
+7?=3D
+ =3D?us-ascii?Q?tUs3CL0p4Vgdly/rp1ww9JXGad5DQ8SdPnSU?=3D
+
+
+--7d1cca41-d951-4304-a651-e60544ec2fdd
+Content-Type: text/html; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+<html>
+  <meta name=3D"viewport" content=3D"width=3Ddevice-width, initial-scale=3D=
+1" />
+  <head>
+    <title>
+          DSN
+        </title>
+  </head>
+  <body style=3D"        background-color: white;      ">
+    <table style=3D"        background-color: white;         max-width: 548=
+px;         color: black;         border-spacing: 0px 0px;         padding-=
+top: 0px;         padding-bottom: 0px;        border-collapse: collapse;   =
+   " width=3D"548" cellspacing=3D"0" cellpadding=3D"0">
+      <tbody>
+        <tr>
+          <td style=3D"        text-align: left;        padding-bottom: 20p=
+x;      ">
+            <img height=3D"28" width=3D"126" style=3D"        max-width: 10=
+0%;      " src=3D"https://products.office.com/en-us/CMSImages/Office365Logo=
+_Orange.png?version=3Db8d100a9-0a8b-8e6a-88e1-ef488fee0470" />
+          </td>
+        </tr>
+        <tr>
+          <td style=3D"        font-family: 'Segoe UI', Frutiger, Arial, sa=
+ns-serif;        font-size: 16px;         padding-bottom: 10px;         -ms=
+-text-size-adjust: 100%;        text-align: left;      ">Your message to <s=
+pan style=3D"        color: #0072c6;      ">dmorse@aegisfirst.com</span> co=
+uldn't be delivered.<br /></td>
+        </tr>
+        <tr>
+          <td style=3D"        font-family: 'Segoe UI', Frutiger, Arial, sa=
+ns-serif;         font-size: 24px;         padding-top: 0px;         paddin=
+g-bottom: 20px;         text-align: center;         -ms-text-size-adjust: 1=
+00%;      ">The group <span style=3D"        color: #0072c6;      ">dmorse<=
+/span> only accepts messages from people in its organization or on its allo=
+wed senders list, and your email address isn't on the list.<br /></td>
+        </tr>
+        <tr>
+          <td style=3D"        padding-bottom: 15px;         padding-left: =
+0px;         padding-right: 0px;         border-spacing: 0px 0px;      ">
+            <table style=3D"        max-width: 548px;         font-weight: =
+600;        border-spacing: 0px 0px;         padding-top: 0px;         padd=
+ing-bottom: 0px;        border-collapse: collapse;      ">
+              <tbody>
+                <tr>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        font-size: 15px;        font-weight: 600;        t=
+ext-align: left;        width: 181px;        -ms-text-size-adjust: 100%;   =
+     vertical-align: bottom;      ">
+                    <font color=3D"#ffffff">
+                      <span style=3D"color:#000000">010f01a21307ee07-7a4. .=
+ .</span>
+                    </font>
+                  </td>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        font-size: 15px;        font-weight: 600;        t=
+ext-align: center;        width: 186px;        -ms-text-size-adjust: 100%; =
+       vertical-align: bottom;      ">
+                    <font color=3D"#ffffff">
+                      <span style=3D"color:#000000">Office 365</span>
+                    </font>
+                  </td>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;         -ms-text-size-adjust: 100%;         font-size: 15=
+px;         font-weight: 600;        text-align: right;         width: 181p=
+x;         vertical-align: bottom;      ">
+                    <font color=3D"#ffffff">
+                      <span style=3D"color:#000000">dmorse</span>
+                    </font>
+                  </td>
+                </tr>
+                <tr>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 14px=
+;        font-weight: 400;        text-align: left;        padding-top: 0px=
+;        padding-bottom: 0px;        vertical-align: middle;        width: =
+181px;      ">
+                    <font color=3D"#ffffff">
+                      <span style=3D"color:#000000">Sender</span>
+                    </font>
+                  </td>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 14px=
+;        font-weight: 400;        text-align: center;        padding-top: 0=
+px;        padding-bottom: 0px;        vertical-align: middle;        width=
+: 186px;      " />
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 14px=
+;        font-weight: 400;        text-align: right;        padding-top: 0p=
+x;        padding-bottom: 0px;        vertical-align: middle;        width:=
+ 181px;      ">
+                    <font color=3D"#ffffff">
+                      <span style=3D"        color: #c00000;      ">
+                        <b>Action Required</b>
+                      </span>
+                    </font>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan=3D"3" style=3D"        padding-top:0;        =
+padding-bottom:0;        padding-left:0;        padding-right:0      ">
+                    <table cellspacing=3D"0" cellpadding=3D"0" style=3D"   =
+     border-spacing: 0px 0px;        padding-top: 0px;        padding-botto=
+m: 0px;        padding-left: 0px;        padding-right: 0px;        border-=
+collapse: collapse;      ">
+                      <tbody>
+                        <tr height=3D"10">
+                          <td width=3D"180" height=3D"10" bgcolor=3D"#ccccc=
+c" style=3D"        width: 180px;        line-height: 10px;        height: =
+10px;        font-size: 6px;        padding-top: 0;        padding-bottom: =
+0;        padding-left: 0;        padding-right: 0;      "><!--[if gte mso =
+15]>&nbsp;<![endif]--></td>
+                          <td width=3D"4" height=3D"10" bgcolor=3D"#ffffff"=
+ style=3D"        width: 4px;        line-height: 10px;        height: 10px=
+;        font-size: 6px;        padding-top: 0;        padding-bottom: 0;  =
+      padding-left: 0;        padding-right: 0;      "><!--[if gte mso 15]>=
+&nbsp;<![endif]--></td>
+                          <td width=3D"180" height=3D"10" bgcolor=3D"#ccccc=
+c" style=3D"        width: 180px;        line-height: 10px;        height: =
+10px;        font-size: 6px;        padding-top: 0;        padding-bottom: =
+0;        padding-left: 0;        padding-right: 0;      "><!--[if gte mso =
+15]>&nbsp;<![endif]--></td>
+                          <td width=3D"4" height=3D"10" bgcolor=3D"#ffffff"=
+ style=3D"        width: 4px;        line-height: 10px;        height: 10px=
+;        font-size: 6px;        padding-top: 0;        padding-bottom: 0;  =
+      padding-left: 0;        padding-right: 0;      "><!--[if gte mso 15]>=
+&nbsp;<![endif]--></td>
+                          <td width=3D"180" height=3D"10" bgcolor=3D"#c0000=
+0" style=3D"        width: 180px;        line-height: 10px;        height: =
+10px;        font-size: 6px;        padding-top: 0;        padding-bottom: =
+0;        padding-left: 0;        padding-right: 0;      "><!--[if gte mso =
+15]>&nbsp;<![endif]--></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 14px=
+;        text-align: left;        width: 181px;        line-height: 20px;  =
+      font-weight: 400;        padding-top: 0px;        padding-left: 0px; =
+       padding-right: 0px;        padding-bottom: 0px;      " />
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 14px=
+;        text-align: center;        width: 186px;        line-height: 20px;=
+        font-weight: 400;        padding-top: 0px;        padding-left: 0px=
+;        padding-right: 0px;        padding-bottom: 0px;      " />
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 14px=
+;        text-align: right;        width: 181px;        line-height: 20px; =
+       font-weight: 400;        padding-top: 0px;        padding-left: 0px;=
+        padding-right: 0px;        padding-bottom: 0px;      ">
+                    <font color=3D"#ffffff">
+                      <span style=3D"        color: #c00000;      ">Sender =
+not allowed</span>
+                    </font>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style=3D"        width: 100%;        padding-top: 0px;       =
+ padding-right: 10px;        padding-left: 10px;      ">
+            <br />
+            <table style=3D"        width: 100%;        padding-right: 0px;=
+        padding-left: 0px;        padding-top: 0px;        padding-bottom: =
+0px;        background-color: #f2f5fa;        margin-left: 0px;      ">
+              <tbody>
+                <tr>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 21px=
+;        font-weight: 500;        background-color: #f2f5fa;        padding=
+-top: 0px;        padding-bottom: 0px;        padding-left: 10px;        pa=
+dding-right: 10px;      ">How to Fix It</td>
+                </tr>
+                <tr>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 16px=
+;        font-weight: 400;        padding-top: 0px;        padding-bottom: =
+6px;        padding-left: 10px;        padding-right: 10px;        backgrou=
+nd-color: #f2f5fa;      ">It appears you aren't in the same organization as=
+ the group (or a sub-group) you're sending to or your email address isn't o=
+n the group's allowed senders list. Ask the owner of the group to grant you=
+ permission to send to it, and then try again. If the group belongs to a di=
+fferent organization than yours, contact the organization's customer servic=
+e department for assistance. If the group is in your organization and you d=
+on't know who the group owner is, you can find it by doing the following in=
+ either Outlook on the web or Outlook:</td>
+                </tr>
+                <tr>
+                  <td style=3D"         padding-top: 0px;         padding-b=
+ottom: 0px;         padding-left: 0px;         padding-right: 0px;        b=
+order-spacing: 0px 0px;      ">
+                    <ul style=3D"        font-family: 'Segoe UI', Frutiger,=
+ Arial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 16=
+px;        font-weight: 400;        margin-left: 40px;        margin-bottom=
+: 5px;        background-color: #f2f5fa;        padding-top: 0px;        pa=
+dding-bottom: 0px;        padding-left: 6px;        padding-right: 6px;    =
+  ">
+                      <li>Open your Sent folder and select the original mes=
+sage.</li>
+                      <li>If you're using Outlook on the web, select the gr=
+oup name located on the To or CC line. If you're using Outlook, double-clic=
+k the group name located on the To or CC line.</li>
+                      <li>In Outlook on the web, from the pop-up dialog box=
+, choose Owner. In Outlook, choose Contact. The owner's name is listed unde=
+r Owner.</li>
+                    </ul>
+                  </td>
+                </tr>
+                <tr>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 16px=
+;        font-weight: 400;        padding-top: 0px;        padding-bottom: =
+6px;        padding-left: 10px;        padding-right: 10px;        backgrou=
+nd-color: #f2f5fa;      ">The owner of the group may have intentionally cho=
+sen to restrict who can send messages to it, and they may not want to adjus=
+t the existing restriction. In this case, you'll have to contact the group =
+members by some other means, such as sending an email message to their indi=
+vidual email addresses or contacting them by phone.</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style=3D"        font-family: 'Segoe UI', Frutiger, Arial, sa=
+ns-serif;        -ms-text-size-adjust: 100%;        font-size: 14px;       =
+ font-weight: 400;        padding-top: 10px;        padding-bottom: 0px;   =
+     padding-bottom: 4px;      ">
+            <br />
+            <em>Was this helpful? <a href=3D"https://go.microsoft.com/fwlin=
+k/?LinkId=3D615007">Send feedback to Microsoft</a>.</em>
+          </td>
+        </tr>
+        <tr>
+          <td style=3D"        -ms-text-size-adjust: 100%;        font-size=
+: 0px;        line-height: 0px;        padding-top: 0px;        padding-bot=
+tom: 0px;      ">
+            <hr />
+          </td>
+        </tr>
+        <tr>
+          <td style=3D"        font-family: 'Segoe UI', Frutiger, Arial, sa=
+ns-serif;        -ms-text-size-adjust: 100%;        font-size: 21px;       =
+ font-weight: 500;      ">
+            <br />More Info for Email Admins</td>
+        </tr>
+        <tr>
+          <td style=3D"        font-family: 'Segoe UI', Frutiger, Arial, sa=
+ns-serif;        -ms-text-size-adjust: 100%;        font-size: 14px;      "=
+>
+            <em>Status code: 550 5.7.133</em>
+            <br />
+            <br />This error occurs when the distribution group, security g=
+roup, or Microsoft 365 group is configured to accept messages only from aut=
+henticated senders (senders in the same organization or those added to the =
+group's allowed senders list).<br /><br />To fix the issue, the recipient's=
+ email admin or the group owner must add the sender's email address to the =
+group's allowed senders list or change the group's delivery management sett=
+ing to accept messages from senders inside and outside of the organization.=
+<br /><br />Usually this issue can only be fixed by the recipient's email a=
+dmin or the group owner.<br /><br />For more information and steps to fix t=
+his error, see <a href=3D"https://go.microsoft.com/fwlink/p/?LinkId=3D61512=
+7">Fix email delivery issues for error code 5.7.133 in Office 365</a>.<br /=
+><br /></td>
+        </tr>
+        <tr>
+          <td style=3D"        font-family: 'Segoe UI', Frutiger, Arial, sa=
+ns-serif;        -ms-text-size-adjust: 100%;        font-size: 17px;       =
+ font-weight: 500;      ">Original Message Details</td>
+        </tr>
+        <tr>
+          <td style=3D"        font-size: 14px;        line-height: 20px;  =
+      font-family: 'Segoe UI', Frutiger, Arial, sans-serif;        -ms-text=
+-size-adjust: 100%;        font-weight: 500;      ">
+            <table style=3D"        width: 100%;        border-collapse: co=
+llapse;        margin-left: 10px;      ">
+              <tbody>
+                <tr>
+                  <td valign=3D"top" style=3D"        font-family: 'Segoe U=
+I', Frutiger, Arial, sans-serif;        font-size: 14px;        -ms-text-si=
+ze-adjust: 100%;        white-space: nowrap;        font-weight: 500;      =
+  width: 140px;      ">Created Date:</td>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 14px=
+;        font-weight: 400;      ">11/25/2026 2:06:56 PM</td>
+                </tr>
+                <tr>
+                  <td valign=3D"top" style=3D"        font-family: 'Segoe U=
+I', Frutiger, Arial, sans-serif;        font-size: 14px;        -ms-text-si=
+ze-adjust: 100%;        white-space: nowrap;        font-weight: 500;      =
+  width: 140px;      ">Sender Address:</td>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 14px=
+;        font-weight: 400;      ">010f01a21307ee07-7a41de4e-f845-422a-81ed-=
+c75581fc9136-000000@ses.underarmourco.online</td>
+                </tr>
+                <tr>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        font-size: 14px;        -ms-text-size-adjust: 100%=
+;        white-space: nowrap;        font-weight: 500;        width: 140px;=
+      ">Recipient Address:</td>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 14px=
+;        font-weight: 400;      ">dmorse@aegisfirst.com</td>
+                </tr>
+                <tr>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        font-size: 14px;        -ms-text-size-adjust: 100%=
+;        white-space: nowrap;        font-weight: 500;        width: 140px;=
+      ">Subject:</td>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 14px=
+;        font-weight: 400;      ">[BOND-2026-0522] Inquiry - Continuous Cus=
+toms Bond</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style=3D"        font-family: 'Segoe UI', Frutiger, Arial, sa=
+ns-serif;        -ms-text-size-adjust: 100%;        font-size: 17px;       =
+ font-weight: 500;      ">
+            <br />Error Details</td>
+        </tr>
+        <tr>
+          <td style=3D"        font-size: 14px;        line-height: 20px;  =
+      font-family: 'Segoe UI', Frutiger, Arial, sans-serif;        -ms-text=
+-size-adjust: 100%;        font-weight: 500;      ">
+            <table style=3D"        width: 100%;        border-collapse: co=
+llapse;        margin-left: 10px;      ">
+              <tbody>
+                <tr>
+                  <td valign=3D"top" style=3D"        font-family: 'Segoe U=
+I', Frutiger, Arial, sans-serif;        font-size: 14px;        -ms-text-si=
+ze-adjust: 100%;        white-space: nowrap;        font-weight: 500;      =
+  width: 140px;      ">Error:</td>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 14px=
+;        font-weight: 400;      ">
+                    <em>550 5.7.133 RESOLVER.RST.SenderNotAuthenticatedForG=
+roup; authentication required; Delivery restriction check failed because th=
+e sender was not authenticated when sending to this group</em>
+                  </td>
+                </tr>
+                <tr>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        font-size: 14px;        -ms-text-size-adjust: 100%=
+;        white-space: nowrap;        font-weight: 500;        width: 140px;=
+      ">Message rejected by:</td>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 14px=
+;        font-weight: 400;      ">DS0PR04MB9439.namprd04.prod.outlook.com</=
+td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style=3D"        font-family: 'Segoe UI', Frutiger, Arial, sa=
+ns-serif;        -ms-text-size-adjust: 100%;        font-size: 17px;       =
+ font-weight: 500;      ">
+            <br />Notification Details</td>
+        </tr>
+        <tr>
+          <td style=3D"        font-size: 14px;        line-height: 20px;  =
+      font-family: 'Segoe UI', Frutiger, Arial, sans-serif;        -ms-text=
+-size-adjust: 100%;        font-weight: 500;      ">
+            <table style=3D"        width: 100%;        border-collapse: co=
+llapse;        margin-left: 10px;      ">
+              <tbody>
+                <tr>
+                  <td valign=3D"top" style=3D"        font-family: 'Segoe U=
+I', Frutiger, Arial, sans-serif;        font-size: 14px;        -ms-text-si=
+ze-adjust: 100%;        white-space: nowrap;        font-weight: 500;      =
+  width: 140px;      ">Sent by:</td>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 14px=
+;        font-weight: 400;      ">
+                    <em>DS0PR04MB9439.namprd04.prod.outlook.com</em>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <br />
+    <table style=3D"width: 880px;" cellspacing=3D"0">
+      <tr>
+        <td colspan=3D"6" style=3D"        padding-top: 4px;        border-=
+bottom: 1px solid #999999;        padding-bottom: 4px;        line-height: =
+120%;        font-size: 17px;        font-family: 'Segoe UI', Frutiger, Ari=
+al, sans-serif;        -ms-text-size-adjust: 100%;        font-weight: 500;=
+      ">Message Hops</td>
+      </tr>
+      <tr>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        background-color: #f2f5fa;        border-bottom: 1p=
+x solid #999999;        white-space: nowrap;        padding: 8px;      ">HO=
+P</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        background-color: #f2f5fa;        border-bottom: 1p=
+x solid #999999;        white-space: nowrap;        padding: 8px;        wi=
+dth: 80px;      ">TIME (UTC)</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        background-color: #f2f5fa;        border-bottom: 1p=
+x solid #999999;        white-space: nowrap;        padding: 8px;      ">FR=
+OM</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        background-color: #f2f5fa;        border-bottom: 1p=
+x solid #999999;        white-space: nowrap;        padding: 8px;      ">TO=
+</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        background-color: #f2f5fa;        border-bottom: 1p=
+x solid #999999;        white-space: nowrap;        padding: 8px;      ">WI=
+TH</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        background-color: #f2f5fa;        border-bottom: 1p=
+x solid #999999;        white-space: nowrap;        padding: 8px;      ">RE=
+LAY TIME</td>
+      </tr>
+      <tr>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: center;      ">1</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;        width: 80px;      ">11/25/2026<br />2:0=
+6:56 PM</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">e226-6.smtp-out.us-east-2.amazonses.com=
+</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">mx-inbound46-235.us-east-2c.ess.aws.cud=
+aops.com</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      "></td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">*</td>
+      </tr>
+      <tr>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: center;      ">2</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;        width: 80px;      ">11/25/2026<br />2:0=
+6:58 PM</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">outbound-ip62b.ess.barracuda.com</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">BN2PEPF0000A992.mail.protection.outlook=
+.com</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">Microsoft SMTP Server (version=3DTLS1_2=
+, cipher=3DTLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384)</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">2&nbsp;sec</td>
+      </tr>
+      <tr>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: center;      ">3</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;        width: 80px;      ">11/25/2026<br />2:0=
+6:58 PM</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">BN2PEPF0000A992.namprd04.prod.outlook.c=
+om</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">BN9PR03CA0098.outlook.office365.com</td=
+>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">Microsoft SMTP Server (version=3DTLS1_3=
+, cipher=3DTLS_AES_256_GCM_SHA384)</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">*</td>
+      </tr>
+      <tr>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: center;      ">4</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;        width: 80px;      ">11/25/2026<br />2:0=
+6:58 PM</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">BN9PR03CA0098.namprd03.prod.outlook.com=
+</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">DS0PR04MB9439.namprd04.prod.outlook.com=
+</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">Microsoft SMTP Server (version=3DTLS1_2=
+, cipher=3DTLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384)</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">*</td>
+      </tr>
+    </table>
+    <p style=3D"        font-family: 'Segoe UI', Frutiger, Arial, sans-seri=
+f;        -ms-text-size-adjust: 100%;        font-size: 17px;        font-w=
+eight: 500;        padding-top: 4px;        padding-bottom: 0;        margi=
+n-top: 19px;        margin-bottom: 5px;      ">Original Message Headers</p>
+    <pre style=3D"        color: gray;        white-space: pre;        padd=
+ing-top: 0;        margin-top: 5px;      ">Received: from BN9PR03CA0098.nam=
+prd03.prod.outlook.com (2603:10b6:408:fd::13)
+ by DS0PR04MB9439.namprd04.prod.outlook.com (2603:10b6:8:1fd::6) with
+ Microsoft SMTP Server (version=3DTLS1_2,
+ cipher=3DTLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.662.6; Wed, 25 No=
+v
+ 2026 14:06:58 +0000
+Received: from BN2PEPF0000A992.namprd04.prod.outlook.com
+ (2603:10b6:408:fd:cafe::3) by BN9PR03CA0098.outlook.office365.com
+ (2603:10b6:408:fd::13) with Microsoft SMTP Server (version=3DTLS1_3,
+ cipher=3DTLS_AES_256_GCM_SHA384) id 15.21.662.6 via Frontend Transport; We=
+d, 25
+ Nov 2026 14:06:58 +0000
+Authentication-Results: mx.microsoft.com 1; spf=3Dpass (sender IP is
+ 23.251.226.6) smtp.mailfrom=3Dses.underarmourco.online; dkim=3Dfail (body =
+hash
+ did not verify) header.d=3Dunderarmourco.online;dkim=3Dfail (body hash did=
+ not
+ verify) header.d=3Damazonses.com;dkim=3Dfail (signature did not verify)
+ header.d=3Dunderarmourco.online;dmarc=3Dpass action=3Dnone
+ header.from=3Dunderarmourco.online;compauth=3Dpass reason=3D100
+Received-SPF: Pass (protection.outlook.com: domain of ses.underarmourco.onl=
+ine
+ designates 23.251.226.6 as permitted sender) receiver=3Dprotection.outlook=
+.com;
+ client-ip=3D23.251.226.6; helo=3De226-6.smtp-out.us-east-2.amazonses.com; =
+pr=3DC
+Received: from outbound-ip62b.ess.barracuda.com (209.222.82.239) by
+ BN2PEPF0000A992.mail.protection.outlook.com (10.167.248.134) with Microsof=
+t
+ SMTP Server (version=3DTLS1_2, cipher=3DTLS_ECDHE_RSA_WITH_AES_256_GCM_SHA=
+384) id
+ 15.21.662.3 via Frontend Transport; Wed, 25 Nov 2026 14:06:58 +0000
+Received: from e226-6.smtp-out.us-east-2.amazonses.com (e226-6.smtp-out.us-=
+east-2.amazonses.com [23.251.226.6]) by mx-inbound46-235.us-east-2c.ess.aws=
+.cudaops.com (version=3DTLSv1.2 cipher=3DECDHE-RSA-AES256-GCM-SHA384 bits=
+=3D256 verify=3DNO); Wed, 25 Nov 2026 14:06:56 +0000
+DKIM-Signature: v=3D1; a=3Drsa-sha256; q=3Ddns/txt; c=3Drelaxed/simple;
+	s=3D7snkno5idcr4dyz77r3ckp245kr6fxqd; d=3Dunderarmourco.online;
+	t=3D1795615616;
+	h=3DFrom:To:Subject:Message-ID:Content-Type:Content-Transfer-Encoding:MIME=
+-Version:Date;
+	bh=3DO2lEbQBejFtG/XCNkCJsh723++/9rsv5Lb/QOZpVfm8=3D;
+	b=3DHII6rcEBaBQuaBVSIoTrw7YLsyIEmHwYMc39YIsbN0NlZiLP0X5hIod/1X9DH9IU
+	g38trfA3KUtp5G9+M6i1Cf4ERg6G+1/llYdQX7Y2qF/M40Z4w3jJ1JnDdNp7+PY3gLa
+	9LUjWzwPntUxOztFgm2YOBXhG4QMsVucZFFFXhBL9DJ2VSnW6a+t486z54SQVb3pQZt
+	LMilgeK2PoEYCEg9kF+NTSuSB37l9cSWHZHDqygtos9EMQwQzBc91eMszGTnEmDGSOx
+	DNlqeh8nY33CW0izr0M33gfb0IZ5i8EvgH3ua5uGQeeJ+ozc4VbLvM0FX9f5ijhLw75
+	zD8gGw2d2w=3D=3D
+DKIM-Signature: v=3D1; a=3Drsa-sha256; q=3Ddns/txt; c=3Drelaxed/simple;
+	s=3Dkra23psoka5qyyh6gdejiiuof3nluwuz; d=3Damazonses.com; t=3D1795615616;
+	h=3DFrom:To:Subject:Message-ID:Content-Type:Content-Transfer-Encoding:MIME=
+-Version:Date:Feedback-ID;
+	bh=3DO2lEbQBejFtG/XCNkCJsh723++/9rsv5Lb/QOZpVfm8=3D;
+	b=3DU80eZg6ertokejcm6eVam+gwU7fASk53WCslKFgtBpOcwwqF3INJQFyrS8WTBl6Z
+	xLlw+2Hbh+9NCLnoKwZ+xc5Rp9eOGubDUekRLETP94cOVuODxUF67TIeU6nBIJdJ34y
+	8pSPiMXWSWcet+FekNTfGn6yA9VCzBdrm3w1Lefg=3D
+DKIM-Signature: v=3D1; a=3Drsa-sha256; c=3Drelaxed/relaxed; d=3Dunderarmour=
+co.online;
+	s=3Ddkim; t=3D1795615615; h=3Dfrom:subject:message-id:to:mime-version:cont=
+ent-type:
+	 content-transfer-encoding; bh=3DO2lEbQBejFtG/XCNkCJsh723++/9rsv5Lb/QOZpVf=
+m8=3D;
+	b=3Doz/nzBV+wd4nT89cjGU3LXRWYJ9YhW3V6uLVfwuS7sANKmCSRJy10fK6QgxvvIwbZvOnO5
+	/mIhGmyTA5uybNBom4tLSdhclaWniyvkS45C4ovlixBgILcR0FZ6HqEIjdruoe+fkJ1uiz
+	fJb7usvq2KwXmCC5QOaT2n5tEH+pjgeJgVqu3I67Zq+IjFp6gTr09C76PSLdN6C755vVc0
+	YRtVIr22s/qWtqrXqnWkmTpTNdKIYT436EPGhvv1FSt+X7Glrm04aYQh/Nk27+fkELOYgk
+	h4I2wJekop7H0u3TV085HUDNL98ulGDZ2I0qpW34IoO9YlbJjvpwqJk86pp2gA=3D=3D
+From: marywladkowski@underarmourco.online
+To: dmorse@aegisfirst.com
+Subject: [BOND-2026-0522] Inquiry - Continuous Customs Bond
+Message-ID: &lt;010f01a21307ee07-7a41de4e-f845-422a-81ed-c75581fc9136-00000=
+0@us-east-2.amazonses.com&gt;
+Content-Type: text/plain; charset=3D"utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
+Date: Wed, 25 Nov 2026 14:06:56 +0000
+Feedback-ID: ::1.us-east-2.dnBLFQvZ7DBnA5nHg3QcqhG4UiG8AnTuix0bXTff/SU=3D:A=
+mazonSES
+X-SES-Outgoing: 2026.11.25-23.251.226.6
+X-BESS-ID: 1795615616-112011-7750-3551-1
+X-BESS-VER: 2019.1_20261116.1548
+X-BESS-Apparent-Source-IP: 23.251.226.6
+X-BESS-Parts: H4sIAAAAAAACA4uuVkqtKFGyUioBkjpK+cVKVoaGxpZAVgZQ0MLcKNky2cLSK=
+N
+	XQ1Mzc0tDE0MDUxMzM1NzYwtw0xShRqTYWAL6keTNBAAAA
+X-BESS-Spam-Status: SCORE=3D0.00 using account:ESS61230 scores of QUARANTIN=
+E_LEVEL=3D6.0 KILL_LEVEL=3D9.0 tests=3DMIME_QP_LONG_LINE, NO_REAL_NAME
+Received-SPF: pass (mx-inbound46-235.us-east-2c.ess.aws.cudaops.com: domain=
+ of 010f01a21307ee07-7a41de4e-f845-422a-81ed-c75581fc9136-000000@ses.undera=
+rmourco.online designates 23.251.226.6 as permitted sender)
+X-BESS-Spam-Score: 0.00
+Authentication-Results-Original: mx-inbound46-235.us-east-2c.ess.aws.cudaop=
+s.com; spf=3Dpass (sender IP is
+ 23.251.226.6)
+ smtp.mailfrom=3D010f01a21307ee07-7a41de4e-f845-422a-81ed-c75581fc9136-0000=
+00@ses.underarmourco.online;
+ dkim=3Dnone header.d=3D; dmarc=3Dnone
+ header.from=3Dmarywladkowski@underarmourco.online
+X-BESS-Spam-Report: Code version 3.2, rules version 3.2.2.277837 [from clou=
+dscan16-
+	28.us-east-2b.ess.aws.cudaops.com]
+	Rule breakdown below
+	 pts rule name              description
+	---- ---------------------- --------------------------------
+	0.00 MIME_QP_LONG_LINE      RAWBODY: Quoted-printable line longer than 76 =
+chars=20
+	0.00 NO_REAL_NAME           HEADER: From: does not include a real name=20
+X-BESS-BRTS-Status: 1
+X-BESS-Info: H4sIAAAAAAACA6tWSslMUbIyMjQ0t7DQUUrJU7JSSkxNzyxOyywqLtFLzs9Vqg=
+U
+	AVfj5rCQAAAA=3D
+Return-Path:
+	010f01a21307ee07-7a41de4e-f845-422a-81ed-c75581fc9136-000000@ses.underarmo=
+urco.online
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: da3eb838-b263-4153-afc2-61dca27ab131:0
+X-MS-Exchange-SkipListedInternetSender: ip=3D[23.251.226.6];domain=3De226-6=
+.smtp-out.us-east-2.amazonses.com
+X-MS-Exchange-ExternalOriginalInternetSender: ip=3D[23.251.226.6];domain=3D=
+e226-6.smtp-out.us-east-2.amazonses.com
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN2PEPF0000A992:EE_|DS0PR04MB9439:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2a29ef81-6faa-4e2f-c168-08df4afd5e=
+74
+X-MS-Exchange-AtpMessageProperties: SA|SL
+X-Forefront-Antispam-Report:
+	CIP:209.222.82.239;CTRY:US;LANG:en;SCL:5;SRV:;IPV:NLI;SFV:SPM;H:e226-6.smt=
+p-out.us-east-2.amazonses.com;PTR:e226-6.smtp-out.us-east-2.amazonses.com;C=
+AT:SPM;SFS:(13230040)(704160611799003)(5009299003)(2069299003)(32142699015)=
+(260918224100599003)(260918215300599003)(82310400026)(3613699012)(100670990=
+03)(5063699009)(56012099006)(11063799006)(260925022911599003)(2609250213115=
+99003)(260925021911599003)(261022075727099003)(261022105027099003)(26102612=
+1527099003)(261026140227099003)(261021121427099003)(261028144727099003)(261=
+102123227099003)(16102099003)(55112099003)(18002099003)(4113699003)(6133799=
+003)(19002099009)(5042299003);DIR:INB;
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|704160611799003|5009299003|2069299003|32142699015|26091=
+8224100599003|260918215300599003|82310400026|3613699012|10067099003|5063699=
+009|56012099006|11063799006|260925022911599003|260925021311599003|260925021=
+911599003|261022075727099003|261022105027099003|261026121527099003|26102614=
+0227099003|261021121427099003|261028144727099003|261102123227099003|1610209=
+9003|55112099003|18002099003|4113699003|6133799003|19002099009|5042299003;
+X-Microsoft-Antispam-Message-Info:
+	=3D?us-ascii?Q?yq0ZxgISx0z+EhSkLV37fuqhtHD9Td6749FosFbGTxcCXHfjPko+HOOicD+=
+x?=3D
+ =3D?us-ascii?Q?qfuhk7W6jGqw6mBgs8vR0Cx3r1wCwTLP0yKOva40avqf8PG3heBRp89a6Dw=
+I?=3D
+ =3D?us-ascii?Q?wGz+TOC5edXz7SEDi1nslM1FoSo03IntRC0NqW2wxSaC8CwYkecbWpox8Mr=
+8?=3D
+ =3D?us-ascii?Q?fPnz3X9WRW7LHo+KI7ao+7VpVG7cueJIFCkVjZjmgbWzWTsuODC5qsfduFZ=
+Z?=3D
+ =3D?us-ascii?Q?TaPCKMURJd0SRsLe6PtEDRcbxwU/bkIDW9sLAzKw7N4ErTsHDkkRh7nsOiB=
+x?=3D
+ =3D?us-ascii?Q?8Ik3hFwIYwkLGKjQ801W4UyIr8FrUth06j4sj9Ko2txb/pk4qDBmXWPlH1x=
+3?=3D
+ =3D?us-ascii?Q?DwU5KwCm1HCVnhG09BgnJLlwzY9rfAVlH9KXOE9hsE/KclRNEBW2BU/FPdp=
+L?=3D
+ =3D?us-ascii?Q?iyXaJSd3edle3mrPFQwd5uJx4O9+Em+d/R/K6pudJ2dZMNf45hWnOREOTpy=
+o?=3D
+ =3D?us-ascii?Q?vEpxtC+H8pbN2a6HdPbG4NggUERrGC7/6yd7bWvLGEkb98L9Mm4VkTTszb0=
+Q?=3D
+ =3D?us-ascii?Q?oOMkaghEVtY9A4rjjkzBDHpxRUFDafFACNqHPSD1VIsmoDs0B6YKmpJGGpm=
+/?=3D
+ =3D?us-ascii?Q?PmHyapja4nQmXlmSaMXhYy9ceTvH6aS43e9buExRcP3UdnsCJJ0608HmrR7=
+X?=3D
+ =3D?us-ascii?Q?w5XB6pIysUrFEMn5/9tlzHKQLSltgQ9lFU+qq0zpyVwu9siJahDs+lUtWMB=
+z?=3D
+ =3D?us-ascii?Q?EVcrQrE5UZAOZZTCP/rSileavY6QlGujNg/AOrHmuaAPUce5uYb8t2ndBgZ=
+d?=3D
+ =3D?us-ascii?Q?b3XFUxH+FMRdu8JPuyh1uQ6ZijrypMn6QRNft9lFULCfXiFRHDqvbe0IXOn=
+n?=3D
+ =3D?us-ascii?Q?1Pe1nqLt+ukx16Zo0ZL10Nw8CaTU0JFyMg09+iAlzfFTNXA46ZXGmefxVjU=
+n?=3D
+ =3D?us-ascii?Q?JKf/8PKts83iT9YA4pgD1RCKwWPdbEam0jIcEdo/o4vSVsWNpkExfoUnmsR=
+c?=3D
+ =3D?us-ascii?Q?mDFNAkoVlqkSCKlPkP14mXeSXs40pIuPt2gIsP2OeSJvok4PH+RpSs3Cix1=
+T?=3D
+ =3D?us-ascii?Q?am3u8j8lDcyDD79n9hxY9J71KZWHKjIqAUMVa7ShD5+xDN5ERkcswhd3bMR=
+d?=3D
+ =3D?us-ascii?Q?iAMMQdAV8hccV4KRbscmewtS2PRsVJwxSDr3gU+2soGsqneAUmIKhMMl4qx=
+L?=3D
+ =3D?us-ascii?Q?IUwcpqOT0lt7f/Jk2X8XZIuBHJCwkWSh4QU5EyZ6DNBJtuv/xWgiSCaRQhG=
+1?=3D
+ =3D?us-ascii?Q?SKQcGDcOJ3DhlhmNafsIwjgSHMRW/6xAGo4ngZQpc57+K6E3Hocaq3i2Aik=
+2?=3D
+ =3D?us-ascii?Q?jjYieveJ/xRllATrlzcpeEsmS6cYclCQ5368uCMNx0m7jg9MFouAWtSqchl=
+v?=3D
+ =3D?us-ascii?Q?HyllSGojAKyzG2kzQ/0AN0dJbq8S+prPnJYUmwwnb5Mp5P7SoB67vrJ9PgP=
+/?=3D
+ =3D?us-ascii?Q?dmmero5oGi+PzZh2eaWppLEcC2/0MAhIIgZplCt/DM5+k1D+u6f13UPTUxM=
+7?=3D
+ =3D?us-ascii?Q?gnPaiQOam6vMGgeAwHjTyK8Q/e/G34ndov65GA+MKpGGYF2lOi1e6ym2yqR=
+R?=3D
+ =3D?us-ascii?Q?Wu+YQ5ZwnnDDYf6/59Z50l8GUDKGmqSTcfu4Bi1edktaG46/YWwdVO/vyux=
+g?=3D
+ =3D?us-ascii?Q?owy4g+nD9htwjmPXGZIsO9LPaV57p/l7ltLB2uISEWKUGeho220VYj0ABR6=
+Z?=3D
+ =3D?us-ascii?Q?+VD+mLn4HIuN6Tg2tIcLjbQidygF3vAyICiPP2ww7tqZxzCuVziccP4++43=
+H?=3D
+ =3D?us-ascii?Q?tpD3eMcKSpC1UK2uaUEuVzBaGbxPR5QO5fNFgHMa9QUJM1+toZlqNckyz7i=
+S?=3D
+ =3D?us-ascii?Q?encp3Tqsv759yAGeBa4vB6SM2kwj7VmvGyWXk5aIcMEXZ6Wsg/bv6ZGspU8=
+R?=3D
+ =3D?us-ascii?Q?alLxX2wVRjmY2RJB7hSiRQOBWycIcvZOOK0TO1/7mMg9syNYuSm8zJIOAJS=
+S?=3D
+ =3D?us-ascii?Q?EgKJ+n7RwdVBBN+Z7MlN/TT8zJCO2IeV2LzPCG3y4/wqUrVhGLADnYiOZsD=
+m?=3D
+ =3D?us-ascii?Q?ggD7PaXd4v1oWXIcxQY5y1qtHdKkrJWtLJHeEyJRgE3vVFllhspSXIuJjZM=
+F?=3D
+ =3D?us-ascii?Q?0hud3GlqSDZ/umB9c70Fv7x25+QLlGstUqTUsBcLjM+bBiwStnRfKusZpi3=
+J?=3D
+ =3D?us-ascii?Q?CTAkmqA0yYlrpTI9qbirtTs+wPf9uknOLGf4BFuw4rKsE0hJbr3lwJYqdxQ=
+s?=3D
+ =3D?us-ascii?Q?MGNmUw7Ay8wwujxRc/aw04GTqzUXu7w9gQIEtK38yzYI7gPfWIZxa+pKNFx=
+4?=3D
+ =3D?us-ascii?Q?szIlpWHQ3GlTrfKXkY9SGmjRHGTm4wd5qavA1c3GTeY3cCFDI/pmh+VN0Pi=
+m?=3D
+ =3D?us-ascii?Q?aDrRYciV73mijMA5GCrrp5nXgaYZc6xaePlz6VvaMsq8at8HCstsx8eqe8x=
+g?=3D
+ =3D?us-ascii?Q?i3e99UOgG13S94r5qPTDxw7A/RwbPOjT+yrGWR8gNn2vpFM127UC+bBYmsl=
+c?=3D
+ =3D?us-ascii?Q?4UYGG/MtY18sf9IgOjglz4Fjz/FA4NWpMxYgoQkD6wqlh4+Yk+BeSlo7BZB=
+p?=3D
+ =3D?us-ascii?Q?i9biq1IWboeOWqg7mZKWt5GLp8UFezj+9+YMBd7aTigKKE+oj4qvAZuzncJ=
+5?=3D
+ =3D?us-ascii?Q?r62oM2pa9/J1yu+GFK6dGdAzfic/Y4ExDThHc8DOOrakampyVmwe2JCoSOM=
+j?=3D
+ =3D?us-ascii?Q?jBhKIE4LnQti2Q7Qw9HQAnpgRve8vTmi2He9Mg+IGjG6a/JrSCuMPxeU5vq=
+t?=3D
+ =3D?us-ascii?Q?TL1Lc8VwCTTnBIiIs6gl8Zesktn51uQSvHkAqikojYJ2gzJlDOH6BQBnHs0=
+H?=3D
+ =3D?us-ascii?Q?8n0n4qs62ByO926y9OyN4+9UzOE6GT1iBZ+m/m/EPC6ncNillCO6LZlploQ=
+5?=3D
+ =3D?us-ascii?Q?ESwnJuOJfmdJMsWHuWRzDBVJ9am6fbgdbsvymRlxN2Rh0Y5bbC2jaDwHbGy=
+o?=3D
+ =3D?us-ascii?Q?D1W9QQu2vkZWK/Md2+x8aUolcReWfjk9OhKBpCsDq8P1jqior/NZXSCIJfe=
+m?=3D
+ =3D?us-ascii?Q?6yE0ScaMBfVm/Ikjkj7YbnEiOn4fGCIOssuc4QTi6QDycn+rlH0nU1EXdKQ=
+n?=3D
+ =3D?us-ascii?Q?CvhmpFOzmqQaKvchZW8fX1ijFa1XTAn0dInSE1/QxhD5Rq9plrPFyslManZ=
+q?=3D
+ =3D?us-ascii?Q?eDw43gul1AUBI2AvLlbhmsmZ2Fnr3PQQ0Guaiog6fioZW8B9tbliCOxRTFU=
+F?=3D
+ =3D?us-ascii?Q?72wbx648nxmxwVAMrKEWT5PtnYIaPRm2m2MQKhA9jKomW7cYG/Zr2F3R0aK=
+5?=3D
+ =3D?us-ascii?Q?t7JwsejtkB0g1iZcZZ3hrtSQ7XNxYjEMmkWkHxkgq+1x7PRyjWVo8f3+Vep=
+Q?=3D
+ =3D?us-ascii?Q?c0nqpSFpZvZ7Ke0/bk0XXffu8C1wPjkINE7XB8ZpSJ48J0vrMUxFATbiAbb=
+N?=3D
+ =3D?us-ascii?Q?i7f5rMHgM4rdwZ+nqZAYCUL2ts/Gvzr3SSxma8JxcM8rM0U/vTi7a0Z7rnX=
+k?=3D
+ =3D?us-ascii?Q?UoxX02n67XCzFsSX3ZbbP81DCMWf1Uud0C3tPWFVpPDVYMJ5ljAQcRlZ+wf=
+S?=3D
+ =3D?us-ascii?Q?TSuskYoL/h1SoDTGc4GFuwmjl27s1wzbdi0PgvFgmTU8sg7MG/BvaTwEX80=
+f?=3D
+ =3D?us-ascii?Q?BjKIUBMLUEsF9rEYaci4t5Ko2h3c8SPGE+iKliHPkbgwYuUcX72C/C+uQF+=
+7?=3D
+ =3D?us-ascii?Q?tUs3CL0p4Vgdly/rp1ww9JXGad5DQ8SdPnSU?=3D
+</pre>
+  </body>
+</html>=
+
+--7d1cca41-d951-4304-a651-e60544ec2fdd--
+
+--62804427-5cc1-4a8c-bd27-6ef740a7a959
+Content-Type: message/delivery-status
+
+Reporting-MTA: dns;DS0PR04MB9439.namprd04.prod.outlook.com
+Received-From-MTA: dns;outbound-ip62b.ess.barracuda.com
+Arrival-Date: Wed, 25 Nov 2026 14:06:58 +0000
+
+Original-Recipient: rfc822;dmorse@aegisfirst.com
+Final-Recipient: rfc822;dmorse@aegisfirst.com
+Action: failed
+Status: 5.7.133
+Diagnostic-Code: smtp;550 5.7.133 RESOLVER.RST.SenderNotAuthenticatedForGroup; authentication required; Delivery restriction check failed because the sender was not authenticated when sending to this group
+
+
+--62804427-5cc1-4a8c-bd27-6ef740a7a959
+Content-Type: message/rfc822
+
+Received: from BN9PR03CA0098.namprd03.prod.outlook.com (2603:10b6:408:fd::13)
+ by DS0PR04MB9439.namprd04.prod.outlook.com (2603:10b6:8:1fd::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.662.6; Wed, 25 Nov
+ 2026 14:06:58 +0000
+Received: from BN2PEPF0000A992.namprd04.prod.outlook.com
+ (2603:10b6:408:fd:cafe::3) by BN9PR03CA0098.outlook.office365.com
+ (2603:10b6:408:fd::13) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.662.6 via Frontend Transport; Wed, 25
+ Nov 2026 14:06:58 +0000
+Authentication-Results: mx.microsoft.com 1; spf=pass (sender IP is
+ 23.251.226.6) smtp.mailfrom=ses.underarmourco.online; dkim=fail (body hash
+ did not verify) header.d=underarmourco.online;dkim=fail (body hash did not
+ verify) header.d=amazonses.com;dkim=fail (signature did not verify)
+ header.d=underarmourco.online;dmarc=pass action=none
+ header.from=underarmourco.online;compauth=pass reason=100
+Received-SPF: Pass (protection.outlook.com: domain of ses.underarmourco.online
+ designates 23.251.226.6 as permitted sender) receiver=protection.outlook.com;
+ client-ip=23.251.226.6; helo=e226-6.smtp-out.us-east-2.amazonses.com; pr=C
+Received: from outbound-ip62b.ess.barracuda.com (209.222.82.239) by
+ BN2PEPF0000A992.mail.protection.outlook.com (10.167.248.134) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.662.3 via Frontend Transport; Wed, 25 Nov 2026 14:06:58 +0000
+Received: from e226-6.smtp-out.us-east-2.amazonses.com (e226-6.smtp-out.us-east-2.amazonses.com [23.251.226.6]) by mx-inbound46-235.us-east-2c.ess.aws.cudaops.com (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO); Wed, 25 Nov 2026 14:06:56 +0000
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=7snkno5idcr4dyz77r3ckp245kr6fxqd; d=underarmourco.online;
+	t=1795615616;
+	h=From:To:Subject:Message-ID:Content-Type:Content-Transfer-Encoding:MIME-Version:Date;
+	bh=O2lEbQBejFtG/XCNkCJsh723++/9rsv5Lb/QOZpVfm8=;
+	b=HII6rcEBaBQuaBVSIoTrw7YLsyIEmHwYMc39YIsbN0NlZiLP0X5hIod/1X9DH9IU
+	g38trfA3KUtp5G9+M6i1Cf4ERg6G+1/llYdQX7Y2qF/M40Z4w3jJ1JnDdNp7+PY3gLa
+	9LUjWzwPntUxOztFgm2YOBXhG4QMsVucZFFFXhBL9DJ2VSnW6a+t486z54SQVb3pQZt
+	LMilgeK2PoEYCEg9kF+NTSuSB37l9cSWHZHDqygtos9EMQwQzBc91eMszGTnEmDGSOx
+	DNlqeh8nY33CW0izr0M33gfb0IZ5i8EvgH3ua5uGQeeJ+ozc4VbLvM0FX9f5ijhLw75
+	zD8gGw2d2w==
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=kra23psoka5qyyh6gdejiiuof3nluwuz; d=amazonses.com; t=1795615616;
+	h=From:To:Subject:Message-ID:Content-Type:Content-Transfer-Encoding:MIME-Version:Date:Feedback-ID;
+	bh=O2lEbQBejFtG/XCNkCJsh723++/9rsv5Lb/QOZpVfm8=;
+	b=U80eZg6ertokejcm6eVam+gwU7fASk53WCslKFgtBpOcwwqF3INJQFyrS8WTBl6Z
+	xLlw+2Hbh+9NCLnoKwZ+xc5Rp9eOGubDUekRLETP94cOVuODxUF67TIeU6nBIJdJ34y
+	8pSPiMXWSWcet+FekNTfGn6yA9VCzBdrm3w1Lefg=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=underarmourco.online;
+	s=dkim; t=1795615615; h=from:subject:message-id:to:mime-version:content-type:
+	 content-transfer-encoding; bh=O2lEbQBejFtG/XCNkCJsh723++/9rsv5Lb/QOZpVfm8=;
+	b=oz/nzBV+wd4nT89cjGU3LXRWYJ9YhW3V6uLVfwuS7sANKmCSRJy10fK6QgxvvIwbZvOnO5
+	/mIhGmyTA5uybNBom4tLSdhclaWniyvkS45C4ovlixBgILcR0FZ6HqEIjdruoe+fkJ1uiz
+	fJb7usvq2KwXmCC5QOaT2n5tEH+pjgeJgVqu3I67Zq+IjFp6gTr09C76PSLdN6C755vVc0
+	YRtVIr22s/qWtqrXqnWkmTpTNdKIYT436EPGhvv1FSt+X7Glrm04aYQh/Nk27+fkELOYgk
+	h4I2wJekop7H0u3TV085HUDNL98ulGDZ2I0qpW34IoO9YlbJjvpwqJk86pp2gA==
+From: marywladkowski@underarmourco.online
+To: dmorse@aegisfirst.com
+Subject: [BOND-2026-0522] Inquiry - Continuous Customs Bond
+Message-ID: <010f01a21307ee07-7a41de4e-f845-422a-81ed-c75581fc9136-000000@us-east-2.amazonses.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
+Date: Wed, 25 Nov 2026 14:06:56 +0000
+Feedback-ID: ::1.us-east-2.dnBLFQvZ7DBnA5nHg3QcqhG4UiG8AnTuix0bXTff/SU=:AmazonSES
+X-SES-Outgoing: 2026.11.25-23.251.226.6
+X-BESS-ID: 1795615616-112011-7750-3551-1
+X-BESS-VER: 2019.1_20261116.1548
+X-BESS-Apparent-Source-IP: 23.251.226.6
+X-BESS-Parts: H4sIAAAAAAACA4uuVkqtKFGyUioBkjpK+cVKVoaGxpZAVgZQ0MLcKNky2cLSKN
+	XQ1Mzc0tDE0MDUxMzM1NzYwtw0xShRqTYWAL6keTNBAAAA
+X-BESS-Spam-Status: SCORE=0.00 using account:ESS61230 scores of QUARANTINE_LEVEL=6.0 KILL_LEVEL=9.0 tests=MIME_QP_LONG_LINE, NO_REAL_NAME
+Received-SPF: pass (mx-inbound46-235.us-east-2c.ess.aws.cudaops.com: domain of 010f01a21307ee07-7a41de4e-f845-422a-81ed-c75581fc9136-000000@ses.underarmourco.online designates 23.251.226.6 as permitted sender)
+X-BESS-Spam-Score: 0.00
+Authentication-Results-Original: mx-inbound46-235.us-east-2c.ess.aws.cudaops.com; spf=pass (sender IP is
+ 23.251.226.6)
+ smtp.mailfrom=010f01a21307ee07-7a41de4e-f845-422a-81ed-c75581fc9136-000000@ses.underarmourco.online;
+ dkim=none header.d=; dmarc=none
+ header.from=marywladkowski@underarmourco.online
+X-BESS-Spam-Report: Code version 3.2, rules version 3.2.2.277837 [from cloudscan16-
+	28.us-east-2b.ess.aws.cudaops.com]
+	Rule breakdown below
+	 pts rule name              description
+	---- ---------------------- --------------------------------
+	0.00 MIME_QP_LONG_LINE      RAWBODY: Quoted-printable line longer than 76 chars 
+	0.00 NO_REAL_NAME           HEADER: From: does not include a real name 
+X-BESS-BRTS-Status: 1
+X-BESS-Info: H4sIAAAAAAACA6tWSslMUbIyMjQ0t7DQUUrJU7JSSkxNzyxOyywqLtFLzs9VqgU
+	AVfj5rCQAAAA=
+Return-Path:
+ 010f01a21307ee07-7a41de4e-f845-422a-81ed-c75581fc9136-000000@ses.underarmourco.online
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: da3eb838-b263-4153-afc2-61dca27ab131:0
+X-MS-Exchange-SkipListedInternetSender: ip=[23.251.226.6];domain=e226-6.smtp-out.us-east-2.amazonses.com
+X-MS-Exchange-ExternalOriginalInternetSender: ip=[23.251.226.6];domain=e226-6.smtp-out.us-east-2.amazonses.com
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN2PEPF0000A992:EE_|DS0PR04MB9439:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2a29ef81-6faa-4e2f-c168-08df4afd5e74
+X-MS-Exchange-AtpMessageProperties: SA|SL
+X-Forefront-Antispam-Report:
+ CIP:209.222.82.239;CTRY:US;LANG:en;SCL:5;SRV:;IPV:NLI;SFV:SPM;H:e226-6.smtp-out.us-east-2.amazonses.com;PTR:e226-6.smtp-out.us-east-2.amazonses.com;CAT:SPM;SFS:(13230040)(704160611799003)(5009299003)(2069299003)(32142699015)(260918224100599003)(260918215300599003)(82310400026)(3613699012)(10067099003)(5063699009)(56012099006)(11063799006)(260925022911599003)(260925021311599003)(260925021911599003)(261022075727099003)(261022105027099003)(261026121527099003)(261026140227099003)(261021121427099003)(261028144727099003)(261102123227099003)(16102099003)(55112099003)(18002099003)(4113699003)(6133799003)(19002099009)(5042299003);DIR:INB;
+X-Microsoft-Antispam:
+ BCL:0;ARA:13230040|704160611799003|5009299003|2069299003|32142699015|260918224100599003|260918215300599003|82310400026|3613699012|10067099003|5063699009|56012099006|11063799006|260925022911599003|260925021311599003|260925021911599003|261022075727099003|261022105027099003|261026121527099003|261026140227099003|261021121427099003|261028144727099003|261102123227099003|16102099003|55112099003|18002099003|4113699003|6133799003|19002099009|5042299003;
+X-Microsoft-Antispam-Message-Info:
+ =?us-ascii?Q?yq0ZxgISx0z+EhSkLV37fuqhtHD9Td6749FosFbGTxcCXHfjPko+HOOicD+x?=
+ =?us-ascii?Q?qfuhk7W6jGqw6mBgs8vR0Cx3r1wCwTLP0yKOva40avqf8PG3heBRp89a6DwI?=
+ =?us-ascii?Q?wGz+TOC5edXz7SEDi1nslM1FoSo03IntRC0NqW2wxSaC8CwYkecbWpox8Mr8?=
+ =?us-ascii?Q?fPnz3X9WRW7LHo+KI7ao+7VpVG7cueJIFCkVjZjmgbWzWTsuODC5qsfduFZZ?=
+ =?us-ascii?Q?TaPCKMURJd0SRsLe6PtEDRcbxwU/bkIDW9sLAzKw7N4ErTsHDkkRh7nsOiBx?=
+ =?us-ascii?Q?8Ik3hFwIYwkLGKjQ801W4UyIr8FrUth06j4sj9Ko2txb/pk4qDBmXWPlH1x3?=
+ =?us-ascii?Q?DwU5KwCm1HCVnhG09BgnJLlwzY9rfAVlH9KXOE9hsE/KclRNEBW2BU/FPdpL?=
+ =?us-ascii?Q?iyXaJSd3edle3mrPFQwd5uJx4O9+Em+d/R/K6pudJ2dZMNf45hWnOREOTpyo?=
+ =?us-ascii?Q?vEpxtC+H8pbN2a6HdPbG4NggUERrGC7/6yd7bWvLGEkb98L9Mm4VkTTszb0Q?=
+ =?us-ascii?Q?oOMkaghEVtY9A4rjjkzBDHpxRUFDafFACNqHPSD1VIsmoDs0B6YKmpJGGpm/?=
+ =?us-ascii?Q?PmHyapja4nQmXlmSaMXhYy9ceTvH6aS43e9buExRcP3UdnsCJJ0608HmrR7X?=
+ =?us-ascii?Q?w5XB6pIysUrFEMn5/9tlzHKQLSltgQ9lFU+qq0zpyVwu9siJahDs+lUtWMBz?=
+ =?us-ascii?Q?EVcrQrE5UZAOZZTCP/rSileavY6QlGujNg/AOrHmuaAPUce5uYb8t2ndBgZd?=
+ =?us-ascii?Q?b3XFUxH+FMRdu8JPuyh1uQ6ZijrypMn6QRNft9lFULCfXiFRHDqvbe0IXOnn?=
+ =?us-ascii?Q?1Pe1nqLt+ukx16Zo0ZL10Nw8CaTU0JFyMg09+iAlzfFTNXA46ZXGmefxVjUn?=
+ =?us-ascii?Q?JKf/8PKts83iT9YA4pgD1RCKwWPdbEam0jIcEdo/o4vSVsWNpkExfoUnmsRc?=
+ =?us-ascii?Q?mDFNAkoVlqkSCKlPkP14mXeSXs40pIuPt2gIsP2OeSJvok4PH+RpSs3Cix1T?=
+ =?us-ascii?Q?am3u8j8lDcyDD79n9hxY9J71KZWHKjIqAUMVa7ShD5+xDN5ERkcswhd3bMRd?=
+ =?us-ascii?Q?iAMMQdAV8hccV4KRbscmewtS2PRsVJwxSDr3gU+2soGsqneAUmIKhMMl4qxL?=
+ =?us-ascii?Q?IUwcpqOT0lt7f/Jk2X8XZIuBHJCwkWSh4QU5EyZ6DNBJtuv/xWgiSCaRQhG1?=
+ =?us-ascii?Q?SKQcGDcOJ3DhlhmNafsIwjgSHMRW/6xAGo4ngZQpc57+K6E3Hocaq3i2Aik2?=
+ =?us-ascii?Q?jjYieveJ/xRllATrlzcpeEsmS6cYclCQ5368uCMNx0m7jg9MFouAWtSqchlv?=
+ =?us-ascii?Q?HyllSGojAKyzG2kzQ/0AN0dJbq8S+prPnJYUmwwnb5Mp5P7SoB67vrJ9PgP/?=
+ =?us-ascii?Q?dmmero5oGi+PzZh2eaWppLEcC2/0MAhIIgZplCt/DM5+k1D+u6f13UPTUxM7?=
+ =?us-ascii?Q?gnPaiQOam6vMGgeAwHjTyK8Q/e/G34ndov65GA+MKpGGYF2lOi1e6ym2yqRR?=
+ =?us-ascii?Q?Wu+YQ5ZwnnDDYf6/59Z50l8GUDKGmqSTcfu4Bi1edktaG46/YWwdVO/vyuxg?=
+ =?us-ascii?Q?owy4g+nD9htwjmPXGZIsO9LPaV57p/l7ltLB2uISEWKUGeho220VYj0ABR6Z?=
+ =?us-ascii?Q?+VD+mLn4HIuN6Tg2tIcLjbQidygF3vAyICiPP2ww7tqZxzCuVziccP4++43H?=
+ =?us-ascii?Q?tpD3eMcKSpC1UK2uaUEuVzBaGbxPR5QO5fNFgHMa9QUJM1+toZlqNckyz7iS?=
+ =?us-ascii?Q?encp3Tqsv759yAGeBa4vB6SM2kwj7VmvGyWXk5aIcMEXZ6Wsg/bv6ZGspU8R?=
+ =?us-ascii?Q?alLxX2wVRjmY2RJB7hSiRQOBWycIcvZOOK0TO1/7mMg9syNYuSm8zJIOAJSS?=
+ =?us-ascii?Q?EgKJ+n7RwdVBBN+Z7MlN/TT8zJCO2IeV2LzPCG3y4/wqUrVhGLADnYiOZsDm?=
+ =?us-ascii?Q?ggD7PaXd4v1oWXIcxQY5y1qtHdKkrJWtLJHeEyJRgE3vVFllhspSXIuJjZMF?=
+ =?us-ascii?Q?0hud3GlqSDZ/umB9c70Fv7x25+QLlGstUqTUsBcLjM+bBiwStnRfKusZpi3J?=
+ =?us-ascii?Q?CTAkmqA0yYlrpTI9qbirtTs+wPf9uknOLGf4BFuw4rKsE0hJbr3lwJYqdxQs?=
+ =?us-ascii?Q?MGNmUw7Ay8wwujxRc/aw04GTqzUXu7w9gQIEtK38yzYI7gPfWIZxa+pKNFx4?=
+ =?us-ascii?Q?szIlpWHQ3GlTrfKXkY9SGmjRHGTm4wd5qavA1c3GTeY3cCFDI/pmh+VN0Pim?=
+ =?us-ascii?Q?aDrRYciV73mijMA5GCrrp5nXgaYZc6xaePlz6VvaMsq8at8HCstsx8eqe8xg?=
+ =?us-ascii?Q?i3e99UOgG13S94r5qPTDxw7A/RwbPOjT+yrGWR8gNn2vpFM127UC+bBYmslc?=
+ =?us-ascii?Q?4UYGG/MtY18sf9IgOjglz4Fjz/FA4NWpMxYgoQkD6wqlh4+Yk+BeSlo7BZBp?=
+ =?us-ascii?Q?i9biq1IWboeOWqg7mZKWt5GLp8UFezj+9+YMBd7aTigKKE+oj4qvAZuzncJ5?=
+ =?us-ascii?Q?r62oM2pa9/J1yu+GFK6dGdAzfic/Y4ExDThHc8DOOrakampyVmwe2JCoSOMj?=
+ =?us-ascii?Q?jBhKIE4LnQti2Q7Qw9HQAnpgRve8vTmi2He9Mg+IGjG6a/JrSCuMPxeU5vqt?=
+ =?us-ascii?Q?TL1Lc8VwCTTnBIiIs6gl8Zesktn51uQSvHkAqikojYJ2gzJlDOH6BQBnHs0H?=
+ =?us-ascii?Q?8n0n4qs62ByO926y9OyN4+9UzOE6GT1iBZ+m/m/EPC6ncNillCO6LZlploQ5?=
+ =?us-ascii?Q?ESwnJuOJfmdJMsWHuWRzDBVJ9am6fbgdbsvymRlxN2Rh0Y5bbC2jaDwHbGyo?=
+ =?us-ascii?Q?D1W9QQu2vkZWK/Md2+x8aUolcReWfjk9OhKBpCsDq8P1jqior/NZXSCIJfem?=
+ =?us-ascii?Q?6yE0ScaMBfVm/Ikjkj7YbnEiOn4fGCIOssuc4QTi6QDycn+rlH0nU1EXdKQn?=
+ =?us-ascii?Q?CvhmpFOzmqQaKvchZW8fX1ijFa1XTAn0dInSE1/QxhD5Rq9plrPFyslManZq?=
+ =?us-ascii?Q?eDw43gul1AUBI2AvLlbhmsmZ2Fnr3PQQ0Guaiog6fioZW8B9tbliCOxRTFUF?=
+ =?us-ascii?Q?72wbx648nxmxwVAMrKEWT5PtnYIaPRm2m2MQKhA9jKomW7cYG/Zr2F3R0aK5?=
+ =?us-ascii?Q?t7JwsejtkB0g1iZcZZ3hrtSQ7XNxYjEMmkWkHxkgq+1x7PRyjWVo8f3+VepQ?=
+ =?us-ascii?Q?c0nqpSFpZvZ7Ke0/bk0XXffu8C1wPjkINE7XB8ZpSJ48J0vrMUxFATbiAbbN?=
+ =?us-ascii?Q?i7f5rMHgM4rdwZ+nqZAYCUL2ts/Gvzr3SSxma8JxcM8rM0U/vTi7a0Z7rnXk?=
+ =?us-ascii?Q?UoxX02n67XCzFsSX3ZbbP81DCMWf1Uud0C3tPWFVpPDVYMJ5ljAQcRlZ+wfS?=
+ =?us-ascii?Q?TSuskYoL/h1SoDTGc4GFuwmjl27s1wzbdi0PgvFgmTU8sg7MG/BvaTwEX80f?=
+ =?us-ascii?Q?BjKIUBMLUEsF9rEYaci4t5Ko2h3c8SPGE+iKliHPkbgwYuUcX72C/C+uQF+7?=
+ =?us-ascii?Q?tUs3CL0p4Vgdly/rp1ww9JXGad5DQ8SdPnSU?=
+
+Warning: Unusual sender <marywladkowski@underarmourco.online>
+
+You don't usually receive emails from this address.
+Make sure you trust this sender before taking any actions.
+
+Hello,
+
+Under Armour LLC is looking to purchase a customs bond and would like to re=
+quest a quote from your agency. Details below per our client application:
+
+01 / BOND REQUEST
+- Service requested: New bond
+- Bond coverage: Continuous Customs Bond
+- Activity code: 1 - Importer
+- Requested bond limit: USD 50,000
+
+02 / LEGAL ENTITY & IMPORTER ID
+- Exact legal entity: Under Armour LLC
+- Entity type: LLC
+- State of formation: CA
+- EIN: 43-2222338
+- Principal address: 2150 E SOUTH ST STE 108, LONG BEACH, CA, 90805
+
+03 / CONTACTS & AUTHORIZED SIGNER
+- Authorized signer: MARY HEBERT WLADKOWSKI (Organizer)
+- Contact email: marywladkowski@underarmourco.online
+- Phone: 15599376468
+
+Please reply with:
+1. Your price for this bond and the estimated processing time
+2. Your application requirements / intake checklist (entity & importer ID, =
+contacts & owners, merchandise & trade profile, customs operations, bond hi=
+story & compliance, and AD/CVD schedule if applicable)
+3. Documents you need from us - we have Articles of Formation, IRS EIN lett=
+er (CP575), W-9 and principal ID available
+
+Best regards,
+MARY HEBERT WLADKOWSKI
+Under Armour LLC
+
+--62804427-5cc1-4a8c-bd27-6ef740a7a959--

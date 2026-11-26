@@ -1,0 +1,122 @@
+Return-Path: <>
+Delivered-To: cynthiabulleck@jatendofoods.online
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id 6EL3Hg7yBmvC4CUAQ1DlOA
+	(envelope-from <>)
+	for <cynthiabulleck@jatendofoods.online>; Wed, 25 Nov 2026 09:34:54 -0500
+X-Original-To: cynthiabulleck@jatendofoods.online
+Received: from e226-243.smtp-out.us-east-2.amazonses.com (e226-243.smtp-out.us-east-2.amazonses.com [23.251.226.243])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id ED8BE117589
+	for <cynthiabulleck@jatendofoods.online>; Wed, 25 Nov 2026 09:34:53 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=TCq2JpXe;
+	dkim=fail ("headers rsa verify failed") header.d=comcast.net header.s=20190202a header.b=HOZb0vnN;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	spf=pass (mail.pony-it.com: domain of e226-243.smtp-out.us-east-2.amazonses.com designates 23.251.226.243 as permitted sender) smtp.helo=e226-243.smtp-out.us-east-2.amazonses.com
+ARC-Seal: i=1; a=rsa-sha256; d=jatendofoods.online; s=dkim; cv=none;
+	t=1795617294;
+	b=gfABuCYj6QoNdKQ43yBl/jWQS+q1wP0cMOqCQk76baOuiTgTbooqOUESA6zlrEl+kGN98m
+	ng53YHstk881rHsYNLeA0b0O7S98v34tuB1GMD5ixMY22q1W2/QFkhfkoEkLcJBzXOBmGu
+	viAlJW2oyh8ZRo0ZaHdso/NlSjPx6USvbPp19ak8ZlpFptjfECh3JKSd+oVjued6bLC+C4
+	XMDnsJejxRM4Bafee86zFmVXCVq4S5MCAmMYw/GPWr1U0NnyzlP43OlCMA4cfe6zOTPr31
+	WRioXmDZ5vRjBtGVcpQihXqyzZ7MWlX2Msbnbiohmz57wBFJ+egaFgDY2Je5Lg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=jatendofoods.online; s=dkim; t=1795617294;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:dkim-signature;
+	bh=DqViwGV9cg5uAoTeK7Czg0q2CgilPZj5uq4Ei/res7Y=;
+	b=tX34I/6Jt7LYhzcUC72Ryxye1YzMogcw/+D7oHgAX+iM/V4bKb5l/wzEPlchRcETQoVKrL
+	rVmWH28zAlYj4WfRYHzggXUBcYBDMJW2WDPKFvvQXRtDzVAglFb18oZcn2r3Fu5Kkt1pc7
+	jszpHUgHHzSrx2MyormPbGrqQOSz2k7CFXGNmtVRLFmNuVT7qC1gBo1vPhZraCCnCgCxNW
+	tScFEKMVQlJ/84BK1vzrlWyV8Vg3cmRAIjPWSqtZDmS7HwFvxC4S/PgHaViq/cXMonzNa/
+	Y6ITqnbv/HKqkaaX1g5x/lDRJfWAZvG5PPkz0mvPt181vL/8KXJCBWTaqZb3iQ==
+ARC-Authentication-Results: i=1;
+	mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=TCq2JpXe;
+	dkim=fail ("headers rsa verify failed") header.d=comcast.net header.s=20190202a header.b=HOZb0vnN;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	spf=pass (mail.pony-it.com: domain of e226-243.smtp-out.us-east-2.amazonses.com designates 23.251.226.243 as permitted sender) smtp.helo=e226-243.smtp-out.us-east-2.amazonses.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=kra23psoka5qyyh6gdejiiuof3nluwuz; d=amazonses.com; t=1795617293;
+	h=Message-ID:Date:From:To:Subject:In-Reply-To:References:MIME-Version:Content-Type:Content-Transfer-Encoding:Feedback-ID;
+	bh=DqViwGV9cg5uAoTeK7Czg0q2CgilPZj5uq4Ei/res7Y=;
+	b=TCq2JpXeSDa5Q3cNQMeEQLMWcGU0reH6V9J14s8Wwa00uIc69LJY7L5w+QTYZa70
+	pn66XTm/PhqkDGzB6aYhfW/ghulwYn5k2TEG5Ucnmw1wdILsYEqMoXXEtTauldmnz0s
+	mxQB9/XxP6KhNcJT/JIAEIdRfIIuFi5l+cop/SA4=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=comcast.net;
+	s=20190202a; t=1795617292;
+	bh=DqViwGV9cg5uAoTeK7Czg0q2CgilPZj5uq4Ei/res7Y=;
+	h=Received:Received:Message-ID:Date:From:To:Subject:MIME-Version:
+	 Content-Type:Xfinity-Spam-Result;
+	b=HOZb0vnNKPstIqSoIvxIZ42p3pD3vKYp4/kaaMmvVLxwG9mACpdNZ+7+geW2feLDc
+	 jDjWEbMLozNZHzeDQY5XOV6uFAnKIIADpBlmfkazQ42oA5fVM1cPTX5cqH1c7ZBv/7
+	 1j6D9OL6OVhIswG7fX1bcnrUFxmnL9s0A5Po65ExwOWYXqWag3ykkergNWWPRPGlGG
+	 kKTqecPgNe9lsGB8kQjxVHx4XVwdq24Z9xNn1gtYsLC/cr8kdr0OTcWqGCotZwed1a
+	 3hbte1vrJBqssTbnmmieBuA3r6pCrOJBv8G38tKiFfXlntTbr/O7OQqJMfUhNuhpf+
+	 EFkJ8SIW19iMA==
+Xfinity-QID: WE5ExYR6XZfxjWE5ExCqkm
+Xfinity-Graffiti: 40906690718
+X-Sieve: Pigeonhole Sieve 0.5.22.2 (2d9c86ce)
+Message-ID: <010f01a213218417-49895226-424a-433c-9f5f-fc96ca23b601-000000@us-east-2.amazonses.com>
+Date: Wed, 25 Nov 2026 14:34:53 +0000
+From: MAILER-DAEMON@us-east-2.amazonses.com
+To: cynthiabulleck@jatendofoods.online
+Subject: Re: [BOND-2026-0656] Inquiry - Continuous Customs Bond
+In-Reply-To: <010f01a2131f6ea2-b358886a-71f3-4b2f-83df-eecc4e024293-000000@us-east-2.amazonses.com>
+References: <010f01a2131f6ea2-b358886a-71f3-4b2f-83df-eecc4e024293-000000@us-east-2.amazonses.com>
+Auto-Submitted: auto-replied (vacation)
+Precedence: bulk
+X-Auto-Response-Suppress: All
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfMmBuNSZeQYkt4e8PHaZsJTBWtI9P0BIl5VobdyS/+4G6tnYTqwuLDKZaXhDiaIyrb+CkCahpdPsbolxB5Aio7nMN5tvoO6TCQcIELg3TXR7kMTdP91t
+ qyD6aGKPHGlKJkWuGu1mewjY3uUSAu5JMcxz+i7U6ga2OAjyIdZEvvcplY7zxNBphwTAQo4tRhUvOBEke6RuHwU0j5AD9e925cUESTPXZ9LdWmgaXc0rDm/d
+ M1eyf6RiVy1OYsSEofXy4HT6kLcFPAahTnVMbEJLlnI=
+Feedback-ID: ::1.us-east-2.c0QCJwTJKDSb6mlKpIo5IpGwsngRMRBjZtJ48k4WYjY=:AmazonSES
+X-SES-Outgoing: 2026.11.25-23.251.226.243
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Result: default: False [-3.94 / 15.00];
+	BAYES_HAM(-2.05)[88.40%];
+	IP_REPUTATION_HAM(-0.89)[asn: 16509(-0.31), country: US(-0.01), ip: 23.251.226.243(-0.57)];
+	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:23.251.226.243:c];
+	R_DKIM_ALLOW(-0.20)[amazonses.com:s=kra23psoka5qyyh6gdejiiuof3nluwuz];
+	ONCE_RECEIVED(0.10)[];
+	MIME_GOOD(-0.10)[text/plain];
+	MIME_FROM_MX_GOOD(-0.10)[feedback-smtp.us-east-2.amazonses.com];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCPT_MAILCOW_DOMAIN(0.00)[jatendofoods.online];
+	PRECEDENCE_BULK(0.00)[];
+	ARC_NA(0.00)[];
+	RCPT_COUNT_ONE(0.00)[1];
+	DWL_DNSWL_NONE(0.00)[amazonses.com:dkim];
+	MIME_TRACE(0.00)[0:+];
+	R_DKIM_REJECT(0.00)[comcast.net:s=20190202a];
+	DKIM_TRACE(0.00)[amazonses.com:+,comcast.net:-];
+	ARC_SIGNED(0.00)[jatendofoods.online:s=dkim:i=1];
+	RCVD_COUNT_ZERO(0.00)[0];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_NONE(0.00)[];
+	DMARC_POLICY_ALLOW(0.00)[amazonses.com,quarantine];
+	RWL_MAILSPIKE_POSSIBLE(0.00)[23.251.226.243:from];
+	FROM_NO_DN(0.00)[];
+	ASN(0.00)[asn:16509, ipnet:23.251.226.0/24, country:US];
+	DKIM_MIXED(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	RCVD_IN_DNSWL_NONE(0.00)[23.251.226.243:from]
+X-Rspamd-Queue-Id: ED8BE117589
+
+This email is no longer monitored
+
+Contact office for updated email address.
+
+Thank you
+
+

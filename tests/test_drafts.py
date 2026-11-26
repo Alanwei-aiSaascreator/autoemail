@@ -107,7 +107,8 @@ def test_form_request_separates_enclosed_from_to_follow(session, world):
         "ownership",
         "ad_cvd",
     ]
-    assert "Completed and enclosed:" in draft.body
+    # 无附件时申请表无法自动填：正文如实说明「无法自动填」，不谎称已附上
+    assert "could not be auto-filled" in draft.body
     assert "will follow in a separate email" in draft.body
     assert "Completed bond application form" in draft.body
     assert "Ownership breakdown" in draft.body

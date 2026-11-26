@@ -1,0 +1,527 @@
+Return-Path: <angelica.racadio@freightos.com>
+Delivered-To: taylorjackson@pegasystems.online
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id 2HFyFuIPB2sX/jEAQ1DlOA
+	(envelope-from <angelica.racadio@freightos.com>)
+	for <taylorjackson@pegasystems.online>; Wed, 25 Nov 2026 11:42:10 -0500
+X-Original-To: taylorjackson@pegasystems.online
+Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id 72E3B11722D
+	for <taylorjackson@pegasystems.online>; Wed, 25 Nov 2026 11:42:09 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=clearitusa.com header.s=google header.b=qtLviDfd;
+	dmarc=pass (policy=none) header.from=clearitusa.com;
+	spf=pass (mail.pony-it.com: domain of angelica.racadio@freightos.com designates 209.85.160.52 as permitted sender) smtp.mailfrom=angelica.racadio@freightos.com;
+	arc=pass ("google.com:s=arc-20260327:i=1")
+ARC-Seal: i=2; a=rsa-sha256; d=pegasystems.online; s=dkim; cv=pass;
+	t=1795624930;
+	b=RZP1sRCnO2WNU+Zby7VZs07vAGOGPuIvBgjUDIfxFIUja+l+n+VjpQdAY0CgX8eDIUCDWY
+	WDal3PhqsdjCVdEXyhQuQhqTWeKrVVe3osqALiEWXA0Av3w1iLIOaCCiGbGmo3xeig+IGh
+	j1f0NrFOVKNCQzDYkGgPSxEYORkgw7wFpuGiQByLXcSGPbrOqZSGi4yFD7Te6BZQj6yuD4
+	hcl3fifa3uJ/ZsIP0mnULdjbIsnZs06gNJXO9Thdi/bUlBq+HwMDb7XhFaFIDsHF4F5vQ+
+	/wzjhVN0JJMd+Y+mrDqtMUZb8A+UzHRRDAwyCEImdcltfJyRcP4vY0VNi1Eo+g==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed;
+	d=pegasystems.online; s=dkim; t=1795624930;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references:dkim-signature;
+	bh=3/yetuc9njH1jJ32YGdsKhcw22nn83VG4eyHrTCKyZo=;
+	b=s7pSwp/qGZRRvJsuOCqrKBHnTiQQyOJKf1KKPJxRj/zitHvoafU5xplrMAF2sKeRTcB4ab
+	IDY9iN31nhL9lqJLgyoFdOy3Y0Ypik74x9zafIoVU0SEovuBVdAn3mr5YuXcJfAzq9BIDd
+	DsgJRVuwSQZZduv/+XUf4K+5RhGc6rZL2gttfiN61smOuaDqBAk8paeAWhxWKui2A74KKC
+	fezNBZM1sacB1G6ZUngQFVCepOO3oj89/eKEnm1XmVRP3DmuK2Mq5uwskQg4K5wCe0avCR
+	5xWyPnO/PVfSKwGvdzwB7Euy4eyor224x0/X35SSAH547Lb+LU5He6k+silZkA==
+ARC-Authentication-Results: i=2;
+	mail.pony-it.com;
+	dkim=pass header.d=clearitusa.com header.s=google header.b=qtLviDfd;
+	dmarc=pass (policy=none) header.from=clearitusa.com;
+	spf=pass (mail.pony-it.com: domain of angelica.racadio@freightos.com designates 209.85.160.52 as permitted sender) smtp.mailfrom=angelica.racadio@freightos.com;
+	arc=pass ("google.com:s=arc-20260327:i=1")
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-48e9476e26aso2169584fac.3
+        for <taylorjackson@pegasystems.online>; Wed, 25 Nov 2026 08:42:09 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795624928; cv=none;
+        d=google.com; s=arc-20260327;
+        b=IfDd3edUIRh4bxmJOxHtNmv5pV0/akRRqhGyx7CKhsVX2IW2u3iyj0tgcM/1uUzmBy
+         uzsXRWWFEh1k98MkWUppIQR7bIGVsJHt7P+BvL2qZdlwXUSCluZjKtVErvoPXo7A9BAz
+         F9McE509bA+fAjfuRDTTgFZG1X/KfUyr893WKttXEUkr2JzPGwLPJFzXEsYbM5yqbxG4
+         V1Lo5K5b0slOjcDM8y0LtK1wMkg9q/fRmKjooyKcYT6YEtrCBP09kgtCYp0G4ve7olQY
+         FsSQ6BhGiNt5QRgExWp6zcIGQYBCC+/UqcnPdRXMXfosOfD6BD0VdY83KV+u8pk3xT+G
+         9XqQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=3/yetuc9njH1jJ32YGdsKhcw22nn83VG4eyHrTCKyZo=;
+        fh=mWSTFyPq89dLOtTm6OpzaCt4qijz9gPkvUMKlqsC/1Y=;
+        b=JdwYxlGefhDH2TaahfXfFBEtMEnJtyNm9ZrKxyqZE+6hjFlybStOWNy2Z8TRsVdRC/
+         agJ6VhhiTQzBO/ZKe20NqCUT+yGREQ681razrf2ns+OZ/w8Uz0gB5fL+5NJEnVJfm7RK
+         /BivLlgnLrZPA4oVmE/8T2eA/jCoBKpYn4ads46n9na/RrkzwPREdX1xCXGPeTlkkHrX
+         XkepvZRCAZ6A7F6tYyCyF7r4q3mhdOW6juW6bjWU53Yg22EKgsxVsButbOpE0iWpJ8LD
+         KlvBeRUmZqAjCrijLwEy5p5jwALIAuiJGvcGwN8+eokkcbIOqmx4FTBnuItWTU9UqeKY
+         29YA==;
+        darn=pegasystems.online
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=clearitusa.com; s=google; t=1795624928; x=1796229728; darn=pegasystems.online;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=3/yetuc9njH1jJ32YGdsKhcw22nn83VG4eyHrTCKyZo=;
+        b=qtLviDfd5nPJlxr+OTAXZ2SB2hWsYCNKX7PEIH+DqeolzxS04mWQw71IjCMMnzKwiM
+         7Sgdf45DLj+tgqPFo4SGWuWSjN5t1e2wdW1+dpUC/TYruHLJZQHjEArfObRdG5ZuXws/
+         /s6K1/Zz6d2TVzGItZph0zWsRd8i+Gw5FuxJhTQmW1uvTSpjhPSf7xjbRdJc5w3PgXVH
+         ERYOrfir9Z857/m9rctuUapzMLEjr2BTzMVhRfiGBkNFSCFbbD5zfAMb1CNjshKZDkIh
+         QLiK01bzrYTDUN47hACj4sBWmqs4TE/jU/YFQ7u4EUBegqAR3/2/Tgtzd6FmC2eKnhOu
+         F24g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795624928; x=1796229728;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=3/yetuc9njH1jJ32YGdsKhcw22nn83VG4eyHrTCKyZo=;
+        b=mOzDA7HEy4zyg+LcJUn6u311rBrZnYX5e79qZp7YnlvDA7A3ZEBmnKFj39qyH9eDK5
+         Avku+/SeiuMXxd75BM+PD/GqpUcnuY3B+FF/J6CJ/SciFsyzDqpC09E+dR2ImeZTbhfi
+         7Z8xNqF1C29OR9KF47MhwIs9AC+C/jVqzfjubmuXLgUm+8TDsDqS5uM51fZGnY6A3ldY
+         GLVGWp5sGqe2Huf9D2MqVu9UihREbwF6u1ft/PIne6w9aAHQqNLkK0kb/7VH5d45QU1i
+         ahacHk/ja/E8oLCcKyFtmfJerLPRPv9+DFAOWpwCKPjkeNP6YRQflVqbMjl/hPOYdMJh
+         GW/A==
+X-Gm-Message-State: APuU4Z/YoDUFhTx+GBNchK06qRUztIxBmwtvn6OE84twjjXDXgEDc7AI
+	T+nzx9ZFypkhEkXaHWAHU3mJufI7bkpzZZpttO7AkPwEbFijyLSyIM2PF2aMIji3xTpVmaPd1/G
+	goQnKPVUSzrZJw3t+6/yvwPga49GDeAUaYU+k7brVu3VqwtDBcvQg4cE=
+X-Gm-Gg: AZFdTZcZKYxp0uxnZIzZoAA78bUyQWdSmOiZyKYQOb58zQv+X3JHxuyruYrpuyknmkC
+	VolaCf2engbCtbZMXmBKnrtIVpP3CMCpajbpyJWhv6iCxfeBaN6rmztpJZzsbjb5tRz/mxy8vwD
+	4EbyB7gNa55SnIkfv2d211xCCZGUDX2qIqU+NPmGVPufdRggBQqRdoZ+zIXFh9fzvjGMCyo632r
+	3F9ftBkT6ftaPnrBfvg3yD42sIZsO46oH1raJcepyz0UYUdT22ZgI1RLGl/yZbFrWiLOGXoUu2m
+	9SzwMCKS6JGXRogVaofIvDbENq3d/Y/Lste7SfRm0so3+FI2iKBg/zOdEabK16SEXOtLIvxZTbW
+	0PJvng2Dj26hUpobA1AeGlLW0x4TR8KEwCc9zttZIQ7h+wjoA/mgR/qKTo2ERrXee+A2N
+X-Received: by 2002:a05:6870:6109:b0:4ad:9471:aaf9 with SMTP id
+ 586e51a60fabf-4bc85efbd11mr16728072fac.62.1795624928200; Wed, 25 Nov 2026
+ 08:42:08 -0800 (PST)
+MIME-Version: 1.0
+References: <planned-3801bbc4ba2e4c1ab73c38ae422e6f50@autoemail> <010f01a20b594afe-1e4bebb3-900d-4ac5-b82e-13ab367d1228-000000@us-east-2.amazonses.com>
+In-Reply-To: <010f01a20b594afe-1e4bebb3-900d-4ac5-b82e-13ab367d1228-000000@us-east-2.amazonses.com>
+From: Support <support@clearitusa.com>
+Date: Wed, 25 Nov 2026 11:41:56 -0500
+X-Gm-Features: Aa3M54qVVuRMGBcgs4c5mCT23Txlsg9dtV0aXQKFfDb2I0eovZKMcrAE3dFxUR8
+Message-ID: <CAKgkQw+C1FmmYhYd7xahErX+tzDDH5LuJ=0AMNi9sdTivAKxqQ@mail.gmail.com>
+Subject: Re: Clearit Operations [BOND-2026-0471] Inquiry - Continuous Customs Bond
+To: taylorjackson@pegasystems.online
+Cc: info@clearitusa.com
+Content-Type: multipart/related; boundary="000000000000ff0b0d06611c8165"
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Result: default: False [-7.26 / 15.00];
+	BAYES_HAM(-5.50)[100.00%];
+	ARC_ALLOW(-1.00)[google.com:s=arc-20260327:i=1];
+	HTML_SHORT_LINK_IMG_3(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[clearitusa.com,none];
+	FORGED_SENDER(0.30)[support@clearitusa.com,angelica.racadio@freightos.com];
+	IP_REPUTATION_HAM(-0.26)[asn: 15169(-0.25), country: US(-0.01), ip: 209.85.160.52(0.00)];
+	R_SPF_ALLOW(-0.20)[+ip4:209.85.128.0/17];
+	R_DKIM_ALLOW(-0.20)[clearitusa.com:s=google];
+	MIME_FROM_MX_GOOD(-0.10)[aspmx.l.google.com];
+	RWL_MAILSPIKE_GOOD(-0.10)[209.85.160.52:from];
+	MX_GOOD(-0.10)[aspmx.l.google.com];
+	MIME_GOOD(-0.10)[multipart/related,multipart/alternative,text/plain];
+	RCPT_MAILCOW_DOMAIN(0.00)[pegasystems.online];
+	RCPT_COUNT_TWO(0.00)[2];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+,1:+,2:+,3:~,4:~];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[clearitusa.com:+];
+	TO_MATCH_ENVRCPT_SOME(0.00)[];
+	TO_DN_NONE(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[support@clearitusa.com,angelica.racadio@freightos.com];
+	ARC_SIGNED(0.00)[pegasystems.online:s=dkim:i=2];
+	PREVIOUSLY_DELIVERED(0.00)[taylorjackson@pegasystems.online];
+	RCVD_COUNT_ONE(0.00)[1];
+	ASN(0.00)[asn:15169, ipnet:209.85.128.0/17, country:US];
+	MISSING_XM_UA(0.00)[];
+	RCVD_IN_DNSWL_NONE(0.00)[209.85.160.52:from]
+X-Rspamd-Queue-Id: 72E3B11722D
+
+--000000000000ff0b0d06611c8165
+Content-Type: multipart/alternative; boundary="000000000000ff0b0b06611c8164"
+
+--000000000000ff0b0b06611c8164
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi,
+
+Thank you for contacting Clearit.
+
+We only offer our bond services to Importers who we process the customs
+clearance. If you are looking for a stand alone bond only and no clearance,
+unfortunately, we wouldn't be able to assist and we recommend contacting a
+local broker at the U.S. port of entry. Please see the link below for a
+list of brokers by port:
+
+https://www.cbp.gov/about/contact/brokers-listing
+
+If you have any further questions or need assistance, please don't hesitate
+to let us know.
+
+Thanks,
+
+
+
+On Mon, Nov 23, 2026 at 9:18=E2=80=AFPM <taylorjackson@pegasystems.online> =
+wrote:
+
+> Hello,
+>
+> Pegasystems LLC is looking to purchase a customs bond and would like to
+> request a quote from your agency. Details below per our client applicatio=
+n:
+>
+> 01 / BOND REQUEST
+> - Service requested: New bond
+> - Bond coverage: Continuous Customs Bond
+> - Activity code: 1 - Importer
+> - Requested bond limit: USD 50,000
+>
+> 02 / LEGAL ENTITY & IMPORTER ID
+> - Exact legal entity: Pegasystems LLC
+> - Entity type: LLC
+> - State of formation: CA
+> - EIN: 43-2272344
+> - Principal address: 9281 OFFICE PARK CIR STE 158, ELK GROVE, CA, 95758
+> <https://www.google.com/maps/search/9281+OFFICE+PARK+CIR+STE+158,+ELK+GRO=
+VE,+CA,+95758?entry=3Dgmail&source=3Dg>
+>
+> 03 / CONTACTS & AUTHORIZED SIGNER
+> - Authorized signer: TAYLOR SIMMONE JACKSON (Organizer)
+> - Contact email: taylorjackson@pegasystems.online
+> - Phone: 17472187530 <(747)%20218-7530>
+>
+> Please reply with:
+> 1. Your price for this bond and the estimated processing time
+> 2. Your application requirements / intake checklist (entity & importer ID=
+,
+> contacts & owners, merchandise & trade profile, customs operations, bond
+> history & compliance, and AD/CVD schedule if applicable)
+> 3. Documents you need from us - we have Articles of Formation, IRS EIN
+> letter (CP575), W-9 and principal ID available
+>
+> Best regards,
+> TAYLOR SIMMONE JACKSON
+> Pegasystems LLC
+>
+>
+>
+
+--=20
+Angelica Racadio
+*Customer Support* | Clearit USA
+
+
+
+
+
+
+
+
+
+
+[image: https://g.page/r/CXLLeMfTbBdOEBM/review]
+<https://g.page/r/CXLLeMfTbBdOEBM/review>
+
+--000000000000ff0b0b06611c8164
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><div>Hi=
+,<br><br>Thank you for contacting Clearit.<br><br>We only offer our bond se=
+rvices to Importers who we process the customs clearance. If you are lookin=
+g for a stand alone bond only and no clearance, unfortunately, we wouldn&#3=
+9;t be able to assist and we recommend contacting a local broker at the U.S=
+. port of entry. Please see the link below for a list of brokers by port:<b=
+r><br><a href=3D"https://www.cbp.gov/about/contact/brokers-listing" target=
+=3D"_blank">https://www.cbp.gov/about/contact/brokers-listing</a><br><br>If=
+ you have any further questions or need assistance, please don&#39;t hesita=
+te to let us know.<br><br>Thanks,</div></div></div><br></div><br></div><br>=
+<div class=3D"gmail_quote gmail_quote_container"><div dir=3D"ltr" class=3D"=
+gmail_attr">On Mon, Nov 23, 2026 at 9:18=E2=80=AFPM &lt;taylorjackson@pegas=
+ystems.online&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=
+=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding=
+-left:1ex">Hello,<br>
+<br>
+Pegasystems LLC is looking to purchase a customs bond and would like to req=
+uest a quote from your agency. Details below per our client application:<br=
+>
+<br>
+01 / BOND REQUEST<br>
+- Service requested: New bond<br>
+- Bond coverage: Continuous Customs Bond<br>
+- Activity code: 1 - Importer<br>
+- Requested bond limit: USD 50,000<br>
+<br>
+02 / LEGAL ENTITY &amp; IMPORTER ID<br>
+- Exact legal entity: Pegasystems LLC<br>
+- Entity type: LLC<br>
+- State of formation: CA<br>
+- EIN: 43-2272344<br>
+- Principal address: <a href=3D"https://www.google.com/maps/search/9281+OFF=
+ICE+PARK+CIR+STE+158,+ELK+GROVE,+CA,+95758?entry=3Dgmail&amp;source=3Dg">92=
+81 OFFICE PARK CIR STE 158, ELK GROVE, CA, 95758</a><br>
+<br>
+03 / CONTACTS &amp; AUTHORIZED SIGNER<br>
+- Authorized signer: TAYLOR SIMMONE JACKSON (Organizer)<br>
+- Contact email: taylorjackson@pegasystems.online<br>
+- Phone: <a href=3D"tel:(747)%20218-7530" value=3D"+17472187530" target=3D"=
+_blank">17472187530</a><br>
+<br>
+Please reply with:<br>
+1. Your price for this bond and the estimated processing time<br>
+2. Your application requirements / intake checklist (entity &amp; importer =
+ID, contacts &amp; owners, merchandise &amp; trade profile, customs operati=
+ons, bond history &amp; compliance, and AD/CVD schedule if applicable)<br>
+3. Documents you need from us - we have Articles of Formation, IRS EIN lett=
+er (CP575), W-9 and principal ID available<br>
+<br>
+Best regards,<br>
+TAYLOR SIMMONE JACKSON<br>
+Pegasystems LLC<br>
+<br>
+<br>
+</blockquote></div><div><br clear=3D"all"></div><div><br></div><span class=
+=3D"gmail_signature_prefix">-- </span><br><div dir=3D"ltr" class=3D"gmail_s=
+ignature"><div dir=3D"ltr"><span style=3D"color:rgb(29,28,29);font-family:S=
+lack-Lato,Slack-Fractions,appleLogo,sans-serif;font-size:15px">Angelica Rac=
+adio</span><br style=3D"color:rgb(29,28,29);font-family:Slack-Lato,Slack-Fr=
+actions,appleLogo,sans-serif;font-size:15px"><b style=3D"color:rgb(29,28,29=
+);font-family:Slack-Lato,Slack-Fractions,appleLogo,sans-serif;font-size:15p=
+x">Customer Support</b><span style=3D"color:rgb(29,28,29);font-family:Slack=
+-Lato,Slack-Fractions,appleLogo,sans-serif;font-size:15px">=C2=A0| Clearit =
+USA</span><span style=3D"height:8px;display:block;color:rgb(29,28,29);font-=
+family:Slack-Lato,Slack-Fractions,appleLogo,sans-serif;font-size:15px"></sp=
+an><span style=3D"height:8px;display:block;color:rgb(29,28,29);font-family:=
+Slack-Lato,Slack-Fractions,appleLogo,sans-serif;font-size:15px"><img src=3D=
+"https://yt3.ggpht.com/a/AATXAJx0NmfyCOPRbN6_HdgQvAjQ1mseOdOWid91fA=3Ds900-=
+c-k-c0xffffffff-no-rj-mo" width=3D"96" height=3D"96"></span><span style=3D"=
+height:8px;display:block;color:rgb(29,28,29);font-family:Slack-Lato,Slack-F=
+ractions,appleLogo,sans-serif;font-size:15px"><br></span><span style=3D"hei=
+ght:8px;display:block;color:rgb(29,28,29);font-family:Slack-Lato,Slack-Frac=
+tions,appleLogo,sans-serif;font-size:15px"><br></span><span style=3D"height=
+:8px;display:block;color:rgb(29,28,29);font-family:Slack-Lato,Slack-Fractio=
+ns,appleLogo,sans-serif;font-size:15px"><br></span><span style=3D"height:8p=
+x;display:block;color:rgb(29,28,29);font-family:Slack-Lato,Slack-Fractions,=
+appleLogo,sans-serif;font-size:15px"><br></span><span style=3D"height:8px;d=
+isplay:block;color:rgb(29,28,29);font-family:Slack-Lato,Slack-Fractions,app=
+leLogo,sans-serif;font-size:15px"><br></span><span style=3D"height:8px;disp=
+lay:block;color:rgb(29,28,29);font-family:Slack-Lato,Slack-Fractions,appleL=
+ogo,sans-serif;font-size:15px"><br></span><span style=3D"height:8px;display=
+:block;color:rgb(29,28,29);font-family:Slack-Lato,Slack-Fractions,appleLogo=
+,sans-serif;font-size:15px"><br></span><span style=3D"height:8px;display:bl=
+ock;color:rgb(29,28,29);font-family:Slack-Lato,Slack-Fractions,appleLogo,sa=
+ns-serif;font-size:15px"><br></span><span style=3D"height:8px;display:block=
+;color:rgb(29,28,29);font-family:Slack-Lato,Slack-Fractions,appleLogo,sans-=
+serif;font-size:15px"><br></span><span style=3D"height:8px;display:block;co=
+lor:rgb(29,28,29);font-family:Slack-Lato,Slack-Fractions,appleLogo,sans-ser=
+if;font-size:15px"><br></span><span style=3D"height:8px;display:block;color=
+:rgb(29,28,29);font-family:Slack-Lato,Slack-Fractions,appleLogo,sans-serif;=
+font-size:15px"><br></span><span><span style=3D"font-size:11pt;font-family:=
+Arial,sans-serif;color:rgb(0,0,0);background-color:transparent;font-variant=
+:normal;vertical-align:baseline;white-space:pre-wrap"><a href=3D"https://g.=
+page/r/CXLLeMfTbBdOEBM/review" target=3D"_blank"><img alt=3D"https://g.page=
+/r/CXLLeMfTbBdOEBM/review" src=3D"cid:ii_1a21395304bafca8db41" style=3D"bor=
+der-width: medium; border-style: none; border-color: currentcolor;" width=
+=3D"420" height=3D"84"></a></span></span></div></div>
+
+--000000000000ff0b0b06611c8164--
+--000000000000ff0b0d06611c8165
+Content-Type: image/png; name="https://g.page/r/CXLLeMfTbBdOEBM/review"
+Content-Disposition: inline; 
+	filename="https://g.page/r/CXLLeMfTbBdOEBM/review"
+Content-Transfer-Encoding: base64
+Content-ID: <ii_1a21395304bafca8db41>
+X-Attachment-Id: ii_1a21395304bafca8db41
+X-Attachment-Content-Disposition: inline
+
+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
+gg==
+--000000000000ff0b0d06611c8165--

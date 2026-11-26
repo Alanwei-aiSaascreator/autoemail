@@ -1,0 +1,175 @@
+Return-Path: <mauricio@aptariffs.com>
+Delivered-To: cynthiabulleck@jatendofoods.online
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id OOs1C0olB2v/ljcAQ1DlOA
+	(envelope-from <mauricio@aptariffs.com>)
+	for <cynthiabulleck@jatendofoods.online>; Wed, 25 Nov 2026 13:13:30 -0500
+X-Original-To: cynthiabulleck@jatendofoods.online
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id 4AAF5116C94
+	for <cynthiabulleck@jatendofoods.online>; Wed, 25 Nov 2026 13:13:29 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=aptariffs.com header.s=google header.b=rg6ie3U1;
+	dmarc=pass (policy=none) header.from=aptariffs.com;
+	spf=pass (mail.pony-it.com: domain of mauricio@aptariffs.com designates 209.85.208.44 as permitted sender) smtp.mailfrom=mauricio@aptariffs.com;
+	arc=pass ("google.com:s=arc-20260327:i=1")
+ARC-Seal: i=2; a=rsa-sha256; d=jatendofoods.online; s=dkim; cv=pass;
+	t=1795630409;
+	b=aFD5ZEbRubUSOFENzeqQeycRiueh6IOBPgBRHwTkqDSAFEmXVZ4TkL+kXiKfaAeoTTswkT
+	wM9PedpF0G2RRsAGkh0LXMpecGiImduesNEE8cfn3zQmbvDUZOUbfg3Zns4m66+HXPdNId
+	FrlpZ7VZruq/M2abQcAkZ7ATrjIEnvPdNUicVZ4oTA83/MQIx9NDJgFTGNQR9Z6ANy0K3L
+	L9LWSoe9Kab8pz8sySHXhnASZbhy/z0PfUcl2IWlQYlyiPOysgIZwEa6Z9zYs5dlgJrnda
+	MiY7M1c61xjadZQUF3fAmsBVD/Ly7N/uHuWdDe5XzhDFUSOOqzgiH865wZ97Mg==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed;
+	d=jatendofoods.online; s=dkim; t=1795630409;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 dkim-signature; bh=OMHl5BJd3bZ/I/ruHSSOkQ0Wsg9nOzg3144q4rSu+Uk=;
+	b=TKEtFh4mWcOKg7o21kAjhzMmns1WmKq7c0+AsqlHBmef/X8KIr5bnXM38ovNb/E/FY31Sk
+	DJamW9Wlyh+3mfnrhBCoK8IR63UexrLp90AFvudaPus2qv98F9nwDzYR4SMZK1EMLuUIZU
+	99ZoDbUFTeBPfgnX0UvrMXQM4RzClTLVMKEIuSx7qsqiI0+TUpz2mjYNWD9SSHsfy8iCBc
+	WXdYg3PBzDKN9XjFWAFubDwuI79kA8hW8V5TJeKNcnAMP0Qn0WKFndlcDt97HMHW1tzfh9
+	I+ZmkadM0mlSUYfmBrFclSw6/mf7DWHgq4Qz94HMWVd+4cqOkc/GlKMX09AMzQ==
+ARC-Authentication-Results: i=2;
+	mail.pony-it.com;
+	dkim=pass header.d=aptariffs.com header.s=google header.b=rg6ie3U1;
+	dmarc=pass (policy=none) header.from=aptariffs.com;
+	spf=pass (mail.pony-it.com: domain of mauricio@aptariffs.com designates 209.85.208.44 as permitted sender) smtp.mailfrom=mauricio@aptariffs.com;
+	arc=pass ("google.com:s=arc-20260327:i=1")
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-6b87a92c17eso8619721a12.3
+        for <cynthiabulleck@jatendofoods.online>; Wed, 25 Nov 2026 10:13:29 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795630408; cv=none;
+        d=google.com; s=arc-20260327;
+        b=PP3X2Hdh4hmN+HVFkCGIVQGKQBXuHBjQBWLs1/qd73fCZ579OVt7izClpDL7kK6B42
+         wzc0SgZbkf2VkY4JY3Wl60EFDjwTOaw1AJVNOOsQklMl+GD1qyF4oOUGYrIKWs72bVnB
+         aAEBrxtQIyqSjeHZSoq7+/ZmcRhS08+1GZehzo9keoLjsrKAJnTKwLaR6G2lPclbGzWF
+         aRUShrwYQQNK7bKp8/iwdFNqPZDapkE9fJhJqrToeQvqBYAH0ujdTWSSY2vf2mjMfPTj
+         8zOKpp6jUCRANYgFFlSAuzyOadu/rkeeMX++DzjI0/0gnblo69djE9XR2oO3qsvUqv7Y
+         ciyQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=OMHl5BJd3bZ/I/ruHSSOkQ0Wsg9nOzg3144q4rSu+Uk=;
+        fh=Nf6/jdx+tCZl2ti6EdIuE4YZijXmJ5Co9Eu5lZuDtag=;
+        b=DRXllbM7OlA7iPW9hjE3pMvB8Vzi9PuNd06najba1UkNvK4BHBvn/8tCRd8gbiuewd
+         ymLUgvMRVb8y9y2vFOO74o6MxJbfXhSbY/W/IJmNVLrtqREKbOuhfvUrqDlo7/QS+7w1
+         OrJmsJvfM0wxnMhAE1nhwYtwD+/Sb5zpx11wrB0khLmhetY0wrRph42qd5gJkrt9csiH
+         GUytKig1NrZZ3iVnl3AzTwqaiVsRn3EkRYkiyT39g1QVLV6yiupde93JPvJ2mbozilV0
+         cMKtZQgf+LtJCYRqywWB/daY1pAfABvf7toH9fJZeBsoWdS1g4yPF23aqej/IrsaRCUh
+         ct5g==;
+        darn=jatendofoods.online
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=aptariffs.com; s=google; t=1795630408; x=1796235208; darn=jatendofoods.online;
+        h=content-type:cc:to:subject:message-id:date:from:mime-version:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=OMHl5BJd3bZ/I/ruHSSOkQ0Wsg9nOzg3144q4rSu+Uk=;
+        b=rg6ie3U1zNQZkga23GCxIUSEW1F/zJNXI2Uj+oiYj8PfrttEL55MiOV6rtPf9F1dnL
+         BGeClMVoFcXu9qtwu7auIcET8WOxHp6aZ4SfQB6RBNStmsKckgLQzgTxGu/Cvwvrhb7s
+         WxoTU3wVMK+CWV+Mlww7c4LgfC3QXhtKAxI9RHu/uELriPnukcD4qW2Wdii21udQhouu
+         SiXXszXNvk9z42Ohj/rZy3tl2tDB76RdCZB5JCgV2N182c5cE0EH2A0jgBcB94r3anTQ
+         e9elW94y15pV+LifPYPZt0AerfO/zEexyGy5Yx0a1FesMDItc6lLMLN7nKLlKtgetJUS
+         6O2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795630408; x=1796235208;
+        h=content-type:cc:to:subject:message-id:date:from:mime-version
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=OMHl5BJd3bZ/I/ruHSSOkQ0Wsg9nOzg3144q4rSu+Uk=;
+        b=fzht1QLEQp8ualqRzMU5HrXqvTJDIEqpnZKtSDnY1LWa0Fzl++53EIag95jIqDNs6w
+         rxkngBnU8MnB4SF1veqJvIReq33F+B+I//fbZuEsSuz8KNhV3uBpULOWv2azQfcRNnPT
+         xx0Q3tN/wUHGf24uRkVDpdI+3846vpBYBeFrY3Tf0WObGDRFCOu5rgr2y+uOT1lQZZ/0
+         fIf3bzvaqHFmA6+s5QdjxXwi0X4NXW52OY7zjcpu00X6YJmVlRM3IfgoEcP4zktuV005
+         eOPtI0x6pUvOScf8JcXZ3qL1ZFtQ5sDZ+KLpdu78Hu9XCJXzUnOkRaFvtjhw9dhgFPWh
+         I9SA==
+X-Gm-Message-State: APuU4Z/Wof6LZuTyVJ8IT6sb0EibR6b/C/hEp11e/yKKLMWu/4m0uVxA
+	xP9QJhI1em2WODFQ/aKTK3idoZ64VtPdrYsb1NGQa0QsOfdemUczh2E3Ijqos7QtsoLM4LHlXFl
+	NyvYjf86HDg9Hays4YFHDOhZhkfXeG6DGR5JgwMqOv8T9k3392Pdj
+X-Gm-Gg: AZFdTZcNvNN9XRoIhekHVXRWEnc5VgfV/fpqudm+CRtwErFtqxwkEKHlgWdyrgN9pF7
+	wJvvcaTA0NJN2OyslAd+wzDIygWQSXQHi7wXt0cvquMrVFs83eH9/gjjE++eOmWbhqWBstARcDn
+	CHJbjc+ReIAEFMtbqnDvPQWN/0VdbXwSQsdujThE3mX+1QrdVzecs4+Gj+RFdgpR6ukRtygfvkw
+	PJ09eJGmuejRD8Og9SU3YqQyZpxmaSudmsZPaf4QfK3+VP4/M/s+upxvuxb8wbCPjdljm9UTWov
+	/pcgka9IXRDYVNe2EWZCT+IeGl5GePEN6V5LgBVtnGgLHnj20CHReFVwSslpzy9+033znUBnJBc
+	jjKf1C6poiUR/dVPB3M/b5z2cS906eAL1xQ1V+Hi0pubKIbVYF4hqW6tsnKdYJ2vegWTlvnm5+1
+	ezf9K8/6ZN306gPnax9SbKAoD3eBHp2ymxlFDDaXoSE5uQljpuxFtxmbgJ7GVuq0VkoZImX40=
+X-Received: by 2002:a05:6402:3223:b0:6b8:5f08:931b with SMTP id
+ 4fb4d7f45d1cf-6ba37ea44b2mr14646569a12.26.1795630407835; Wed, 25 Nov 2026
+ 10:13:27 -0800 (PST)
+Received: from 77377267392 named unknown by gmailapi.google.com with HTTPREST;
+ Wed, 25 Nov 2026 13:13:27 -0500
+MIME-Version: 1.0
+From: Mauricio Larenas <mauricio@aptariffs.com>
+Date: Wed, 25 Nov 2026 13:13:27 -0500
+X-Gm-Features: Aa3M54qj6xp-23s5ydJdtg81tIXVzBJmpgOL9GQu9ZVwcNLrpbnVKCD8WHBlXkc
+Message-ID: <CAKN+KdHA2LAPO_X+ww_=0e0UDbTouFT6ZX2_HoWAtaPsgWdgBA@mail.gmail.com>
+Subject: =?UTF-8?Q?Re=3A_=5BBOND=2D2026=2D0464=5D_Inquiry_=E2=80=93_Continuous_Customs_?=
+	=?UTF-8?Q?Bond?=
+To: cynthiabulleck@jatendofoods.online
+Cc: audrey@burnielgroup.us
+Content-Type: multipart/alternative; boundary="0000000000009b71f706611dc81f"
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Result: default: False [-6.63 / 15.00];
+	BAYES_HAM(-5.27)[99.46%];
+	FAKE_REPLY(1.00)[];
+	ARC_ALLOW(-1.00)[google.com:s=arc-20260327:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[aptariffs.com,none];
+	IP_REPUTATION_HAM(-0.26)[asn: 15169(-0.25), country: US(-0.01), ip: 209.85.208.44(0.00)];
+	R_DKIM_ALLOW(-0.20)[aptariffs.com:s=google];
+	R_SPF_ALLOW(-0.20)[+ip4:209.85.128.0/17];
+	MX_GOOD(-0.10)[aspmx.l.google.com];
+	MIME_GOOD(-0.10)[multipart/alternative,text/plain];
+	ARC_SIGNED(0.00)[jatendofoods.online:s=dkim:i=2];
+	RWL_MAILSPIKE_POSSIBLE(0.00)[209.85.208.44:from];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	MISSING_XM_UA(0.00)[];
+	ASN(0.00)[asn:15169, ipnet:209.85.128.0/17, country:US];
+	RCPT_MAILCOW_DOMAIN(0.00)[jatendofoods.online];
+	RCPT_COUNT_TWO(0.00)[2];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCVD_IN_DNSWL_NONE(0.00)[209.85.208.44:from];
+	TO_DN_NONE(0.00)[];
+	PREVIOUSLY_DELIVERED(0.00)[cynthiabulleck@jatendofoods.online];
+	TO_MATCH_ENVRCPT_SOME(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[aptariffs.com:+]
+X-Rspamd-Queue-Id: 4AAF5116C94
+
+--0000000000009b71f706611dc81f
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi Cynthia,
+
+Thanks for sending the details for JA Tendo Foods LLC=E2=80=99s $50,000 con=
+tinuous
+customs bond. We already have most of what we need. Could you reply with
+the name of the customs broker you plan to use and a brief description of
+the products you=E2=80=99ll import?
+
+If you prefer, you can complete our online application
+<https://app.apcustoms.com/intake/new>. Once we have those details, we can
+confirm pricing, turnaround time, and any supporting documents we=E2=80=99l=
+l need.
+
+Best,
+Mauricio
+
+--0000000000009b71f706611dc81f
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<p>Hi Cynthia,</p><p>Thanks for sending the details for JA Tendo Foods LLC=
+=E2=80=99s $50,000 continuous customs bond. We already have most of what we=
+ need. Could you reply with the name of the customs broker you plan to use =
+and a brief description of the products you=E2=80=99ll import?</p><p>If you=
+ prefer, you can <a href=3D"https://app.apcustoms.com/intake/new">complete =
+our online application</a>. Once we have those details, we can confirm pric=
+ing, turnaround time, and any supporting documents we=E2=80=99ll need.</p><=
+p>Best,<br>Mauricio</p>
+
+--0000000000009b71f706611dc81f--

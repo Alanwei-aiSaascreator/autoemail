@@ -1,0 +1,212 @@
+Return-Path: <bT.w0eqhfdoyzeb2e4=jzdedkthbaa9=hn36m7887wic93@em665558.borderbuddy.com>
+Delivered-To: chanrathanachouk@ordinaryusa.online
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id wEYwCuQOB2sX/jEAQ1DlOA
+	(envelope-from <bT.w0eqhfdoyzeb2e4=jzdedkthbaa9=hn36m7887wic93@em665558.borderbuddy.com>)
+	for <chanrathanachouk@ordinaryusa.online>; Wed, 25 Nov 2026 11:37:56 -0500
+X-Original-To: chanrathanachouk@ordinaryusa.online
+Received: from a1i1014.smtp2go.com (a1i1014.smtp2go.com [43.228.187.246])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id 3B04C1169F7
+	for <chanrathanachouk@ordinaryusa.online>; Wed, 25 Nov 2026 11:37:55 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=smtpcorp.com header.s=a1-4 header.b=IslUrG3+;
+	dkim=pass header.d=borderbuddy.com header.s=s665558 header.b=HfLyi992;
+	dmarc=pass (policy=none) header.from=borderbuddy.com;
+	spf=pass (mail.pony-it.com: domain of "bT.w0eqhfdoyzeb2e4=jzdedkthbaa9=hn36m7887wic93@em665558.borderbuddy.com" designates 43.228.187.246 as permitted sender) smtp.mailfrom="bT.w0eqhfdoyzeb2e4=jzdedkthbaa9=hn36m7887wic93@em665558.borderbuddy.com"
+ARC-Seal: i=1; a=rsa-sha256; d=ordinaryusa.online; s=dkim; cv=none;
+	t=1795624675;
+	b=NSWuRxDmdT2psI6bh2X0ndqDPMFX3MPRRmxpBI97+JSyB333l9K6Gm2kxmdqYclwlVerjX
+	JWghUMQ+l+i4O4AL+oAIhneypXL8o5MvhwktDneCyzpV9IBUOPM1SUDFe9yGTIipoXiEbG
+	AOWg3QCieoaiki/aTlZSlvSDOkI2spK5BM8ZazznTWnf10YFZPvZFG3MDC9rSAptIuGiRo
+	dnm63GPZu6DkRSwP8eNeICGnRP47LZNyeCEBltTPf32MP4COZN8+e6yMKo4ixdYI43nsdb
+	0U7ZcD5ocYFR1KIXz/kQ8UeYVOVy2nrNQz3igb4P2S/j0iS/4b1YKZnREOdxqg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=ordinaryusa.online; s=dkim; t=1795624675;
+	h=from:from:reply-to:reply-to:subject:subject:date:date:
+	 message-id:message-id:to:to:cc:mime-version:mime-version:
+	 content-type:content-type:in-reply-to:in-reply-to:
+	 references:references:dkim-signature;
+	bh=JEtORFw8dZdFRTk8IDD0xojriUrSAikS6wRomDVvJJQ=;
+	b=u64TnGLhkpRj/fn9nP+BbR37dISvkiyz0HXQNBBEIdog5COrS7AhubkHY+btU5UrbVMY5E
+	/zfXRgIBDAu0fIC/uMnn1sUmcjTY/9srmlOlXzs2UeTFtPr6/ndSSUs9SF/+Cy1uT+3i+4
+	V87sAQx868vLY9eBsragmXY9hLXMdwM8dSnSit9sriWPw0sk+GCcdjxG+G3wSNcn/AmGyR
+	N2HjF98zziZL6DxpLeD8WblM2JuY1MsZT/PW6brBaNQqHubayH3Hf8PB+WYbNY1HY2L4Yv
+	Zz0qBpTOSL8EQr4cqLIgbw3HBaWPmg0GD2RV5wtfx5oYmKPQaKpEOjDMiEiV2g==
+ARC-Authentication-Results: i=1;
+	mail.pony-it.com;
+	dkim=pass header.d=smtpcorp.com header.s=a1-4 header.b=IslUrG3+;
+	dkim=pass header.d=borderbuddy.com header.s=s665558 header.b=HfLyi992;
+	dmarc=pass (policy=none) header.from=borderbuddy.com;
+	spf=pass (mail.pony-it.com: domain of "bT.w0eqhfdoyzeb2e4=jzdedkthbaa9=hn36m7887wic93@em665558.borderbuddy.com" designates 43.228.187.246 as permitted sender) smtp.mailfrom="bT.w0eqhfdoyzeb2e4=jzdedkthbaa9=hn36m7887wic93@em665558.borderbuddy.com"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=smtpcorp.com; s=a1-4; h=Feedback-ID:X-Smtpcorp-Track:Date:Message-ID:
+	Subject:Reply-To:To:From:Sender:List-Unsubscribe:List-Unsubscribe-Post;
+	bh=JEtORFw8dZdFRTk8IDD0xojriUrSAikS6wRomDVvJJQ=; b=IslUrG3+BihF6v4JR2CVSGq2ls
+	Bpa7V0gBpuGM7ufOIydn8AascXQxifZLDl31TZyDY8kbdoZj7ePn+H6b3+8kCm7rRHe95+ESY72Fk
+	Jseyj9eclZNQ4l0wamqkBqL9222abhLcvJYE86QImsOWTF4bgtTLFG4zfFw+byqmeE7io2ie44+UP
+	+TkkfbIJaW4+ocooVWK9t/V9ZjFV2JjegBK0zVnmnOMe9yD4Km5Gy34lDfUyd3lwDbIpOGr7ib4rP
+	7C9ocbNDzbUEzjZVjpw2QLR5epup7DchV5Vhm+uHNmfj4bQ8H0WMwzeXZTsA99fVpKF6h4eZddRrU
+	mI8+bG8Q==;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=borderbuddy.com;
+ i=@borderbuddy.com; q=dns/txt; s=s665558; t=1795624675; h=from :
+ subject : to : message-id : date;
+ bh=JEtORFw8dZdFRTk8IDD0xojriUrSAikS6wRomDVvJJQ=;
+ b=HfLyi9920l4RnQQhlqyHAgB5OnlnpKGPZ4urBOC578btsoVvhv9he2xwdV2Eb5yda91f5
+ SCLAf2f+1jd1Z4LSe9itHnekuPZBffyFI2knvQIpsIbRdno4NQe29p7LKQSV7KIAX9My6ai
+ yDLt/Psdk5T8aOOtNidlNYjUcGb5L1v9qVxgbbYimhNu4a/WC7Gxg0yclA+l0MZhaQkPuT1
+ 2Vw05mQvDkdoSBqzQJ2Ja03qhLjeRfyc+xsyagT0LpYaANaCxzu0rdjWkQ/iqGspVImMfVm
+ xzGwNZqoQHBrZlnoDUikxft5C5eNGeAX16i4aWzol9EJjqyE0hiSGVt3UjsA==
+Received: from [10.172.234.246] (helo=SmtpCorp) by smtpcorp.com with esmtpsa
+ (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+ (Exim 4.94.2-S2G) (envelope-from <chinoso@borderbuddy.com>)
+ id 1xWG0G-l1jfmq-O8
+ for chanrathanachouk@ordinaryusa.online; Wed, 25 Nov 2026 16:37:52 +0000
+Received: from [10.114.241.198] (helo=out.frontapp.com)
+ by smtpcorp.com with esmtpsa
+ (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256:X25519)
+ (Exim 4.100.1) (envelope-from <chinoso@borderbuddy.com>)
+ id 1xWG0F-AIkwcC8lEd8-7rhz for chanrathanachouk@ordinaryusa.online;
+ Wed, 25 Nov 2026 16:37:51 +0000
+X-Front-ID: 341520b56afa3328b03a61562f27b883@frontapp.com
+From: "chinoso@borderbuddy.com" <chinoso@borderbuddy.com>
+To: "chanrathanachouk@ordinaryusa.online" <chanrathanachouk@ordinaryusa.online>
+Reply-To: chinoso@borderbuddy.com
+In-Reply-To: <010f01a21317ebcd-7f821daa-0153-4ecd-ace6-cedf966977b9-000000@us-east-2.amazonses.com>
+References: <010f01a21317ebcd-7f821daa-0153-4ecd-ace6-cedf966977b9-000000@us-east-2.amazonses.com>
+ <341520b56afa3328b03a61562f27b883@frontapp.com>
+Subject: Re: [BOND-2026-0614] Inquiry - Continuous Customs Bond
+Message-ID: <341520b56afa3328b03a61562f27b883@frontapp.com>
+X-Mailer: Front (1.0; +https://frontapp.com;
+ +msgid=341520b56afa3328b03a61562f27b883@frontapp.com)
+Date: Wed, 25 Nov 2026 16:37:51 +0000
+MIME-Version: 1.0
+Content-Type: multipart/alternative; boundary="--_NmP-5a93916296e1aa4b-Part_1"
+X-Smtpcorp-Track: UWz9xYXOf9p_.-3yKpi2Ll19p.IE_NjQz4y6k
+Feedback-ID: 665558m:665558alJgVJu:665558sgjzmlwLSs
+X-Report-Abuse: Please forward a copy of this message, including all headers,
+ to <abuse-report@smtp2go.com>
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Result: default: False [-5.74 / 15.00];
+	BAYES_HAM(-3.95)[95.95%];
+	FROM_DN_EQ_ADDR(1.00)[];
+	DWL_DNSWL_LOW(-1.00)[smtpcorp.com:dkim];
+	IP_REPUTATION_HAM(-0.78)[asn: 1299(-0.23), country: SE(-0.01), ip: 43.228.187.246(-0.55)];
+	DMARC_POLICY_ALLOW(-0.50)[borderbuddy.com,none];
+	FORGED_SENDER(0.30)[chinoso@borderbuddy.com,bT.w0eqhfdoyzeb2e4=jzdedkthbaa9=hn36m7887wic93@em665558.borderbuddy.com];
+	R_DKIM_ALLOW(-0.20)[smtpcorp.com:s=a1-4,borderbuddy.com:s=s665558];
+	R_SPF_ALLOW(-0.20)[+ip4:43.228.184.0/22];
+	RCVD_IN_DNSWL_LOW(-0.10)[43.228.187.246:from];
+	MX_GOOD(-0.10)[return.smtp2go.net];
+	MIME_GOOD(-0.10)[multipart/alternative,text/plain];
+	REPLYTO_MX_GOOD(-0.10)[borderbuddy.com.1.0001.arsmtp.com];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	RCPT_MAILCOW_DOMAIN(0.00)[ordinaryusa.online];
+	ARC_NA(0.00)[];
+	RCPT_COUNT_ONE(0.00)[1];
+	FROM_NEQ_ENVFROM(0.00)[chinoso@borderbuddy.com,bT.w0eqhfdoyzeb2e4=jzdedkthbaa9=hn36m7887wic93@em665558.borderbuddy.com];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	TO_DN_EQ_ADDR_ALL(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	REPLYTO_ADDR_EQ_FROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	ASN(0.00)[asn:1299, ipnet:43.228.184.0/22, country:SE];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_TRACE(0.00)[smtpcorp.com:+,borderbuddy.com:+];
+	ARC_SIGNED(0.00)[ordinaryusa.online:s=dkim:i=1];
+	HAS_REPLYTO(0.00)[chinoso@borderbuddy.com]
+X-Rspamd-Queue-Id: 3B04C1169F7
+
+----_NmP-5a93916296e1aa4b-Part_1
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+Good Day,
+
+
+Unfortunately, we aren't able to assist with a continuous bond =
+without an incoming shipment. We apologize for any inconvenience this has =
+caused.
+
+
+Best Regards,
+
+Chinoso
+Sales Executive
+
+BorderBuddy Customs =
+Brokers
+Phone: (587) 400-9775 | www.borderbuddy.com
+Hours of operation: M-F 8am - 4:30pm PST
+
+
+
+Please use our free quote =
+calculator
+BorderBuddy Duties and Taxes Calculator
+
+
+Track Tariff Changes for U.S and Canada
+Tariff Policy Tracker
+
+
+Track Your Shipment Instantly:
+PARS Tracker | PAPS =
+Tracker
+----_NmP-5a93916296e1aa4b-Part_1
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<!--[if (gte mso 9)|(IE)]><style type=3D"text/css">.=
+main-style-5611766fde22e29e9f93 { font-family: sans-serif; font-size: 11pt;=
+ font-family: 'Helvetica Neue', 'Segoe UI', Helvetica, Arial; font-size: =
+13px; }</style><![endif]--><div style=3D"font-family: &#x27;Helvetica =
+Neue&#x27;, &#x27;Segoe UI&#x27;, Helvetica, Arial; font-size: 13px;" =
+class=3D"main-style-5611766fde22e29e9f93"><div>Good Day,</div><div><br =
+/></div>
+<div>Unfortunately, we aren't able to assist with a continuous =
+bond without an incoming shipment. We apologize for any inconvenience this =
+has caused.</div><div><br /></div>
+<div>Best Regards,</div><div><br =
+/></div>
+<br><div class=3D"front-signature"><div><span style=3D"color: =
+rgb(243, 100, 22);"><b>Chinoso</b></span></div><div><span style=3D"color: =
+rgb(243, 100, 22);">Sales Executive<br /></span></div><div><span =
+style=3D"color: rgb(243, 100, 22);">BorderBuddy Customs =
+Brokers</span></div><div><span style=3D"color: rgb(243, 100, 22);">Phone: =
+(587) 400-9775 |&nbsp;<a href=3D"http://www.borderbuddy.com/" =
+rel=3D"noopener noreferrer" target=3D"_blank">www.borderbuddy.=
+com</a></span></div><div><span style=3D"color: rgb(243, 100, 22);">Hours of=
+ operation:&nbsp; M-F 8am - 4:30pm PST<br /></span></div><div><br =
+/></div><div style=3D"box-sizing: content-box;" data-end=3D"587" =
+data-start=3D"361"><b><span style=3D"color: rgb(243, 100, 22);">Please use =
+our free quote calculator</span></b></div><div style=3D"box-sizing: =
+content-box;" data-end=3D"587" data-start=3D"361"><a =
+href=3D"https://borderbuddy.com/quote" rel=3D"noopener noreferrer" =
+target=3D"_blank"><span style=3D"font-weight: 700;">BorderBuddy Duties and =
+Taxes Calculator</span></a></div><div style=3D"box-sizing: =
+content-box;"><br /></div><div style=3D"box-sizing: content-box;"><b><span =
+style=3D"color: rgb(243, 100, 22);">Track Tariff Changes for U.S and =
+Canada</span></b></div><div style=3D"box-sizing: content-box;"><a =
+href=3D"https://borderbuddy.com/trade-tariff-news" rel=3D"noopener =
+noreferrer" target=3D"_blank">Tariff Policy Tracker</a></div><div =
+style=3D"box-sizing: content-box;"><br /></div><div style=3D"box-sizing: =
+content-box;" data-end=3D"720" data-start=3D"589"><span style=3D"color: =
+rgb(243, 100, 22);"><strong data-end=3D"626" data-start=3D"592">Track Your =
+Shipment Instantly:</strong></span></div><div style=3D"box-sizing: =
+content-box;" data-end=3D"720" data-start=3D"589"><span style=3D"color: =
+rgb(243, 100, 22);"><a style=3D"text-decoration: none;" =
+href=3D"https://borderbuddy.com/pars" rel=3D"noopener noreferrer" =
+data-end=3D"673" data-start=3D"629" target=3D"_blank">PARS =
+Tracker</a>&nbsp;|&nbsp;<a style=3D"text-decoration: none;" =
+href=3D"https://borderbuddy.com/paps" rel=3D"noopener noreferrer" =
+data-end=3D"720" data-start=3D"676" target=3D"_blank">PAPS =
+Tracker</a></span></div></div></div><img src=3D"https://app.frontapp.=
+com/api/1/noauth/companies/e0add33aa5a7cd098aa0/seen/msg_3drco92d/han_a2h5d=
+k5/58ff5d31.gif" alt=3D"Sent from Front" aria-hidden=3D"true" =
+style=3D"width: 1px; height: 1px">
+----_NmP-5a93916296e1aa4b-Part_1--

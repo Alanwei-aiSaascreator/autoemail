@@ -1,0 +1,158 @@
+Return-Path: <>
+Delivered-To: brianamartin@flywirecompany.online
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id iEkBKKTsBmvPVSMAQ1DlOA
+	(envelope-from <>)
+	for <brianamartin@flywirecompany.online>; Wed, 25 Nov 2026 09:11:48 -0500
+X-Original-To: brianamartin@flywirecompany.online
+Received: from e226-240.smtp-out.us-east-2.amazonses.com (e226-240.smtp-out.us-east-2.amazonses.com [23.251.226.240])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id 1F2F610B79A
+	for <brianamartin@flywirecompany.online>; Wed, 25 Nov 2026 09:11:48 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=gD1jZNFj;
+	dkim=none ("invalid DKIM record") header.d=grf-chb.com header.s=google header.b=Jcl8REFd;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	spf=pass (mail.pony-it.com: domain of e226-240.smtp-out.us-east-2.amazonses.com designates 23.251.226.240 as permitted sender) smtp.helo=e226-240.smtp-out.us-east-2.amazonses.com;
+	arc=reject ("signature check failed: fail, {[1] = sig:google.com:reject}")
+ARC-Seal: i=2; a=rsa-sha256; d=flywirecompany.online; s=dkim; cv=fail;
+	t=1795615908;
+	b=dveNKPjQNztEdWlWFeQwBbClC7ZPnYPq+FS95/2z8ffZatdC1Itu6DRlU0xjy9skWd3/yw
+	3CRoJjV+NuzOrMLf5U8hvlvi0VerTIZOBkIffwQzcR3/z7JBNRuqMXx9Dr807SxeY2BdmM
+	wZT4/GcFEMjnJtQUbGZ0q/7t9S54d8GAmS/knqWF+Yi3jd21pWG7y7g4VkeULyHpB0WCvJ
+	4+LYehW0euVZwnvQoEkTvAkHQDUay1/9hJOn+1eUOFhshEmh3VIzek4wZajFqaqZJypKw/
+	btdTc6AL63KgFU340MrD9Dug3D/BmvBMnWooNd0Er18GhyXCLUW7ieu17o0uHQ==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed;
+	d=flywirecompany.online; s=dkim; t=1795615908;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:dkim-signature;
+	bh=Vf7dMGfXkzvT9HlcAcrbisdxK7K/UjY2GTPlZo7AbTQ=;
+	b=oJhcsPLdbwYSFkkYUrds6WJV+4faM3Y9TKET1TvRpYRo9F5j5rnSSTDqsmEcmsKQp6xnUO
+	1G8JvjWPC03HZyqdnchiEMkvIN2Yg804qiLO0vIyMYwXZDQNVqvKqusfh+Xsga6o9hJqQJ
+	EgDgOb5/ky8ZSYpkhoSU7gPU4vlUBPT6AQtTYP6QW0ei1e1dHCeDKSbGVnyfiQYH6xp5kx
+	P+C+eggI6nMwLxgy5dRnHkvpbzhaeMVNuFD/p96a3eSbO/XyL4Y1+etIBI4ok2SWnjgpEg
+	KaJFTDRBcEr/cEOcX6ZHTYdo4WabGHVCCM1Ok29A+QCljBxujbndtvz5/3SbmA==
+ARC-Authentication-Results: i=2;
+	mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=gD1jZNFj;
+	dkim=none ("invalid DKIM record") header.d=grf-chb.com header.s=google header.b=Jcl8REFd;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	spf=pass (mail.pony-it.com: domain of e226-240.smtp-out.us-east-2.amazonses.com designates 23.251.226.240 as permitted sender) smtp.helo=e226-240.smtp-out.us-east-2.amazonses.com;
+	arc=reject ("signature check failed: fail, {[1] = sig:google.com:reject}")
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=kra23psoka5qyyh6gdejiiuof3nluwuz; d=amazonses.com; t=1795615907;
+	h=To:From:Date:Message-ID:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Feedback-ID;
+	bh=Vf7dMGfXkzvT9HlcAcrbisdxK7K/UjY2GTPlZo7AbTQ=;
+	b=gD1jZNFjortRQZ0D5MMEZULAzPk03MWSO4YH4NHf1Nb43jx42UJVsxhCtlxF7af0
+	ejftArqym+nVBGQwxTKgi3oaErIDXpt5WEBZIBysNkzBTmIpmmDnCSdTEYTYmzIpTkc
+	63jND83wnVALnuJm9mC75B71p86ViEOYVtTyY3F8=
+ARC-Seal: i=1; a=rsa-sha256; t=1795615906; cv=none;
+        d=google.com; s=arc-20260327;
+        b=XL+V5SRwcSiygXW9hXBgvEYaCXMyMznKxKTroFXEJbIG1AX48865005nKTyQ7hnNQx
+         cIh31nBV+nENI1yTGzUz98+eNjlLDImmAWgBb/UtGVgj1019uTwCXjisQfbDwBD1ENR/
+         /jJBlp6W0azccwXnhqmBpIWuZWutgz3BjHGe8Ri/KSrjrlvUJMOvqZhWcjvQoqS+AYam
+         3zk+cuAddeSVykPvQp5/VXFTc/HFsGWij7Fa9Wy3K2WhGQwvvj7NtkS1W/Vcyjucxoua
+         NbcPojjWJyq8EMSjbldzIAnRzjZrFq4uP6uAx9IVJCVFh9ABPiSa6jViNXQSkWN4+cGB
+         2oDQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=auto-submitted:precedence:content-disposition
+         :content-transfer-encoding:mime-version:subject:message-id:date:from
+         :to:dkim-signature;
+        bh=Vf7dMGfXkzvT9HlcAcrbisdxK7K/UjY2GTPlZo7AbTQ=;
+        fh=6pcKxQYsrZt3WOkIyBimEcx5QDCW64U72Z/bSWXp4qQ=;
+        b=MnNsAahFUMZ5eead2boFok/Nj0je5aIXHctQpH9DSnkJxx73Yegz6nJKPxQATw9Cu9
+         TvePq1bYXumLr3Y9iyKQlmAqEasEdauGy5YIcYcURll3KDGmny3sKcIIdVIBw+yYqBFF
+         rnQaZSJDP+taGsYZZZJH7vLZFYdNr3PIUUKfTBX5KNN/mpxfTFh0dw0EqCrggZ24WGAQ
+         j7YpilXDPwrRMg1zr5cFZ5KENNeUZVljLgFf6nEWEMtCpbag8M12EXp8gqzSbbgCvRSe
+         zY2WBi4o3tOcRREcSD6PTPN8XXo+tdx3DkwAg0I20Av9a88rTDQGY0Z/buaKDjvLpm6J
+         WGtQ==;
+        darn=ses.flywirecompany.online
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=grf-chb.com; s=google; t=1795615906; x=1796220706; darn=ses.flywirecompany.online;
+        h=auto-submitted:precedence:content-disposition
+         :content-transfer-encoding:content-type:mime-version:subject
+         :message-id:date:from:to:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Vf7dMGfXkzvT9HlcAcrbisdxK7K/UjY2GTPlZo7AbTQ=;
+        b=Jcl8REFdvpe9e5nfXohdwN46wcpA9KHccD0iUJy4uxylRtk056I2PnZsHaGlO58vEN
+         CnFdirID3cEv25ISAzUGD/2Bm7TuZziIc2Y44evT1oHKFzUC7Dfyo8YZkZe/e/iM6pl6
+         zHIqBhhCrm/Q9xpjZJUwN9dQZN4O2Tyhv/Fuq3FWDiDEWtSKTZNUTMRSISr2dncc0jPI
+         dBPixYR2WbSLqwbZtEx3fwDtJLf8bghl/SPk8XM933UW0bB5nkc4esEwXrRavjgzR9iV
+         0edmh0/KIH3QPfFVydL6AifLI6wcMCJ92h5EHspkCVrmhmCI606bDygY6pMm2wXPQeG4
+         UsyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795615906; x=1796220706;
+        h=auto-submitted:precedence:content-disposition
+         :content-transfer-encoding:content-type:mime-version:subject
+         :message-id:date:from:to:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=Vf7dMGfXkzvT9HlcAcrbisdxK7K/UjY2GTPlZo7AbTQ=;
+        b=PvSHdf3slpALSmn+mdGBE7GaYHxE70tVLi/Omrl9f6JTXMJg738CdQG5cEkqc1qL8e
+         4lo3ewzkaQlqe5cziaaHLTkBe6ptXWZEGPKtHGagmcDenMScjgq2wAkef6gAjWKSpgy7
+         LQsmn78cdvm8DW2v/1QGiJRifHPnlmX68OvtzcOnG6ybrrDF+okpqH9cGqQzyRbhVJaK
+         wEuWa6t+LmkmB/AfuEcHe5FEI1fDjauwYYsKg5/tNTAAD+QzTSUoToq9jvdEswxP9Aoq
+         yq/Lpxcn656cvEUdSxs/sFx1vmpHYB/UL3E59voqvnjM0WUskrXmKvA/wVkmKDdtGE9U
+         W3Vw==
+X-Gm-Message-State: APuU4Z8ug/FCyxmXoaMr382YCdZS9EQPAHaNsfA0po9tFX3nmSId/koA
+	08SHRZkxbJvdYIC3T0vnf5zXk1XXKlzK+iallzOMBdiT2+ydoq9Z4c4enFt89l6J16+v699ffOj
+	+ipvEqHwPDE5mh8gyds2u1vc62ptYEsoO3W0zw7EY5y02eBD2b0R6SG04rn3WgabqCyEjtb1FTs
+	dVBy6vj72joGR1JfIPQRRR39WSvd+J
+X-Gm-Gg: AZFdTZf4euw65+8lKt+Wcb5orXef4em9rAn7rHPVGBeWbLXWQ2K7KgDcyAMYfxwNYwE
+	G2M37h9RNdrvK09ltlS3wydRUlXjr/KHjwA9vcHq0QKIGKec5oFnrLAs5NOB7S2FcpuY4ZL52zB
+	oGFHLlkyvNp+NG3lfYnhdOzFQaPoTDKim3z2w8v6BD05wpACGZ5VF+C4BsHPuSBEuvP6gk67PyL
+	/4nOu3guj9ZC2/Orfuf2qiQwnWTQgeEemFjjUJqMBDK7TUx6LRxF0zDmQtnB5Jy8q1YPOnGYeky
+	LLeZkW5Vz85DUz1PuvAFiVITjYcSIGYVdgBBVMdhYIXZ7FWr7wQjYWFGYNZ1SCAspOyaJlu3YZJ
+	7Tjnv3tiW2A08twLAhII=
+X-Received: by 2002:a05:651c:312c:b0:3ae:5f8c:4ee1 with SMTP id 38308e7fff4ca-3ae7fa7257amr55304411fa.23.1795615905796;
+        Wed, 25 Nov 2026 06:11:45 -0800 (PST)
+To: brianamartin@flywirecompany.online
+From: MAILER-DAEMON@us-east-2.amazonses.com
+Date: Wed, 25 Nov 2026 14:11:47 +0000
+Message-ID: <010f01a2130c5edd-8c830a48-3864-45f5-b596-dad54e4d451c-000000@us-east-2.amazonses.com>
+Subject: Happy Thanksgiivng! Re: [BOND-2026-0548] Inquiry - Continuous Customs Bond
+MIME-Version: 1.0
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+Precedence: bulk
+X-Autoreply: yes
+Auto-Submitted: auto-replied
+Feedback-ID: ::1.us-east-2.c0QCJwTJKDSb6mlKpIo5IpGwsngRMRBjZtJ48k4WYjY=:AmazonSES
+X-SES-Outgoing: 2026.11.25-23.251.226.240
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Result: default: False [-3.11 / 15.00];
+	BAYES_HAM(-1.34)[83.79%];
+	IP_REPUTATION_HAM(-1.17)[asn: 16509(-0.31), country: US(-0.01), ip: 23.251.226.240(-0.85)];
+	DMARC_POLICY_ALLOW(-0.50)[amazonses.com,quarantine];
+	MIME_HTML_ONLY(0.20)[];
+	R_DKIM_ALLOW(-0.20)[amazonses.com:s=kra23psoka5qyyh6gdejiiuof3nluwuz];
+	R_SPF_ALLOW(-0.20)[+ip4:23.251.226.240:c];
+	ONCE_RECEIVED(0.10)[];
+	ARC_REJECT(0.10)[signature check failed: fail, {[1] = sig:google.com:reject}];
+	MIME_FROM_MX_GOOD(-0.10)[feedback-smtp.us-east-2.amazonses.com];
+	SUBJECT_HAS_EXCLAIM(0.00)[];
+	R_DKIM_PERMFAIL(0.00)[grf-chb.com:s=google];
+	RCPT_COUNT_ONE(0.00)[1];
+	RCPT_MAILCOW_DOMAIN(0.00)[flywirecompany.online];
+	DWL_DNSWL_NONE(0.00)[amazonses.com:dkim];
+	MIME_TRACE(0.00)[0:~];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	DKIM_TRACE(0.00)[amazonses.com:+,grf-chb.com:~];
+	RCVD_COUNT_ZERO(0.00)[0];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_NONE(0.00)[];
+	ARC_SIGNED(0.00)[flywirecompany.online:s=dkim:i=2];
+	ASN(0.00)[asn:16509, ipnet:23.251.226.0/24, country:US];
+	MISSING_XM_UA(0.00)[];
+	FROM_NO_DN(0.00)[];
+	DKIM_MIXED(0.00)[];
+	RCVD_IN_DNSWL_NONE(0.00)[23.251.226.240:from]
+X-Rspamd-Queue-Id: 1F2F610B79A
+
+<div dir="ltr"><div>Our office will be closed on Thursday, November 26th and Friday, November 27th in observance of the Thanksgiving holiday. Normal operating hours will resume on Monday, November 30th.</div></div>

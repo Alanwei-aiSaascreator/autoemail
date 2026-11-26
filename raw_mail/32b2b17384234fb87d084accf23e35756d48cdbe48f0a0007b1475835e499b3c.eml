@@ -1,0 +1,211 @@
+Return-Path: <>
+Delivered-To: brianamartin@flywirecompany.online
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id kNwGFJLsBmvPVSMAQ1DlOA
+	(envelope-from <>)
+	for <brianamartin@flywirecompany.online>; Wed, 25 Nov 2026 09:11:30 -0500
+X-Original-To: brianamartin@flywirecompany.online
+Received: from us-smtp-delivery-221.mimecast.com (us-smtp-delivery-221.mimecast.com [170.10.133.221])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id 6BA4B10B79A
+	for <brianamartin@flywirecompany.online>; Wed, 25 Nov 2026 09:11:29 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=baldwin.com header.s=mimecast20240412 header.b=NmJ0TwKZ;
+	dmarc=pass (policy=quarantine) header.from=baldwin.com;
+	spf=pass (mail.pony-it.com: domain of us-smtp-delivery-221.mimecast.com designates 170.10.133.221 as permitted sender) smtp.helo=us-smtp-delivery-221.mimecast.com
+ARC-Seal: i=1; a=rsa-sha256; d=flywirecompany.online; s=dkim; cv=none;
+	t=1795615889;
+	b=cadIoV2c9Tao/tbju5iDOS8oHU5CNCmkUtG6ekAe8gqIItKQz055Tu9mjNtr3l9wRK8Eol
+	dB6iGdRh1s0HUwdYi2whIiAHPD/RXNgafLoGr0ijCVM8xlS3Q6fMGd54IxhQ0XRwKk4Hm/
+	bhidel44Y2zsVbQ7oLgux9jV3SICmn8Ik6R6SX9aWHjQiVAAijg0VtRf4xRZPoJ5Uo90qU
+	vNXgxsbWiwGw9wyBLLb9uDtZNlUbdulk5OIC+MscxVH8AW28KUB4VV6Y8p9SN1woZ61j6v
+	l8XtwmOn7aiIXaXDs/BfPPT6GyEld5yZhyle1UsX2XluEipDNp8rp7XqhAAljw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=flywirecompany.online; s=dkim; t=1795615889;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references:dkim-signature;
+	bh=/U1Oxd0BaD8u/AP0su59V6rU1Iz/MGTOacZ0PsoL0uw=;
+	b=Z7b8UoueG5kfG2DBAZhdiQHFk+l+vU92JZUwAZWGkzlA7Rfpp3v1AYf9ON5qpdF7QWYoHs
+	+nj9RfdfoZYE8oW3X3FfUXMeFqLeIwat8lyYqwrHdsE1q7JF7pPs8aHOhWQzu7m9McdAQP
+	mmLzkRDrPk81Zs3G0KdryWXYXtshbgqA501cqEvavtghTvhMeT8JpxCbxe9uWNgluJFREX
+	7jvk5NZvDqN7rzPR1Fa8jaPi05xJX89SaioAjrhETZsyvONUcQwa9qcl8nUOU/RN9LDIc7
+	nXBbNK5Hp79N192dao1dhH5eSerEkIKA9oMLN+ZW+iOu03tqtng/uHTvMYifUg==
+ARC-Authentication-Results: i=1;
+	mail.pony-it.com;
+	dkim=pass header.d=baldwin.com header.s=mimecast20240412 header.b=NmJ0TwKZ;
+	dmarc=pass (policy=quarantine) header.from=baldwin.com;
+	spf=pass (mail.pony-it.com: domain of us-smtp-delivery-221.mimecast.com designates 170.10.133.221 as permitted sender) smtp.helo=us-smtp-delivery-221.mimecast.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=baldwin.com;
+	s=mimecast20240412; t=1795615888;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=/U1Oxd0BaD8u/AP0su59V6rU1Iz/MGTOacZ0PsoL0uw=;
+	b=NmJ0TwKZGSSZlNjFQhKonmTi6IgleyNKiCaWvQwWr5guf2KOg3ESca+7xlBzERvQHrq4d7
+	AkvJf5pZP2Hl6ENwVUOM/u3HVnkyAJweJfmlyeah6anmgOI4+VKKWnhv/cbrAvw/4/hdbj
+	Bo7AanppgyBEKMhWiUq6zhQPdJoKtCc=
+Received: from SN4PR2101CU001.outbound.protection.outlook.com
+ (mail-southcentralusazhn15012046.outbound.protection.outlook.com
+ [52.102.140.46]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-86-3xsbzCZ0OFO9vjhuEt8IVQ-1; Wed, 25 Nov 2026 14:11:20 +0000
+X-MC-Unique: 3xsbzCZ0OFO9vjhuEt8IVQ-1
+X-Mimecast-MFC-AGG-ID: 3xsbzCZ0OFO9vjhuEt8IVQ_1795615879
+Received: from MN2PR03MB5069.namprd03.prod.outlook.com (2603:10b6:208:1a2::24)
+ by SJ0PR03MB5504.namprd03.prod.outlook.com (2603:10b6:a03:28a::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.662.6; Wed, 25 Nov
+ 2026 14:11:18 +0000
+Received: from MN2PR03MB5069.namprd03.prod.outlook.com ([::1]) by
+ MN2PR03MB5069.namprd03.prod.outlook.com ([fe80::ca1:e46b:d1f7:cb46%3]) with
+ Microsoft SMTP Server id 15.21.0639.011; Wed, 25 Nov 2026 14:11:18 +0000
+From: Jennifer Anaya <jennifer.anaya@baldwin.com>
+To: "brianamartin@flywirecompany.online" <brianamartin@flywirecompany.online>
+Subject: Automatic reply: [BOND-2026-0545] Inquiry - Continuous Customs Bond
+Thread-Topic: [BOND-2026-0545] Inquiry - Continuous Customs Bond
+Thread-Index: AQHdfObWid0lV+sRaEaNuZKn/AfOkLc+0+Bb
+Date: Wed, 25 Nov 2026 14:11:18 +0000
+Message-ID: <a2d8663b2b8048809383c451c891d657@MN2PR03MB5069.namprd03.prod.outlook.com>
+References: <010f01a2130bced6-58234012-bf45-4323-ac97-17c3d23d6e74-000000@us-east-2.amazonses.com>
+In-Reply-To: <010f01a2130bced6-58234012-bf45-4323-ac97-17c3d23d6e74-000000@us-east-2.amazonses.com>
+X-MS-Has-Attach: 
+X-Auto-Response-Suppress: All
+X-MS-Exchange-Inbox-Rules-Loop: jennifer.anaya@baldwin.com
+X-MS-TNEF-Correlator: 
+x-ms-exchange-parent-message-id: <010f01a2130bced6-58234012-bf45-4323-ac97-17c3d23d6e74-000000@us-east-2.amazonses.com>
+auto-submitted: auto-generated
+x-ms-exchange-generated-message-source: Mailbox Rules Agent
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MN2PR03MB5069:EE_|SJ0PR03MB5504:EE_
+x-ms-office365-filtering-correlation-id: cc914c7c-3faf-4f6a-3dcc-08df4afdf990
+x-exclaimerhostedsignatures-messageprocessed: true
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|50650200027|10070799003|376014|366016|1800799024|3613699012|10067099003|56012099006|11063799006|261022075727099003|261022105027099003|261022113327099003|261026121527099003|261026140227099003|261028144727099003|22082099003|18002099003|5133699003|8096899003|12063799003|80100003
+x-microsoft-antispam-message-info: ZtWP8KLHcI6v5tbhIoBN3z37/925SdwniA9M9+xQGg0SJE56nwNZ+RLd2SifRK61DbNXnrpz/wrxYETJvluNn/UNUpHvdpGnpZRnzMOQHV564vezjbOzOwosOLGk/JsnUa4d+T4PjCtFJmKAjVopAVdUSHVVdKRaPMYKNLxmQstqe1kmbobtfEyMYMNz4pgg/bzfUl9cjDuLInkV6jsh1LEieVbfpQqcDQBbgMi3dxAcFxmS73h3Y7LRLcKVZMyVhr7q7kcrsOTW+J/pu4fUHUr2gZNBK5oxEL3NJppZlUI2rLnOAc24MHivFlonbbwkV8c+7JK9LG8PBAaOlopGumi8QLSsqu7i69q66DU4epMdUf2PN0FAtLETyEBpK4JdXlKy5pU7KBXDFd6/tZACNHRtVu2dIxQDRnht3jNE0OYsbPA7VVys8+tEESaFL200vLHhaEc4wmVLKUNRbif8btkwt448H2QgZfpVaC09n30Rwn3zLZi3F4S5uWWOPFx59N7zCB95MfREYpcyUBB6g7a56RXWiqg4paUCGMlbdykDeRo71afWChlvkTix1v2yLFSvnQoNMKeD7tDhJfgHdzPPd7qepupmUldC11MVL38mg99AzYybDaRdL6WcOCci5aDujcXCiBWz34LJENvQkugzCJo+R90CFSnE+v620FiqQLtdt9ZME8aqo6bj9PPoSxJtc0EtnzkIOvV3MVT6pg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR03MB5069.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(50650200027)(10070799003)(376014)(366016)(1800799024)(3613699012)(10067099003)(56012099006)(11063799006)(261022075727099003)(261022105027099003)(261022113327099003)(261026121527099003)(261026140227099003)(261028144727099003)(22082099003)(18002099003)(5133699003)(8096899003)(12063799003)(80100003);DIR:OUT;SFP:1501
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: EAlnl0RsPABaUSyJ6jImz+AAbFaxTFaiLYlKUSaCq+1XOjNxRfANKeE/3oZV9VONBJUG3Yf+Ams7/lznYQdB+ToMojnUQsWwDYgUTPCdSmJDgAji6I7+dAjj9vRp6TY+344JzuQebUMy1Jl++Qq1EhM9LOzl/lMG7Rq+PBeruDfHaaShIn4kMx5BbDNx07qU2ilpDiu8K9fac/WsNEQLnr1F9P+KS9a/wRN0eEJGRJL2pdQx3oC5AyusxixIm3FbLFYMjGX0q2kvvnlbnBkq04CQKtdOE+LF/4FiAu2TJXQhqaZZkBqwoIZ392G/du2bCMQAXNK8Kx34OkVO/IXGd6xMQRCL1P3z/v2SKtw1hC2dUSLvKwE3Z65XDdnsqT3JgV/qleVzSN53abkE+P0Uwn16hDTuorktBxg0BGB/7/5leGjWQGlf/T2+m9rCbEVH
+MIME-Version: 1.0
+X-Exchange-RoutingPolicyChecked: VdDVw09+99ZepaWH3h9BVLIj7bT2YBonEwjVu/GTyv7IoSJViJGoLO3Mzdo/N7coBEqtc8WZ4gjob5IOrGU2FpaQMFoxs1SpqV2O2QoexwtceKL7WooJ2jP4xJIieePhTAv29plhDJsJVou0FsPCKClxp4k2cw8qu+tukdGP6Jqjo9HU1hqv7ggxn0AqmKRa+1ZPFDTjKbVbyd3apVplVFukN/EWBT7tUbyL/QvNl33SXX0bDuI4P86bpUTPxmLOEE/EMtVhh391XDmGwahdM3KK/3C3md7tIYzRfo9Ifl7MEUszqRP+omtPL4Ql+6b4J1p0mUWjjKPWJgzMuT9lNA==
+X-OriginatorOrg: baldwin.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR03MB5069.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cc914c7c-3faf-4f6a-3dcc-08df4afdf990
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Nov 2026 14:11:18.3874
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 0fae1cea-e49a-40f0-94b3-be5e19bbdd91
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR03MB5504
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: st3sRT7H8M-GGRSGkTq2fCSm2LFBMERAUpwRH6e7Q2o_1795615879
+X-Mimecast-Originator: baldwin.com
+Content-Type: multipart/alternative;
+	boundary="_000_a2d8663b2b8048809383c451c891d657MN2PR03MB5069namprd03pr_"
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Result: default: False [-1.73 / 15.00];
+	DMARC_POLICY_ALLOW(-0.50)[baldwin.com,quarantine];
+	BAYES_HAM(-0.34)[70.65%];
+	R_DKIM_ALLOW(-0.20)[baldwin.com:s=mimecast20240412];
+	R_SPF_ALLOW(-0.20)[+a];
+	IP_REPUTATION_HAM(-0.19)[asn: 30031(-0.18), country: US(-0.01), ip: 170.10.133.221(0.00)];
+	MIME_FROM_MX_GOOD(-0.10)[us-smtp-inbound-1.mimecast.com];
+	MIME_GOOD(-0.10)[multipart/alternative,text/plain];
+	RCVD_IN_DNSWL_LOW(-0.10)[170.10.133.221:from];
+	MISSING_XM_UA(0.00)[];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	ARC_NA(0.00)[];
+	ASN(0.00)[asn:30031, ipnet:170.10.132.0/23, country:US];
+	TO_DN_EQ_ADDR_ALL(0.00)[];
+	RCPT_COUNT_ONE(0.00)[1];
+	RCPT_MAILCOW_DOMAIN(0.00)[flywirecompany.online];
+	RCVD_TLS_LAST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	ARC_SIGNED(0.00)[flywirecompany.online:s=dkim:i=1];
+	RCVD_IN_DNSWL_NONE(0.00)[52.102.140.46:received];
+	RCVD_COUNT_THREE(0.00)[3];
+	DKIM_TRACE(0.00)[baldwin.com:+]
+X-Rspamd-Queue-Id: 6BA4B10B79A
+
+--_000_a2d8663b2b8048809383c451c891d657MN2PR03MB5069namprd03pr_
+Content-Type: text/plain; charset=WINDOWS-1252
+Content-Transfer-Encoding: quoted-printable
+
+I am currently out of the office.  I will have limited access to email at t=
+imes but will be checking in periodically. I will return Monday, November 3=
+0th.
+
+Thank you.
+
+Baldwin West Insurance Services, LLC, #0D86695
+Disclaimer<https://baldwin.com/transparency-disclosure/>
+
+--_000_a2d8663b2b8048809383c451c891d657MN2PR03MB5069namprd03pr_
+Content-Type: text/html; charset=WINDOWS-1252
+Content-Transfer-Encoding: quoted-printable
+
+<html xmlns:o=3D"urn:schemas-microsoft-com:office:office" xmlns:w=3D"urn:sc=
+hemas-microsoft-com:office:word" xmlns:m=3D"http://schemas.microsoft.com/of=
+fice/2004/12/omml" xmlns=3D"http://www.w3.org/TR/REC-html40">
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
+>
+<meta name=3D"Generator" content=3D"Microsoft Word 15 (filtered medium)">
+<style><!--
+/* Font Definitions */
+@font-face
+=09{font-family:"Cambria Math";
+=09panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+=09{font-family:Aptos;}
+@font-face
+=09{font-family:"Segoe UI";
+=09panose-1:2 11 5 2 4 2 4 2 2 3;}
+/* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+=09{margin:0in;
+=09font-size:12.0pt;
+=09font-family:"Aptos",sans-serif;
+=09mso-ligatures:standardcontextual;}
+span.EmailStyle17
+=09{mso-style-type:personal-compose;
+=09font-family:"Aptos",sans-serif;}
+.MsoChpDefault
+=09{mso-style-type:export-only;}
+@page WordSection1
+=09{size:8.5in 11.0in;
+=09margin:1.0in 1.0in 1.0in 1.0in;}
+div.WordSection1
+=09{page:WordSection1;}
+--></style>
+</head>
+<body lang=3D"EN-US" link=3D"#467886" vlink=3D"#96607D" style=3D"word-wrap:=
+break-word">
+<div class=3D"WordSection1">
+<p class=3D"MsoNormal" style=3D"text-autospace:none">I am currently out of =
+the office.&nbsp; I will have limited access to email at times but will be =
+checking in periodically. I will return Monday, November 30th.<o:p></o:p></=
+p>
+<p class=3D"MsoNormal" style=3D"text-autospace:none"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal" style=3D"text-autospace:none">Thank you.<span style=
+=3D"font-size:8.5pt;font-family:&quot;Segoe UI&quot;,sans-serif"><o:p></o:p=
+></span></p>
+<p class=3D"MsoNormal" style=3D"text-autospace:none"><span style=3D"font-si=
+ze:8.5pt;font-family:&quot;Segoe UI&quot;,sans-serif"><o:p>&nbsp;</o:p></sp=
+an></p>
+</div>
+<div style=3D"font-size:10px; color:#808080;">Baldwin West Insurance Servic=
+es, LLC, #0D86695</div>
+<div style=3D"font-size:10px; color:#808080;"><a style=3D"font-size:10px; c=
+olor:#808080; font-style:italic;" href=3D"https://baldwin.com/transparency-=
+disclosure/">Disclaimer</a></div>
+</body>
+</html>
+
+--_000_a2d8663b2b8048809383c451c891d657MN2PR03MB5069namprd03pr_--
+
