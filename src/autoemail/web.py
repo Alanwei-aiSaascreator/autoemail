@@ -1588,17 +1588,26 @@ def render_case(
     ]
 
     drafts = session.scalars(select(Draft).where(Draft.case_id == case.id).order_by(Draft.id.desc())).all()
-    draft_rows = [
-        [
+    draft_rows = []
+    for draft in drafts:
+        if draft.status in ("pending", "blocked"):
+            actions = (
+                f'<form method="post" action="/drafts/{draft.id}/approve" style="margin:0;display:inline">'
+                f'<input type="hidden" name="confirm" value="yes">'
+                f'<input type="text" name="reviewer" placeholder="审核人" style="width:64px" required>'
+                f'<button class="btn-mini" onclick="return confirm(\'确认批准并发送该草稿？\')">批准</button></form> '
+                f'<a class="btn-mini ghost" href="/drafts/{draft.id}">查看</a>'
+            )
+        else:
+            actions = f'<a class="btn-mini ghost" href="/drafts/{draft.id}">查看</a>'
+        draft_rows.append([
             f'<a href="/drafts/{draft.id}">#{draft.id}</a>',
             _e(draft.intent),
             _tag(draft.status),
             _e(draft.subject),
-            _e(draft.model_id),
             _fmt_dt(draft.created_at),
-        ]
-        for draft in drafts
-    ]
+            actions,
+        ])
 
     invoices = session.scalars(select(Invoice).where(Invoice.case_id == case.id)).all()
     invoice_rows = [
@@ -1702,6 +1711,20 @@ def render_case(
     has_pending_drafts = any(d.status in ("pending", "blocked") for d in drafts)
     has_unpaid = bool(unpaid)
 
+    pending_draft_n = sum(1 for d in drafts if d.status in ("pending", "blocked"))
+    if has_pending_drafts or has_unpaid:
+        todo = []
+        if pending_draft_n:
+            todo.append(f"{pending_draft_n} 个草稿待审核")
+        if has_unpaid:
+            todo.append(f"{len(unpaid)} 张发票待回填付款")
+        next_action = '<div class="alert warn"><b>需要你处理：</b>' + "、".join(todo) + "</div>"
+    else:
+        next_action = (
+            '<div class="alert ok"><b>当前状态：</b>'
+            f"{_e(STATE_WAITING.get(case.state, case.state))}</div>"
+        )
+
     mode_form = f"""
 <form method="post" action="/cases/{case.id}/mode">
   <div class="row">
@@ -1720,18 +1743,17 @@ def render_case(
 """
 
     sections = "".join([
-        _section("填表产物", filled_html, len(filled_rows), open_=True),
-        _section("新类型表单储备", registry_rows_html, len(registry_rows), open_=bool(pending_registry)),
         _section(
             "草稿",
-            _table(["ID", "意图", "状态", "主题", "模型", "创建时间"], draft_rows),
+            _table(["ID", "意图", "状态", "主题", "创建时间", "操作"], draft_rows),
             len(drafts),
-            open_=has_pending_drafts,
+            open_=True,
         ),
         _section(
             "邮件",
             _table(["方向", "时间", "发件人", "主题", "正文", "附件", "操作"], message_rows),
             len(messages),
+            open_=True,
         ),
         _section(
             "报价",
@@ -1744,6 +1766,8 @@ def render_case(
             len(invoices),
             open_=has_unpaid,
         ),
+        _section("填表产物", filled_html, len(filled_rows)),
+        _section("新类型表单储备", registry_rows_html, len(registry_rows), open_=bool(pending_registry)),
         _section(
             "催办任务",
             _table(["ID", "状态", "到期时间", "触发状态", "尝试次数"], followup_rows),
@@ -1761,6 +1785,7 @@ def render_case(
 <p class="crumbs"><a href="/cases">Case 列表</a> / {_e(case.case_no)}</p>
 <h1>{_e(case.case_no)}</h1>
 {flash}
+{next_action}
 {new_type_alert}
 {facts}
 {sections}
@@ -1785,8 +1810,8 @@ def render_drafts(session: Session, status: str = "all") -> str:
         if draft.status in ("pending", "blocked"):
             actions = (
                 f'<form method="post" action="/drafts/{draft.id}/approve" style="margin:0;display:inline">'
-                f'<input type="hidden" name="reviewer" value="">'
                 f'<input type="hidden" name="confirm" value="yes">'
+                f'<input type="text" name="reviewer" placeholder="审核人" style="width:64px" required>'
                 f'<button class="btn-mini" onclick="return confirm(\'确认批准并发送该草稿？\')">批准</button></form> '
                 f'<a class="btn-mini ghost" href="/drafts/{draft.id}">查看 / 编辑</a>'
             )
