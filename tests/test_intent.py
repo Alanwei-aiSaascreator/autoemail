@@ -116,6 +116,32 @@ def test_blank_forms_with_request_body_are_form_request_not_bond_delivered():
     assert result.label == "form_request"
 
 
+def test_form_request_extracts_material_checklist():
+    """form_request 应识别出代理商要求的具体材料清单（申请表/财务/股权/AD-CVD/个人财务）。"""
+    body = (
+        "In order to proceed, the forms and other information we would need are:\n"
+        "- Customs Bond application thoroughly completed and signed.\n"
+        "- Breakdown of ownership percentage for the company\n"
+        "- Personal Financial Statement for all owners and spouses\n"
+        "- Current business financial statement (balance sheet and income statement)\n"
+        "- Please confirm if the goods are subject to any anti-dumping and/or countervailing duties."
+    )
+    result = classify_message(
+        message(
+            body,
+            subject="RE: [BOND-2026-0192] Inquiry - Continuous Customs Bond",
+            attachments=[_a("CA Shea.Customs Bond Application.pdf", "bond")],
+        )
+    )
+    assert result.label == "form_request"
+    materials = result.slots.get("materials", [])
+    assert "application" in materials
+    assert "personal_financial" in materials
+    assert "financial_statement" in materials
+    assert "ownership" in materials
+    assert "ad_cvd" in materials
+
+
 def test_delivered_bond_without_request_body_still_bond_delivered():
     """真正交付 Bond 的邮件（无填表要求正文）仍应判 bond_delivered。"""
     result = classify_message(

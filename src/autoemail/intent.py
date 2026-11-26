@@ -42,6 +42,26 @@ _PAYMENT_METHOD_MENTION_RE = re.compile(
     re.IGNORECASE,
 )
 
+# 代理商要求填表时，正文里列出的具体材料类型（用于后续按清单响应，
+# 而不是一律套用标准三件套）。顺序即提取顺序。
+_MATERIAL_RULES: list[tuple[str, re.Pattern]] = [
+    ("application", re.compile(r"bond\s+application|application\s+form|\bapplication\b", re.IGNORECASE)),
+    ("personal_financial", re.compile(r"personal\s+financial\s+statement", re.IGNORECASE)),
+    ("financial_statement", re.compile(r"financial\s+statement|income\s+statement|balance\s+sheet", re.IGNORECASE)),
+    ("ownership", re.compile(r"ownership\s+(?:breakdown|percentage)|\bownership\b", re.IGNORECASE)),
+    ("ad_cvd", re.compile(r"anti[- ]?dumping|countervailing|ad/?cvd", re.IGNORECASE)),
+]
+
+
+def _extract_material_requirements(body_text: str) -> list[str]:
+    """从正文提取代理商要求的材料清单（申请表/财务报表/股权结构/反倾销反补贴/个人财务报表）。"""
+    text = body_text or ""
+    materials: list[str] = []
+    for key, pattern in _MATERIAL_RULES:
+        if pattern.search(text) and key not in materials:
+            materials.append(key)
+    return materials
+
 
 @dataclass
 class PaymentInfo:
@@ -244,7 +264,10 @@ def classify_message(message: NormalizedMessage) -> IntentResult:
     )
     if _FORM_REQUEST_BODY_RE.search(message.body_text):
         return IntentResult(
-            "form_request", 0.85, {"attachments": sorted(attachment_types)},
+            "form_request", 0.85, {
+                "attachments": sorted(attachment_types),
+                "materials": _extract_material_requirements(message.body_text),
+            },
             evidence=["正文要求填写/提交表格材料"],
         )
     if "bond" in attachment_types:
