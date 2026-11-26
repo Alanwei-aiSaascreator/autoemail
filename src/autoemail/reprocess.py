@@ -18,7 +18,6 @@ from .ingest.parse import parse_email_bytes
 from .models import (
     AuditEvent,
     Case,
-    Commission,
     Draft,
     DRAFT_BLOCKED,
     DRAFT_FAILED,
@@ -35,46 +34,6 @@ from .models import (
 
 # 重跑前允许作废的草稿状态（与人工可拒绝的草稿状态一致；sent/rejected 不动）
 _REVERTABLE_DRAFT_STATES = (DRAFT_PENDING, DRAFT_BLOCKED, DRAFT_FAILED)
-
-
-def _attach_case_fillings(
-    session: Session, case: Case, draft: Draft, *, material_keys: list[str] | None = None
-) -> list[str]:
-    """把该 case 的填表产物（filled_forms 里 case_no 或公司名前缀的 PDF）附到草稿。
-
-    用于重新处理历史邮件：原始 .eml 未存档时拿不到空白表格，但填表产物已存在，
-    直接附上已填好（含签名）的产物，让草稿可以随回复发出。返回附上的文件路径列表。
-
-    材料清单驱动：新草稿若已解析出代理商要求的材料（material_keys 非空）且其中
-    不含 application，则不附填表产物——对方根本没要申请表，不能拿三件套敷衍。
-    """
-    if material_keys and "application" not in material_keys:
-        return []
-    from .config import settings
-
-    filled_dir = Path(settings.filled_forms_dir)
-    if not filled_dir.is_dir():
-        return []
-    commission = session.get(Commission, case.commission_id)
-    patterns = [f"{case.case_no}_*"]
-    if commission is not None and commission.legal_name:
-        patterns.append(f"{commission.legal_name}_*")
-    attached: list[str] = []
-    seen: set[str] = set()
-    for pattern in patterns:
-        for item in sorted(filled_dir.glob(pattern)):
-            if not item.is_file() or item.name in seen:
-                continue
-            seen.add(item.name)
-            attached.append(str(item))
-    if not attached:
-        return []
-    existing = list(draft.attachments or [])
-    for p in attached:
-        if p not in existing:
-            existing.append(p)
-    draft.attachments = existing
-    return attached
 
 
 def rebuild_message(session: Session, stored: Message) -> tuple[NormalizedMessage, str]:
@@ -308,33 +267,8 @@ def reprocess_message(
     )
     session.commit()
 
-    # 重新处理后，若新草稿是 form_request，附上该 case 已有的填表产物（含签名的表格）。
-    # 材料清单里不含 application 时不附：按代理商实际要求，不发无关文件。
-    if result.draft_id and result.intent.label == "form_request" and case is not None:
-        draft = session.get(Draft, result.draft_id)
-        if draft is not None:
-            keys = [str(x) for x in ((draft.controlled_fields or {}).get("material_keys") or [])]
-            attached = _attach_case_fillings(session, case, draft, material_keys=keys)
-            if attached:
-                draft.body = draft.body.rstrip("\n") + (
-                    "\n\nPlease find attached the completed application form(s) "
-                    "and supporting documents.\n"
-                )
-                draft.updated_at = utcnow()
-                session.flush()
-                audit.record(
-                    session,
-                    action="draft.attachments_added",
-                    actor=actor,
-                    case_id=case.id,
-                    thread_id=stored.thread_id,
-                    message_id=message_id,
-                    draft_id=draft.id,
-                    decision=str(len(attached)),
-                    reasons=[f"重新处理：自动附上填表产物 {attached}"],
-                )
-            session.commit()
-
+    # 重跑后草稿附件由 generate_draft 决定：只填原始 .eml 里对方发来的申请表
+    # （格式匹配才填），绝不附该 case 名下历史批量三件套——那可能是别的代理商格式。
     new_intent = result.intent.label
     audit.record(
         session,

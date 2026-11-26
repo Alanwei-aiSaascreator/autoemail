@@ -149,8 +149,12 @@ def test_reprocess_rejected_when_invoice_paid(session, world, monkeypatch):
     ) is None
 
 
-def test_reprocess_attaches_existing_fillings(session, world, monkeypatch, tmp_path):
-    """重新处理历史 form_request 邮件时，自动附上该 case 已存在的填表产物（含签名表格）。"""
+def test_reprocess_does_not_attach_stale_fillings(session, world, monkeypatch, tmp_path):
+    """重跑只填原始 .eml 里的申请表，绝不附 case 名下历史批量三件套。
+
+    三件套可能是别的代理商的格式（如 Express 的 Continuous Bond Application），
+    拿它敷衍代理商正是之前「发错文件」的根因，必须彻底禁止。
+    """
     from autoemail.config import settings
 
     monkeypatch.setattr(settings, "filled_forms_dir", str(tmp_path))
@@ -167,14 +171,13 @@ def test_reprocess_attaches_existing_fillings(session, world, monkeypatch, tmp_p
     new_draft = session.get(Draft, summary["draft_id"])
     assert new_draft is not None
     assert new_draft.intent == "form_request"
-    assert len(new_draft.attachments) == 2
-    assert any("bond.pdf" in a for a in new_draft.attachments)
-    assert any("poa.pdf" in a for a in new_draft.attachments)
-    assert "completed application form" in new_draft.body
+    # 不再把历史三件套当正确产物附上
+    assert new_draft.attachments == []
+    assert "Please find attached" not in new_draft.body
 
 
 def test_reprocess_skips_fillings_when_application_not_requested(session, world, monkeypatch, tmp_path):
-    """材料清单里没有 application 时不附填表产物：对方没要申请表，不能发三件套敷衍。"""
+    """材料清单不含 application 时，正文按清单分段列明待提供材料，绝不附填表产物。"""
     from autoemail.config import settings
 
     monkeypatch.setattr(settings, "filled_forms_dir", str(tmp_path))
