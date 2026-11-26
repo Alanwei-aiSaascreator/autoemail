@@ -45,7 +45,7 @@ def test_material_draft_uses_agent_policy(session, world):
         channel_msg_id="material-1",
         from_addr="toni@a1surety.com",
         subject="Re: [BOND-2026-0142] Application",
-        body_text="Please complete the application form.",
+        body_text="Please return the thoroughly completed and signed documents.",
         dedupe_hash="material-hash",
     )
     result = process_message(session, message)
@@ -53,6 +53,29 @@ def test_material_draft_uses_agent_policy(session, world):
     assert result.intent.label == "form_request"
     assert "POA" in draft.body
     assert draft.controlled_fields["requested_materials"]
+
+
+def test_material_draft_uses_extracted_checklist(session, world):
+    """正文明确列出材料清单时，回复应优先用正文提取的材料，而非 policy 默认 POA。"""
+    message = NormalizedMessage(
+        channel="eml",
+        channel_msg_id="material-2",
+        from_addr="toni@a1surety.com",
+        subject="Re: [BOND-2026-0142] Application",
+        body_text=(
+            "In order to proceed, the forms and other information we would need are:\n"
+            "- Customs Bond application thoroughly completed and signed.\n"
+            "- Current business financial statement (balance sheet and income statement).\n"
+            "- Please confirm if the goods are subject to any anti-dumping or countervailing duties."
+        ),
+        dedupe_hash="material-hash-2",
+    )
+    result = process_message(session, message)
+    draft = session.get(Draft, result.draft_id)
+    assert result.intent.label == "form_request"
+    assert "Completed bond application form" in draft.body
+    assert "Business financial statement" in draft.body
+    assert "anti-dumping" in draft.body
 
 
 def test_invoice_does_not_create_email_draft(session, world, monkeypatch):
