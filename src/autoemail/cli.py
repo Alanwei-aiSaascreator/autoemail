@@ -663,6 +663,37 @@ def cmd_signature_stamp(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_agent_add_domain(args: argparse.Namespace) -> int:
+    """给代理商补域名：解除「收件域名不属于代理商档案」的拦截。"""
+    from .models import Agent, Case
+
+    init_db()
+    session = get_session()
+    try:
+        if args.case:
+            case = session.query(Case).filter(Case.case_no == args.case).first()
+            if case is None:
+                print(f"找不到 case：{args.case}")
+                return 1
+            agent = session.get(Agent, case.agent_id)
+        else:
+            agent = session.query(Agent).filter(Agent.name.like(f"%{args.agent}%")).first()
+        if agent is None:
+            print("找不到代理商")
+            return 1
+        doms = list(agent.email_domains or [])
+        if args.domain in doms:
+            print(f"{agent.name}（#{agent.id}）已有域名 {args.domain}")
+            return 0
+        doms.append(args.domain)
+        agent.email_domains = doms
+        session.commit()
+        print(f"已给 {agent.name}（#{agent.id}）补域名 {args.domain} -> {doms}")
+        return 0
+    finally:
+        session.close()
+
+
 def cmd_intake_store(args: argparse.Namespace) -> int:
     """上传客户需求采集表 PDF，解析后存结构化字段（委托专属）。"""
     from .formfill import store_intake
@@ -963,6 +994,14 @@ def build_parser() -> argparse.ArgumentParser:
     signature_stamp = signature_sub.add_parser("stamp", help="对已填表格补盖签名（poa/bond/cbp5106）")
     signature_stamp.add_argument("--commission", default=None, help="仅处理指定委托（按名称模糊匹配）")
     signature_stamp.set_defaults(func=cmd_signature_stamp)
+
+    agent_cmd = sub.add_parser("agent", help="代理商档案管理")
+    agent_sub = agent_cmd.add_subparsers(dest="agent_command", required=True)
+    agent_domain = agent_sub.add_parser("add-domain", help="给代理商补域名（解除收件域名拦截）")
+    agent_domain.add_argument("--case", default=None, help="按 case 编号定位代理商")
+    agent_domain.add_argument("--agent", default=None, help="按代理商名称模糊匹配")
+    agent_domain.add_argument("--domain", required=True, help="要补的域名")
+    agent_domain.set_defaults(func=cmd_agent_add_domain)
 
     intake = sub.add_parser("intake", help="客户需求采集表：解析并存储结构化字段（委托专属）")
     intake_sub = intake.add_subparsers(dest="intake_command", required=True)
