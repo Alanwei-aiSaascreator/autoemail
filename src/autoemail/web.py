@@ -129,6 +129,33 @@ border-radius:9px;box-shadow:0 2px 8px rgba(0,0,0,.2)}
 .hero button:hover{background:#eff6ff}
 a.card{display:block;color:inherit;text-decoration:none;transition:box-shadow .15s}
 a.card:hover{text-decoration:none;box-shadow:0 2px 10px rgba(37,99,235,.12);border-color:var(--accent)}
+/* 合规预警页 */
+.cmp-card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-bottom:14px}
+.cmp-card.reject{border-left:4px solid #dc2626}
+.cmp-card.review{border-left:4px solid #d97706}
+.cmp-card.pass{border-left:4px solid #10b981}
+.cmp-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.cmp-head .case-no{font-weight:650;font-size:15px}
+.cmp-meta{color:var(--muted);font-size:12px;margin-left:auto}
+.cmp-rule{display:flex;gap:10px;padding:9px 12px;border-radius:8px;background:#f9fafb;
+border:1px solid var(--line);margin-top:8px;font-size:13px;align-items:flex-start}
+.cmp-rule .rid{font-family:ui-monospace,Consolas,monospace;font-weight:600;white-space:nowrap}
+.cmp-rule .fix{color:var(--muted);margin-top:2px}
+.cmp-rule .basis{color:var(--muted);font-size:12px;margin-top:2px}
+.sev{display:inline-block;padding:1px 8px;border-radius:999px;font-size:12px;white-space:nowrap}
+.sev.blocker{background:#fee2e2;color:#991b1b}
+.sev.warning{background:#fef3c7;color:#92400e}
+.sev.info{background:#e5e7eb;color:#374151}
+.origin-chip{display:inline-block;padding:1px 8px;border-radius:999px;font-size:12px;
+background:#eef2ff;color:#3730a3}
+.top-rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-bottom:18px}
+.top-rule{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 16px;font-size:13px}
+.top-rule .n{font-size:20px;font-weight:650}
+.subtabs{margin:10px 0 16px}
+.subtabs a{display:inline-block;padding:4px 12px;border:1px solid var(--line);border-radius:999px;
+margin-right:8px;font-size:13px;color:var(--muted);background:var(--card)}
+.subtabs a.active{background:#1d4ed8;color:#fff;border-color:#1d4ed8}
+.subtabs a:hover{text-decoration:none;border-color:var(--accent)}
 .steps{display:flex;gap:0;background:var(--card);border:1px solid var(--line);border-radius:10px;
 padding:16px 12px;margin-bottom:18px;overflow-x:auto}
 .step{flex:1;min-width:90px;text-align:center;position:relative;color:var(--muted);font-size:12px}
@@ -1986,54 +2013,100 @@ def render_drafts(session: Session, status: str = "all") -> str:
 
 
 _COMPLIANCE_TAG = {
-    "REJECT": '<span class="tag blocked">REJECT</span>',
-    "REVIEW": '<span class="tag pending">REVIEW</span>',
-    "PASS": '<span class="tag sent">PASS</span>',
+    "REJECT": '<span class="tag blocked">REJECT 阻断</span>',
+    "REVIEW": '<span class="tag pending">REVIEW 待复核</span>',
+    "PASS": '<span class="tag sent">PASS 通过</span>',
 }
 _ORIGIN_LABEL = {"inbound": "入站审查", "fill": "填表佐证"}
+_SEV_LABEL = {"BLOCKER": "阻断", "WARNING": "告警", "INFO": "提示"}
+_CMP_CARD_CLASS = {"REJECT": "reject", "REVIEW": "review", "PASS": "pass"}
 
 
-def render_compliance(session: Session, status: str = "all") -> str:
-    """合规预警汇总页：跨案件展示全部审查记录（入站审查 + 填表佐证）。"""
+def render_compliance(session: Session, status: str = "all", origin: str = "all") -> str:
+    """合规预警监控台：跨案件汇总全部审查记录（入站审查 + 填表佐证）。"""
     overall_counts = dict(
         session.execute(
             select(ComplianceRun.overall, func.count()).group_by(ComplianceRun.overall)
         ).all()
     )
     total = sum(overall_counts.values())
+
     statement = select(ComplianceRun).order_by(ComplianceRun.id.desc()).limit(200)
     if status != "all":
         statement = statement.where(ComplianceRun.overall == status)
     runs = session.scalars(statement).all()
+    if origin != "all":
+        runs = [r for r in runs if r.origin == origin]
 
-    rows = []
+    # 案件与委托名映射
+    case_map = {
+        c.id: c for c in session.query(Case).filter(Case.id.in_({r.case_id for r in runs} or {0})).all()
+    }
+    commission_names: dict[int, str] = {}
+    for case in case_map.values():
+        commission = session.get(Commission, case.commission_id)
+        commission_names[case.id] = commission.legal_name if commission else "—"
+
+    # 涉及案件数
+    involved_cases = len({r.case_id for r in runs})
+
+    # 高频问题 Top：按 rule_id 聚合（仅统计当前筛选范围）
+    rule_counter: dict[str, dict] = {}
     for run in runs:
-        case = session.get(Case, run.case_id)
-        trig = run.triggered or []
-        detail_lines = [
-            f"{item.get('level')} {item.get('rule_id')}：{item.get('message')}"
-            f"（建议：{item.get('fix_hint')}；依据：{item.get('legal_basis')}）"
-            for item in trig
-        ]
-        if run.unverified:
-            detail_lines.append(
-                f"未判定 {len(run.unverified)} 条（外部数据源规则：{'、'.join(run.unverified[:8])}"
-                + ("…" if len(run.unverified) > 8 else "") + "）"
+        for item in run.triggered or []:
+            rid = item.get("rule_id") or "?"
+            entry = rule_counter.setdefault(
+                rid, {"count": 0, "level": item.get("level", "INFO"),
+                      "message": item.get("message", ""), "cases": set()}
             )
-        detail_html = (
-            f'<details><summary>触发 {len(trig)} 项</summary><pre>{_e(chr(10).join(detail_lines))}</pre></details>'
-            if detail_lines
-            else '<span class="muted">无触发项</span>'
+            entry["count"] += 1
+            entry["cases"].add(run.case_id)
+    top_rules = sorted(rule_counter.items(), key=lambda kv: -kv[1]["count"])[:4]
+
+    # 排序：REJECT 优先，其余按时间倒序
+    order = {"REJECT": 0, "REVIEW": 1, "PASS": 2}
+    runs_sorted = sorted(runs, key=lambda r: (order.get(r.overall, 3), -r.id))
+
+    cards = []
+    for run in runs_sorted[:80]:
+        case = case_map.get(run.case_id)
+        case_no = case.case_no if case else f"#{run.case_id}"
+        trig = run.triggered or []
+        rule_rows = []
+        for item in trig:
+            level = item.get("level", "INFO")
+            rule_rows.append(
+                f'<div class="cmp-rule">'
+                f'<span class="sev {level.lower()}">{_e(_SEV_LABEL.get(level, level))}</span>'
+                f'<div><span class="rid">{_e(item.get("rule_id", ""))}</span> '
+                f'{_e(item.get("message", ""))}'
+                f'<div class="fix">建议：{_e(item.get("fix_hint", ""))}</div>'
+                f'<div class="basis">依据：{_e(item.get("legal_basis", ""))}</div></div>'
+                f'</div>'
+            )
+        unverified_html = ""
+        if run.unverified:
+            shown = "、".join(run.unverified[:6])
+            more = f" 等 {len(run.unverified)} 条" if len(run.unverified) > 6 else ""
+            unverified_html = (
+                f'<div class="muted" style="font-size:12px;margin-top:10px">'
+                f'未判定 {len(run.unverified)} 条（依赖外部数据源）：{_e(shown)}{_e(more)}</div>'
+            )
+        cards.append(
+            f'<div class="cmp-card {_CMP_CARD_CLASS.get(run.overall, "")}">'
+            f'<div class="cmp-head">'
+            f'<span class="case-no"><a href="/cases/{run.case_id}">{_e(case_no)}</a></span>'
+            f'<span class="muted">{_e(commission_names.get(run.case_id, ""))}</span>'
+            f'{_COMPLIANCE_TAG.get(run.overall, _e(run.overall))}'
+            f'<span class="origin-chip">{_e(_ORIGIN_LABEL.get(run.origin, run.origin))}</span>'
+            f'<span class="cmp-meta">{_fmt_dt(run.created_at)} · 规则集 v{_e(run.rule_set_version)}</span>'
+            f'</div>'
+            + ("".join(rule_rows) if rule_rows else '<div class="muted">无触发项</div>')
+            + unverified_html
+            + "</div>"
         )
-        rows.append([
-            f'<a href="/cases/{run.case_id}">{_e(case.case_no if case else run.case_id)}</a>',
-            _ORIGIN_LABEL.get(run.origin, run.origin),
-            _COMPLIANCE_TAG.get(run.overall, _e(run.overall)),
-            f"{run.blocker_count} / {run.warning_count} / {run.info_count}",
-            detail_html,
-            f"v{run.rule_set_version}",
-            _fmt_dt(run.created_at),
-        ])
+    if not cards:
+        cards.append('<div class="panel muted">当前筛选范围内暂无审查记录</div>')
 
     tabs = _tabs(
         [
@@ -2044,17 +2117,53 @@ def render_compliance(session: Session, status: str = "all") -> str:
         ],
         status,
     )
-    intro = (
-        '<p class="muted">合规审查在两个时机自动进行：① 委托文件传入时（入站审查）；'
-        "② 我方自动填表后、发送前（填表佐证）。结论由规则引擎按 CBP 规则表逐条判定，"
-        '规则可在 <code>rules/rule_def.csv</code> 维护。REJECT 表示存在阻断项，禁止提交担保商/CBP。</p>'
+
+    origin_items = [
+        ("all", "全部来源", "all" if origin == "all" else ""),
+        ("inbound", "入站审查", "inbound"),
+        ("fill", "填表佐证", "fill"),
+    ]
+    subparts = []
+    for value, label, _ in origin_items:
+        cls = "active" if value == origin else ""
+        href = f"/compliance?status={status}&origin={value}" if status != "all" else f"/compliance?origin={value}"
+        subparts.append(f'<a class="{cls}" href="{href}">{_e(label)}</a>')
+    subtabs = '<div class="subtabs">' + "".join(subparts) + "</div>"
+
+    stat_cards = (
+        '<div class="cards">'
+        f'<div class="card"><div class="label">审查总数</div><div class="num">{total}</div></div>'
+        f'<div class="card"><div class="label">REJECT 阻断</div><div class="num" style="color:#dc2626">{overall_counts.get("REJECT", 0)}</div></div>'
+        f'<div class="card"><div class="label">REVIEW 待复核</div><div class="num" style="color:#d97706">{overall_counts.get("REVIEW", 0)}</div></div>'
+        f'<div class="card"><div class="label">PASS 通过</div><div class="num" style="color:#10b981">{overall_counts.get("PASS", 0)}</div></div>'
+        f'<div class="card"><div class="label">涉及案件</div><div class="num">{involved_cases}</div></div>'
+        "</div>"
     )
+
+    top_html = ""
+    if top_rules:
+        cells = []
+        for rid, info in top_rules:
+            level = info["level"]
+            cells.append(
+                f'<div class="top-rule">'
+                f'<span class="sev {level.lower()}">{_e(_SEV_LABEL.get(level, level))}</span> '
+                f'<span class="rid">{_e(rid)}</span>'
+                f'<div class="n">{info["count"]} 次 · {len(info["cases"])} 个案件</div>'
+                f'<div class="muted">{_e(info["message"][:60])}</div>'
+                f'</div>'
+            )
+        top_html = f'<h3 style="margin:18px 0 10px;font-size:14px">高频问题</h3><div class="top-rules">{"".join(cells)}</div>'
+
     content = f"""
 <p class="crumbs"><a href="/">看板</a> / 合规预警</p>
 <h1>合规预警</h1>
-{intro}
+<p class="muted">合规审查在两个时机自动进行：<b>① 入站审查</b>——委托文件传入时；<b>② 填表佐证</b>——我方自动填表后、发送前。结论由规则引擎按 CBP 规则表逐条判定，REJECT 表示存在阻断项，禁止提交担保商/CBP。</p>
+{stat_cards}
+{top_html}
 {tabs}
-{_table(["案件", "来源", "结论", "阻断/告警/提示", "触发明细", "规则集", "时间"], rows)}
+{subtabs}
+{"".join(cards)}
 """
     return _layout("合规预警", "compliance", content)
 
@@ -2386,7 +2495,11 @@ class Handler(BaseHTTPRequestHandler):
             elif path == "/drafts":
                 body = render_drafts(session, (query.get("status") or ["all"])[0])
             elif path == "/compliance":
-                body = render_compliance(session, (query.get("status") or ["all"])[0])
+                body = render_compliance(
+                    session,
+                    (query.get("status") or ["all"])[0],
+                    (query.get("origin") or ["all"])[0],
+                )
             elif path.startswith("/drafts/"):
                 try:
                     draft_id = int(path.rstrip("/").rsplit("/", 1)[1])
@@ -2692,6 +2805,7 @@ def serve(port: int = 8787, open_browser: bool = True, host: str = "127.0.0.1") 
         if reconfigure is not None:
             reconfigure(encoding="utf-8", errors="replace")
     server = ThreadingHTTPServer((host, port), Handler)
+    server.daemon_threads = True
     shown = host if host != "0.0.0.0" else f"<本机IP>({host})"
     url = f"http://{shown}:{port}/"
     print(f"只读看板已启动：{url}（Ctrl+C 停止）")
