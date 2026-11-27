@@ -140,6 +140,7 @@ def _template(
     agent: Agent,
     source: NormalizedMessage,
     material_keys: list[str],
+    intake_data: dict[str, str] | None = None,
 ) -> tuple[str, str, str, dict[str, Any]]:
     fields: dict[str, Any] = {
         "case_no": case.case_no,
@@ -153,14 +154,29 @@ def _template(
         currency = intent.slots.get("currency", "USD")
         fields.update({"amount": str(amount) if amount is not None else None, "currency": currency})
         subject = f"Re: [{case.case_no}] Bond quote confirmation"
+        if amount is not None:
+            lead = (
+                f"Thank you for the quote for {commission.legal_name}. "
+                f"We have received the quoted amount of {amount} {currency}.\n\n"
+                "Please confirm the next required documents and processing steps for the "
+                "Continuous Customs Bond.\n\n"
+            )
+        else:
+            # 对方没给报价：不谎称"已收到报价"，转而主动提供承保人审查需要的
+            # 贸易概况，并请对方报批价与时效。
+            lead = (
+                f"Thank you for your message regarding the continuous importer bond for "
+                f"{commission.legal_name}. No quote amount was included in your email; "
+                "please let us know your quoted premium and estimated processing time.\n\n"
+            )
+        profile = _trade_profile_paragraph(intake_data)
+        if profile:
+            lead += profile + "\n\n"
         body = (
             f"Hi {agent.contact_name or agent.name},\n\n"
-            f"Thank you for the quote for {commission.legal_name}. "
-            f"We have received the quoted amount of {amount or 'the quoted amount'} {currency}.\n\n"
-            "Please confirm the next required documents and processing steps for the "
-            "Continuous Customs Bond.\n\n"
-            "Best regards,\n"
-            f"{commission.signer_name or 'Bond Operations'}\n"
+            + lead
+            + "Best regards,\n"
+            + f"{commission.signer_name or 'Bond Operations'}\n"
         )
         return "quote_reply", subject, body, fields
 
@@ -263,6 +279,46 @@ def _ensure_adcvd_attestation(
     )
 
 
+def _trade_profile_paragraph(intake_data: dict[str, str] | None) -> str:
+    """从需求表生成承保人审查需要的贸易概况段落（无数据返回空串）。
+
+    覆盖代理商询价时的常见问题：进口什么、原产地、运输频次、入境口岸、
+    年进口值与税费预估（含 AD/CVD）。全部取自客户已签名的需求表，不编造。
+    """
+    intake = intake_data or {}
+    lines: list[str] = []
+    goods = intake.get("d001") or intake.get("d002")
+    if goods:
+        origin = intake.get("d015") or intake.get("d004") or ""
+        lines.append(f"- Goods to import: {goods}" + (f" (country of origin: {origin})" if origin else ""))
+    if intake.get("d017"):
+        lines.append(f"- Expected shipment frequency: {intake['d017']}")
+    if intake.get("d028"):
+        lines.append(f"- U.S. port of entry: {intake['d028']}")
+    if intake.get("d019"):
+        duties_note = f"; estimated annual duties/taxes/fees USD {intake['d021']}" if intake.get("d021") else ""
+        lines.append(
+            f"- Estimated annual import value: USD {intake['d019']}{duties_note}"
+        )
+    if intake.get("a007"):
+        adcvd = "subject to" if intake["a007"].lower().startswith("y") else "not subject to"
+        lines.append(
+            f"- AD/CVD: per the importer's intake form, the goods are currently {adcvd} "
+            "antidumping or countervailing duties"
+        )
+    if intake.get("a006"):
+        lines.append(f"- Requested effective date: {intake['a006']}")
+    if intake.get("a012"):
+        prior = "replacing an existing/prior bond" if intake["a012"].lower().startswith("rep") else f"prior bond status: {intake['a012']}"
+        lines.append(f"- Existing bond: {prior}")
+    if not lines:
+        return ""
+    return (
+        "For your review, the importer's trade profile from their submitted intake form:\n"
+        + "\n".join(lines)
+    )
+
+
 def _recipient_from_source(source: Message, agent: Agent) -> list[str]:
     recipients = [source.from_addr]
     domains = {d.lower() for d in (agent.email_domains or [])}
@@ -361,6 +417,8 @@ def generate_draft(
         return DraftResult(existing, False)
 
     commission, agent, policy = _case_context(session, case)
+    from .formfill import get_intake_fields
+
     material_keys, material_source = _resolve_materials(session, intent, agent, policy)
     template_id, subject, body, fields = _template(
         intent,
@@ -369,6 +427,7 @@ def generate_draft(
         agent=agent,
         source=source,
         material_keys=material_keys,
+        intake_data=get_intake_fields(session, commission.id) or {},
     )
     if material_keys:
         fields["material_source"] = material_source
