@@ -26,13 +26,21 @@ _HTS_API = "https://hts.usitc.gov/reststop/exportList"
 # ---- 联网核对 ----
 
 def lookup_hts(hts_code: str, *, timeout: float = 10.0) -> dict | None:
-    """查 USITC HTS 税则：返回 {"htsno", "description", "general"}；失败返回 None。"""
+    """查 USITC HTS 税则：返回 {"htsno", "description", "general"}；失败返回 None。
+
+    客户写的品号常是 10 位统计码（如 9617.00.19.00），而公开税则库只到 8 位
+    （9617.00.10）；按标题段（前两段 9617.00）查询，再取与品号公共前缀最长的
+    条目作为核对结果。
+    """
     import httpx
 
     code = (hts_code or "").strip()
     if not code:
         return None
-    prefix = code[:6]
+    parts = [p for p in code.split(".") if p]
+    if len(parts) < 2:
+        return None
+    prefix = f"{parts[0]}.{parts[1]}"
     try:
         resp = httpx.get(
             _HTS_API,
@@ -43,35 +51,47 @@ def lookup_hts(hts_code: str, *, timeout: float = 10.0) -> dict | None:
         entries = resp.json()
     except Exception:  # noqa: BLE001 网络不可达/解析失败一律降级，不阻断回复
         return None
+    best_item = None
+    best_shared = 0
     for item in entries or []:
         no = (item.get("htsno") or "").strip()
-        if no == code or no.startswith(code[:8]):
-            return {
-                "htsno": no,
-                "description": (item.get("description") or "").strip(),
-                "general": (item.get("general") or "").strip(),
-            }
-    return None
+        if not no:
+            continue
+        shared = 0
+        for a, b in zip(code, no):
+            if a != b:
+                break
+            shared += 1
+        if shared > best_shared:
+            best_item, best_shared = item, shared
+    # 至少命中完整标题段（如 "9617.00" 共 7 字符）才算核对成功
+    if best_item is None or best_shared < len(prefix) + 1:
+        return None
+    return {
+        "htsno": (best_item.get("htsno") or "").strip(),
+        "description": (best_item.get("description") or "").strip(),
+        "general": (best_item.get("general") or "").strip(),
+    }
 
 
 def ad_cvd_answer(intake: dict) -> str:
-    """AD/CVD 标准应答：以客户需求表 a007 为准，附 HTS 联网核对结果。"""
+    """AD/CVD 标准应答：以客户需求表 a007 为准，开头直接 Yes/No 作答，附 HTS 核对。"""
     declared = (intake.get("a007") or "").strip()
     codes = [intake.get(k) for k in ("d003", "d007", "d011") if intake.get(k)]
     if declared.lower().startswith("y"):
         base = (
-            "Per the importer's submitted intake form, the imported goods are subject to "
-            "antidumping/countervailing duties (AD/CVD)."
+            "Yes. The goods imported by the principal are subject to antidumping or "
+            "countervailing duties (AD/CVD) per the importer's intake form."
         )
     elif declared.lower().startswith("n"):
         base = (
-            "Per the importer's submitted intake form, the imported goods are not currently "
-            "subject to antidumping/countervailing duties (AD/CVD)."
+            "No. The goods imported by the principal are not subject to antidumping or "
+            "countervailing duties (AD/CVD)."
         )
     else:
         base = (
-            "AD/CVD status was not specified on the importer's intake form and is being "
-            "confirmed."
+            "The importer's intake form did not specify AD/CVD status; we are confirming "
+            "with the principal and will advise shortly."
         )
     lookups = [info for info in (lookup_hts(c) for c in codes) if info]
     if lookups:
@@ -84,12 +104,13 @@ def ad_cvd_answer(intake: dict) -> str:
 
 
 def ownership_answer(commission) -> str:  # noqa: ANN001
-    """股权分配标准应答：委托方公司法人 100% 持股。"""
+    """股权分配标准应答：正面回答"是否有多位股东"——仅法人一人 100% 持股。"""
     name = commission.principal_full_name or commission.signer_name or "the legal representative"
     title = commission.signer_title or "legal representative"
     return (
-        f"Ownership: {name} ({title}), the legal representative of "
-        f"{commission.legal_name}, holds 100% of the company's ownership/equity."
+        f"There is only one owner of {commission.legal_name}: {name} ({title}) holds "
+        "100% of the ownership/equity. There are no other owners, partners, or parent "
+        "company."
     )
 
 

@@ -518,7 +518,12 @@ def generate_draft(
 
             inline_answers.append(ad_cvd_answer(get_intake_fields(session, commission.id) or {}))
         if inline_answers:
-            body = body.rstrip("\n") + "\n\n" + "\n\n".join(inline_answers) + "\n"
+            body = (
+                body.rstrip("\n")
+                + "\n\nTo answer your specific questions:\n\n"
+                + "\n\n".join(inline_answers)
+                + "\n"
+            )
 
     status, rule_hits, reasons, gate_notices = _preview_gate(
         case=case,

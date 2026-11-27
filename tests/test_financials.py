@@ -33,12 +33,19 @@ def test_ownership_answer_100_percent_legal_rep(session):
     assert "Wei Zhang" in answer
     assert "100%" in answer
     assert "Sunrise Home Goods LLC" in answer
+    # 正面回答"是否有多位股东"：明确只有一位 owner
+    assert "only one owner" in answer
+    assert "no other owners" in answer
 
 
 def test_ad_cvd_answer_follows_intake(session, monkeypatch):
     monkeypatch.setattr(financials, "lookup_hts", lambda code: None)
-    assert "not currently subject" in financials.ad_cvd_answer({"a007": "No"})
-    assert "subject to" in financials.ad_cvd_answer({"a007": "Yes"})
+    no_answer = financials.ad_cvd_answer({"a007": "No"})
+    assert no_answer.startswith("No.")
+    assert "are not subject" in no_answer
+    yes_answer = financials.ad_cvd_answer({"a007": "Yes"})
+    assert yes_answer.startswith("Yes.")
+    assert "are subject to" in yes_answer
 
 
 def test_ad_cvd_answer_includes_hts_verification(session, monkeypatch):
@@ -59,6 +66,36 @@ def test_lookup_hts_returns_none_on_network_failure(monkeypatch):
 
     monkeypatch.setattr(httpx, "get", raise_timeout)
     assert financials.lookup_hts("9617.00.19.00") is None
+
+
+def test_lookup_hts_matches_nearest_heading(monkeypatch):
+    """10 位统计码在公开税则库只到 8 位：应命中公共前缀最长的标题条目。"""
+    import httpx
+
+    class FakeResp:
+        def raise_for_status(self):
+            return None
+
+        def json(self):
+            return [
+                {"htsno": "9617.00", "description": "Vacuum flasks", "general": ""},
+                {"htsno": "9617.00.10.00", "description": "Not exceeding 1 liter", "general": "7.2%"},
+                {"htsno": "9617.00.30.00", "description": "1-2 liters", "general": "6.9%"},
+            ]
+
+    captured = {}
+
+    def fake_get(url, params=None, timeout=None):
+        captured["params"] = params
+        return FakeResp()
+
+    monkeypatch.setattr(httpx, "get", fake_get)
+    info = financials.lookup_hts("9617.00.19.00")
+    # 查询区间用标题段（9617.00），不是截断错误的前缀
+    assert captured["params"]["from"] == "9617.00"
+    assert info is not None
+    assert info["htsno"] == "9617.00.10.00"
+    assert info["general"] == "7.2%"
 
 
 def test_business_financial_pdf_generation(session, world, tmp_path, monkeypatch):
