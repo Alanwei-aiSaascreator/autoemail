@@ -19,6 +19,7 @@ from .channels.eml import EmlDirectoryChannel
 from .channels.imap import ImapSmtpChannel, inbound_channels
 from .config import settings
 from .db import get_session, init_db
+from .casesweep import maybe_run_case_sweep
 from .daily_inquiry import maybe_run_daily_batch, run_daily_batch
 from .drafts import approve_draft, edit_draft, get_draft, list_drafts, reject_draft
 from .evaluation import evaluate_labels, export_labels
@@ -407,6 +408,11 @@ def cmd_mail_watch(args: argparse.Namespace) -> int:
                     log.info("每日询价批次 %s", json.dumps(batch_summary, ensure_ascii=False))
                     if batch_summary.get("ran") or batch_summary.get("error"):
                         print(json.dumps(batch_summary, ensure_ascii=False, indent=2))
+                # Case 清扫：比价出局/无回音的探测 case 自动落 lost（每天一次）
+                sweep_summary = maybe_run_case_sweep(session)
+                if sweep_summary is not None and sweep_summary.get("total"):
+                    log.info("Case 清扫 %s", json.dumps(sweep_summary, ensure_ascii=False))
+                    print(json.dumps(sweep_summary, ensure_ascii=False, indent=2))
                 # 轮询全局收件箱 + 各委托自有邮箱，收到的回复都走同一处理管线
                 processed_total = 0
                 for mail_channel in inbound_channels(session):
