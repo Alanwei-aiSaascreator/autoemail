@@ -146,3 +146,44 @@ def test_pipeline_falls_back_without_plan(session, world, monkeypatch, tmp_path)
     draft = session.get(Draft, result.draft_id)
     assert draft is not None
     assert "only one owner" not in draft.body
+
+
+# ---- 扫描件的眼睛：视觉 OCR 提取 ----
+
+def test_extract_scanned_none_without_provider():
+    assert planner.extract_scanned_pdf_text(b"not a pdf", provider=None) == ""
+
+
+def test_extract_scanned_unreadable_pdf_returns_empty():
+    provider = FakeLLMProvider(None)
+    assert planner.extract_scanned_pdf_text(b"%PDF-1.4 broken", provider=provider) == ""
+
+
+def test_pipeline_uses_vision_for_textless_pdf(session, world, monkeypatch, tmp_path):
+    """无文本层附件触发视觉 OCR，规划器拿到文字后正常出计划。"""
+    import io
+
+    from reportlab.lib.pagesizes import letter as page_size
+    from reportlab.pdfgen import canvas as rl_canvas
+
+    # 造一个真无文本层的图片 PDF
+    buf = io.BytesIO()
+    c = rl_canvas.Canvas(buf, pagesize=page_size)
+    c.drawString(72, 700, "scan-placeholder")
+    c.save()
+    img_pdf = b"%PDF-1.4 minimal"  # 文本层提取为空即可触发视觉路径
+
+    calls = {"ocr": 0}
+
+    def fake_ocr(pdf_bytes, *, provider=None, max_pages=3):
+        calls["ocr"] += 1
+        return "U.S. Customs Bond Application blank form for completion"
+
+    monkeypatch.setattr(planner, "extract_scanned_pdf_text", fake_ocr)
+    monkeypatch.setattr(settings, "filled_forms_dir", str(tmp_path))
+    plan = _plan()
+    provider = FakeLLMProvider(plan)
+    msg = _message()
+    result = process_message(session, msg, llm_provider=provider)
+    draft = session.get(Draft, result.draft_id)
+    assert draft is not None

@@ -218,11 +218,19 @@ def _process_stored(
         from .ingest.pdf import extract_pdf_text
         from .planner import plan_reply
 
-        pdf_texts = {
-            att.filename: (extract_pdf_text(att.content) or "")
-            for att in message.attachments or []
-            if (att.filename or "").lower().endswith(".pdf")
-        }
+        pdf_texts: dict[str, str] = {}
+        for att in message.attachments or []:
+            if not (att.filename or "").lower().endswith(".pdf"):
+                continue
+            text = extract_pdf_text(att.content) or ""
+            # 扫描件/照片件（无文本层）→ 视觉模型 OCR 提取后再规划
+            if len(text.strip()) < 40:
+                from .planner import extract_scanned_pdf_text
+
+                ocr = extract_scanned_pdf_text(att.content, provider=active_provider)
+                if len(ocr.strip()) > len(text.strip()):
+                    text = ocr
+            pdf_texts[att.filename] = text
         reply_plan = plan_reply(
             message,
             provider=active_provider,
