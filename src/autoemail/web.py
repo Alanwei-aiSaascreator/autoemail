@@ -41,6 +41,7 @@ from .models import (
     Commission,
     CommissionImport,
     CommissionKnowledge,
+    ComplianceRun,
     Draft,
     FollowUpTask,
     FormTypeRegistry,
@@ -1780,6 +1781,57 @@ def render_case(
         for event in events
     ]
 
+    # 合规审查（CBP Bond 规则表）：最新一次运行详情 + 历史运行列表
+    runs = session.scalars(
+        select(ComplianceRun)
+        .where(ComplianceRun.case_id == case.id)
+        .order_by(ComplianceRun.id.desc())
+        .limit(10)
+    ).all()
+    run_rows = [
+        [
+            f"#{item.id}",
+            _tag(item.overall.lower()) if item.overall != "PASS" else '<span class="tag sent">PASS</span>',
+            f"{item.blocker_count} / {item.warning_count} / {item.info_count}",
+            f"规则集 v{item.rule_set_version}",
+            _fmt_dt(item.created_at),
+        ]
+        for item in runs
+    ]
+    compliance_detail = ""
+    if runs:
+        latest = runs[0]
+        trig_rows = [
+            [
+                _e(item.get("rule_id")),
+                _e(item.get("level")),
+                _e(item.get("message")),
+                _e(item.get("fix_hint")),
+                _e(item.get("legal_basis")),
+            ]
+            for item in (latest.triggered or [])
+        ]
+        unverified_html = (
+            f'<details><summary>输入不可用未判定 {len(latest.unverified)} 条'
+            "（多为外部数据源规则：OFAC/Circular 570/SOS 等，接入后自动启用）</summary>"
+            f"<pre>{_e('、'.join(latest.unverified))}</pre></details>"
+            if latest.unverified
+            else ""
+        )
+        compliance_detail = (
+            _table(["规则", "级别", "问题", "修复建议", "依据"], trig_rows)
+            if trig_rows
+            else '<p class="alert ok">无触发项，文件包通过全部可判定规则</p>'
+        ) + unverified_html
+    else:
+        compliance_detail = '<p class="muted">暂无审查记录（收到附件时自动审查）</p>'
+    compliance_html = (
+        f"<h3>最新审查结果：{_e(runs[0].overall if runs else '—')}</h3>{compliance_detail}"
+        + _table(["运行", "结论", "阻断/告警/提示", "规则集", "时间"], run_rows)
+        if runs
+        else compliance_detail
+    )
+
     flash = (
         f'<div class="alert {_e(flash_kind)}">{_e(flash_message)}</div>'
         if flash_message
@@ -1832,6 +1884,12 @@ def render_case(
             _table(["方向", "时间", "发件人", "主题", "正文", "附件", "操作"], message_rows),
             len(messages),
             open_=True,
+        ),
+        _section(
+            "合规审查",
+            compliance_html,
+            len(runs),
+            open_=bool(runs and runs[0].overall == "REJECT"),
         ),
         _section(
             "报价",

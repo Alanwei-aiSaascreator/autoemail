@@ -13,6 +13,7 @@ from sqlalchemy.orm import Session
 from . import audit
 from .bounces import detect_bounce, record_bounce
 from .channels.base import MessageChannel, NormalizedMessage
+from .compliance import blockers_of, review_case
 from .channels.imap import ImapSmtpChannel
 from .config import settings
 from .ingest.assignment import Assignment, resolve
@@ -25,12 +26,14 @@ from .drafts import generate_draft
 from .invoices import record_invoice
 from .notify.feishu import (
     build_bounce_text,
+    build_compliance_text,
     build_payment_text,
     build_quote_text,
     notify as notify_feishu,
 )
 from .notify.wecom import (
     build_bounce_markdown,
+    build_compliance_markdown,
     build_payment_markdown,
     build_quote_markdown,
     notify as notify_wecom,
@@ -349,6 +352,79 @@ def _process_stored(
         transition_case(session, case, target_state, reason=f"收到代理商 {intent.label} 回复", message_id=stored.id)
         cancel_followups_for_case(session, case.id, reason="收到代理商新回复")
     session.commit()
+
+    # 文件合规审查（CBP Bond 规则表）：收到代理表格/委托资料附件即自动审查，
+    # 结论由规则引擎逐条判定；REJECT（BLOCKER）推群告警。付款类不审。
+    if message.attachments and intent.payment is None:
+        from .ingest.pdf import extract_pdf_text
+
+        compliance_texts: dict[str, str] = {}
+        compliance_sizes: dict[str, int] = {}
+        for att in message.attachments:
+            name = att.filename or f"attachment-{len(compliance_texts) + 1}"
+            compliance_sizes[name] = len(att.content or b"")
+            text = ""
+            if name.lower().endswith(".pdf"):
+                try:
+                    text = extract_pdf_text(att.content or b"") or ""
+                except Exception:  # noqa: BLE001  解析失败按无文本层处理
+                    text = ""
+                if len(text.strip()) < 40 and active_provider is not None:
+                    from .planner import extract_scanned_pdf_text
+
+                    try:
+                        ocr = extract_scanned_pdf_text(att.content or b"", provider=active_provider)
+                        if len(ocr.strip()) > len(text.strip()):
+                            text = ocr
+                    except Exception:  # noqa: BLE001  OCR 失败降级为无文本
+                        pass
+            elif name.lower().endswith((".txt", ".csv", ".html")):
+                text = (att.content or b"").decode("utf-8", errors="ignore")
+            compliance_texts[name] = text
+        run = review_case(session, case, doc_texts=compliance_texts, doc_sizes=compliance_sizes)
+        session.commit()
+        audit.record(
+            session,
+            action="compliance.review",
+            thread_id=thread.id,
+            message_id=stored.id,
+            case_id=case.id,
+            decision=run.overall,
+            reasons=[
+                f"blockers={run.blocker_count}",
+                f"warnings={run.warning_count}",
+                f"unverified={len(run.unverified)}",
+                f"version={run.rule_set_version}",
+            ],
+        )
+        session.commit()
+        if run.overall == "REJECT":
+            commission, agent = _case_context(session, case)
+            blocker_lines = [
+                f"{item['rule_id']}（{item['message']}；建议：{item['fix_hint']}）"
+                for item in blockers_of(run)
+            ]
+            notify_wecom(
+                settings.wecom_webhook,
+                build_compliance_markdown(
+                    commission_name=commission.legal_name,
+                    agent_name=agent.name,
+                    case_no=case.case_no,
+                    overall=run.overall,
+                    blocker_lines=blocker_lines,
+                ),
+            )
+            notify_feishu(
+                settings.feishu_webhook,
+                build_compliance_text(
+                    commission_name=commission.legal_name,
+                    agent_name=agent.name,
+                    case_no=case.case_no,
+                    overall=run.overall,
+                    blocker_lines=blocker_lines,
+                ),
+            )
+
 
     if intent.label == "quote_reply" and intent.slots.get("amount") is not None:
         record_quote(

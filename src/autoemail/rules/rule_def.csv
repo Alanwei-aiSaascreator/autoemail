@@ -1,0 +1,92 @@
+﻿rule_id,group_id,group_name,level,object_path,logic_desc,error_code,message,fix_hint,legal_basis,enabled,version
+D001,G01,文件完整性,BLOCKER,document set,required_docs(required_set(principal_type)) 缺失任一 → 触发,E-DOC-001,必填文件缺失,按主体类型补齐后重跑,19 CFR 113.13 / 担保商清单,1,1
+D002,G01,文件完整性,BLOCKER,document.ocr_conf,含关键字段页的 OCR 置信度均值 < 0.85 或可解析字符数 < 20,E-DOC-002,影像不可核验,重扫 300dpi 彩色件,内控基线,1,1
+D003,G01,文件完整性,WARNING,document.hash,同一 document_type 存在 >1 个哈希不同的版本,E-DOC-003,文件多版本并存,指定现行版本并注明来源,内控基线,1,1
+D004,G01,文件完整性,BLOCKER,document.lang,非英文文件（注册证、决议、授权书）缺 translation 子文件,E-DOC-004,缺翻译件,补翻译并保留原件同页对照,19 CFR 141.18 / 担保商清单,1,1
+D005,G01,文件完整性,BLOCKER,document.apostille,境外主体需认证文件 apostille_flag=false,E-DOC-005,缺公证或海牙认证,补办后再提交,担保商核保规则,1,1
+D006,G01,文件完整性,WARNING,document.native_pdf,签署类文件为可编辑电子版（无签名、无印章图层）,E-DOC-006,签署文件疑未签署,提交签字盖章扫描件,内控基线,1,1
+D007,G01,文件完整性,INFO,document.sha256,记录哈希、页数、上传人、时间,E-DOC-007,留痕项,不阻断,内控基线,1,1
+D008,G01,文件完整性,WARNING,document.size,单文件 > 20MB 或页数 > 30,E-DOC-008,文件过大,拆分或压缩后重传,内控基线,1,1
+P001,G02,主体资质,BLOCKER,principal.type,"type ∉ {US_CORP,US_LLC,FOREIGN_CORP}",E-PRI-001,主体类型未认定,选择主体类型后重跑,内控基线,1,1
+P002,G02,主体资质,BLOCKER,principal.resident_agent,FOREIGN 且 (ra 为空 或 ra.state ∉ entry_states),E-PRI-002,境外主体缺合格 RA,指定申报州常驻代理人,19 CFR 141.18,1,1
+P003,G02,主体资质,BLOCKER,principal.resident_agent.address,RA 地址 ∈ 地址黑名单 或 判定为 PO Box,E-PRI-003,RA 地址不合规,换真实可送达地址,19 CFR 141.18 / 内控,1,1
+P004,G02,主体资质,BLOCKER,principal.sos_status,US 主体 sos_status ≠ GOOD_STANDING（查询时间 ≤72h）,E-PRI-004,主体状态异常,先恢复存续状态再申请,州法 / 担保商核保,1,1
+P005,G02,主体资质,BLOCKER,principal.legal_name,legal_name ≠ 注册证名称 ≠ EIN 信名称（规范化后）,E-PRI-005,主体名称不一致,统一为法定全称,19 CFR 113.13 / 表单规范,1,1
+P006,G02,主体资质,BLOCKER,principal.address,street 为空 或 判定为 PO Box,E-PRI-006,仅填信箱地址,补物理街道地址,CBP 表单规范,1,1
+P007,G02,主体资质,BLOCKER,principal.trade_name,trade_name 被填入 legal_name 字段,E-PRI-007,以商号冒充法定名,legal_name 改法定全称,CBP 表单规范,1,1
+P008,G02,主体资质,WARNING,principal.change_log,存在名称、地址、RA 变更且无 rider 备案,E-PRI-008,变更未备案,补 rider 附页,19 CFR Part 113 变更规则,1,1
+P009,G02,主体资质,WARNING,principal.ld_open,liquidated_damages_open>0 或 cbp_violation_history=true,E-PRI-009,存在违约或处罚史,人工预审后再报担保商,19 CFR Part 113,1,1
+P010,G02,主体资质,WARNING,principal.age,成立 <12 个月 且 无 import_history,E-PRI-010,新主体无进口史,准备保证金或单次保函,担保商核保规则,1,1
+B001,G03,保函参数,BLOCKER,bond.type,"type ∉ {CONTINUOUS,SINGLE,CASH}",E-BND-001,保函类型未认定,补选类型,19 CFR Part 113,1,1
+B002,G03,保函参数,BLOCKER,bond.amount,CONTINUOUS 且 amount < 50000,E-BND-002,低于法定最低保额,提至 5 万美元以上,19 CFR Part 113 最低保额,1,1
+B003,G03,保函参数,WARNING,bond.amount,CONTINUOUS 且 amount < 0.10*duty_tax_fees_prior12m,E-BND-003,保额低于历史税费 10%,按实补足,19 CFR Part 113 保额计算,1,1
+B004,G03,保函参数,BLOCKER,bond.dates,start_date > end_date 或 end_date < today,E-BND-004,保函期限无效或已过期,重出保函,19 CFR Part 113,1,1
+B005,G03,保函参数,WARNING,bond.dates,0 ≤ end_date - today ≤ 45 天,E-BND-005,保函临近到期,启动续保并重校材料,内控基线,1,1
+B006,G03,保函参数,BLOCKER,surety.name,surety 不在 Circular 570 当日缓存清单内,E-BND-006,担保商不合格,换 570 名单内担保商,Treasury Circular 570,1,1
+B007,G03,保函参数,BLOCKER,bond.activity_code,activity_code ≠ 1 且未加载对应专项规则集,E-BND-007,业务代码与条款错配,按进口条款重出,19 CFR 113.62,1,1
+B008,G03,保函参数,BLOCKER,bond.ein_binding,同一 bond_no 绑定 >1 个 EIN,E-BND-008,保函被跨主体共用,按主体重新绑定,19 CFR Part 113 / 内控,1,1
+B009,G03,保函参数,BLOCKER,bond.amount,SINGLE 且 amount < 预估税费 + 罚金缓冲,E-BND-009,单次保函保额不足,按票补足,19 CFR Part 113,1,1
+B010,G03,保函参数,WARNING,bond.amount,商品含 AD/CVD、危险品或 PGA 管制且保额未上浮,E-BND-010,高风险品类保额未上浮,按担保商要求加保,担保商核保规则,1,1
+S001,G04,授权链,BLOCKER,signatory.title,title ∉ officer_set 且 (resolution 缺失 或 poa 缺失),E-SIG-001,非高管签字缺授权,补决议与授权书,19 CFR 113.33,1,1
+S002,G04,授权链,BLOCKER,signatory.title,title ∈ officer_set 但章程/注册文件无该职位记载,E-SIG-002,职位不可验证,补章程页或改由高管签署,19 CFR 113.33,1,1
+S003,G04,授权链,BLOCKER,resolution.notarized,FOREIGN 且 (notarized=false 或 apostilled=false),E-SIG-003,决议未公证或未认证,补办后重传,担保商核保规则,1,1
+S004,G04,授权链,BLOCKER,resolution.scope,决议未涵盖 customs bond 或 Form 301 授权事项,E-SIG-004,授权范围不足,重拟决议明确授权事项,19 CFR 113.33,1,1
+S005,G04,授权链,BLOCKER,poa.expiry,poa.expiry_date < today,E-SIG-005,授权书过期,重新出具授权,19 CFR 141.36,1,1
+S006,G04,授权链,WARNING,poa.expiry,0 ≤ poa.expiry_date - today ≤ 30 天,E-SIG-006,授权书临期,提前续签,内控基线,1,1
+S007,G04,授权链,WARNING,poa.subdelegation,subdelegation=false 且存在次级代理人,E-SIG-007,未开放转委托,补授权或取消次级代理,19 CFR 141.36,1,1
+S008,G04,授权链,BLOCKER,form.sign_date,签字日期 > 提交日期 或 < 授权生效日期,E-SIG-008,签字日期逻辑错误,核实行签时间,内控基线,1,1
+S009,G04,授权链,BLOCKER,signatory.name,表单签字人与证件、决议姓名不一致（规范化后）,E-SIG-009,签字人身份不可对应,统一姓名写法,19 CFR 113.33,1,1
+S010,G04,授权链,INFO,signatory,记录姓名、职位、授权文件页码,E-SIG-010,留痕项,不阻断,内控基线,1,1
+I001,G05,证件有效性,BLOCKER,signatory.id.type,"type ∉ {PASSPORT,US_DL,US_STATE_ID,CN_ID}",E-ID-001,主证件类型不受理,换护照或州证件,担保商核保规则,1,1
+I002,G05,证件有效性,BLOCKER,signatory.id.expiry,expiry_date 缺失 或 < today,E-ID-002,证件已过期,换新证后重传,担保商核保规则,1,1
+I003,G05,证件有效性,WARNING,signatory.id.expiry,0 ≤ expiry_date - today ≤ 90 天,E-ID-003,证件临期,提前换证，避免核保驳回,担保商核保规则,1,1
+I004,G05,证件有效性,BLOCKER,signatory.id.type,仅以中国驾照作主证件（CN_DRIVER_LICENSE）,E-ID-004,驾照不能作主证件,改护照或身份证,担保商核保规则,1,1
+I005,G05,证件有效性,WARNING,signatory.id.aux,主证件为护照时，辅助驾照已过期,E-ID-005,辅助证件过期,补有效辅助证件,内控基线,1,1
+I006,G05,证件有效性,BLOCKER,signatory.id.mrz,护照 MRZ 校验位失败 或 身份证校验位失败,E-ID-006,证件机读区异常,人工核验原件,内控基线,1,1
+I007,G05,证件有效性,BLOCKER,signatory.id.name,证件姓名 ≠ signatory.name ≠ resolution 姓名,E-ID-007,证件姓名不一致,统一或改派签字人,内控基线,1,1
+I008,G05,证件有效性,BLOCKER,signatory.id.doc_kind,"doc_kind ∈ {TEMP_RECEIPT, RENEWAL_RECEIPT}",E-ID-008,临时回执不作有效证件,补正式证件,担保商核保规则,1,1
+I009,G05,证件有效性,WARNING,document.image_quality,证件页缺页、反光、遮挡 或 OCR 置信度 <0.90,E-ID-009,证件影像质量不足,重拍或重扫,内控基线,1,1
+I010,G05,证件有效性,INFO,signatory.id.number,提取证件号、国籍、出生日期，按掩码存储,E-ID-010,留痕项（脱敏）,不阻断,数据合规内控,1,1
+U001,G06,UBO与制裁,BLOCKER,ubo.set,持股 ≥25% 的自然人未完整穿透填报,E-UBO-001,UBO 未穿透,补录自然人及持股比例,31 CFR 1010.230,1,1
+U002,G06,UBO与制裁,BLOCKER,ubo.id.expiry,任一 UBO 证件 expiry_date < today,E-UBO-002,UBO 证件过期,补有效证件,31 CFR 1010.230,1,1
+U003,G06,UBO与制裁,BLOCKER,ubo.fields,name/dob/address/country 任一为空,E-UBO-003,UBO 信息不全,补齐四项基本字段,31 CFR 1010.230,1,1
+U004,G06,UBO与制裁,BLOCKER,ubo.screening,姓名+出生日期与 SDN 模糊匹配分值 >0.92,E-UBO-004,疑似制裁命中,转人工复核并留证,OFAC SDN / 50% Rule,1,1
+U005,G06,UBO与制裁,BLOCKER,principal.screening,主体、签字人、UBO 任一命中 SDN 或 50% 规则,E-SAN-005,制裁清单命中,停止办理,OFAC SDN / 50% Rule,1,1
+U006,G06,UBO与制裁,WARNING,ubo.address,UBO 居住地址与公司注册地址字符串全等,E-UBO-006,UBO 地址存疑,人工核对居住证明,内控基线,1,1
+U007,G06,UBO与制裁,WARNING,ubo.id.number,同一证件号出现在 ≥3 个不同主体,E-UBO-007,多主体共用同一自然人,核查实际控制关系,内控基线,1,1
+F001,G07,表单字段,BLOCKER,form301.required,必填字段为空白（含全角空格）,E-FRM-001,必填项空白,补齐或按规范划线,CBP Form 301,1,1
+F002,G07,表单字段,BLOCKER,form301.legal_name,legal_name 与注册证名称不匹配（含缩写、简称）,E-FRM-002,名称被缩写,改法定全称,CBP Form 301 填写规范,1,1
+F003,G07,表单字段,WARNING,form301.blank_cells,空白栏未划线划除（版面删除线检测失败）,E-FRM-003,空白栏未划除,按规范划线或填 N/A,CBP Form 301 填写规范,1,1
+F004,G07,表单字段,BLOCKER,form.date_fields,日期非 ISO 且无法无歧义归一（如 03/04/2026）,E-FRM-004,日期歧义,改 YYYY-MM-DD,CBP Form 301,1,1
+F005,G07,表单字段,BLOCKER,goods.hs_code,"HS 长度 ∉ {6,8,10} 或 含非数字字符",E-FRM-005,HS 编码格式错误,按税则补足位数,HTSUS,1,1
+F006,G07,表单字段,BLOCKER,form.amount,金额小数位 >2 或千分位与小数位混用,E-FRM-006,金额精度异常,统一 Decimal 两位,内控基线,1,1
+F007,G07,表单字段,WARNING,form.field_vs_source,回填值与源抽取值不一致,E-FRM-007,回填与源文件不符,按原件更正,内控基线,1,1
+F008,G07,表单字段,INFO,form.template_hash,记录模板版本哈希、填写人、填写时间,E-FRM-008,留痕项,不阻断,内控基线,1,1
+H001,G08,商品与监管,BLOCKER,goods.ad_cvd,HS 命中 AD/CVD 清单 且 ad_cvd_flag=false,E-HS-001,疑似规避反倾销,如实申报并补税令核对,19 CFR 351 / AD-CVD 令,1,1
+H002,G08,商品与监管,BLOCKER,goods.pga,HS 命中 FDA/FCC/DOT/EPA/CPSC/USDA 清单 且无对应声明或注册号,E-HS-002,缺 PGA 声明,补证书或注册号,PGA 各机构规则,1,1
+H003,G08,商品与监管,BLOCKER,goods.dg,危险品未提供 UN 编号、MSDS 或 DG 申报,E-HS-003,危险品资料缺失,补齐后方可申报,IATA/IMDG / CBP DG 规则,1,1
+H004,G08,商品与监管,WARNING,goods.quota,纺织品、配额类商品缺配额或原产地证明,E-HS-004,配额文件缺失,补证或改归类,CBP 配额规则,1,1
+H005,G08,商品与监管,WARNING,goods.ip,品牌或版权高风险清单命中且无授权书,E-HS-005,IP 授权缺失,补授权或改无牌申报,CBP IPR 规则,1,1
+H006,G08,商品与监管,BLOCKER,goods.desc_vs_hs,商品描述与 HS 归类明显不符（模型判定+人工确认）,E-HS-006,归类与描述不符,重新归类并留判定依据,HTSUS GRI,1,1
+H007,G08,商品与监管,INFO,goods.pga_map,输出需申报的 PGA 机构与证书映射表,E-HS-007,提示项,不阻断,PGA 各机构规则,1,1
+H008,G08,商品与监管,BLOCKER,bond.coverage,预估税费 + 在途责任 > 保函剩余额度,E-HS-008,保额覆盖不足,加保后再申报,19 CFR Part 113,1,1
+X001,G09,一致性,BLOCKER,cross.legal_name,注册证 / EIN 信 / 301 / 担保商申请表 名称不全等,E-XCH-001,主体名称跨文件不一致,统一后重出,内控基线,1,1
+X002,G09,跨文件一致性,BLOCKER,cross.ein,各文件 EIN 归一化后不全等,E-XCH-002,EIN 跨文件不一致,以 IRS 记录为准,内控基线,1,1
+X003,G09,跨文件一致性,BLOCKER,cross.signatory,证件 / 决议 / POA / 表单 四处姓名不全等,E-XCH-003,签字人姓名跨文件不一致,统一写法,内控基线,1,1
+X004,G09,跨文件一致性,BLOCKER,cross.ubo_set,申请人 UBO 表与担保商 UBO 附表条目集合不等,E-XCH-004,两处 UBO 申报冲突,以穿透结果为准重填,31 CFR 1010.230,1,1
+X005,G09,跨文件一致性,WARNING,cross.resident_agent,RA 名称、地址、州在协议与 301 附件不一致,E-XCH-005,RA 信息不一致,更正 301 附件,19 CFR 141.18,1,1
+X006,G09,跨文件一致性,BLOCKER,cross.address,注册地址与 301 地址的街道号、邮编不一致,E-XCH-006,地址要素不一致,按注册地址更正,CBP 表单规范,1,1
+X007,G09,跨文件一致性,WARNING,cross.goods_value,申请表 HS/货值与发票、箱单差异 >5%,E-XCH-007,货值口径不一致,补差异说明,内控基线,1,1
+T001,G10,时效与版本,WARNING,form.template_hash,模板哈希不在当前白名单,E-TIM-001,模板过期,改用现行模板重填,内控基线,1,1
+T002,G10,时效与版本,BLOCKER,coverage.window,证件、POA 或 RA 授权有效期短于 bond.end_date,E-TIM-002,授权覆盖期不足,延长授权或缩短保函期,19 CFR Part 113,1,1
+T003,G10,时效与版本,BLOCKER,renewal.recert,续保案件未重校 ID 与 UBO,E-TIM-003,续保未重校,强制重跑证件与 UBO 规则,内控基线,1,1
+T004,G10,时效与版本,INFO,bond.dates,距到期 ≤45 天生成续保任务,E-TIM-004,提示项,不阻断,内控基线,1,1
+T005,G10,时效与版本,BLOCKER,document.created_at,文件生成时间晚于签字日期（倒签嫌疑）,E-TIM-005,存在倒签嫌疑,核实签署时间,内控基线,1,1
+T006,G10,时效与版本,WARNING,audit.age,审核日距签字日 >180 天,E-TIM-006,材料陈旧,重新取得最新版本,担保商核保规则,1,1
+R001,G11,反欺诈,BLOCKER,principal.ein_map,同一 EIN 对应多个 legal_name,E-FRD-001,一码多主体,核查冒用风险,内控基线,1,1
+R002,G11,反欺诈,WARNING,person.id_number,同一证件号出现在 ≥3 个主体（跨案关联）,E-FRD-002,人员高度复用,核查实际控制关系,内控基线,1,1
+R003,G11,反欺诈,WARNING,document.metadata,PDF 元数据为图像编辑器生成且无扫描特征,E-FRD-003,疑似改动文件,索取原始件或核验原件,内控基线,1,1
+R004,G11,反欺诈,BLOCKER,document.sign_area,签署类文件签名区、印章区为空,E-FRD-004,签名或印章缺失,补签后重传,内控基线,1,1
+R005,G11,反欺诈,WARNING,address.cluster,同一地址注册 ≥5 个不同 IOR,E-FRD-005,地址聚集风险,核查实质经营,内控基线,1,1
+R006,G11,反欺诈,BLOCKER,result.gate,全部规则通过但存在 0.85–0.90 低置信字段,E-FRD-006,低置信字段未复核,禁止自动放行,内控基线,1,1
+R007,G11,反欺诈,WARNING,override.reason,人工覆盖未填写理由或理由为空,E-FRD-007,覆盖无理由,补齐理由并留痕,内控基线,1,1

@@ -485,6 +485,32 @@ class EmailBlocklist(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
 
 
+class ComplianceRun(Base):
+    """CBP Bond 文件合规审查运行记录（规则唯一来源：rules/rule_def.csv）。
+
+    语义遵循指导文件：任一 BLOCKER 触发 → REJECT；有 WARNING 或规则输入
+    不可用（unverified）→ REVIEW；全部通过且无上述情形 → PASS。
+    结论由规则引擎逐条判定产生，大模型不参与下结论。
+    """
+
+    __tablename__ = "compliance_run"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    case_id: Mapped[int] = mapped_column(ForeignKey("case.id"), index=True)
+    message_id: Mapped[int | None] = mapped_column(ForeignKey("message.id"))
+    rule_set_version: Mapped[str] = mapped_column(String(20))
+    # PASS / REVIEW / REJECT
+    overall: Mapped[str] = mapped_column(String(16))
+    blocker_count: Mapped[int] = mapped_column(default=0)
+    warning_count: Mapped[int] = mapped_column(default=0)
+    info_count: Mapped[int] = mapped_column(default=0)
+    # 触发规则明细：[{rule_id, level, error_code, message, fix_hint, legal_basis, evidence}]
+    triggered: Mapped[list] = mapped_column(JSON, default=list)
+    # 输入不可用而未判定的规则 ID（显式列出不静默跳过）
+    unverified: Mapped[list] = mapped_column(JSON, default=list)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+
+
 class FormTypeRegistry(Base):
     """新类型表单储备库（类型 ≠ 格式：格式差异由 LLM 克服，类型才是储备单元）。
 

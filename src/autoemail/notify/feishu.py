@@ -117,6 +117,28 @@ def build_bounce_text(
     return "\n".join(lines)
 
 
+def build_compliance_text(
+    *,
+    commission_name: str,
+    agent_name: str,
+    case_no: str,
+    overall: str,
+    blocker_lines: list[str],
+) -> str:
+    lines = [
+        f"【文件合规审查：{overall}（存在阻断项，禁止提交担保商/CBP）】",
+        f"委托公司：{commission_name}",
+        f"代理商：{agent_name}",
+        f"案件：{case_no}",
+        "",
+        "阻断项清单：",
+    ]
+    lines.extend(f"- {item}" for item in blocker_lines)
+    lines.append("")
+    lines.append("请按修复建议补件后重跑审查；详见网页 Case 页「合规审查」一节。")
+    return "\n".join(lines)
+
+
 def notify(webhook: str, content: str, *, retries: int = 3) -> bool:
     """推送失败重试 3 次；仍失败返回 False，由调用方降级为站内告警。
 
