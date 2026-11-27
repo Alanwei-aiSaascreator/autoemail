@@ -401,26 +401,17 @@ EXECUTORS: dict[str, Callable[[ReviewContext], tuple[bool | None, dict]]] = {
 }
 
 
-def review_case(
+def build_docs_for_commission(
     session: Session,
-    case: Case,
-    *,
+    commission_id: int,
     doc_texts: dict[str, str] | None = None,
     doc_sizes: dict[str, int] | None = None,
-) -> ComplianceRun:
-    """对 case 当前文件包跑全量规则审查，落 ComplianceRun 并返回。
-
-    doc_texts：入站附件文件名 → 提取文本（调用方负责 PDF/OCR 抽取）；
-    数据库证件档案（CommissionDocument）自动并入。
-    """
+) -> list[DocItem]:
+    """组装委托文件包：数据库证件档案（CommissionDocument）+ 入站附件文本。"""
     from .models import CommissionDocument
 
-    commission = session.get(Commission, case.commission_id)
-    rules, version = load_rule_defs()
-    today = datetime.now(timezone.utc).date()
-
     docs: list[DocItem] = []
-    for row in session.query(CommissionDocument).filter_by(commission_id=case.commission_id).all():
+    for row in session.query(CommissionDocument).filter_by(commission_id=commission_id).all():
         text = ""
         if (row.filename or "").lower().endswith((".pdf", ".txt", ".html")):
             try:
@@ -445,7 +436,19 @@ def review_case(
             text=text,
             size=(doc_sizes or {}).get(filename, 0),
         ))
+    return docs
 
+
+def evaluate_documents(
+    commission: Commission | None,
+    docs: list[DocItem],
+) -> dict:
+    """纯判定（不落库）：返回 {overall, counts, triggered, unverified, version}。
+
+    review_case（管线落库）与委托库批量体检（临时盘点）共用同一份判定。
+    """
+    rules, version = load_rule_defs()
+    today = datetime.now(timezone.utc).date()
     ctx = ReviewContext(commission=commission, docs=docs, today=today)
     triggered: list[dict] = []
     unverified: list[str] = []
@@ -477,23 +480,41 @@ def review_case(
             })
         elif rule.level == INFO:
             counts[INFO] += 1
-
     if counts[BLOCKER]:
         overall = REJECT
     elif counts[WARNING] or unverified:
         overall = REVIEW
     else:
         overall = PASS
+    return {
+        "overall": overall,
+        "counts": counts,
+        "triggered": triggered,
+        "unverified": sorted(set(unverified)),
+        "version": version,
+    }
 
+
+def review_case(
+    session: Session,
+    case: Case,
+    *,
+    doc_texts: dict[str, str] | None = None,
+    doc_sizes: dict[str, int] | None = None,
+) -> ComplianceRun:
+    """对 case 当前文件包跑全量规则审查，落 ComplianceRun 并返回。"""
+    commission = session.get(Commission, case.commission_id)
+    docs = build_docs_for_commission(session, case.commission_id, doc_texts, doc_sizes)
+    result = evaluate_documents(commission, docs)
     run = ComplianceRun(
         case_id=case.id,
-        rule_set_version=version,
-        overall=overall,
-        blocker_count=counts[BLOCKER],
-        warning_count=counts[WARNING],
-        info_count=counts[INFO],
-        triggered=triggered,
-        unverified=sorted(set(unverified)),
+        rule_set_version=result["version"],
+        overall=result["overall"],
+        blocker_count=result["counts"][BLOCKER],
+        warning_count=result["counts"][WARNING],
+        info_count=result["counts"][INFO],
+        triggered=result["triggered"],
+        unverified=result["unverified"],
     )
     session.add(run)
     session.flush()
