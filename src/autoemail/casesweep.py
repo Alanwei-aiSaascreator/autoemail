@@ -24,8 +24,9 @@ from .models import Case, TERMINAL_STATES
 from .state import transition_case
 
 SWEEP_ACTION = "case.sweep"
-QUOTED_OUT_STALE_DAYS = 7
-INIT_STALE_DAYS = 14
+# 比价节奏快：出局 3 天无后续即关闭；询价 7 天无回音即关闭
+QUOTED_OUT_STALE_DAYS = 3
+INIT_STALE_DAYS = 7
 # 中标收敛时允许直接关闭的早期状态（实质推进中的不动）
 CONCEDE_EARLY_STATES = ("init", "quoted_out", "quoted", "materials_requested")
 # 超时清扫覆盖的状态 → 天数
