@@ -24,7 +24,7 @@ from .drafts import generate_draft
 from .invoices import record_invoice
 from .notify.feishu import build_payment_text, build_quote_text, notify as notify_feishu
 from .notify.wecom import build_payment_markdown, build_quote_markdown, notify as notify_wecom
-from .state import state_for_intent, transition_case
+from .state import can_transition, state_for_intent, transition_case
 from .followups import cancel_followups_for_case
 from .outbound import send_draft
 from .quotes import record_quote
@@ -211,6 +211,48 @@ def _process_stored(
     if case is None:
         raise RuntimeError(f"case id {assignment.case_id} 不存在")
 
+    # 回复全量规划：LLM 读全文+附件文本，在框架枚举内决策意图/材料/正文回答/
+    # 附件处置/状态迁移；低置信或不可用时为 None，走确定性链路。
+    reply_plan = None
+    if active_provider is not None and llm_allowed and provider_ready and deterministic_intent.payment is None:
+        from .ingest.pdf import extract_pdf_text
+        from .planner import plan_reply
+
+        pdf_texts = {
+            att.filename: (extract_pdf_text(att.content) or "")
+            for att in message.attachments or []
+            if (att.filename or "").lower().endswith(".pdf")
+        }
+        reply_plan = plan_reply(
+            message,
+            provider=active_provider,
+            case_no=case.case_no,
+            case_state=case.state,
+            pdf_texts=pdf_texts,
+        )
+        if reply_plan is not None:
+            from .planner import plan_to_slots
+
+            intent.slots.update(plan_to_slots(reply_plan))
+            if reply_plan.intent != "unclear":
+                intent.label = reply_plan.intent
+                intent.confidence = max(intent.confidence, reply_plan.confidence)
+                intent.evidence = ["planner", *intent.evidence]
+            audit.record(
+                session,
+                action="llm.reply_plan",
+                thread_id=thread.id,
+                message_id=stored.id,
+                case_id=case.id,
+                decision=reply_plan.intent,
+                reasons=[
+                    f"state_hint={reply_plan.state_hint}",
+                    f"materials={reply_plan.materials}",
+                    f"answers={len(reply_plan.inline_answers)}",
+                    f"attachments={[(a.filename, a.disposition) for a in reply_plan.attachments]}",
+                ],
+            )
+
     audit.record(
         session,
         action="intent.classify",
@@ -222,6 +264,10 @@ def _process_stored(
     )
     case.last_inbound_at = message.sent_at or datetime.now(timezone.utc)
     target_state = state_for_intent(intent.label)
+    # LLM 规划的状态建议：仅当命中状态机白名单时采纳，否则保持确定性映射
+    plan_hint = str(intent.slots.get("state_hint") or "none")
+    if plan_hint != "none" and plan_hint != target_state and can_transition(case.state, plan_hint):
+        target_state = plan_hint
     if target_state:
         transition_case(session, case, target_state, reason=f"收到代理商 {intent.label} 回复", message_id=stored.id)
         cancel_followups_for_case(session, case.id, reason="收到代理商新回复")

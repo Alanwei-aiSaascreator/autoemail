@@ -169,9 +169,11 @@ def _template(
                 f"{commission.legal_name}. No quote amount was included in your email; "
                 "please let us know your quoted premium and estimated processing time.\n\n"
             )
-        profile = _trade_profile_paragraph(intake_data)
-        if profile:
-            lead += profile + "\n\n"
+        # 有 LLM 全量计划时，正文回答完全由计划驱动（避免与贸易概况段重复）
+        if not intent.slots.get("inline_answers"):
+            profile = _trade_profile_paragraph(intake_data)
+            if profile:
+                lead += profile + "\n\n"
         body = (
             f"Hi {agent.contact_name or agent.name},\n\n"
             + lead
@@ -317,6 +319,38 @@ def _trade_profile_paragraph(intake_data: dict[str, str] | None) -> str:
         "For your review, the importer's trade profile from their submitted intake form:\n"
         + "\n".join(lines)
     )
+
+
+def _plan_inline_answer_text(
+    answer_key: str, question: str, commission: Commission, intake: dict[str, str]
+) -> str | None:
+    """LLM 计划里的一题 → 确定性应答器生成正文（事实全部来自档案/需求表）。"""
+    if answer_key == "ownership":
+        return ownership_answer(commission)
+    if answer_key == "ad_cvd":
+        return ad_cvd_answer(intake)
+    if answer_key == "trade_profile":
+        return _trade_profile_paragraph(intake)
+    if answer_key == "request_quote":
+        return "Please share your quoted premium and estimated processing time."
+    if answer_key == "effective_date":
+        value = intake.get("a006")
+        return f"The requested bond effective date is {value}." if value else None
+    if answer_key == "existing_bond":
+        value = intake.get("a012")
+        if not value:
+            return None
+        if value.lower().startswith("rep"):
+            return "The importer is replacing an existing/prior continuous bond."
+        return f"Prior bond status per intake form: {value}."
+    if answer_key == "documents_ready":
+        return (
+            "The company formation documents, EIN confirmation letter (CP575), and "
+            "principal ID are ready; we can submit them via your secure channel upon "
+            "your instruction."
+        )
+    # acknowledge 或未知 key：不出正文（问候段已致谢）
+    return None
 
 
 def _recipient_from_source(source: Message, agent: Agent) -> list[str]:
@@ -561,8 +595,16 @@ def generate_draft(
                 notices.append(f"{label} 未能自动生成，已从「已附上」中移除")
                 body = body.replace(f"- {label}\n", "").replace(f"- {label}", "")
         app_attached = False
+        # LLM 附件处置计划：ignore 的附件跳过不处理（如宣传材料/无关文件）
+        attachment_plan = intent.slots.get("attachment_plan") or []
+        plan_dispositions = {
+            str(a.get("filename")): str(a.get("disposition")) for a in attachment_plan
+        }
         for att in source.attachments or []:
             if not (att.filename or "").lower().endswith(".pdf"):
+                continue
+            if plan_dispositions.get(att.filename) == "ignore":
+                notices.append(f"按计划跳过附件：{att.filename}")
                 continue
             from .formfill import auto_fill_for_case
 
@@ -601,10 +643,12 @@ def generate_draft(
             )
         # 股权分配 / AD-CVD 按运营标准口径在正文中直接回答
         inline_answers: list[str] = []
+        answered_keys: set[str] = set()
         if "ownership" in material_keys:
             from .financials import ownership_answer
 
             inline_answers.append(ownership_answer(commission))
+            answered_keys.add("ownership")
         if "ad_cvd" in material_keys:
             from .financials import ad_cvd_answer
             from .formfill import get_intake_fields
@@ -612,6 +656,7 @@ def generate_draft(
             intake = get_intake_fields(session, commission.id) or {}
             inline_answers.append(ad_cvd_answer(intake))
             _ensure_adcvd_attestation(session, case, commission, intake)
+            answered_keys.add("ad_cvd")
         if inline_answers:
             body = (
                 body.rstrip("\n")
@@ -619,6 +664,40 @@ def generate_draft(
                 + "\n\n".join(inline_answers)
                 + "\n"
             )
+
+    # LLM 全量计划的逐题应答：两个意图通用；与材料口径已答的题目去重
+    plan_answers = intent.slots.get("inline_answers") or []
+    if plan_answers:
+        from .financials import ad_cvd_answer, ownership_answer
+        from .formfill import get_intake_fields
+
+        intake = get_intake_fields(session, commission.id) or {}
+        already: set[str] = set()
+        if intent.label == "form_request":
+            already |= answered_keys & {"ownership", "ad_cvd"}
+        elif intent.label == "quote_reply" and not intent.slots.get("inline_answers"):
+            already.add("trade_profile")
+        texts: list[str] = []
+        for item in plan_answers:
+            key = str(item.get("answer_key") or "")
+            if key in already or key == "acknowledge":
+                continue
+            already.add(key)
+            text = _plan_inline_answer_text(key, str(item.get("question") or ""), commission, intake)
+            if text:
+                texts.append(text)
+            if key == "ad_cvd":
+                _ensure_adcvd_attestation(session, case, commission, intake)
+        if texts:
+            if "To answer your specific questions:" in body:
+                body = body.rstrip("\n") + "\n\n" + "\n\n".join(texts) + "\n"
+            else:
+                body = (
+                    body.rstrip("\n")
+                    + "\n\nTo answer your specific questions:\n\n"
+                    + "\n\n".join(texts)
+                    + "\n"
+                )
 
     status, rule_hits, reasons, gate_notices = _preview_gate(
         case=case,
