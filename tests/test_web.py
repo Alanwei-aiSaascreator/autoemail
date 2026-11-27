@@ -196,7 +196,7 @@ def test_draft_pages_render_body_and_fields(session, world):
     assert detail is not None
     assert "受控字段" in detail
     assert "deterministic_template" in detail
-    assert "Thank you for the quote" in detail
+    assert "quote for Sunrise Home Goods LLC" in detail
 
 
 def test_upload_signature_stores_asset(session, world):

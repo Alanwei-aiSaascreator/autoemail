@@ -150,13 +150,16 @@ def _template(
     }
 
     if intent.label == "quote_reply":
+        from . import humanize
+
+        _seed = humanize.human_seed(case.case_no, channel_msg_id=source.channel_msg_id or "")
         amount = intent.slots.get("amount")
         currency = intent.slots.get("currency", "USD")
         fields.update({"amount": str(amount) if amount is not None else None, "currency": currency})
         subject = f"Re: [{case.case_no}] Bond quote confirmation"
         if amount is not None:
             lead = (
-                f"Thank you for the quote for {commission.legal_name}. "
+                f"{humanize.opener_quote_reply(commission.legal_name, _seed)} "
                 f"We have received the quoted amount of {amount} {currency}.\n\n"
                 "Please confirm the next required documents and processing steps for the "
                 "Continuous Customs Bond.\n\n"
@@ -165,8 +168,8 @@ def _template(
             # 对方没给报价：不谎称"已收到报价"，转而主动提供承保人审查需要的
             # 贸易概况，并请对方报批价与时效。
             lead = (
-                f"Thank you for your message regarding the continuous importer bond for "
-                f"{commission.legal_name}. No quote amount was included in your email; "
+                f"{humanize.opener_quote_missing(commission.legal_name, _seed)} "
+                "No quote amount was included in your email; "
                 "please let us know your quoted premium and estimated processing time.\n\n"
             )
         # 有 LLM 全量计划时，正文回答完全由计划驱动（避免与贸易概况段重复）
@@ -174,15 +177,21 @@ def _template(
             profile = _trade_profile_paragraph(intake_data)
             if profile:
                 lead += profile + "\n\n"
+        tail = humanize.closer(_seed)
+        closing = f"{tail}\n\n" if tail else ""
         body = (
-            f"Hi {agent.contact_name or agent.name},\n\n"
+            f"{humanize.greeting(agent.contact_name or agent.name, _seed)}\n\n"
             + lead
+            + closing
             + "Best regards,\n"
             + f"{commission.signer_name or 'Bond Operations'}\n"
         )
         return "quote_reply", subject, body, fields
 
     if intent.label == "form_request":
+        from . import humanize as _hz
+
+        _seed = _hz.human_seed(case.case_no, channel_msg_id=source.channel_msg_id or "")
         fields["material_keys"] = list(material_keys)
         # 无法自动完成的材料单独成段：明确告知"随后另行提供"，而不是发三件套敷衍。
         enclosed = [_MATERIAL_LABELS[k] for k in material_keys if k in _AUTO_PROVIDABLE]
@@ -193,9 +202,11 @@ def _template(
         ]
         subject = f"Re: [{case.case_no}] Application documents"
         greeting = (
-            f"Hi {agent.contact_name or agent.name},\n\n"
-            f"Thank you for your message regarding {commission.legal_name}.\n\n"
+            f"{_hz.greeting(agent.contact_name or agent.name, _seed)}\n\n"
+            f"{_hz.opener_form_request(commission.legal_name, _seed)}\n\n"
         )
+        _tail = _hz.closer(_seed)
+        _closing = f"{_tail}\n\n" if _tail else ""
         if material_keys:
             parts: list[str] = []
             if enclosed:
@@ -214,8 +225,9 @@ def _template(
                     "items above as soon as they are ready.\n\n"
                 )
             body += (
-                "Best regards,\n"
-                f"{commission.signer_name or 'Bond Operations'}\n"
+                _closing
+                + "Best regards,\n"
+                + f"{commission.signer_name or 'Bond Operations'}\n"
             )
         else:
             # 无法判定清单时退回确认式模板，并列出默认材料请对方确认
@@ -228,19 +240,26 @@ def _template(
                 "following items are required for this case:\n\n"
                 f"{material_text}\n\n"
                 "We will provide the completed documents after our internal review.\n\n"
-                "Best regards,\n"
-                f"{commission.signer_name or 'Bond Operations'}\n"
+                + _closing
+                + "Best regards,\n"
+                + f"{commission.signer_name or 'Bond Operations'}\n"
             )
         return "form_request", subject, body, fields
 
     if intent.label == "bond_delivered":
+        from . import humanize as _hz
+
+        _seed = _hz.human_seed(case.case_no, channel_msg_id=source.channel_msg_id or "")
         subject = f"Re: [{case.case_no}] Bond copy received"
+        _tail = _hz.closer(_seed)
+        _closing = f"{_tail}\n\n" if _tail else ""
         body = (
-            f"Hi {agent.contact_name or agent.name},\n\n"
-            f"We confirm receipt of the Bond copy for {commission.legal_name}. "
+            f"{_hz.greeting(agent.contact_name or agent.name, _seed)}\n\n"
+            f"{_hz.opener_bond_delivered(commission.legal_name, _seed)} "
             "We will review and archive the document internally.\n\n"
-            "Thank you,\n"
-            f"{commission.signer_name or 'Bond Operations'}\n"
+            + _closing
+            + "Thank you,\n"
+            + f"{commission.signer_name or 'Bond Operations'}\n"
         )
         return "bond_delivered", subject, body, fields
 

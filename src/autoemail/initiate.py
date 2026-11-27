@@ -97,7 +97,12 @@ def _agent_address(agent: Agent, explicit: str | None) -> str:
 
 
 def _inquiry(case_no: str, commission: Commission, recipient: str) -> tuple[str, str]:
-    """询价正文按《客户需求》（CUSTOMS BOND CLIENT APPLICATION）问卷结构撰写。"""
+    """询价正文按《客户需求》（CUSTOMS BOND CLIENT APPLICATION）问卷结构撰写。
+
+    开场寒暄/引入句经人味层生成自然变体（每封不同，事实内容不变）。
+    """
+    from . import humanize
+
     subject = f"[{case_no}] Inquiry - Continuous Customs Bond"
     address = ", ".join(
         part
@@ -111,10 +116,10 @@ def _inquiry(case_no: str, commission: Commission, recipient: str) -> tuple[str,
     )
     signer = commission.signer_name or "Bond Operations"
     signer_title = commission.signer_title or "Member"
+    seed = humanize.human_seed(case_no, channel_msg_id=recipient)
     body = (
-        f"Hello,\n\n"
-        f"{commission.legal_name} is looking to purchase a customs bond and would like "
-        f"to request a quote from your agency. Details below per our client application:\n\n"
+        f"{humanize.greeting('', seed + recipient)}\n\n"
+        f"{humanize.opener_inquiry(commission.legal_name, seed)} Details below per our client application:\n\n"
         "01 / BOND REQUEST\n"
         "- Service requested: New bond\n"
         "- Bond coverage: Continuous Customs Bond\n"
@@ -137,10 +142,15 @@ def _inquiry(case_no: str, commission: Commission, recipient: str) -> tuple[str,
         "history & compliance, and AD/CVD schedule if applicable)\n"
         "3. Documents you need from us - we have Articles of Formation, IRS EIN letter "
         "(CP575), W-9 and principal ID available\n\n"
-        "Best regards,\n"
+        f"{humanize.closer(seed)}\n\n"
+        f"{humanize.signoff(seed)}\n"
         f"{signer}\n"
         f"{commission.legal_name}\n"
     )
+    body = "\n".join(line for line in body.split("\n") if line.strip() or True)
+    # 去掉 closer 为空时留下的多余空行段
+    while "\n\n\n" in body:
+        body = body.replace("\n\n\n", "\n\n")
     return subject, body
 
 
