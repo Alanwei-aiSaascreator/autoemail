@@ -298,6 +298,7 @@ def _layout(title: str, active: str, content: str) -> str:
 {nav("inquiry", "/inquiry", "发起询价")}
 {nav("cases", "/cases", "Case")}
 {nav("drafts", "/drafts", "草稿")}
+{nav("compliance", "/compliance", "合规")}
 {nav("llm", "/llm", "LLM")}
 {nav("settings", "/settings", "设置")}
 </nav>
@@ -1791,7 +1792,8 @@ def render_case(
     run_rows = [
         [
             f"#{item.id}",
-            _tag(item.overall.lower()) if item.overall != "PASS" else '<span class="tag sent">PASS</span>',
+            _ORIGIN_LABEL.get(item.origin, item.origin),
+            _COMPLIANCE_TAG.get(item.overall, _e(item.overall)),
             f"{item.blocker_count} / {item.warning_count} / {item.info_count}",
             f"规则集 v{item.rule_set_version}",
             _fmt_dt(item.created_at),
@@ -1827,7 +1829,7 @@ def render_case(
         compliance_detail = '<p class="muted">暂无审查记录（收到附件时自动审查）</p>'
     compliance_html = (
         f"<h3>最新审查结果：{_e(runs[0].overall if runs else '—')}</h3>{compliance_detail}"
-        + _table(["运行", "结论", "阻断/告警/提示", "规则集", "时间"], run_rows)
+        + _table(["运行", "来源", "结论", "阻断/告警/提示", "规则集", "时间"], run_rows)
         if runs
         else compliance_detail
     )
@@ -1981,6 +1983,80 @@ def render_drafts(session: Session, status: str = "all") -> str:
 {_table(["ID", "Case", "意图", "状态", "主题", "创建时间", "操作"], rows)}
 """
     return _layout("草稿", "drafts", content)
+
+
+_COMPLIANCE_TAG = {
+    "REJECT": '<span class="tag blocked">REJECT</span>',
+    "REVIEW": '<span class="tag pending">REVIEW</span>',
+    "PASS": '<span class="tag sent">PASS</span>',
+}
+_ORIGIN_LABEL = {"inbound": "入站审查", "fill": "填表佐证"}
+
+
+def render_compliance(session: Session, status: str = "all") -> str:
+    """合规预警汇总页：跨案件展示全部审查记录（入站审查 + 填表佐证）。"""
+    overall_counts = dict(
+        session.execute(
+            select(ComplianceRun.overall, func.count()).group_by(ComplianceRun.overall)
+        ).all()
+    )
+    total = sum(overall_counts.values())
+    statement = select(ComplianceRun).order_by(ComplianceRun.id.desc()).limit(200)
+    if status != "all":
+        statement = statement.where(ComplianceRun.overall == status)
+    runs = session.scalars(statement).all()
+
+    rows = []
+    for run in runs:
+        case = session.get(Case, run.case_id)
+        trig = run.triggered or []
+        detail_lines = [
+            f"{item.get('level')} {item.get('rule_id')}：{item.get('message')}"
+            f"（建议：{item.get('fix_hint')}；依据：{item.get('legal_basis')}）"
+            for item in trig
+        ]
+        if run.unverified:
+            detail_lines.append(
+                f"未判定 {len(run.unverified)} 条（外部数据源规则：{'、'.join(run.unverified[:8])}"
+                + ("…" if len(run.unverified) > 8 else "") + "）"
+            )
+        detail_html = (
+            f'<details><summary>触发 {len(trig)} 项</summary><pre>{_e(chr(10).join(detail_lines))}</pre></details>'
+            if detail_lines
+            else '<span class="muted">无触发项</span>'
+        )
+        rows.append([
+            f'<a href="/cases/{run.case_id}">{_e(case.case_no if case else run.case_id)}</a>',
+            _ORIGIN_LABEL.get(run.origin, run.origin),
+            _COMPLIANCE_TAG.get(run.overall, _e(run.overall)),
+            f"{run.blocker_count} / {run.warning_count} / {run.info_count}",
+            detail_html,
+            f"v{run.rule_set_version}",
+            _fmt_dt(run.created_at),
+        ])
+
+    tabs = _tabs(
+        [
+            ("all", "全部", "/compliance", total),
+            ("REJECT", "阻断", "/compliance?status=REJECT", overall_counts.get("REJECT", 0)),
+            ("REVIEW", "待复核", "/compliance?status=REVIEW", overall_counts.get("REVIEW", 0)),
+            ("PASS", "通过", "/compliance?status=PASS", overall_counts.get("PASS", 0)),
+        ],
+        status,
+    )
+    intro = (
+        '<p class="muted">合规审查在两个时机自动进行：① 委托文件传入时（入站审查）；'
+        "② 我方自动填表后、发送前（填表佐证）。结论由规则引擎按 CBP 规则表逐条判定，"
+        '规则可在 <code>rules/rule_def.csv</code> 维护。REJECT 表示存在阻断项，禁止提交担保商/CBP。</p>'
+    )
+    content = f"""
+<p class="crumbs"><a href="/">看板</a> / 合规预警</p>
+<h1>合规预警</h1>
+{intro}
+{tabs}
+{_table(["案件", "来源", "结论", "阻断/告警/提示", "触发明细", "规则集", "时间"], rows)}
+"""
+    return _layout("合规预警", "compliance", content)
 
 
 def _smtp_ready() -> bool:
@@ -2309,6 +2385,8 @@ class Handler(BaseHTTPRequestHandler):
                     body = _layout("未找到", "cases", "<h1>Case 不存在</h1>")
             elif path == "/drafts":
                 body = render_drafts(session, (query.get("status") or ["all"])[0])
+            elif path == "/compliance":
+                body = render_compliance(session, (query.get("status") or ["all"])[0])
             elif path.startswith("/drafts/"):
                 try:
                     draft_id = int(path.rstrip("/").rsplit("/", 1)[1])

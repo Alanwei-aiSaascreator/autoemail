@@ -627,6 +627,26 @@ def generate_draft(
                 attachments.extend(supporting)
                 notices.append(f"已附上支持文件原件：{', '.join(supporting)}")
         if attachments:
+            # 填表佐证（主动审查）：产物发出去之前过一遍 CBP 规则表，
+            # 预警写进 notices 供人工发送前参考；不阻断草稿主链路
+            from .compliance import review_files
+
+            try:
+                fill_run = review_files(session, case, attachments, origin="fill")
+            except Exception as exc:  # noqa: BLE001
+                fill_run = None
+                notices.append(f"填表合规佐证执行失败：{exc}")
+            if fill_run is not None:
+                notices.append(
+                    f"填表合规佐证：{fill_run.overall}"
+                    f"（阻断 {fill_run.blocker_count} / 告警 {fill_run.warning_count}，"
+                    f"详见合规页）"
+                )
+                for item in fill_run.triggered:
+                    if item.get("level") in ("BLOCKER", "WARNING"):
+                        notices.append(
+                            f"合规提醒 {item['rule_id']}：{item['message']}（{item['fix_hint']}）"
+                        )
             body = body.rstrip("\n") + (
                 "\n\nPlease find attached the completed documents and "
                 f"supporting files for {commission.legal_name}.\n\n"

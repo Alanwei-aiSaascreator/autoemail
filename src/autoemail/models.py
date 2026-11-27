@@ -498,6 +498,8 @@ class ComplianceRun(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     case_id: Mapped[int] = mapped_column(ForeignKey("case.id"), index=True)
     message_id: Mapped[int | None] = mapped_column(ForeignKey("message.id"))
+    # 审查来源：inbound（委托文件传入时自动审查）/ fill（我方自动填表后主动佐证）
+    origin: Mapped[str] = mapped_column(String(16), default="inbound")
     rule_set_version: Mapped[str] = mapped_column(String(20))
     # PASS / REVIEW / REJECT
     overall: Mapped[str] = mapped_column(String(16))

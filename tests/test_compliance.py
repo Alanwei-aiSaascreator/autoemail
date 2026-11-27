@@ -12,9 +12,10 @@ from autoemail.compliance import (
     extract_eins,
     load_rule_defs,
     review_case,
+    review_files,
 )
 from autoemail.channels.base import NormalizedAttachment, NormalizedMessage
-from autoemail.models import ComplianceRun
+from autoemail.models import ComplianceRun, Draft
 from autoemail.pipeline import process_message
 
 
@@ -194,3 +195,71 @@ def test_pipeline_skips_compliance_without_attachments(session, world):
     assert result.draft_id is not None
     runs = session.query(ComplianceRun).filter_by(case_id=world["case"].id).all()
     assert runs == []
+
+
+# ---- 填表佐证（主动审查）：我方产物发送前过规则 ----
+
+def _blank_form_pdf(tmp_path, name="blank.pdf") -> str:
+    """生成一张'空白 onboarding 表'：含 EIN 字样（会被分类为 EIN_LETTER）
+    但不含委托公司名——正是体检发现的空表场景。"""
+    from reportlab.pdfgen import canvas
+
+    buf = BytesIO()
+    c = canvas.Canvas(buf)
+    c.drawString(72, 750, "APPLICATION FOR CONTINUOUS CUSTOMS BOND")
+    c.drawString(72, 730, "Please complete all fields, sign, and return.")
+    c.drawString(72, 710, "Importer name *")
+    c.drawString(72, 690, "Federal ID # (EIN / IRS No.) *")
+    c.save()
+    p = tmp_path / name
+    p.write_bytes(buf.getvalue())
+    return str(p)
+
+
+def test_review_files_fill_origin_flags_blank_form(session, world, tmp_path):
+    path = _blank_form_pdf(tmp_path)
+    run = review_files(session, world["case"], [path], origin="fill")
+    assert run is not None
+    assert run.origin == "fill"
+    ids = {item["rule_id"] for item in run.triggered}
+    assert "P005" in ids  # 空白表：公司名未出现在表格文本里
+
+
+def test_review_files_returns_none_without_files(session, world):
+    assert review_files(session, world["case"], [], origin="fill") is None
+
+
+def test_draft_fill_appends_compliance_notices(session, world, tmp_path, monkeypatch):
+    """自动填表产物发送前：合规佐证写入草稿 notices，供人工发送前参考。"""
+    pdf_path = _blank_form_pdf(tmp_path, name="filled.pdf")
+    monkeypatch.setattr(
+        "autoemail.formfill.auto_fill_for_case",
+        lambda *a, **k: {"output_path": pdf_path},
+    )
+    message = NormalizedMessage(
+        channel="eml",
+        channel_msg_id="fill-review-1",
+        from_addr="toni@a1surety.com",
+        subject="Re: [BOND-2026-0142] Application",
+        body_text="Please return the thoroughly completed and signed documents.",
+        attachments=[
+            NormalizedAttachment(
+                filename="application.pdf",
+                mime="application/pdf",
+                content=_pdf_bytes("sample application"),
+                sha256="hash-fill-review",
+            )
+        ],
+        dedupe_hash="fill-review-hash-1",
+    )
+    result = process_message(session, message)
+    draft = session.get(Draft, result.draft_id)
+    assert draft is not None
+    assert any("填表合规佐证" in n for n in (draft.notices or []))
+    run = (
+        session.query(ComplianceRun)
+        .filter_by(case_id=world["case"].id, origin="fill")
+        .order_by(ComplianceRun.id.desc())
+        .first()
+    )
+    assert run is not None

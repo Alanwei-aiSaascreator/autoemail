@@ -1,4 +1,4 @@
-﻿rule_id,group_id,group_name,level,object_path,logic_desc,error_code,message,fix_hint,legal_basis,enabled,version
+rule_id,group_id,group_name,level,object_path,logic_desc,error_code,message,fix_hint,legal_basis,enabled,version
 D001,G01,文件完整性,BLOCKER,document set,required_docs(required_set(principal_type)) 缺失任一 → 触发,E-DOC-001,必填文件缺失,按主体类型补齐后重跑,19 CFR 113.13 / 担保商清单,1,1
 D002,G01,文件完整性,BLOCKER,document.ocr_conf,含关键字段页的 OCR 置信度均值 < 0.85 或可解析字符数 < 20,E-DOC-002,影像不可核验,重扫 300dpi 彩色件,内控基线,1,1
 D003,G01,文件完整性,WARNING,document.hash,同一 document_type 存在 >1 个哈希不同的版本,E-DOC-003,文件多版本并存,指定现行版本并注明来源,内控基线,1,1

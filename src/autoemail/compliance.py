@@ -114,28 +114,28 @@ def load_rule_defs(path: Path = RULES_PATH) -> tuple[dict[str, RuleDef], str]:
     """加载并校验规则表：rule_id 唯一、level 合法；失败拒绝启动。返回 (规则表, 版本)。"""
     rules: dict[str, RuleDef] = {}
     version = "0"
-    with open(path, encoding="utf-8-sig", newline="") as fh:
-        for lineno, row in enumerate(csv.DictReader(fh), start=2):
-            rule_id = (row.get("rule_id") or "").strip()
-            level = (row.get("level") or "").strip()
-            if not rule_id:
-                raise ValueError(f"规则表第 {lineno} 行缺 rule_id")
-            if rule_id in rules:
-                raise ValueError(f"规则表 rule_id 重复：{rule_id}（第 {lineno} 行）")
-            if level not in {BLOCKER, WARNING, INFO}:
-                raise ValueError(f"规则表 {rule_id} level 非法：{level}（第 {lineno} 行）")
-            version = (row.get("version") or version).strip()
-            rules[rule_id] = RuleDef(
-                rule_id=rule_id,
-                group_id=(row.get("group_id") or "").strip(),
-                group_name=(row.get("group_name") or "").strip(),
-                level=level,
-                object_path=(row.get("object_path") or "").strip(),
-                message=(row.get("message") or "").strip(),
-                fix_hint=(row.get("fix_hint") or "").strip(),
-                legal_basis=(row.get("legal_basis") or "").strip(),
-                enabled=(row.get("enabled") or "1").strip() == "1",
-            )
+    text = path.read_text(encoding="utf-8-sig").lstrip("\ufeff")
+    for lineno, row in enumerate(csv.DictReader(io.StringIO(text)), start=2):
+        rule_id = (row.get("rule_id") or "").strip()
+        level = (row.get("level") or "").strip()
+        if not rule_id:
+            raise ValueError(f"规则表第 {lineno} 行缺 rule_id")
+        if rule_id in rules:
+            raise ValueError(f"规则表 rule_id 重复：{rule_id}（第 {lineno} 行）")
+        if level not in {BLOCKER, WARNING, INFO}:
+            raise ValueError(f"规则表 {rule_id} level 非法：{level}（第 {lineno} 行）")
+        version = (row.get("version") or version).strip()
+        rules[rule_id] = RuleDef(
+            rule_id=rule_id,
+            group_id=(row.get("group_id") or "").strip(),
+            group_name=(row.get("group_name") or "").strip(),
+            level=level,
+            object_path=(row.get("object_path") or "").strip(),
+            message=(row.get("message") or "").strip(),
+            fix_hint=(row.get("fix_hint") or "").strip(),
+            legal_basis=(row.get("legal_basis") or "").strip(),
+            enabled=(row.get("enabled") or "1").strip() == "1",
+        )
     if not rules:
         raise ValueError("规则表为空")
     return rules, version
@@ -506,6 +506,60 @@ def evaluate_documents(
     }
 
 
+def review_files(
+    session: Session,
+    case: Case,
+    file_paths: list[str],
+    *,
+    origin: str = "inbound",
+) -> ComplianceRun | None:
+    """对我方产出/收到的本地文件（如自动填表产物）跑规则审查并落库。
+
+    填表佐证场景（origin="fill"）：产物发出去之前先过一遍规则，触发的预警
+    由调用方写进草稿 notices，供人工发送前参考。
+    文件缺失或全部解析失败时返回 None（无输入不虚报结论）。
+    """
+    docs: list[DocItem] = []
+    for path_str in file_paths or []:
+        p = Path(path_str)
+        if not p.is_file():
+            continue
+        text = ""
+        try:
+            if p.suffix.lower() == ".pdf":
+                from .ingest.pdf import extract_pdf_text
+
+                text = extract_pdf_text(p.read_bytes()) or ""
+            elif p.suffix.lower() in {".txt", ".html", ".csv"}:
+                text = p.read_text(encoding="utf-8", errors="ignore")
+        except Exception:  # noqa: BLE001  解析失败按无文本层处理
+            text = ""
+        docs.append(DocItem(
+            filename=p.name,
+            doc_type=classify_document(p.name, text),
+            text=text,
+            size=p.stat().st_size,
+        ))
+    if not docs:
+        return None
+    commission = session.get(Commission, case.commission_id)
+    result = evaluate_documents(commission, docs)
+    run = ComplianceRun(
+        case_id=case.id,
+        origin=origin,
+        rule_set_version=result["version"],
+        overall=result["overall"],
+        blocker_count=result["counts"][BLOCKER],
+        warning_count=result["counts"][WARNING],
+        info_count=result["counts"][INFO],
+        triggered=result["triggered"],
+        unverified=result["unverified"],
+    )
+    session.add(run)
+    session.flush()
+    return run
+
+
 def review_case(
     session: Session,
     case: Case,
@@ -519,6 +573,7 @@ def review_case(
     result = evaluate_documents(commission, docs)
     run = ComplianceRun(
         case_id=case.id,
+        origin="inbound",
         rule_set_version=result["version"],
         overall=result["overall"],
         blocker_count=result["counts"][BLOCKER],
