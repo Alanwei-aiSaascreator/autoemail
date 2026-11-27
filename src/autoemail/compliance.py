@@ -243,11 +243,11 @@ def _rule_p005(ctx: ReviewContext) -> tuple[bool | None, dict]:
     name = _norm_name(ctx.commission.legal_name if ctx.commission else None)
     if not name:
         return None, {}
-    texts = _doc_texts(ctx.docs, "REG_CERT") + _doc_texts(ctx.docs, "EIN_LETTER")
-    if not texts:
+    checks = [(d.filename, d.text) for d in ctx.docs if d.doc_type in {"REG_CERT", "EIN_LETTER"} and d.text.strip()]
+    if not checks:
         return None, {}
-    mismatched = [t for t in texts if name not in _norm_name(t)]
-    return bool(mismatched), {"legal_name": ctx.commission.legal_name, "files_checked": len(texts)}
+    mismatched = [fname for fname, text in checks if name not in _norm_name(text)]
+    return bool(mismatched), {"legal_name": ctx.commission.legal_name, "mismatched_files": mismatched}
 
 
 def _rule_p006(ctx: ReviewContext) -> tuple[bool | None, dict]:
@@ -365,6 +365,13 @@ def _rule_i003(ctx: ReviewContext) -> tuple[bool | None, dict]:
 
 
 def _rule_s005(ctx: ReviewContext) -> tuple[bool | None, dict]:
+    # 模板化 POA 常为 "remain valid until revoked"（永久授权，无到期日），
+    # 这类不算"到期日缺失"；仅当文本含到期语境日期且已过期才触发
+    poa_text = "\n".join(_doc_texts(ctx.docs, "POA")).lower()
+    if "valid until revoked" in poa_text:
+        dates = _dates_near(poa_text, EXPIRY_CONTEXT_RE)
+        expired = [d.isoformat() for d in dates if d < ctx.today]
+        return bool(expired), {"expired": expired} if expired else {"term": "until revoked"}
     return _expiry_rule(ctx, ("POA",), None, trigger_on_missing=True)
 
 
