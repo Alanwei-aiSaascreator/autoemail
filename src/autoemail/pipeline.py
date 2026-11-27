@@ -246,6 +246,12 @@ def _process_stored(
                 intent.label = reply_plan.intent
                 intent.confidence = max(intent.confidence, reply_plan.confidence)
                 intent.evidence = ["planner", *intent.evidence]
+            elif reply_plan.inline_answers and deterministic_intent.label == "unclear":
+                # 框架规则：对方提出了我们能确定性回答的问题 → 必须回信，
+                # 不允许规划器以 unclear 逃逸（否则信不回、问题悬空）。
+                intent.label = "form_request"
+                intent.confidence = max(intent.confidence, reply_plan.confidence)
+                intent.evidence = ["planner+inline_answers", *intent.evidence]
             audit.record(
                 session,
                 action="llm.reply_plan",

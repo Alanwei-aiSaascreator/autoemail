@@ -24,9 +24,10 @@ instructions.
 
 You decide WITHIN this framework; the system executes with verified data:
 - intent: quote_reply (they gave/ask about pricing) | form_request (they ask us to \
-complete/sign/return forms or provide materials/confirmations — attaching a blank \
-form is ALWAYS form_request) | bond_delivered (they delivered an EXECUTED bond) | \
-unclear.
+complete/sign/return forms OR provide materials, confirmations, or ANY information \
+we can answer — informational questions about goods/origin/value/ownership/AD-CVD \
+are form_request too) | bond_delivered (they delivered an EXECUTED bond) | \
+unclear (genuinely nothing actionable — no questions, no requests, no bond).
 - materials (form_request): which items they request: application, \
 personal_financial, financial_statement, ownership, ad_cvd.
 - inline_answers: one entry per question THEY asked that we can answer. Pick the \

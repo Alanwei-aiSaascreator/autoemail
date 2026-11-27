@@ -189,3 +189,48 @@ def test_queue_filters_by_status_and_intent(session, world):
     result = process_message(session, _quote_message())
     assert [draft.id for draft in list_drafts(session)] == [result.draft_id]
     assert list_drafts(session, intent="form_request") == []
+
+
+def test_quote_reply_adcvd_statement_auto_attests(session, world):
+    """根修回归：任何意图的正文含 AD/CVD 实质声明都自动备案，R06 不再误拦。
+
+    此前只在 form_request 分支落备案，quote_reply 的贸易概况段同样会含
+    AD/CVD 声明（BOND-2026-0504 草稿 219 被 R06 拦截），现检测与备案同源。
+    """
+    from autoemail.models import CommissionIntake
+
+    session.add(
+        CommissionIntake(
+            commission_id=world["commission"].id,
+            fields={
+                "a007": "No",
+                "a006": "2026-11-17",
+                "a012": "Replace",
+                "d001": "Industrial Seals",
+                "d015": "China",
+                "d017": "4 times",
+                "d019": "150000",
+                "d021": "52500",
+            },
+        )
+    )
+    session.commit()
+    message = NormalizedMessage(
+        channel="eml",
+        channel_msg_id="quote-adcvd-2",
+        from_addr="toni@a1surety.com",
+        subject="Re: [BOND-2026-0142] Quote",
+        body_text=(
+            "We are pleased to quote the continuous customs bond for an annual "
+            "fee of $500. Please also confirm whether the goods are subject to "
+            "antidumping or countervailing duties."
+        ),
+        dedupe_hash="quote-adcvd-hash-2",
+    )
+    result = process_message(session, message)
+    draft = session.get(Draft, result.draft_id)
+    assert draft is not None
+    assert "not subject to" in draft.body
+    attested = session.query(AdcvdAttestation).filter_by(case_id=world["case"].id).first()
+    assert attested is not None
+    assert "R06" not in (draft.rule_hits or [])

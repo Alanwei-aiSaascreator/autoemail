@@ -699,6 +699,18 @@ def generate_draft(
                     + "\n"
                 )
 
+    # 根修：凡最终正文包含 AD/CVD 实质声明（与 R06 闸门同一检测正则），
+    # 无论来自哪个意图/分支/模板，一律先落 IOR 备案记录——检测与备案同源，
+    # 不会再出现"某条分支漏备案被 R06 误拦"。
+    from .outbound import ADCVD_PATTERN
+
+    if ADCVD_PATTERN.search(body):
+        from .formfill import get_intake_fields
+
+        _ensure_adcvd_attestation(
+            session, case, commission, get_intake_fields(session, commission.id) or {}
+        )
+
     status, rule_hits, reasons, gate_notices = _preview_gate(
         case=case,
         thread=thread,
