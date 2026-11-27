@@ -56,6 +56,14 @@ def test_window_respects_dst():
     assert auto_send_window_open(datetime(2026, 7, 15, 13, 0, tzinfo=ZoneInfo("UTC")))[0] is True
 
 
+def test_window_closes_at_5pm_ny():
+    # 窗口有结束边界：纽约 17:00 起一律视为未开窗（含 17:00 整点）
+    assert auto_send_window_open(datetime(2026, 1, 15, 16, 59, tzinfo=NY))[0] is True
+    assert auto_send_window_open(datetime(2026, 1, 15, 17, 0, tzinfo=NY))[0] is False
+    # 北京周四早上 = 纽约周三晚上，此前会被误判为开窗并立即触发批次
+    assert auto_send_window_open(datetime(2026, 1, 15, 20, 15, tzinfo=NY))[0] is False
+
+
 # ---- 闸门规则 R11 ----
 
 def _ctx(**overrides):
