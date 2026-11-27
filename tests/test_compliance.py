@@ -126,6 +126,16 @@ def test_review_lists_unverified_rules(session, world):
     assert "B006" in run.unverified
 
 
+def test_disabled_rule_f004_is_skipped(session, world):
+    """CSV enabled=0 的规则（F004 日期歧义）不触发、不进 unverified。"""
+    rules, _v = load_rule_defs()
+    assert rules["F004"].enabled is False
+    run = review_case(session, world["case"], doc_texts={"cert.pdf": "filed on 10/05/2026"})
+    ids = {item["rule_id"] for item in run.triggered}
+    assert "F004" not in ids
+    assert "F004" not in run.unverified
+
+
 # ---- 管线集成：收到附件即审查 ----
 
 def _pdf_bytes(text: str) -> bytes:

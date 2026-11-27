@@ -92,6 +92,7 @@ class RuleDef:
     message: str
     fix_hint: str
     legal_basis: str
+    enabled: bool = True
 
 
 @dataclass
@@ -133,6 +134,7 @@ def load_rule_defs(path: Path = RULES_PATH) -> tuple[dict[str, RuleDef], str]:
                 message=(row.get("message") or "").strip(),
                 fix_hint=(row.get("fix_hint") or "").strip(),
                 legal_basis=(row.get("legal_basis") or "").strip(),
+                enabled=(row.get("enabled") or "1").strip() == "1",
             )
     if not rules:
         raise ValueError("规则表为空")
@@ -454,6 +456,8 @@ def evaluate_documents(
     unverified: list[str] = []
     counts = {BLOCKER: 0, WARNING: 0, INFO: 0}
     for rule_id, rule in rules.items():
+        if not rule.enabled:
+            continue  # CSV enabled=0 的规则（如 F004 日期歧义）整体跳过，不算 unverified
         executor = EXECUTORS.get(rule_id)
         if executor is None:
             unverified.append(rule_id)

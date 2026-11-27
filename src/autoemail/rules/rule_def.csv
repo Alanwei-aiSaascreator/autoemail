@@ -57,7 +57,7 @@ U007,G06,UBO与制裁,WARNING,ubo.id.number,同一证件号出现在 ≥3 个不
 F001,G07,表单字段,BLOCKER,form301.required,必填字段为空白（含全角空格）,E-FRM-001,必填项空白,补齐或按规范划线,CBP Form 301,1,1
 F002,G07,表单字段,BLOCKER,form301.legal_name,legal_name 与注册证名称不匹配（含缩写、简称）,E-FRM-002,名称被缩写,改法定全称,CBP Form 301 填写规范,1,1
 F003,G07,表单字段,WARNING,form301.blank_cells,空白栏未划线划除（版面删除线检测失败）,E-FRM-003,空白栏未划除,按规范划线或填 N/A,CBP Form 301 填写规范,1,1
-F004,G07,表单字段,BLOCKER,form.date_fields,日期非 ISO 且无法无歧义归一（如 03/04/2026）,E-FRM-004,日期歧义,改 YYYY-MM-DD,CBP Form 301,1,1
+F004,G07,表单字段,BLOCKER,form.date_fields,日期非 ISO 且无法无歧义归一（如 03/04/2026）,E-FRM-004,日期歧义,改 YYYY-MM-DD,CBP Form 301,0,1
 F005,G07,表单字段,BLOCKER,goods.hs_code,"HS 长度 ∉ {6,8,10} 或 含非数字字符",E-FRM-005,HS 编码格式错误,按税则补足位数,HTSUS,1,1
 F006,G07,表单字段,BLOCKER,form.amount,金额小数位 >2 或千分位与小数位混用,E-FRM-006,金额精度异常,统一 Decimal 两位,内控基线,1,1
 F007,G07,表单字段,WARNING,form.field_vs_source,回填值与源抽取值不一致,E-FRM-007,回填与源文件不符,按原件更正,内控基线,1,1
