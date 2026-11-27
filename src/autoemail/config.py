@@ -40,7 +40,7 @@ class Settings(BaseSettings):
 
     # 每日随机询价：文件齐全的委托每天随机选 N 家代理商发询价，收到报价即推飞书
     daily_inquiry_enabled: bool = True
-    daily_inquiry_batch_size: int = 20
+    daily_inquiry_batch_size: int = 70
 
     # 自动填表产物目录：收到代理商表格自动填充后的 PDF 落盘位置
     filled_forms_dir: str = "./filled_forms"
