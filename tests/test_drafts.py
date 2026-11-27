@@ -4,7 +4,7 @@ from autoemail.channels.base import NormalizedMessage
 from autoemail.channels.eml import EmlDirectoryChannel
 from autoemail.drafts import edit_draft, generate_draft, list_drafts, reject_draft
 from autoemail.cli import main
-from autoemail.models import Draft, DRAFT_PENDING, DRAFT_REJECTED
+from autoemail.models import AdcvdAttestation, Draft, DRAFT_PENDING, DRAFT_REJECTED
 from autoemail.pipeline import process_message
 from autoemail.models import Message, Thread
 from autoemail.ingest.threading import store_message
@@ -77,6 +77,10 @@ def test_material_draft_uses_extracted_checklist(session, world):
     assert "Business financial statement" in draft.body
     # AD/CVD 不再"另行提供"，按运营口径在正文中直接回答
     assert "AD/CVD" in draft.body
+    # 回答依据客户签名需求表生成时，必须同步落 IOR 备案记录供 R06 闸门核验
+    attested = session.query(AdcvdAttestation).filter_by(case_id=world["case"].id).first()
+    assert attested is not None
+    assert "intake form" in attested.statement
 
 
 def test_form_request_separates_enclosed_from_to_follow(session, world):

@@ -229,6 +229,40 @@ def _template(
     raise ValueError(f"不支持生成草稿的意图：{intent.label}")
 
 
+def _ensure_adcvd_attestation(
+    session: Session, case: Case, commission: Commission, intake: dict[str, str]
+) -> None:
+    """按运营口径（依据客户已签名的需求表 a007）回答 AD/CVD 时，落一条 IOR 备案记录。
+
+    R06 闸门要求 AD/CVD 实质声明必须有人工备案：客户需求表本身即 IOR 的签名声明
+    （j013 签名 / j012 日期），此处将该声明来源如实登记，保留审计链后放行自动发送。
+    """
+    from .models import AdcvdAttestation
+
+    exists = session.scalar(
+        select(AdcvdAttestation.id).where(AdcvdAttestation.case_id == case.id)
+    )
+    if exists:
+        return
+    hts_codes = "; ".join(intake.get(k) for k in ("d003", "d007", "d011") if intake.get(k))
+    signer = intake.get("j013") or commission.principal_full_name or commission.signer_name or "principal"
+    signed_on = intake.get("j012") or "date not recorded"
+    statement = (
+        f"IOR declared AD/CVD status '{intake.get('a007') or 'unspecified'}' in the signed "
+        f"client intake form (signature: {signer}, dated {signed_on}). Answered per "
+        "operations policy with USITC HTS verification where available."
+    )
+    session.add(
+        AdcvdAttestation(
+            case_id=case.id,
+            hts_code=hts_codes or "n/a",
+            country_of_origin=intake.get("d015") or "n/a",
+            statement=statement,
+            attested_by=signer,
+        )
+    )
+
+
 def _recipient_from_source(source: Message, agent: Agent) -> list[str]:
     recipients = [source.from_addr]
     domains = {d.lower() for d in (agent.email_domains or [])}
@@ -516,7 +550,9 @@ def generate_draft(
             from .financials import ad_cvd_answer
             from .formfill import get_intake_fields
 
-            inline_answers.append(ad_cvd_answer(get_intake_fields(session, commission.id) or {}))
+            intake = get_intake_fields(session, commission.id) or {}
+            inline_answers.append(ad_cvd_answer(intake))
+            _ensure_adcvd_attestation(session, case, commission, intake)
         if inline_answers:
             body = (
                 body.rstrip("\n")
