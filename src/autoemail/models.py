@@ -466,6 +466,25 @@ class AdcvdAttestation(Base):
     attested_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
 
 
+class EmailBlocklist(Base):
+    """全局邮箱黑名单：DSN 退信（对方拒收）后永久停止向该地址发件。
+
+    范围是全局而非单个 case：同一代理邮箱用于多个委托时，其他委托同样不再发送
+    （R13 闸门在发送唯一出口统一校验）。人工从黑名单移除后方可恢复。
+    """
+
+    __tablename__ = "email_blocklist"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    # 归一化小写邮箱，全局唯一
+    email: Mapped[str] = mapped_column(String(320), unique=True, index=True)
+    reason: Mapped[str] = mapped_column(String(400))
+    source_message_id: Mapped[int | None] = mapped_column(ForeignKey("message.id"))
+    removed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    removed_by: Mapped[str | None] = mapped_column(String(120))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+
+
 class FormTypeRegistry(Base):
     """新类型表单储备库（类型 ≠ 格式：格式差异由 LLM 克服，类型才是储备单元）。
 

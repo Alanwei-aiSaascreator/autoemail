@@ -73,6 +73,29 @@ def build_quote_markdown(
     return "\n".join(lines)
 
 
+def build_bounce_markdown(
+    *,
+    commission_name: str,
+    agent_name: str,
+    case_no: str,
+    blocked_emails: list[str],
+    dsn_code: str | None = None,
+) -> str:
+    dsn_part = f"（{dsn_code}）" if dsn_code else ""
+    emails = "、".join(blocked_emails)
+    lines = [
+        "**退信告警：代理邮箱拒收，已全局停止发件**",
+        f"> 委托公司：{commission_name}",
+        f"> 代理商：{agent_name}",
+        f"> 案件：{case_no}",
+        f"> 拒收邮箱：{emails}{dsn_part}",
+        "",
+        f"系统已将 {emails} 加入全局黑名单：本委托及其他所有委托均不再向该邮箱发送邮件，自动跟催已暂停。",
+        "请人工联系该代理商确认有效邮箱，恢复发送需在黑名单中人工移除。",
+    ]
+    return "\n".join(lines)
+
+
 def notify(webhook: str, content: str, *, retries: int = 3) -> bool:
     """推送失败重试 3 次；仍失败返回 False，由调用方降级为站内告警。"""
     if not webhook:

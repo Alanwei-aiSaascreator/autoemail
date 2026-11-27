@@ -21,6 +21,7 @@ from .models import (
     Case,
     Commission,
     Draft,
+    EmailBlocklist,
     Message,
     SendLedger,
     TERMINAL_STATES,
@@ -128,6 +129,20 @@ def _redline_hits(body: str) -> list[str]:
     return [word for word in REDLINE_WORDS if word.lower() in lowered]
 
 
+def _blocked_recipients(session: Session, recipients: list[str]) -> list[str]:
+    """收件地址中命中全局黑名单（未移除）的部分。"""
+    addresses = [addr.lower() for addr in recipients or []]
+    if not addresses:
+        return []
+    rows = session.scalars(
+        select(EmailBlocklist.email).where(
+            EmailBlocklist.email.in_(addresses),
+            EmailBlocklist.removed_at.is_(None),
+        )
+    ).all()
+    return sorted(rows)
+
+
 def _auto_send_counts(session: Session, case: Case, thread: Thread) -> tuple[int, int]:
     in_thread = session.scalar(
         select(func.count())
@@ -208,6 +223,7 @@ def send_draft(session: Session, draft: Draft, *, channel: MessageChannel, actor
         ledger_claimed=True,
         auto_send_window_open=window_open,
         auto_send_window_desc=window_desc,
+        blocked_recipients=_blocked_recipients(session, draft.to_addrs),
     )
     decision = evaluate(context)
     draft.rule_hits = decision.rule_ids

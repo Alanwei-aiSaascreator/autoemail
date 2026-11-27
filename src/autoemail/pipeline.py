@@ -11,6 +11,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from . import audit
+from .bounces import detect_bounce, record_bounce
 from .channels.base import MessageChannel, NormalizedMessage
 from .channels.imap import ImapSmtpChannel
 from .config import settings
@@ -22,8 +23,18 @@ from .llm import HttpxOpenAICompatibleProvider
 from .models import Agent, Case, Commission, Draft, Message, Thread
 from .drafts import generate_draft
 from .invoices import record_invoice
-from .notify.feishu import build_payment_text, build_quote_text, notify as notify_feishu
-from .notify.wecom import build_payment_markdown, build_quote_markdown, notify as notify_wecom
+from .notify.feishu import (
+    build_bounce_text,
+    build_payment_text,
+    build_quote_text,
+    notify as notify_feishu,
+)
+from .notify.wecom import (
+    build_bounce_markdown,
+    build_payment_markdown,
+    build_quote_markdown,
+    notify as notify_wecom,
+)
 from .state import can_transition, state_for_intent, transition_case
 from .followups import cancel_followups_for_case
 from .outbound import send_draft
@@ -168,6 +179,58 @@ def _process_stored(
         decision=assignment.method,
         reasons=assignment.evidence + ([assignment.reason] if assignment.reason else []),
     )
+
+    # DSN 退信（对方邮箱拒收）优先于一切归属/意图处理：拉黑 + 冻结 + 停跟催 + 推群
+    bounce = detect_bounce(message)
+    if bounce is not None:
+        bounce_case = session.get(Case, assignment.case_id) if assignment.case_id else None
+        record_bounce(session, thread, bounce, message_id=stored.id, case=bounce_case)
+        session.commit()
+        commission_name, agent_name, case_no = "未知", "未知", "未知"
+        if bounce_case is not None:
+            commission, agent = _case_context(session, bounce_case)
+            commission_name, agent_name, case_no = commission.legal_name, agent.name, bounce_case.case_no
+        notified = notify_wecom(
+            settings.wecom_webhook,
+            build_bounce_markdown(
+                commission_name=commission_name,
+                agent_name=agent_name,
+                case_no=case_no,
+                blocked_emails=bounce.recipients,
+                dsn_code=bounce.dsn_code,
+            ),
+        ) or notify_feishu(
+            settings.feishu_webhook,
+            build_bounce_text(
+                commission_name=commission_name,
+                agent_name=agent_name,
+                case_no=case_no,
+                blocked_emails=bounce.recipients,
+                dsn_code=bounce.dsn_code,
+            ),
+        )
+        audit.record(
+            session,
+            action="bounce.handled",
+            thread_id=thread.id,
+            message_id=stored.id,
+            case_id=assignment.case_id,
+            decision="blocked" if notified else "notified_failed",
+            reasons=[
+                f"recipients={bounce.recipients}",
+                f"dsn={bounce.dsn_code or 'n/a'}",
+                "已全局拉黑并冻结线程，停止一切自动发件",
+            ],
+        )
+        session.commit()
+        return ProcessResult(
+            stored.id,
+            thread.id,
+            assignment.case_id,
+            assignment,
+            IntentResult("unclear", 0.0),
+            ignored_reason="bounce",
+        )
 
     if assignment.case_id is None:
         return ProcessResult(stored.id, thread.id, None, assignment, IntentResult("unclear", 0.0), ignored_reason="unassigned")

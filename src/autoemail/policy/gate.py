@@ -55,6 +55,9 @@ class GateContext:
     auto_send_window_open: bool = True
     auto_send_window_desc: str = ""
 
+    # 全局邮箱黑名单（DSN 退信拒收的地址）：命中即一律拦截，含人工发送
+    blocked_recipients: list[str] = field(default_factory=list)
+
 
 @dataclass
 class Decision:
@@ -69,6 +72,10 @@ def evaluate(ctx: GateContext) -> Decision:
 
     def stop(action: str, rule_id: str, reason: str) -> Decision:
         return Decision(action, [reason], [rule_id], notices)
+
+    # R13 全局黑名单：收件地址曾退信拒收，任何 case、任何模式（含人工）一律不发
+    if ctx.blocked_recipients:
+        return stop(BLOCK, "R13", f"收件人因退信拒收已进全局黑名单：{ctx.blocked_recipients}")
 
     # R01 人工接管 / 会话冻结 / 自动模式关闭
     if ctx.thread_frozen:
