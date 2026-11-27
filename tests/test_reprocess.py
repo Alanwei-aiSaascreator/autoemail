@@ -199,9 +199,11 @@ def test_reprocess_skips_fillings_when_application_not_requested(session, world,
     new_draft = session.get(Draft, summary["draft_id"])
     assert new_draft is not None
     assert new_draft.intent == "form_request"
-    # 代理商只要求财务报表和股权结构：不附任何填表产物
-    assert new_draft.attachments == []
+    # 企业财务报表按运营口径自动生成并附上
+    assert new_draft.attachments == [
+        str(tmp_path / f"{world['case'].case_no}_business_financial_statement.pdf")
+    ]
     assert new_draft.controlled_fields["material_keys"] == ["financial_statement", "ownership"]
-    # 正文明确列出待另行提供的材料，而不是谎称"attached"
-    assert "will follow in a separate email" in new_draft.body
-    assert "Please find attached" not in new_draft.body
+    # 股权按标准口径正文直答：法人 100% 持股
+    assert "100%" in new_draft.body
+    assert "Wei Zhang" in new_draft.body

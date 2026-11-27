@@ -58,10 +58,10 @@ _MATERIAL_LABELS = {
 }
 _LABEL_TO_KEY = {label.lower(): key for key, label in _MATERIAL_LABELS.items()}
 
-# 能随回复自动完成的材料：对方发来表格，我们填好签好附回。
-# 其余材料（财务报表/股权结构/AD-CVD 确认等）无法自动生成，只能列出请客户准备，
-# 绝不能拿标准三件套敷衍。
-_AUTO_PROVIDABLE = frozenset({"application"})
+# 能随回复自动完成的材料：对方发来表格，我们填好签好附回；财务报表可自动生成。
+# 股权结构（ownership）与 AD/CVD 确认按运营标准口径直接在正文中回答。
+_AUTO_PROVIDABLE = frozenset({"application", "personal_financial", "financial_statement"})
+_ANSWERED_INLINE = frozenset({"ownership", "ad_cvd"})
 
 DRAFT_SYSTEM_PROMPT = """You draft one professional reply email for a customs bond purchase case.
 Return only JSON matching the schema. Facts (company name, case number, amounts, materials) are provided and must be respected; never invent or change them.
@@ -168,7 +168,11 @@ def _template(
         fields["material_keys"] = list(material_keys)
         # 无法自动完成的材料单独成段：明确告知"随后另行提供"，而不是发三件套敷衍。
         enclosed = [_MATERIAL_LABELS[k] for k in material_keys if k in _AUTO_PROVIDABLE]
-        to_follow = [_MATERIAL_LABELS[k] for k in material_keys if k not in _AUTO_PROVIDABLE]
+        to_follow = [
+            _MATERIAL_LABELS[k]
+            for k in material_keys
+            if k not in _AUTO_PROVIDABLE and k not in _ANSWERED_INLINE
+        ]
         subject = f"Re: [{case.case_no}] Application documents"
         greeting = (
             f"Hi {agent.contact_name or agent.name},\n\n"
@@ -439,11 +443,31 @@ def generate_draft(
     else:
         notices.append(f"意图置信度 {intent.confidence:.2f}（低），建议转人工处理")
     if intent.label == "form_request" and material_keys:
-        unmet = [k for k in material_keys if k not in _AUTO_PROVIDABLE]
+        unmet = [
+            k
+            for k in material_keys
+            if k not in _AUTO_PROVIDABLE and k not in _ANSWERED_INLINE
+        ]
         if unmet:
             labels = "、".join(_MATERIAL_LABELS.get(k, k) for k in unmet)
             notices.append(f"以下材料无法自动生成，已在回复中列明待另行提供：{labels}")
     if intent.label == "form_request":
+        # 财务类材料（个人/企业财务报表）：按运营标准口径自动生成并附上；
+        # 生成失败的项从正文"已附上"里如实移除，改标待人工处理。
+        fin_requested = [k for k in ("personal_financial", "financial_statement") if k in material_keys]
+        if fin_requested:
+            from .financials import generate_financial_attachments
+
+            fin_paths, fin_ok, fin_notes = generate_financial_attachments(
+                session, case, commission, material_keys
+            )
+            attachments.extend(fin_paths)
+            notices.extend(fin_notes)
+            for k in set(fin_requested) - set(fin_ok):
+                label = _MATERIAL_LABELS[k]
+                notices.append(f"{label} 未能自动生成，已从「已附上」中移除")
+                body = body.replace(f"- {label}\n", "").replace(f"- {label}", "")
+        app_attached = False
         for att in source.attachments or []:
             if not (att.filename or "").lower().endswith(".pdf"):
                 continue
@@ -456,7 +480,8 @@ def generate_draft(
                 notices.append(f"自动填表失败：{att.filename}: {exc}")
             if report and report.get("output_path"):
                 attachments.append(report["output_path"])
-        if attachments:
+                app_attached = True
+        if attachments and app_attached:
             # 代理要求随表附上带照片身份证明（Photo ID）与公司注册文件原件，以原始文件发出
             from .documents import stage_supporting_documents
 
@@ -466,12 +491,13 @@ def generate_draft(
             if supporting:
                 attachments.extend(supporting)
                 notices.append(f"已附上支持文件原件：{', '.join(supporting)}")
+        if attachments:
             body = body.rstrip("\n") + (
-                "\n\nPlease find attached the completed application form(s) and "
-                f"supporting documents for {commission.legal_name}.\n\n"
+                "\n\nPlease find attached the completed documents and "
+                f"supporting files for {commission.legal_name}.\n\n"
             )
             notices.append(f"已自动填表并附上：{', '.join(attachments)}")
-        elif "application" in material_keys:
+        if "application" in material_keys and not app_attached:
             # 对方要求附申请表，但没能自动填（如发来的是不含可填写字段的平铺版）：
             # 正文不能谎称「已附上」，改为如实标注待人工处理。
             app_label = _MATERIAL_LABELS.get("application", "the application form")
@@ -480,6 +506,19 @@ def generate_draft(
                 f"Completed and enclosed:\n- {app_label}",
                 f"The application form could not be auto-filled and will be handled manually: - {app_label}",
             )
+        # 股权分配 / AD-CVD 按运营标准口径在正文中直接回答
+        inline_answers: list[str] = []
+        if "ownership" in material_keys:
+            from .financials import ownership_answer
+
+            inline_answers.append(ownership_answer(commission))
+        if "ad_cvd" in material_keys:
+            from .financials import ad_cvd_answer
+            from .formfill import get_intake_fields
+
+            inline_answers.append(ad_cvd_answer(get_intake_fields(session, commission.id) or {}))
+        if inline_answers:
+            body = body.rstrip("\n") + "\n\n" + "\n\n".join(inline_answers) + "\n"
 
     status, rule_hits, reasons, gate_notices = _preview_gate(
         case=case,

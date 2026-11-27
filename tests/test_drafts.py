@@ -75,7 +75,8 @@ def test_material_draft_uses_extracted_checklist(session, world):
     assert result.intent.label == "form_request"
     assert "Completed bond application form" in draft.body
     assert "Business financial statement" in draft.body
-    assert "anti-dumping" in draft.body
+    # AD/CVD 不再"另行提供"，按运营口径在正文中直接回答
+    assert "AD/CVD" in draft.body
 
 
 def test_form_request_separates_enclosed_from_to_follow(session, world):
@@ -109,9 +110,10 @@ def test_form_request_separates_enclosed_from_to_follow(session, world):
     ]
     # 无附件时申请表无法自动填：正文如实说明「无法自动填」，不谎称已附上
     assert "could not be auto-filled" in draft.body
-    assert "will follow in a separate email" in draft.body
-    assert "Completed bond application form" in draft.body
-    assert "Ownership breakdown" in draft.body
+    # 财务报表自动生成附上；股权与 AD/CVD 按标准口径正文直答
+    assert "Business financial statement" in draft.body
+    assert "100%" in draft.body
+    assert "AD/CVD" in draft.body
     # 置信度分级提示：无论高低都必须标出来供人工协同
     assert any("意图置信度" in n for n in (draft.notices or []))
 
@@ -142,8 +144,9 @@ def test_form_request_falls_back_to_agent_form_profile(session, world):
     assert result.intent.label == "form_request"
     assert draft.controlled_fields["material_keys"] == ["application", "financial_statement"]
     assert draft.controlled_fields["material_source"] == "agent_form_profile"
+    # 财务报表按运营口径自动生成并随回复附上
     assert "Business financial statement" in draft.body
-    assert "will follow in a separate email" in draft.body
+    assert any("business_financial_statement" in (a or "") for a in (draft.attachments or []))
 
 
 def test_invoice_does_not_create_email_draft(session, world, monkeypatch):

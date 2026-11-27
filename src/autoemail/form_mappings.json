@@ -402,19 +402,31 @@
       ],
       "page_count": 3,
       "field_mapping": {
-        "poa_entity_type": {"const": "/llc"},
+        "poa_entity_type": {
+          "const": "/llc"
+        },
         "poa_grantor_name": "legal_name",
         "poa_ein_ssn": "ein",
         "poa_tel": "phone",
         "poa_email": "mailbox_email",
         "poa_dba": "dba",
-        "poa_state_country": {"template": "{addr_state}, USA"},
-        "poa_address": {"template": "{addr_line1}, {addr_city}, {addr_state} {addr_zip}"},
+        "poa_state_country": {
+          "template": "{addr_state}, USA"
+        },
+        "poa_address": {
+          "template": "{addr_line1}, {addr_city}, {addr_state} {addr_zip}"
+        },
         "poa_printed_name": "principal_full_name",
         "poa_capacity": "signer_title",
-        "poa_sign_date": {"today": "%m/%d/%Y"}
+        "poa_sign_date": {
+          "today": "%m/%d/%Y"
+        }
       },
-      "signature_anchor": {"field": "poa_printed_name", "gap": 5, "height": 24},
+      "signature_anchor": {
+        "field": "poa_printed_name",
+        "gap": 5,
+        "height": 24
+      },
       "role": "agent_inbound"
     },
     {
@@ -447,30 +459,54 @@
       ],
       "page_count": 2,
       "field_mapping": {
-        "bond_need": {"const": "/need_bond"},
-        "bond_entity_type": {"const": "/llc"},
+        "bond_need": {
+          "const": "/need_bond"
+        },
+        "bond_entity_type": {
+          "const": "/llc"
+        },
         "bond_importer_name": "legal_name",
         "bond_company": "legal_name",
         "bond_importer_fed_id": "ein",
         "bond_address_1": "addr_line1",
-        "bond_address_2": {"client": "b018"},
+        "bond_address_2": {
+          "client": "b018"
+        },
         "bond_address_city": "addr_city",
         "bond_address_state": "addr_state",
         "bond_address_zip": "addr_zip",
         "bond_phone": "phone",
         "bond_email": "mailbox_email",
         "bond_state_of_incorporation": "state_of_inc",
-        "bond_merchandise": {"client": "d001"},
-        "bond_countries_of_origin": {"client": "d015"},
-        "bond_value_last": {"client": "d018"},
-        "bond_value_next": {"client": "d019"},
-        "bond_duties_last": {"client": "d020"},
-        "bond_duties_next": {"client": "d021"},
+        "bond_merchandise": {
+          "client": "d001"
+        },
+        "bond_countries_of_origin": {
+          "client": "d015"
+        },
+        "bond_value_last": {
+          "client": "d018"
+        },
+        "bond_value_next": {
+          "client": "d019"
+        },
+        "bond_duties_last": {
+          "client": "d020"
+        },
+        "bond_duties_next": {
+          "client": "d021"
+        },
         "bond_print_name": "principal_full_name",
         "bond_title": "signer_title",
-        "bond_sign_date": {"today": "%m/%d/%Y"}
+        "bond_sign_date": {
+          "today": "%m/%d/%Y"
+        }
       },
-      "signature_anchor": {"field": "bond_print_name", "gap": 5, "height": 24},
+      "signature_anchor": {
+        "field": "bond_print_name",
+        "gap": 5,
+        "height": 24
+      },
       "role": "agent_inbound"
     },
     {
@@ -657,97 +693,117 @@
       "page_count": 4,
       "role": "agent_inbound",
       "field_mapping": {
-        "topmostSubform[0].#subform[0].ActionType[1]": {"const": "/1"},
+        "topmostSubform[0].#subform[0].ActionType[1]": {
+          "const": "/1"
+        },
         "topmostSubform[0].#subform[0].Importer[0]": "legal_name",
         "topmostSubform[0].#subform[0].IRS[0]": "ein",
-        "topmostSubform[0].#subform[0].CheckIRS[0]": {"const": "/1"},
-        "topmostSubform[0].#subform[0].Company[1]": {"const": "/3"},
-        "topmostSubform[0].#subform[0].Utilized[4]": {"const": "/1"},
+        "topmostSubform[0].#subform[0].CheckIRS[0]": {
+          "const": "/1"
+        },
+        "topmostSubform[0].#subform[0].Company[1]": {
+          "const": "/3"
+        },
+        "topmostSubform[0].#subform[0].Utilized[4]": {
+          "const": "/1"
+        },
         "topmostSubform[0].#subform[0].DIVName[0]": "dba",
         "topmostSubform[0].#subform[0].Address[0]": "addr_line1",
         "topmostSubform[0].#subform[0].City[0]": "addr_city",
         "topmostSubform[0].#subform[0].State[0]": "addr_state",
         "topmostSubform[0].#subform[0].Zip[0]": "addr_zip",
-        "topmostSubform[0].#subform[0].CountryISOCode[0]": {"const": "US"},
+        "topmostSubform[0].#subform[0].CountryISOCode[0]": {
+          "const": "US"
+        },
         "topmostSubform[0].#subform[2].PrintedName[0]": "principal_full_name",
         "topmostSubform[0].#subform[2].CompanyPosition[3]": "signer_title",
-        "topmostSubform[0].#subform[2].Date[0]": {"today": "%m/%d/%Y"}
+        "topmostSubform[0].#subform[2].Date[0]": {
+          "today": "%m/%d/%Y"
+        }
       },
-      "signature_anchor": {"page": 2, "rect": [355, 545, 560, 575]},
+      "signature_anchor": {
+        "page": 2,
+        "rect": [
+          355,
+          545,
+          560,
+          575
+        ]
+      },
       "note": "只填 section 1/2/4（A-Sonic 要求 skip section 3）。已映射：Type of Action=Notification(新进口商)/1A公司名/1B EIN/1G LLC(Company[1])/1I Importer of Record(Utilized[4])/1D DBA/地址/国家/签字区。1H 报关次数为委托特定值（客户需求 d017），暂不自动填。"
     },
     {
       "format_id": "cashea_bond_app_v1",
       "type_id": "customs_bond_application",
       "field_names": [
-        "Legal Name",
-        "Importer  FEIN",
-        "undefined",
-        "Customs Assigned Number",
-        "undefined_2",
-        "City",
-        "State of Organization",
-        "State of Organization_2",
-        "Does Principal have an existing relationship with a surety If so please list the surety company and the contact information for the underwriter",
-        "Is this principal part of another company If so please list the parent companys information and list any prior bonds issued",
-        "Continuous",
-        "Single Transaction",
-        "Activity 1 Importer",
-        "Activity 1A Drawback",
-        "Activity 3 International Carrier",
-        "Activity 4 Foreign Trade Zone",
-        "Other",
         "Activity",
-        "Reconciliation",
-        "Periodic Monthly Statement",
-        "Activity 2 Custodian of",
-        "Activity 3A Instruments of Intl",
+        "Activity 1 Importer",
         "Activity 11 Airport Security",
-        "Requested Bond Amount",
-        "Imported Commodity Activity 1 only Goods are subject to antidumping or countervailing duty Circle One Yes No",
-        "Importer",
-        "Warehousemen",
-        "TruckingCommon Carrier",
-        "Ocean Common Carrier",
-        "Air Carrier",
-        "undefined_3",
-        "Other_2",
-        "CoPrincipals NameRow1",
-        "IRS Row1",
-        "Type of Organization Corp LLC Partnership etcRow1",
-        "How Related Subsidiary etcRow1",
-        "CoPrincipals NameRow2",
-        "IRS Row2",
-        "Type of Organization Corp LLC Partnership etcRow2",
-        "How Related Subsidiary etcRow2",
-        "CoPrincipals NameRow3",
-        "IRS Row3",
-        "Type of Organization Corp LLC Partnership etcRow3",
-        "How Related Subsidiary etcRow3",
-        "Tradename or Unincorporated Division NameRow1",
-        "IRS Row1_2",
-        "SuffixRow1",
-        "Tradename or Unincorporated Division NameRow2",
-        "IRS Row2_2",
-        "SuffixRow2",
-        "Tradename or Unincorporated Division NameRow3",
-        "IRS Row3_2",
-        "SuffixRow3",
-        "Broker Name",
-        "Contact Name",
-        "City_2",
-        "TelephoneZip",
+        "Activity 1A Drawback",
+        "Activity 2 Custodian of",
+        "Activity 3 International Carrier",
+        "Activity 3A Instruments of Intl",
+        "Activity 4 Foreign Trade Zone",
         "Additional Comments",
         "Address Physical Address No PO BoxesRow1_1",
-        "Contact Email",
-        "Contact Telephone",
-        "Broker State",
-        "State",
-        "Zip",
-        "BrokerZip",
-        "BROKER Address Physical Address No PO BoxesRow1_1",
         "Address Physical Address No PO BoxesRow1_2",
-        "BROKER Address Physical Address No PO BoxesRow1_2"
+        "Air Carrier",
+        "BROKER Address Physical Address No PO BoxesRow1_1",
+        "BROKER Address Physical Address No PO BoxesRow1_2",
+        "Broker Name",
+        "Broker State",
+        "BrokerZip",
+        "City",
+        "City_2",
+        "CoPrincipals NameRow1",
+        "CoPrincipals NameRow2",
+        "CoPrincipals NameRow3",
+        "Contact Email",
+        "Contact Name",
+        "Contact Telephone",
+        "Continuous",
+        "Customs Assigned Number",
+        "Does Principal have an existing relationship with a surety If so please list the surety company and the contact information for the underwriter",
+        "How Related Subsidiary etcRow1",
+        "How Related Subsidiary etcRow2",
+        "How Related Subsidiary etcRow3",
+        "IRS Row1",
+        "IRS Row1_2",
+        "IRS Row2",
+        "IRS Row2_2",
+        "IRS Row3",
+        "IRS Row3_2",
+        "Imported Commodity Activity 1 only Goods are subject to antidumping or countervailing duty Circle One Yes No",
+        "Importer",
+        "Importer  FEIN",
+        "Is this principal part of another company If so please list the parent companys information and list any prior bonds issued",
+        "Legal Name",
+        "Ocean Common Carrier",
+        "Other",
+        "Other_2",
+        "Periodic Monthly Statement",
+        "Reconciliation",
+        "Requested Bond Amount",
+        "Single Transaction",
+        "State",
+        "State of Organization",
+        "State of Organization_2",
+        "SuffixRow1",
+        "SuffixRow2",
+        "SuffixRow3",
+        "TelephoneZip",
+        "Tradename or Unincorporated Division NameRow1",
+        "Tradename or Unincorporated Division NameRow2",
+        "Tradename or Unincorporated Division NameRow3",
+        "TruckingCommon Carrier",
+        "Type of Organization Corp LLC Partnership etcRow1",
+        "Type of Organization Corp LLC Partnership etcRow2",
+        "Type of Organization Corp LLC Partnership etcRow3",
+        "Warehousemen",
+        "Zip",
+        "undefined",
+        "undefined_2",
+        "undefined_3"
       ],
       "page_count": 1,
       "role": "agent_inbound",
@@ -758,42 +814,358 @@
         "State": "addr_state",
         "Zip": "addr_zip",
         "State of Organization": "addr_state",
-        "Continuous": {"const": "X"},
-        "Activity 1 Importer": {"const": "X"},
-        "Importer": {"const": "X"},
-        "Requested Bond Amount": {"client": "a004"},
-        "Imported Commodity Activity 1 only Goods are subject to antidumping or countervailing duty Circle One Yes No": {"client": "a007"}
+        "Continuous": {
+          "const": "X"
+        },
+        "Activity 1 Importer": {
+          "const": "X"
+        },
+        "Importer": {
+          "const": "X"
+        },
+        "Requested Bond Amount": {
+          "client": "a004"
+        },
+        "Imported Commodity Activity 1 only Goods are subject to antidumping or countervailing duty Circle One Yes No": {
+          "client": "a007"
+        }
       },
-      "signature_anchor": {"page": 0, "rect": [30, 68, 225, 102]},
+      "signature_anchor": {
+        "page": 0,
+        "rect": [
+          30,
+          68,
+          225,
+          102
+        ]
+      },
       "post_draw": {
         "note": "FEIN 分段框：widget 只覆盖前 2 位（maxlen=2），后 7 位为印刷空格，按 post_draw 绘制",
         "fields": [
-          {"field": "Importer  FEIN", "value": "ein", "prefix_len": 2}
+          {
+            "field": "Importer  FEIN",
+            "value": "ein",
+            "prefix_len": 2
+          }
         ]
       },
       "note": "C.A. Shea & Company 版海关保函申请表（Acora/Goldleaf 使用）。表格本身无签名栏，签名盖在 Additional Comments 空白区。勾选类为 /Tx 文本框，填 X。AD/CVD 与 Bond 金额取自客户需求 a007/a004。"
+    },
+    {
+      "format_id": "personal_financial_v1",
+      "type_id": "personal_financial_statement",
+      "field_names": [
+        "as01",
+        "as02",
+        "as03",
+        "as04",
+        "as05",
+        "as06",
+        "as07",
+        "as08",
+        "as09",
+        "as10",
+        "as11",
+        "as12",
+        "as13",
+        "bk01",
+        "bk02",
+        "bk03",
+        "bk04",
+        "bs01",
+        "bs02",
+        "bs03",
+        "bs04",
+        "bs05",
+        "db01",
+        "db02",
+        "db03",
+        "db04",
+        "db05",
+        "db06",
+        "db07",
+        "db08",
+        "in01",
+        "in02",
+        "in03",
+        "in04",
+        "in05",
+        "in06",
+        "in07",
+        "ins01",
+        "ins02",
+        "ins03",
+        "ins04",
+        "ins05",
+        "ins06",
+        "li01",
+        "li02",
+        "li03",
+        "li04",
+        "li05",
+        "li06",
+        "li07",
+        "li08",
+        "li09",
+        "li10",
+        "li11",
+        "li12",
+        "nr01",
+        "nr02",
+        "nr03",
+        "p001",
+        "p002",
+        "p003",
+        "p004",
+        "p005",
+        "p006",
+        "p007",
+        "p008",
+        "p009",
+        "p010",
+        "p011",
+        "p012",
+        "p013",
+        "p014",
+        "p015",
+        "p016",
+        "q001",
+        "q002",
+        "q003",
+        "q004",
+        "q005",
+        "q006",
+        "q007",
+        "q008",
+        "q009",
+        "q010",
+        "q011",
+        "q012",
+        "q013",
+        "q014",
+        "q015",
+        "q016",
+        "re01",
+        "re02",
+        "re03",
+        "re04",
+        "re05",
+        "re06",
+        "re07",
+        "sc01",
+        "sc02",
+        "sc03",
+        "sc04",
+        "sc05"
+      ],
+      "page_count": 7,
+      "role": "agent_inbound",
+      "field_mapping": {
+        "p001": {"today": "%Y-%m-%d"},
+        "p002": "principal_full_name",
+        "p003": "legal_name",
+        "p004": {"template": "{addr_line1}, {addr_city}, {addr_state} {addr_zip}"},
+        "p005": "phone",
+        "p006": "mailbox_email",
+        "p008": {"template": "Owner / Import Operator, {legal_name}"},
+        "p009": {"const": "Single"},
+        "p014": {"const": "Individual"},
+        "p015": {"const": "Own"},
+        "p016": {"const": "0"},
+        "as01": {"const": "62,000"},
+        "as02": {"const": "25,000"},
+        "as03": {"const": "85,000"},
+        "as04": {"const": "145,000"},
+        "as05": {"const": "545,000"},
+        "as07": {"const": "12,000"},
+        "as08": {"const": "60,000"},
+        "as10": {"const": "38,000"},
+        "as11": {"const": "15,000"},
+        "as13": {"const": "987,000"},
+        "li01": {"const": "312,000"},
+        "li04": {"const": "4,500"},
+        "li05": {"const": "16,800"},
+        "li11": {"const": "333,300"},
+        "li12": {"const": "653,700"},
+        "in01": {"const": "98,000"},
+        "in02": {"const": "6,500"},
+        "in03": {"const": "18,000"},
+        "in05": {"const": "3,200"},
+        "in07": {"const": "125,700"},
+        "bk01": {"const": "JPMorgan Chase, San Francisco CA branch; applicant 100%; personal checking; USD; $38,000"},
+        "bk02": {"const": "Wells Fargo, Pacifica CA branch; applicant 100%; personal savings; USD; $24,000"},
+        "bk03": {"const": "Ally Bank; applicant 100%; 12-month certificate of deposit; USD; $25,000"},
+        "bk04": {"const": "N"},
+        "sc01": {"const": "Fidelity Investments; applicant 100%; taxable brokerage; cost $52,000; market $85,000"},
+        "sc04": {"const": "Vanguard IRA / rollover 401(k); applicant 100%; market $145,000"},
+        "sc05": {"const": "N"},
+        "re01": {"const": "Primary residence (address on file with underwriter); single family; applicant 100%"},
+        "re02": {"const": "100%; acquired 2018; purchase $410,000; current $545,000"},
+        "re03": {"const": "Wells Fargo Home Mortgage; balance $312,000; $2,050/mo"},
+        "ins01": {"const": "State Farm Life Insurance Co.; owner/insured: applicant"},
+        "ins02": {"const": "Beneficiary: estate; face $250,000; cash surrender value $12,000"},
+        "ins03": {"const": "0"},
+        "bs01": {"template": "{legal_name}, import/wholesale LLC; principal owner 100%"},
+        "bs02": {"const": "Company net worth approx $192,000; ownership interest value $60,000"},
+        "db01": {"const": "JPMorgan Chase; credit cards; current balance $4,500; $150/mo"},
+        "db02": {"const": "$150/mo; revolving; none pledged"},
+        "db05": {"const": "Wells Fargo Home Mortgage; first lien on primary residence; balance $312,000"},
+        "db06": {"const": "N/A"},
+        "q001": {"const": "Y"},
+        "q002": {"const": "N"},
+        "q003": {"const": "N"},
+        "q004": {"const": "N"},
+        "q005": {"const": "N"},
+        "q006": {"const": "N"},
+        "q010": {"const": "Y"},
+        "q011": "principal_full_name",
+        "q012": {"today": "%Y-%m-%d"},
+        "q015": {"const": "N"},
+        "q016": {"const": "N"}
+      },
+      "signature_anchor": {"field": "q011", "gap": 5, "height": 24}
     }
   ],
   "flat_forms": [
     {
       "format_id": "bond_exchange_flat_v1",
       "type_id": "customs_bond_application",
-      "keywords": ["bond exchange", "customs bond application"],
+      "keywords": [
+        "bond exchange",
+        "customs bond application"
+      ],
       "page_count": 1,
-      "page_sizes": [[612, 792]],
+      "page_sizes": [
+        [
+          612,
+          792
+        ]
+      ],
       "fields": [
-        {"name": "legal_name", "kind": "text", "value": "legal_name", "x": 22, "y": 708, "size": 10},
-        {"name": "date", "kind": "text", "value": {"client": "a006"}, "x": 505, "y": 714, "size": 10},
-        {"name": "address", "kind": "text", "value": "addr_line1", "x": 22, "y": 683, "size": 9},
-        {"name": "city", "kind": "text", "value": "addr_city", "x": 22, "y": 634, "size": 10},
-        {"name": "state", "kind": "text", "value": "addr_state", "x": 232, "y": 634, "size": 10},
-        {"name": "zip", "kind": "text", "value": "addr_zip", "x": 268, "y": 634, "size": 10},
-        {"name": "bond_amount", "kind": "text", "value": {"client": "a004"}, "x": 22, "y": 516, "size": 10},
-        {"name": "commodity", "kind": "text", "value": {"client": "d001"}, "x": 227, "y": 516, "size": 8, "max_width": 360},
-        {"name": "clear_preselected_other", "kind": "clear", "rect": [445.0, 489.0, 452.5, 495.5]},
-        {"name": "activity_1_importer", "kind": "check", "value": {"const": "X"}, "rect": [19.4, 553.4, 28.6, 562.6], "size": 10},
-        {"name": "business_importer", "kind": "check", "value": {"const": "X"}, "rect": [30.6, 487.7, 39.7, 496.8], "size": 10},
-        {"name": "ad_cvd", "kind": "check", "value": {"client": "a007"}, "equals": "Yes", "rect": [368.6, 526.7, 373.8, 531.8], "size": 5.5},
+        {
+          "name": "legal_name",
+          "kind": "text",
+          "value": "legal_name",
+          "x": 22,
+          "y": 708,
+          "size": 10
+        },
+        {
+          "name": "date",
+          "kind": "text",
+          "value": {
+            "client": "a006"
+          },
+          "x": 505,
+          "y": 714,
+          "size": 10
+        },
+        {
+          "name": "address",
+          "kind": "text",
+          "value": "addr_line1",
+          "x": 22,
+          "y": 683,
+          "size": 9
+        },
+        {
+          "name": "city",
+          "kind": "text",
+          "value": "addr_city",
+          "x": 22,
+          "y": 634,
+          "size": 10
+        },
+        {
+          "name": "state",
+          "kind": "text",
+          "value": "addr_state",
+          "x": 232,
+          "y": 634,
+          "size": 10
+        },
+        {
+          "name": "zip",
+          "kind": "text",
+          "value": "addr_zip",
+          "x": 268,
+          "y": 634,
+          "size": 10
+        },
+        {
+          "name": "bond_amount",
+          "kind": "text",
+          "value": {
+            "client": "a004"
+          },
+          "x": 22,
+          "y": 516,
+          "size": 10
+        },
+        {
+          "name": "commodity",
+          "kind": "text",
+          "value": {
+            "client": "d001"
+          },
+          "x": 227,
+          "y": 516,
+          "size": 8,
+          "max_width": 360
+        },
+        {
+          "name": "clear_preselected_other",
+          "kind": "clear",
+          "rect": [
+            445.0,
+            489.0,
+            452.5,
+            495.5
+          ]
+        },
+        {
+          "name": "activity_1_importer",
+          "kind": "check",
+          "value": {
+            "const": "X"
+          },
+          "rect": [
+            19.4,
+            553.4,
+            28.6,
+            562.6
+          ],
+          "size": 10
+        },
+        {
+          "name": "business_importer",
+          "kind": "check",
+          "value": {
+            "const": "X"
+          },
+          "rect": [
+            30.6,
+            487.7,
+            39.7,
+            496.8
+          ],
+          "size": 10
+        },
+        {
+          "name": "ad_cvd",
+          "kind": "check",
+          "value": {
+            "client": "a007"
+          },
+          "equals": "Yes",
+          "rect": [
+            368.6,
+            526.7,
+            373.8,
+            531.8
+          ],
+          "size": 5.5
+        },
         {
           "name": "fein",
           "kind": "chars",
@@ -801,18 +1173,105 @@
           "remove_chars": "- ",
           "length": 9,
           "size": 11,
-          "positions": [[383, 684], [401, 684], [417, 684], [432.5, 684], [450, 684], [468, 684], [486, 684], [504, 684], [521.5, 684]]
+          "positions": [
+            [
+              383,
+              684
+            ],
+            [
+              401,
+              684
+            ],
+            [
+              417,
+              684
+            ],
+            [
+              432.5,
+              684
+            ],
+            [
+              450,
+              684
+            ],
+            [
+              468,
+              684
+            ],
+            [
+              486,
+              684
+            ],
+            [
+              504,
+              684
+            ],
+            [
+              521.5,
+              684
+            ]
+          ]
         },
         {
           "name": "customs_assigned_number",
           "kind": "chars",
-          "value": {"client": "b011"},
-          "when": {"value": "ein", "present": false},
+          "value": {
+            "client": "b011"
+          },
+          "when": {
+            "value": "ein",
+            "present": false
+          },
           "remove_chars": "- ",
           "length": 11,
           "size": 11,
           "align": "center",
-          "positions": [[383.5, 644], [401.6, 644], [419.7, 644], [437.7, 644], [455.9, 644], [474.0, 644], [510.1, 644], [528.2, 644], [546.3, 644], [564.4, 644], [582.4, 644]]
+          "positions": [
+            [
+              383.5,
+              644
+            ],
+            [
+              401.6,
+              644
+            ],
+            [
+              419.7,
+              644
+            ],
+            [
+              437.7,
+              644
+            ],
+            [
+              455.9,
+              644
+            ],
+            [
+              474.0,
+              644
+            ],
+            [
+              510.1,
+              644
+            ],
+            [
+              528.2,
+              644
+            ],
+            [
+              546.3,
+              644
+            ],
+            [
+              564.4,
+              644
+            ],
+            [
+              582.4,
+              644
+            ]
+          ]
         }
       ],
       "note": "FEIN 与 Customs Assigned Number 二选一；b005 是州登记编号，禁止映射。Continuous 和 Send Via E-Mail 沿用原表正确预勾；清除与 Importer 冲突的 Other 预勾。"
