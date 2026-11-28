@@ -112,8 +112,11 @@ def test_form_request_separates_enclosed_from_to_follow(session, world):
         "ownership",
         "ad_cvd",
     ]
-    # 无附件时申请表无法自动填：正文如实说明「无法自动填」，不谎称已附上
-    assert "could not be auto-filled" in draft.body
+    # 无附件时申请表无法自动填：正文用正常商务口径（随后提供），绝不谎称已附上，
+    # 也绝不出现暴露自动化流程的表述（auto-filled / manually / automated 等）
+    assert "to follow in our next email" in draft.body
+    assert "auto-fill" not in draft.body
+    assert "manually" not in draft.body
     # 财务报表自动生成附上；股权与 AD/CVD 按标准口径正文直答
     assert "Business financial statement" in draft.body
     assert "100%" in draft.body
@@ -151,6 +154,34 @@ def test_form_request_falls_back_to_agent_form_profile(session, world):
     # 财务报表按运营口径自动生成并随回复附上
     assert "Business financial statement" in draft.body
     assert any("business_financial_statement" in (a or "") for a in (draft.attachments or []))
+
+
+def test_docusign_request_never_reveals_automation(session, world):
+    """DocuSign 场景：对方让去电子签链接完成 POA 并上传材料，邮件无附件。
+
+    回复是正常商务信函：不能出现 auto-filled / handled manually 等暴露
+    自动化流程的表述，也不能谎称已附上不存在的文件。
+    """
+    message = NormalizedMessage(
+        channel="eml",
+        channel_msg_id="docusign-1",
+        from_addr="assistant@crcustomsbrokers.com",
+        subject="Re: [BOND-2026-0142] Application documents",
+        body_text=(
+            "Hi, please complete the customs power of attorney in the DocuSign "
+            "request we sent and use its upload field to provide the company "
+            "formation documents, IRS EIN confirmation, and corporate financial statements."
+        ),
+        dedupe_hash="docusign-hash-1",
+    )
+    result = process_message(session, message)
+    draft = session.get(Draft, result.draft_id)
+    assert result.intent.label == "form_request"
+    lowered = draft.body.lower()
+    for banned in ("auto-fill", "auto filled", "automated", "handled manually", "manually"):
+        assert banned not in lowered, f"正文泄露自动化表述：{banned}"
+    # 无附件时不得谎称已附上
+    assert "attached" not in lowered or "please find attached" not in lowered
 
 
 def test_invoice_does_not_create_email_draft(session, world, monkeypatch):
