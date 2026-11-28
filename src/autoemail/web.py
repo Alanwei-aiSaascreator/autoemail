@@ -411,7 +411,7 @@ def _reasons(items: list[str] | None) -> str:
 # case 当前状态 → 当前在等什么（人话），按流程顺序排列
 STATE_STEPS = ["init", "quoted_out", "quoted", "materials_requested", "bond_received", "invoiced", "paid"]
 STATE_LABELS = {
-    "init": "询价已发出",
+    "init": "询价未发出",
     "quoted_out": "已发出询价",
     "quoted": "已收到报价",
     "materials_requested": "已索取材料",
@@ -422,7 +422,7 @@ STATE_LABELS = {
     "lost": "已流失",
 }
 STATE_WAITING = {
-    "init": "等待代理商回复",
+    "init": "等待询价发出（草稿待审或补发）",
     "quoted_out": "等待代理商报价",
     "quoted": "等待确认报价",
     "materials_requested": "等待申请材料往来",
