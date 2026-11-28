@@ -43,12 +43,17 @@ from .models import (
     CommissionKnowledge,
     ComplianceRun,
     Draft,
+    DRAFT_SENT,
+    EmailBlocklist,
     FollowUpTask,
+    FOLLOWUP_PENDING,
+    FOLLOWUP_RUNNING,
     FormTypeRegistry,
     INVOICE_UNPAID,
     Invoice,
     Message,
     Quote,
+    SendLedger,
     Thread,
     utcnow,
 )
@@ -321,6 +326,7 @@ def _layout(title: str, active: str, content: str) -> str:
 <span class="brand">Bond 邮件 Agent · 审核台</span>
 <nav>
 {nav("dashboard", "/", "看板")}
+{nav("stats", "/stats", "中台")}
 {nav("commissions", "/commissions", "委托")}
 {nav("inquiry", "/inquiry", "发起询价")}
 {nav("cases", "/cases", "Case")}
@@ -444,6 +450,217 @@ def _steps_bar(state: str) -> str:
         dot = "✓" if i < current_idx else str(i + 1)
         parts.append(f'<div class="step {cls}"><span class="dot">{dot}</span><br>{_e(label)}</div>')
     return '<div class="steps">' + "".join(parts) + "</div>"
+
+
+# 检测中台：状态卡配色（按语义映射到现有 CSS 变量）
+_STATE_CARD_STYLE = {
+    "init": "",
+    "quoted_out": "",
+    "quoted": "color:var(--accent)",
+    "materials_requested": "color:var(--accent)",
+    "bond_received": "",
+    "invoiced": "color:var(--warn)",
+    "paid": "color:var(--ok)",
+    "closed": "color:var(--muted)",
+    "lost": "color:var(--bad)",
+    "blocked": "color:var(--bad)",
+}
+
+
+def render_stats(session: Session) -> str:
+    """检测中台：全库状态分布一屏总览，数字全部来自实时 SQL 聚合。
+
+    每张状态卡可点击，直接跳到对应的筛选视图；漏斗条给出每个状态占进行中
+    case 的比例；今日动作用本地时区当日边界统计当天实际发生的动作。
+    """
+    now = utcnow()
+    # 今日边界按本地时区当日零点（数据库存 UTC，换算后比较）
+    local_now = now.astimezone()
+    day_start = local_now.replace(hour=0, minute=0, second=0, microsecond=0)
+
+    # ── 1) Case 状态总览：全库按状态聚合 ──────────────────────────────
+    state_counts = dict(
+        session.execute(select(Case.state, func.count()).group_by(Case.state)).all()
+    )
+    total_cases = sum(state_counts.values())
+    active_cases = total_cases - state_counts.get("closed", 0) - state_counts.get("lost", 0)
+
+    state_cards_html = []
+    for state in (*STATE_STEPS, "closed", "lost", "blocked"):
+        count = state_counts.get(state, 0)
+        if count == 0:
+            continue  # 只展示有量的状态，空状态不占位
+        pct = f"{count / active_cases * 100:.0f}%" if active_cases else "—"
+        href = "/cases?group=active" if state not in ("closed", "lost") else f"/cases?group={state}"
+        state_cards_html.append(
+            f'<a class="card" href="{href}">'
+            f'<div class="label">{_e(STATE_LABELS.get(state, state))}'
+            f'<span class="muted" style="font-size:11px"> {_e(state)}</span></div>'
+            f'<div class="num" style="{_STATE_CARD_STYLE.get(state, "")}">{count}'
+            f'<span class="muted" style="font-size:12px;font-weight:400"> · {pct}</span></div>'
+            f'<div class="muted" style="font-size:12px">{_e(STATE_WAITING.get(state, ""))}</div>'
+            f"</a>"
+        )
+
+    # 状态分布漏斗（占进行中 case 的比例条）
+    funnel_rows = []
+    for state in STATE_STEPS:
+        count = state_counts.get(state, 0)
+        if count == 0:
+            continue
+        width = min(100, max(2, round(count / active_cases * 100))) if active_cases else 2
+        funnel_rows.append(
+            f'<tr><td style="white-space:nowrap;width:150px">{_e(STATE_LABELS.get(state, state))}'
+            f'<span class="muted" style="font-size:11px"> {_e(state)}</span></td>'
+            f'<td><div style="background:#eff6ff;border-radius:6px;height:20px;overflow:hidden">'
+            f'<div style="background:var(--accent);height:100%;width:{width}%;border-radius:6px"></div>'
+            f"</div></td><td style=\"text-align:right;white-space:nowrap\"><b>{count}</b></td></tr>"
+        )
+    funnel_html = (
+        f'<table><thead><tr><th>状态</th><th style="width:60%">占比</th><th style="text-align:right">数量</th></tr></thead>'
+        f"<tbody>{''.join(funnel_rows)}</tbody></table>"
+        if funnel_rows
+        else '<p class="muted">没有进行中的 case</p>'
+    )
+
+    # ── 2) 今日动作（本地时区当日零点起） ─────────────────────────────
+    sent_today = (
+        session.scalar(
+            select(func.count())
+            .select_from(AuditEvent)
+            .where(AuditEvent.action == "draft.sent", AuditEvent.ts >= day_start)
+        )
+        or 0
+    )
+    # 询价台账 dedupe_key 是 sha256，按 draft_id 关联 initial_inquiry 草稿计数
+    initial_today = (
+        session.scalar(
+            select(func.count())
+            .select_from(SendLedger)
+            .join(Draft, SendLedger.draft_id == Draft.id)
+            .where(SendLedger.sent_at >= day_start, Draft.intent == "initial_inquiry")
+        )
+        or 0
+    )
+    inbound_today = (
+        session.scalar(
+            select(func.count())
+            .select_from(Message)
+            .where(Message.direction == "in", Message.created_at >= day_start)
+        )
+        or 0
+    )
+    blocked_today = (
+        session.scalar(
+            select(func.count())
+            .select_from(EmailBlocklist)
+            .where(EmailBlocklist.created_at >= day_start, EmailBlocklist.removed_at.is_(None))
+        )
+        or 0
+    )
+    today_cards_html = "".join(
+        f'<div class="card"><div class="label">{label}</div><div class="num">{value}</div>'
+        f'<div class="muted" style="font-size:12px">{hint}</div></div>'
+        for label, value, hint in (
+            ("今日发出询价", initial_today, "initial_inquiry 首次询价邮件"),
+            ("今日发送总数", sent_today, "全部草稿发送（含询价/回复/催办）"),
+            ("今日入站邮件", inbound_today, "收到的代理商/客户邮件"),
+            ("今日新增拦截", blocked_today, "退信后加入黑名单的邮箱"),
+        )
+    )
+
+    # ── 3) 全局待办横切 ───────────────────────────────────────────────
+    draft_counts = dict(
+        session.execute(select(Draft.status, func.count()).group_by(Draft.status)).all()
+    )
+    pending_drafts = draft_counts.get("pending", 0) + draft_counts.get("blocked", 0)
+    unpaid_invoices = (
+        session.scalar(
+            select(func.count()).select_from(Invoice).where(Invoice.status == INVOICE_UNPAID)
+        )
+        or 0
+    )
+    followup_open = (
+        session.scalar(
+            select(func.count())
+            .select_from(FollowUpTask)
+            .where(FollowUpTask.status.in_((FOLLOWUP_PENDING, FOLLOWUP_RUNNING)))
+        )
+        or 0
+    )
+    compliance_open = (
+        session.scalar(
+            select(func.count())
+            .select_from(ComplianceRun)
+            .where(ComplianceRun.overall.in_(("REJECT", "REVIEW")))
+        )
+        or 0
+    )
+    blocked_cases = state_counts.get("blocked", 0)
+    todo_cards_html = "".join(
+        f'<a class="card" href="{href}"><div class="label">{label}</div>'
+        f'<div class="num" style="{style}">{value}</div>'
+        f'<div class="muted" style="font-size:12px">{hint}</div></a>'
+        for label, value, href, hint, style in (
+            ("待审草稿", pending_drafts, "/drafts?status=pending", "需人工批准后发送",
+             "color:var(--warn)" if pending_drafts else ""),
+            ("未付发票", unpaid_invoices, "/invoices", "等待安排付款",
+             "color:var(--warn)" if unpaid_invoices else ""),
+            ("跟进任务", followup_open, "/", "到期自动生成催办草稿", ""),
+            ("合规预警", compliance_open, "/compliance?status=REJECT", "REJECT/REVIEW 待处理",
+             "color:var(--bad)" if compliance_open else ""),
+            ("被拦截 Case", blocked_cases, "/cases?group=active", "合规闸门暂停发件",
+             "color:var(--bad)" if blocked_cases else ""),
+        )
+    )
+
+    # ── 4) 代理商聚合：每家代理手上的 case 状态分布 ───────────────────
+    agent_stats = session.execute(
+        select(
+            Case.agent_id,
+            func.count(Case.id),
+            func.sum(func.coalesce(Case.state.notin_(("closed", "lost")), 0)),
+        )
+        .group_by(Case.agent_id)
+        .order_by(func.count(Case.id).desc())
+        .limit(20)
+    ).all()
+    agent_rows = []
+    for agent_id, count, active_n in agent_stats:
+        agent = session.get(Agent, agent_id)
+        agent_rows.append(
+            [
+                _e(agent.name if agent else f"#{agent_id}"),
+                f'<a href="/cases?group=active">{active_n or 0}</a>',
+                count,
+                count - (active_n or 0),
+            ]
+        )
+    agent_html = (
+        _table(["代理商", "进行中", "全部 Case", "已结束"], agent_rows) if agent_rows else '<p class="muted">暂无代理商数据</p>'
+    )
+
+    content = f"""
+<p class="crumbs"><a href="/">看板</a> / 检测中台</p>
+<h1>检测中台</h1>
+<p class="muted">全库实时统计：每个状态有多少 case、今天实际发生了什么、哪些事卡住了。数字直接来自数据库聚合，无缓存。</p>
+
+<h2>Case 状态总览 <span class="muted" style="font-size:13px">共 {total_cases} 个 · 进行中 {active_cases} 个</span></h2>
+<div class="cards">{"".join(state_cards_html)}</div>
+
+<h2>进行中分布（漏斗）</h2>
+{funnel_html}
+
+<h2>今日动作</h2>
+<div class="cards">{today_cards_html}</div>
+
+<h2>待办横切</h2>
+<div class="cards">{todo_cards_html}</div>
+
+<h2>代理商 TOP 20</h2>
+{agent_html}
+"""
+    return _layout("检测中台", "stats", content)
 
 
 def render_dashboard(session: Session) -> str:
@@ -2514,6 +2731,8 @@ class Handler(BaseHTTPRequestHandler):
         try:
             if path == "/":
                 body = render_dashboard(session)
+            elif path == "/stats":
+                body = render_stats(session)
             elif path == "/commissions":
                 body = render_commissions(
                     session,

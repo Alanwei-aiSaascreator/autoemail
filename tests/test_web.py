@@ -26,6 +26,7 @@ from autoemail.web import (
     render_inquiry,
     render_llm,
     render_settings,
+    render_stats,
 )
 
 FIXTURES = Path(__file__).parent / "fixtures"
@@ -482,3 +483,24 @@ def test_approve_with_channel_sends(session, world):
     assert draft.status == DRAFT_SENT
     assert len(channel.calls) == 1
     assert f"/drafts/{result.draft_id}/approve" not in render_draft(session, result.draft_id)
+
+
+def test_stats_renders_state_distribution(session, world):
+    _seed(session, world)
+
+    page = render_stats(session)
+
+    assert "检测中台" in page
+    assert "Case 状态总览" in page
+    assert "今日发出询价" in page
+    assert "今日动作" in page
+    assert "待办横切" in page
+    assert "A1 Surety" in page
+
+
+def test_stats_zero_data_still_renders(session):
+    page = render_stats(session)
+
+    assert "检测中台" in page
+    assert "没有进行中的 case" in page
+    assert "暂无代理商数据" in page
