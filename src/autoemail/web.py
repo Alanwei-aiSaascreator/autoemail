@@ -9,7 +9,7 @@ import json
 import sys
 import webbrowser
 import zlib
-from datetime import datetime
+from datetime import datetime, timezone
 from email import policy
 from email.parser import BytesParser
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -637,32 +637,44 @@ function filterCases(q) {{
     ) or 0
     active = total - closed
 
-    statement = select(Case).order_by(Case.created_at.desc())
+    # 按委托聚合统计（SQL 分组，不受行数上限影响），确保所有委托始终可见
+    stat_statement = (
+        select(
+            Case.commission_id,
+            func.count(Case.id),
+            func.max(Case.created_at),
+            func.sum(func.coalesce(Case.state.notin_(("closed", "lost")), 0)),
+        )
+        .group_by(Case.commission_id)
+    )
     if group == "active":
-        statement = statement.where(Case.state.notin_(("closed", "lost")))
+        stat_statement = stat_statement.having(func.sum(func.coalesce(Case.state.notin_(("closed", "lost")), 0)) > 0)
     elif group == "closed":
-        statement = statement.where(Case.state.in_(("closed", "lost")))
-    cases = session.scalars(statement.limit(500)).all()
-
-    groups: dict[int, list] = {}
-    order: list[int] = []
-    for case in cases:
-        if case.commission_id not in groups:
-            groups[case.commission_id] = []
-            order.append(case.commission_id)
-        groups[case.commission_id].append(case)
+        stat_statement = stat_statement.having(func.sum(func.coalesce(Case.state.notin_(("closed", "lost")), 0)) == 0)
+    stats = {
+        row[0]: {"count": row[1], "latest": row[2], "active_n": row[3] or 0}
+        for row in session.execute(stat_statement).all()
+    }
 
     cards = []
-    for cid in order:
-        commission = session.get(Commission, cid)
-        name = commission.legal_name if commission else "未知委托"
-        mailbox = (commission.mailbox_email if commission else "") or ""
+    for commission in session.scalars(select(Commission).order_by(Commission.id)).all():
+        stat = stats.get(commission.id)
+        if stat is None:
+            if group != "all":
+                continue
+            stat = {"count": 0, "latest": None, "active_n": 0}
+        name = commission.legal_name
+        mailbox = commission.mailbox_email or ""
         initials = "".join(part[0] for part in name.split() if part)[:2].upper() or "—"
         color = palette[zlib.crc32(name.encode()) % len(palette)]
-        count_label = f"{len(groups[cid])} 个 Case"
-        cards.append(
-            f"""
-<a class="comm-card" href="/cases?commission={cid}">
+        if group == "active":
+            count_label = f"{stat['active_n']} 个 Case"
+        else:
+            count_label = f"{stat['count']} 个 Case"
+        # 最近有动静的委托排前面
+        latest_ts = stat["latest"]
+        cards.append((latest_ts or datetime.min.replace(tzinfo=timezone.utc), f"""
+<a class="comm-card" href="/cases?commission={commission.id}">
   <span class="comm-avatar" style="background:{color}">{_e(initials)}</span>
   <span class="comm-meta">
     <span class="comm-name">{_e(name)}</span>
@@ -670,8 +682,10 @@ function filterCases(q) {{
   </span>
   <span class="comm-count">{_e(count_label)}</span>
   <span class="arrow">›</span>
-</a>"""
-        )
+</a>"""))
+
+    cards.sort(key=lambda item: item[0], reverse=True)
+    cards = [html for _, html in cards]
 
     tabs = _tabs(
         [

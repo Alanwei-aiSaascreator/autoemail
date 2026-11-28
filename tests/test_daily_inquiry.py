@@ -77,13 +77,13 @@ def test_batch_plans_twenty_and_never_repeats(session):
     assert second["ran"] is False
 
     # 强制再跑：不会重复已询过的，只补选剩余未询过的 5 家
-    third = run_daily_batch(session, batch_size=20, force=True, actor="cli")
+    third = run_daily_batch(session, batch_size=20, force=True)
     assert third["ran"] is True
     assert third["planned"] == 5
     assert len(_pairs(session, commission.id)) == 25
 
     # 全部询过之后，再强制跑也不再新增
-    fourth = run_daily_batch(session, batch_size=20, force=True, actor="cli")
+    fourth = run_daily_batch(session, batch_size=20, force=True)
     assert fourth["planned"] == 0
     assert len(_pairs(session, commission.id)) == 25
 
