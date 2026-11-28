@@ -36,7 +36,10 @@ def _already_ran_today(session: Session) -> bool:
     return (
         session.scalar(
             select(AuditEvent.id).where(
-                AuditEvent.action == BATCH_ACTION, AuditEvent.decision == today
+                AuditEvent.action == BATCH_ACTION,
+                AuditEvent.decision == today,
+                # -dry-run-no-send 后缀是误配置警告，不算"今日已执行"
+                ~AuditEvent.decision.like("%-dry-run-no-send"),
             )
         )
         is not None
@@ -90,6 +93,22 @@ def run_daily_batch(
     if not force and _already_ran_today(session):
         return {"ran": False, "reason": "今日已执行过批量询价"}
 
+    # channel=None 意味着本批只能生成草稿不能真实发出。守护路径（actor=agent）
+    # 属于误配置（watch 忘带 --allow-auto-send）：记一条显式警告审计，且**不写**
+    # "今日已执行"的常规审计，不占当天名额，正式批次开启后仍会照常执行。
+    # CLI 手动 dry_run（actor=cli）不受影响，属刻意演练。
+    dry_run_warning = channel is None and actor == "agent"
+    if dry_run_warning:
+        audit.record(
+            session,
+            action=BATCH_ACTION,
+            actor=actor,
+            decision=f"{date.today().isoformat()}-dry-run-no-send",
+            reasons=["警告：守护批次未启用发送渠道，仅生成草稿未真实发出（检查 watch 是否带 --allow-auto-send）"],
+        )
+        session.commit()
+        LOGGER.warning("每日询价批次以 dry_run 运行，未真实发送——检查守护进程启动参数")
+
     commissions = _ready_commissions(session)
     if not commissions:
         audit.record(
@@ -100,7 +119,7 @@ def run_daily_batch(
             reasons=["今日无可询价委托（无文件齐全且未付款的委托）"],
         )
         session.commit()
-        return {"ran": True, "commissions": [], "sent": 0, "planned": 0}
+        return {"ran": True, "commissions": [], "sent": 0, "planned": 0, "dry_run_no_send": dry_run_warning}
 
     pool = [a for a in session.scalars(select(Agent)) if a.email_addresses]
     random.shuffle(pool)
@@ -179,13 +198,16 @@ def run_daily_batch(
     ]
     if precheck_failures:
         reasons.append("预检未通过：" + "；".join(precheck_failures))
-    audit.record(
-        session,
-        action=BATCH_ACTION,
-        actor=actor,
-        decision=date.today().isoformat(),
-        reasons=reasons or ["无新增"],
-    )
+    # dry_run 误配置时不写"今日已执行"审计：今天正式批次仍可正常触发。
+    # CLI 手动 dry_run（actor=cli）保持原行为，写审计防重复演练。
+    if not dry_run_warning:
+        audit.record(
+            session,
+            action=BATCH_ACTION,
+            actor=actor,
+            decision=date.today().isoformat(),
+            reasons=reasons or ["无新增"],
+        )
     session.commit()
     return {
         "ran": True,
@@ -193,6 +215,7 @@ def run_daily_batch(
         "sent": sent,
         "planned": planned,
         "failed": failed,
+        "dry_run_no_send": dry_run_warning,
     }
 
 

@@ -1,5 +1,6 @@
 """每日随机询价调度测试。"""
 
+from types import SimpleNamespace
 from datetime import datetime, timezone
 
 import pytest
@@ -66,25 +67,70 @@ def test_batch_plans_twenty_and_never_repeats(session):
     _make_agents(session, 25)
     commission = _make_ready_commission(session, "Alpha LLC")
 
-    first = run_daily_batch(session, batch_size=20)
+    first = run_daily_batch(session, batch_size=20, actor="cli")
     assert first["ran"] is True
     assert first["planned"] == 20
     assert len(_pairs(session, commission.id)) == 20
 
     # 同一天重复触发：跳过
-    second = run_daily_batch(session, batch_size=20)
+    second = run_daily_batch(session, batch_size=20, actor="cli")
     assert second["ran"] is False
 
     # 强制再跑：不会重复已询过的，只补选剩余未询过的 5 家
-    third = run_daily_batch(session, batch_size=20, force=True)
+    third = run_daily_batch(session, batch_size=20, force=True, actor="cli")
     assert third["ran"] is True
     assert third["planned"] == 5
     assert len(_pairs(session, commission.id)) == 25
 
     # 全部询过之后，再强制跑也不再新增
-    fourth = run_daily_batch(session, batch_size=20, force=True)
+    fourth = run_daily_batch(session, batch_size=20, force=True, actor="cli")
     assert fourth["planned"] == 0
     assert len(_pairs(session, commission.id)) == 25
+
+
+def test_watch_dry_run_does_not_consume_daily_slot(session):
+    """回归：watch 忘带 --allow-auto-send 时（actor=agent、channel=None）只出草稿。
+
+    这种误配置批次必须：1) 显式标注 dry_run_no_send；2) 不写"今日已执行"审计，
+    避免占掉当天名额导致正式批次被跳过（2026-11-28 700 封询价未发的事故根因）。
+    """
+    from autoemail.models import AuditEvent
+
+    _make_agents(session, 5)
+    _make_ready_commission(session, "Alpha LLC")
+
+    summary = run_daily_batch(session, batch_size=5, actor="agent", channel=None)
+    assert summary["ran"] is True
+    assert summary["dry_run_no_send"] is True
+    # 不写常规审计（decision=日期），只留一条显式警告
+    from sqlalchemy import func
+
+    normal = session.scalar(
+        select(func.count()).select_from(AuditEvent).where(
+            AuditEvent.action == "daily_inquiry.batch",
+            AuditEvent.decision == datetime.now(timezone.utc).date().isoformat(),
+        )
+    )
+    assert normal == 0
+    warned = session.scalar(
+        select(func.count()).select_from(AuditEvent).where(
+            AuditEvent.action == "daily_inquiry.batch",
+            AuditEvent.decision.like("%-dry-run-no-send"),
+        )
+    )
+    assert warned == 1
+
+    # 随后正式批次（带可用渠道）同日仍可正常执行，不会被 dry_run 占位
+    class _OkChannel:
+        def verify(self):
+            return True, ""
+
+        def send(self, message):
+            return SimpleNamespace(ok=True, channel_msg_id=f"test-{message.to_addrs[0]}")
+
+    summary2 = run_daily_batch(session, batch_size=5, actor="agent", channel=_OkChannel())
+    assert summary2["ran"] is True
+    assert summary2["dry_run_no_send"] is False
 
 
 def test_batch_avoids_same_agent_across_commissions(session):
