@@ -1,0 +1,1036 @@
+Return-Path: <>
+Delivered-To: amanuelafeworktiku@enproinc.live
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id 8LhdDRcrCmuepBIAQ1DlOA
+	(envelope-from <>)
+	for <amanuelafeworktiku@enproinc.live>; Fri, 27 Nov 2026 20:15:03 -0500
+X-Original-To: amanuelafeworktiku@enproinc.live
+Received: from e226-241.smtp-out.us-east-2.amazonses.com (e226-241.smtp-out.us-east-2.amazonses.com [23.251.226.241])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id E0E4E1176E1
+	for <amanuelafeworktiku@enproinc.live>; Fri, 27 Nov 2026 20:15:02 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b="FnC0wcb/";
+	dkim=fail ("headers rsa verify failed") header.d=teuinc.onmicrosoft.com header.s=selector2-teuinc-onmicrosoft-com header.b=H0r7iYAf;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	spf=pass (mail.pony-it.com: domain of e226-241.smtp-out.us-east-2.amazonses.com designates 23.251.226.241 as permitted sender) smtp.helo=e226-241.smtp-out.us-east-2.amazonses.com;
+	arc=reject ("signature check failed: fail, {[1] = sig:microsoft.com:reject}")
+ARC-Seal: i=2; a=rsa-sha256; d=enproinc.live; s=dkim; cv=fail; t=1795828503;
+	b=fOdE/U0AvApmgjUyY3EzaDlQOM6/fO+ZFa9DSeWoo85WIapLfHJ+lhmNeemLgt4mgv9F+C
+	2JTYoXJw5E3NOdl1ZbvYaTzNZZtX3WzlCYTn1l72lF07kBUFvT+G3KHm1vcgP4WiyUBYPR
+	IaTURwJPSkA6N4d25udFSiXkyJIYtts6E9sRgPv3grFwIrz9P6KYb2amq3OcjamU5El9wr
+	++Lzwwc3QYaF2Sphn3H8MOvvZn/2TjRZwaBJ5HjR3VdTJYu8p08ItDbyYRbCnN2ubbIrIk
+	5tdfhoq8U9jNip1C5FkXXiV1eIsLCeRZ//dK3ZLo+yXSqlQVXaIBIV1uSN1xFQ==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=enproinc.live;
+	s=dkim; t=1795828503;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references:dkim-signature;
+	bh=onFtA4xYzwGtniEq5u507BnZVUJValHA9opB8faWL6A=;
+	b=PyJlh4po6pxcT4ARmsJcVyu2XoEEQpQHohs0qxpil9h5I68Fwa2uI6fUyklgfft/zJdPz1
+	eggNqJ0dKHxWRG/14JkLC2n86udp2xrrb9XHbJQSCUecRBMGXMVLSWDD4/raH5zLKtQxrr
+	owS3VmCtI3NIuvJ+gh962wOzss6ZcY/DDdDvxDIx69WmucuqIuYQqnFUhwAID40e/3Xpb+
+	6tBljl1V+9VOYTFRElPmLaKQJeyNcrugdQsnAJYiFI98OvoHkLMT1Z4O0jU15Fp3Lm5oxq
+	7K79jBCyvnhLxk4/2MQxO7Eb9GZEjuue8ccajYkPnRaAEf7UAuPDKNSCVI/A1g==
+ARC-Authentication-Results: i=2;
+	mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b="FnC0wcb/";
+	dkim=fail ("headers rsa verify failed") header.d=teuinc.onmicrosoft.com header.s=selector2-teuinc-onmicrosoft-com header.b=H0r7iYAf;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	spf=pass (mail.pony-it.com: domain of e226-241.smtp-out.us-east-2.amazonses.com designates 23.251.226.241 as permitted sender) smtp.helo=e226-241.smtp-out.us-east-2.amazonses.com;
+	arc=reject ("signature check failed: fail, {[1] = sig:microsoft.com:reject}")
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=kra23psoka5qyyh6gdejiiuof3nluwuz; d=amazonses.com; t=1795828502;
+	h=MIME-Version:From:To:Date:Content-Type:Message-ID:In-Reply-To:References:Subject:Feedback-ID;
+	bh=5tuz955+HA3/dPjdy7weT+M9NZcyD5v20tfZXZ50WGA=;
+	b=FnC0wcb/YwVMuNm3z8HtAcihY6u5NIOvsjHfXK1NkiEF4IQRNXK9Ws57JGVDpJBl
+	Z8CfCET0vxydTvJgQLPspQmKY5BilhB1u+ZwtjDZxbK+aH3hYPfA3nN+fRi4CGHk4Ty
+	cFwyG3AZWGFEqFLakddb9ZY5u2jMUssZ7AVRsPX8=
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=TwA3dQ7FMCorCEdYkiEx0cSTcslxnWbG6qkINCJrQchGmUCdLNBUqMF3i2vmZM/swe0zkbm28nubClLNLcvd9uT5HKLPPPMfBztoSvZliScir7aK9rnWXxPzo6WR3dQYbCa+4q8PHS39UTSdMlDCuxYa9ccTprhJRm3mHJ7WCvOBUu5Rgen3luSEOOUG8iALIbT535S3vMEyItUBxLh3cY89zan5QIQXa6GNhm09/9YmiLpiryhd3lUgcub1Bp5fuyL/LBblZwCM4HMIyjJAJ+LQvmbBw9uqbfRhz7fYz5q//2CI+Chehq9rYWlSRGAfWHay2jg0O/pSaHHVqAh/Xg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=onFtA4xYzwGtniEq5u507BnZVUJValHA9opB8faWL6A=;
+ b=adF4VWCVUt4uzQ3iJ857pPedtxEj43oqwfyrv/UsxdI8skaEijwY5YKQEbU9S7IsIRDX5XbYxm32l9XsqicHACVg/tXthokZYntFSffn8zbi4NsoJDSZSuCjCvRPZB/TzqpJTohHAVkiWCf6H/MPzxn8Y02b8Kwm9DlTLHGZ3oMvsg3KsWAzm2winu1BGJvXFn+XvxH5kEZn7GTX2ZAKS6C30/G2VVmVT/ArAvlPghnM2HkcttiQpm5tTMXWqK1BpITynjl40JDz31yGmOC2uFRUA0JNgqc3VW7FQL9N7yAwqgCxT084mdeHsthwP7/vcMdbMG4NAW9+qkJ1LmMXHQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=pass
+ action=none header.from=teuinc.com; dkim=pass header.d=teuinc.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=teuinc.onmicrosoft.com; s=selector2-teuinc-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=onFtA4xYzwGtniEq5u507BnZVUJValHA9opB8faWL6A=;
+ b=H0r7iYAfgh00mlr1Wd0CqmB3KyAD1MLscBWZRCISE34S8Lj83kr9hUxT75otjpz4evUk6BTFBavyfIyy4crL36tLELTcLIKmpA+w9Oexp8IOz+C3neUu6RB44qdLfXRWQicNT9woRgDgCZCjA0i/Bfja5XmaXr1jTmx1pto25vU=
+MIME-Version: 1.0
+From: MAILER-DAEMON@us-east-2.amazonses.com
+To: amanuelafeworktiku@enproinc.live
+Date: Sat, 28 Nov 2026 01:15:02 +0000
+Content-Type: multipart/report; report-type=delivery-status;
+	boundary="6c0446b7-f142-48d6-ac52-7240f1898a8b"
+X-MS-Exchange-Message-Is-Ndr:
+Content-Language: en-US
+Message-ID: <010f01a21fb84e6c-fa0564f8-4e77-4eb5-936e-cfb5538dc77f-000000@us-east-2.amazonses.com>
+In-Reply-To:
+ <010f01a21fb834e0-c6bf421d-ca38-49d6-b1d8-054062b2b3a3-000000@us-east-2.amazonses.com>
+References:
+ <010f01a21fb834e0-c6bf421d-ca38-49d6-b1d8-054062b2b3a3-000000@us-east-2.amazonses.com>
+Subject: Undeliverable: [BOND-2026-1392] Inquiry - Continuous Customs Bond
+Auto-Submitted: auto-replied
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH2PR14MB4149:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|50650200027|61400799027|366016|69100299015|376014|7149299003|1930700014|6049299003|3109299003|18002099003|16102099003|260925022911599003|261009223327099003|260925021911599003|261009221227099003|260925021311599003|6133799003|261009221727099003|22082099003|261009220027099003|4133799003|12063799003|261009223027099003|13003099007|8096899003|4013099003|4053099003|4076899003|261021130227099003|261021133027099003|261021123027099003|261026135527099003|261021121427099003|56012099006|261022113327099003|261022105027099003|3613699012|261022115727099003|261026140227099003|261026130827099003|261102123227099003|261026121527099003|261022075727099003|261021135927099003|261028144727099003|32400700002|9143799003|10067099003;
+X-Microsoft-Antispam-Message-Info:
+	V1DKNPvNWAM48YivBEMy5uawZ+6N0Aw0Dy8Ah17v4HMWi9yFlpe0dcvjZ9qzVF64n7HAJ/JaolP/zbwV6KwtxJPlhdP0kjR+BQcBax9IT26ghW5Y2puyOwxt2VmEjSJV7s4oDDe1rJ09EVCxVMPBHFjORTa0PZjWPoU3eWD/AW4sXKwRsZCxmwC1ydQwCHD4tCpH0JobFrYl0Mm3i+N52FSNu83R5XeFMWzjV00NNKAfmPqR5iZqIfzQw7ZX3Wzulr6pWZu1i09PzbOxqgudhE9qlTxrVlwNZBeQjNw+90OqCcp5cjhTSS37koe+uaSu/e6sqiW4zCWuRHGh0WWobOVzUC9pDVXXS1WxbxUNNxHdeMPq7MSuX213t6gyN4Q/1pIlf5U58CZgVhSKbJziEV75kMV9aOVyHsmM5k4LkkXX8DOyllg9+1MSTyrorEsCi2pTFJk+opH7PoFLel0UCamZBNaa7kfjKP2dMtH/YwV45Wk6maiuLdMDAwwqtpPhpsHy1/mB8Ngwtc9UVC6SGydj9EfqLYVHqKi33OrPdBPr7EYfON2OckncHklDOeBYdwS1JpkmNTKYOI9KI34xdEvlrnWZ9g4k8xGfXHsxO0Qqz1MiUz95Ga9ebT8K8mNQm3mDs6bgfz67fUQDNQscPgcFcISPbfSXkpuNv+en+0dB6+eABD1ydg9xTz/sBVfWTqrrQhh7QxO6Zn+yTv8wlyHAPLMD8qlxEEhxdyeGsn1uSg997XIuLg4PjP85rfgb0IQZPvKcafnnOemBSssPY0mfpkqxnl/yaGrirwFNRC+bcqcGFvJ0mBaUtSUlbWMnoFC/TP61bIJ/1oQojv39sg==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:;PTR:;CAT:NONE;SFS:(13230040)(50650200027)(61400799027)(366016)(69100299015)(376014)(7149299003)(1930700014)(6049299003)(3109299003)(18002099003)(16102099003)(260925022911599003)(261009223327099003)(260925021911599003)(261009221227099003)(260925021311599003)(6133799003)(261009221727099003)(22082099003)(261009220027099003)(4133799003)(12063799003)(261009223027099003)(13003099007)(8096899003)(4013099003)(4053099003)(4076899003)(261021130227099003)(261021133027099003)(261021123027099003)(261026135527099003)(261021121427099003)(56012099006)(261022113327099003)(261022105027099003)(3613699012)(261022115727099003)(261026140227099003)(261026130827099003)(261102123227099003)(261026121527099003)(261022075727099003)(261021135927099003)(261028144727099003)(32400700002)(9143799003)(10067099003);DIR:OUT;SFP:1501;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	09n3XUyoltzBTnvmszIwGBA2G69PlxzmZepRAtH4ffiQyvFjsxMTvBgvuTdn7La7Y5ESGhlFP5QubFPwk6kQAP34DDoxcDk7i5fyBR4IDVK9CXajepxAOLLmY2YywLx0DD9KIORW2b2nQe1KtWwPCalHvZDzHmcEQv7FtLUwMoSfT1AZ8U1mqRCK17ZQXt4u2Rs8HX9kWO+vzACRikqeq+lYmDO9C7MeXyYOQuhMKs8Ncwe9s6Jx6gdYVUzBOxOrRm+F/IXXcneqC4vVzstVNKulGMfYwG8FfCblPyWDJNNVSMxsn6r/ZIe+8GPJysA8xqIf26EFvdwehIWds7lu5g==
+X-OriginatorOrg: teuinc.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Nov 2026 01:14:58.9032
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-AuthSource: CH2PR14MB4149.namprd14.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-Network-Message-Id:
+	ae292531-bd05-456a-a7e8-08df4ced0541
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR14MB4149
+Feedback-ID: ::1.us-east-2.c0QCJwTJKDSb6mlKpIo5IpGwsngRMRBjZtJ48k4WYjY=:AmazonSES
+X-SES-Outgoing: 2026.11.28-23.251.226.241
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Result: default: False [-7.67 / 15.00];
+	BAYES_HAM(-5.50)[100.00%];
+	IP_REPUTATION_HAM(-1.17)[asn: 16509(-0.31), country: US(-0.01), ip: 23.251.226.241(-0.85)];
+	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
+	R_DKIM_ALLOW(-0.20)[amazonses.com:s=kra23psoka5qyyh6gdejiiuof3nluwuz];
+	R_SPF_ALLOW(-0.20)[+ip4:23.251.226.241:c];
+	BOUNCE(-0.10)[DSN];
+	ONCE_RECEIVED(0.10)[];
+	ARC_REJECT(0.10)[signature check failed: fail, {[1] = sig:microsoft.com:reject}];
+	MIME_GOOD(-0.10)[multipart/alternative,text/plain];
+	MIME_FROM_MX_GOOD(-0.10)[feedback-smtp.us-east-2.amazonses.com];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	MIME_TRACE(0.00)[0:~,1:+,2:+,3:~,4:~,5:~,6:+];
+	SUBJ_BOUNCE_WORDS(0.00)[];
+	URIBL_BLOCKED(0.00)[enproinc.live:email,us-east-2.amazonses.com:from_mime,us-east-2.amazonses.com:mid,e226-241.smtp-out.us-east-2.amazonses.com:rdns,e226-241.smtp-out.us-east-2.amazonses.com:helo,amazonses.com:dkim,amazonses.com:email,teuinc.com:email];
+	DWL_DNSWL_NONE(0.00)[amazonses.com:dkim];
+	RCPT_COUNT_ONE(0.00)[1];
+	RCPT_MAILCOW_DOMAIN(0.00)[enproinc.live];
+	R_DKIM_REJECT(0.00)[teuinc.onmicrosoft.com:s=selector2-teuinc-onmicrosoft-com];
+	DMARC_POLICY_ALLOW(0.00)[amazonses.com,quarantine];
+	RCVD_COUNT_ZERO(0.00)[0];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_NONE(0.00)[];
+	RCVD_IN_DNSWL_NONE(0.00)[23.251.226.241:from];
+	ASN(0.00)[asn:16509, ipnet:23.251.226.0/24, country:US];
+	MISSING_XM_UA(0.00)[];
+	FROM_NO_DN(0.00)[];
+	DKIM_TRACE(0.00)[amazonses.com:+,teuinc.onmicrosoft.com:-];
+	DKIM_MIXED(0.00)[];
+	ARC_SIGNED(0.00)[enproinc.live:s=dkim:i=2]
+X-Rspamd-Queue-Id: E0E4E1176E1
+
+--6c0446b7-f142-48d6-ac52-7240f1898a8b
+Content-Type: multipart/alternative; differences=Content-Type;
+	boundary="4ae022c8-0582-4a56-b1cc-59a802712faf"
+
+--4ae022c8-0582-4a56-b1cc-59a802712faf
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+[https://products.office.com/en-us/CMSImages/Office365Logo_Orange.png?versi=
+on=3Db8d100a9-0a8b-8e6a-88e1-ef488fee0470]
+Your message to the Microsoft 365 group lax@teuinc.com couldn't be delivere=
+d.
+The group lax isn't set up to receive messages from 010f01a21fb834e0-c6bf42=
+1d-ca38-49d6-b1d8-054062b2b3a3-000000@ses.enproinc.live.
+010f01a21fb834e0-c6b. . .       Office 365      lax
+Sender          Action Required
+Sender not allowed
+
+How to Fix It
+Try one or more of the following:
+
+  *   If you're a member of the group, you might be registered with an emai=
+l address other than 010f01a21fb834e0-c6bf421d-ca38-49d6-b1d8-054062b2b3a3-=
+000000@ses.enproinc.live. Resend your message using the email address where=
+ you received a welcome message from the group.
+  *   Ask the group owner to add 010f01a21fb834e0-c6bf421d-ca38-49d6-b1d8-0=
+54062b2b3a3-000000@ses.enproinc.live as a group member. If you don't know w=
+ho the group owner is, contact the organization's customer service departme=
+nt for assistance.
+  *   Ask the group owner to allow people outside their organization to sen=
+d email to the group.
+
+________________________________
+
+More Info for Email Admins
+Status code: 550 5.7.193
+
+The Microsoft 365 group, lax@teuinc.com, is configured to reject messages s=
+ent to it from outside its organization -- unless the sender is a guest gro=
+up member. 010f01a21fb834e0-c6bf421d-ca38-49d6-b1d8-054062b2b3a3-000000@ses=
+.enproinc.live isn't part of the organization, and it isn't a guest group m=
+ember.
+
+If you're the group's email admin or owner, check if the sender is a member=
+ of the group, but is registered under a different email address. Alternati=
+vely, the group owner, or email admin, can add 010f01a21fb834e0-c6bf421d-ca=
+38-49d6-b1d8-054062b2b3a3-000000@ses.enproinc.live as a guest member of the=
+ group.
+
+Original Message Details
+Created Date:   11/28/2026 1:14:55 AM
+Sender Address: 010f01a21fb834e0-c6bf421d-ca38-49d6-b1d8-054062b2b3a3-00000=
+0@ses.enproinc.live
+Recipient Address:      lax@teuinc.com
+Subject:        [BOND-2026-1392] Inquiry - Continuous Customs Bond
+
+Error Details
+Error:  550 5.7.193 UnifiedGroupAgent; Delivery failed because the sender i=
+sn't a group member or external senders aren't permitted to send to this gr=
+oup.
+Message rejected by:    CH2PR14MB4149.namprd14.prod.outlook.com
+
+Notification Details
+Sent by:        CH2PR14MB4149.namprd14.prod.outlook.com
+
+Message Hops
+HOP     TIME (UTC)      FROM    TO      WITH    RELAY TIME
+1       11/28/2026
+1:14:56 AM      e226-5.smtp-out.us-east-2.amazonses.com LV8PEPF00000068.mai=
+l.protection.outlook.com     Microsoft SMTP Server (version=3DTLS1_3, ciphe=
+r=3DTLS_AES_256_GCM_SHA384)   1 sec
+2       11/28/2026
+1:14:57 AM      LV8PEPF00000068.namprd03.prod.outlook.com       BN0PR07CA00=
+08.outlook.office365.com     Microsoft SMTP Server (version=3DTLS1_3, ciphe=
+r=3DTLS_AES_256_GCM_SHA384)   1 sec
+3       11/28/2026
+1:14:57 AM      BN0PR07CA0008.namprd07.prod.outlook.com CH2PR14MB4149.nampr=
+d14.prod.outlook.com Microsoft SMTP Server (version=3DTLS1_2, cipher=3DTLS_=
+ECDHE_RSA_WITH_AES_256_GCM_SHA384)    *
+
+Original Message Headers
+
+Received: from BN0PR07CA0008.namprd07.prod.outlook.com (2603:10b6:408:141::=
+35)
+ by CH2PR14MB4149.namprd14.prod.outlook.com (2603:10b6:610:7a::19) with
+ Microsoft SMTP Server (version=3DTLS1_2,
+ cipher=3DTLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.639.13; Sat, 28 N=
+ov
+ 2026 01:14:57 +0000
+Received: from LV8PEPF00000068.namprd03.prod.outlook.com
+ (2603:10b6:408:141:cafe::8d) by BN0PR07CA0008.outlook.office365.com
+ (2603:10b6:408:141::35) with Microsoft SMTP Server (version=3DTLS1_3,
+ cipher=3DTLS_AES_256_GCM_SHA384) id 15.21.662.11 via Frontend Transport; S=
+at,
+ 28 Nov 2026 01:14:57 +0000
+Authentication-Results: mx.microsoft.com 1; spf=3Dpass (sender IP is
+ 23.251.226.5) smtp.mailfrom=3Dses.enproinc.live; dkim=3Dpass (signature wa=
+s
+ verified) header.d=3Denproinc.live;dkim=3Dpass (signature was verified)
+ header.d=3Damazonses.com;dkim=3Dfail (signature did not verify)
+ header.d=3Denproinc.live;dmarc=3Dpass action=3Dnone header.from=3Denproinc=
+.live;
+Received-SPF: Pass (protection.outlook.com: domain of ses.enproinc.live
+ designates 23.251.226.5 as permitted sender) receiver=3Dprotection.outlook=
+.com;
+ client-ip=3D23.251.226.5; helo=3De226-5.smtp-out.us-east-2.amazonses.com; =
+pr=3DC
+Received: from e226-5.smtp-out.us-east-2.amazonses.com (23.251.226.5) by
+ LV8PEPF00000068.mail.protection.outlook.com (10.167.248.41) with Microsoft
+ SMTP Server (version=3DTLS1_3, cipher=3DTLS_AES_256_GCM_SHA384) id 15.21.6=
+88.5
+ via Frontend Transport; Sat, 28 Nov 2026 01:14:56 +0000
+DKIM-Signature: v=3D1; a=3Drsa-sha256; q=3Ddns/txt; c=3Drelaxed/simple;
+        s=3Dr4wjrqmvj7c7i3qqm3u5abt4binxyy4v; d=3Denproinc.live; t=3D179582=
+8496;
+        h=3DFrom:To:Subject:Message-ID:Content-Type:Content-Transfer-Encodi=
+ng:MIME-Version:Date;
+        bh=3DW07aRTTYIm8/agKRAl4RUXv5Z9wZG6buC9vX8Y3EjSM=3D;
+        b=3DVcOLGYuvfpOgAEKYyMW8ApeVgaiCqggu+G2FbXeItzUrt4jpV9xiU7NLdhybtSK=
+B
+        MQeGUKg0P99M0rLuayQC5JsmLyMyncJXIfInFshBtdUy5xjvp4rQxqNr1laoSQatRrV
+        lVEepzqsrf8pzR8IdxMAvsM/0x+zZ21RQIl4/hKLwM+apC5IX2fepWvgVcm24BBGWOO
+        7PdfBnOb4ptJC6fxNpvJgWqiBHNj8jQyenYjgh4kucg3KToFiGt5BL5cuPt1DceUe4M
+        iG/HalxO0pXSz+DpEwL6ATfJq7PMNwb3wBkwx/YN1fr7bFXz849nWjXLcW/uPCzWtac
+        2Nq6Pt2cPA=3D=3D
+DKIM-Signature: v=3D1; a=3Drsa-sha256; q=3Ddns/txt; c=3Drelaxed/simple;
+        s=3Dkra23psoka5qyyh6gdejiiuof3nluwuz; d=3Damazonses.com; t=3D179582=
+8496;
+        h=3DFrom:To:Subject:Message-ID:Content-Type:Content-Transfer-Encodi=
+ng:MIME-Version:Date:Feedback-ID;
+        bh=3DW07aRTTYIm8/agKRAl4RUXv5Z9wZG6buC9vX8Y3EjSM=3D;
+        b=3DhRRA/T5OOW4+D54vV0WfEMqQiiV3YZvdV3df5FMY5WKp3VjCntjZrBW76pws201=
+B
+        Movl/hlSEaSEnLztE7ntfGG2YLeEHx8AjJaUNe8YgZa10Z5yR3vAudT5PCxx9T13j8+
+        EA0KsSzq++Z4PrXkHFSuLQ+y1qk3W18PZmuS3llw=3D
+DKIM-Signature: v=3D1; a=3Drsa-sha256; c=3Drelaxed/relaxed; d=3Denproinc.li=
+ve;
+        s=3Ddkim; t=3D1795828495; h=3Dfrom:subject:message-id:to:mime-versi=
+on:content-type:
+         content-transfer-encoding; bh=3DW07aRTTYIm8/agKRAl4RUXv5Z9wZG6buC9=
+vX8Y3EjSM=3D;
+        b=3Dd66uyH328DE0l4T+dUqvadMvaD/x+6UUk4gHWcmluIHKEhjNtQn7pbyB5nEu1dJ=
+7QJzkF2
+        aotsOZv15R6rgIikjliO7kgPQC1ddwcOCjvk20Ft0G44lmf33TK1LXVTX1rkbKFrfqL=
+NIK
+        mcpG+GDXgJ9TG1yQynNq9fFxSiN5K3W6wYVHi3sF/4AY87Z0ZR9n9I0sB2G4nUakqlg=
+mZA
+        4q1QUPCtcSB2JXQopmuLidtcxhL3hY94mw7scF1mAAJZNgV8BxrWcPUb1YaMC0WsZgR=
+QIL
+        ogxrIus/B3MVQsYolY0pVg7E+sKSc6B25VPoNrjBlwX0yyl4efM4bsZxccRyjA=3D=
+=3D
+From: amanuelafeworktiku@enproinc.live
+To: lax@teuinc.com
+Subject: [BOND-2026-1392] Inquiry - Continuous Customs Bond
+Message-ID: <010f01a21fb834e0-c6bf421d-ca38-49d6-b1d8-054062b2b3a3-000000@u=
+s-east-2.amazonses.com>
+Content-Type: text/plain; charset=3D"utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
+Date: Sat, 28 Nov 2026 01:14:55 +0000
+Feedback-ID: ::1.us-east-2.dnBLFQvZ7DBnA5nHg3QcqhG4UiG8AnTuix0bXTff/SU=3D:A=
+mazonSES
+X-SES-Outgoing: 2026.11.28-23.251.226.5
+Return-Path:
+        010f01a21fb834e0-c6bf421d-ca38-49d6-b1d8-054062b2b3a3-000000@ses.en=
+proinc.live
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: eff3e159-41a9-440c-802d-d53fc680d737:0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV8PEPF00000068:EE_|CH2PR14MB4149:EE_
+X-MS-Office365-Filtering-Correlation-Id: 88a4f957-63eb-4411-5392-08df4ced04=
+1c
+
+
+--4ae022c8-0582-4a56-b1cc-59a802712faf
+Content-Type: text/html; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+<html>
+  <meta name=3D"viewport" content=3D"width=3Ddevice-width, initial-scale=3D=
+1" />
+  <head>
+    <title>
+          DSN
+        </title>
+  </head>
+  <body style=3D"        background-color: white;      ">
+    <table style=3D"        background-color: white;         max-width: 548=
+px;         color: black;         border-spacing: 0px 0px;         padding-=
+top: 0px;         padding-bottom: 0px;        border-collapse: collapse;   =
+   " width=3D"548" cellspacing=3D"0" cellpadding=3D"0">
+      <tbody>
+        <tr>
+          <td style=3D"        text-align: left;        padding-bottom: 20p=
+x;      ">
+            <img height=3D"28" width=3D"126" style=3D"        max-width: 10=
+0%;      " src=3D"https://products.office.com/en-us/CMSImages/Office365Logo=
+_Orange.png?version=3Db8d100a9-0a8b-8e6a-88e1-ef488fee0470" />
+          </td>
+        </tr>
+        <tr>
+          <td style=3D"        font-family: 'Segoe UI', Frutiger, Arial, sa=
+ns-serif;        font-size: 16px;         padding-bottom: 10px;         -ms=
+-text-size-adjust: 100%;        text-align: left;      ">Your message to th=
+e Microsoft 365 group <span style=3D"        color: #0072c6;      ">lax@teu=
+inc.com</span> couldn't be delivered.<br /></td>
+        </tr>
+        <tr>
+          <td style=3D"        font-family: 'Segoe UI', Frutiger, Arial, sa=
+ns-serif;         font-size: 24px;         padding-top: 0px;         paddin=
+g-bottom: 20px;         text-align: center;         -ms-text-size-adjust: 1=
+00%;      ">The group <span style=3D"        color: #0072c6;      ">lax</sp=
+an> isn't set up to receive messages from <span style=3D"        color: #00=
+72c6;      ">010f01a21fb834e0-c6bf421d-ca38-49d6-b1d8-054062b2b3a3-000000@s=
+es.enproinc.live</span>.<br /></td>
+        </tr>
+        <tr>
+          <td style=3D"        padding-bottom: 15px;         padding-left: =
+0px;         padding-right: 0px;         border-spacing: 0px 0px;      ">
+            <table style=3D"        max-width: 548px;         font-weight: =
+600;        border-spacing: 0px 0px;         padding-top: 0px;         padd=
+ing-bottom: 0px;        border-collapse: collapse;      ">
+              <tbody>
+                <tr>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        font-size: 15px;        font-weight: 600;        t=
+ext-align: left;        width: 181px;        -ms-text-size-adjust: 100%;   =
+     vertical-align: bottom;      ">
+                    <font color=3D"#ffffff">
+                      <span style=3D"color:#000000">010f01a21fb834e0-c6b. .=
+ .</span>
+                    </font>
+                  </td>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        font-size: 15px;        font-weight: 600;        t=
+ext-align: center;        width: 186px;        -ms-text-size-adjust: 100%; =
+       vertical-align: bottom;      ">
+                    <font color=3D"#ffffff">
+                      <span style=3D"color:#000000">Office 365</span>
+                    </font>
+                  </td>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;         -ms-text-size-adjust: 100%;         font-size: 15=
+px;         font-weight: 600;        text-align: right;         width: 181p=
+x;         vertical-align: bottom;      ">
+                    <font color=3D"#ffffff">
+                      <span style=3D"color:#000000">lax</span>
+                    </font>
+                  </td>
+                </tr>
+                <tr>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 14px=
+;        font-weight: 400;        text-align: left;        padding-top: 0px=
+;        padding-bottom: 0px;        vertical-align: middle;        width: =
+181px;      ">
+                    <font color=3D"#ffffff">
+                      <span style=3D"color:#000000">Sender</span>
+                    </font>
+                  </td>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 14px=
+;        font-weight: 400;        text-align: center;        padding-top: 0=
+px;        padding-bottom: 0px;        vertical-align: middle;        width=
+: 186px;      " />
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 14px=
+;        font-weight: 400;        text-align: right;        padding-top: 0p=
+x;        padding-bottom: 0px;        vertical-align: middle;        width:=
+ 181px;      ">
+                    <font color=3D"#ffffff">
+                      <span style=3D"        color: #c00000;      ">
+                        <b>Action Required</b>
+                      </span>
+                    </font>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan=3D"3" style=3D"        padding-top:0;        =
+padding-bottom:0;        padding-left:0;        padding-right:0      ">
+                    <table cellspacing=3D"0" cellpadding=3D"0" style=3D"   =
+     border-spacing: 0px 0px;        padding-top: 0px;        padding-botto=
+m: 0px;        padding-left: 0px;        padding-right: 0px;        border-=
+collapse: collapse;      ">
+                      <tbody>
+                        <tr height=3D"10">
+                          <td width=3D"180" height=3D"10" bgcolor=3D"#ccccc=
+c" style=3D"        width: 180px;        line-height: 10px;        height: =
+10px;        font-size: 6px;        padding-top: 0;        padding-bottom: =
+0;        padding-left: 0;        padding-right: 0;      "><!--[if gte mso =
+15]>&nbsp;<![endif]--></td>
+                          <td width=3D"4" height=3D"10" bgcolor=3D"#ffffff"=
+ style=3D"        width: 4px;        line-height: 10px;        height: 10px=
+;        font-size: 6px;        padding-top: 0;        padding-bottom: 0;  =
+      padding-left: 0;        padding-right: 0;      "><!--[if gte mso 15]>=
+&nbsp;<![endif]--></td>
+                          <td width=3D"180" height=3D"10" bgcolor=3D"#ccccc=
+c" style=3D"        width: 180px;        line-height: 10px;        height: =
+10px;        font-size: 6px;        padding-top: 0;        padding-bottom: =
+0;        padding-left: 0;        padding-right: 0;      "><!--[if gte mso =
+15]>&nbsp;<![endif]--></td>
+                          <td width=3D"4" height=3D"10" bgcolor=3D"#ffffff"=
+ style=3D"        width: 4px;        line-height: 10px;        height: 10px=
+;        font-size: 6px;        padding-top: 0;        padding-bottom: 0;  =
+      padding-left: 0;        padding-right: 0;      "><!--[if gte mso 15]>=
+&nbsp;<![endif]--></td>
+                          <td width=3D"180" height=3D"10" bgcolor=3D"#c0000=
+0" style=3D"        width: 180px;        line-height: 10px;        height: =
+10px;        font-size: 6px;        padding-top: 0;        padding-bottom: =
+0;        padding-left: 0;        padding-right: 0;      "><!--[if gte mso =
+15]>&nbsp;<![endif]--></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 14px=
+;        text-align: left;        width: 181px;        line-height: 20px;  =
+      font-weight: 400;        padding-top: 0px;        padding-left: 0px; =
+       padding-right: 0px;        padding-bottom: 0px;      " />
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 14px=
+;        text-align: center;        width: 186px;        line-height: 20px;=
+        font-weight: 400;        padding-top: 0px;        padding-left: 0px=
+;        padding-right: 0px;        padding-bottom: 0px;      " />
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 14px=
+;        text-align: right;        width: 181px;        line-height: 20px; =
+       font-weight: 400;        padding-top: 0px;        padding-left: 0px;=
+        padding-right: 0px;        padding-bottom: 0px;      ">
+                    <font color=3D"#ffffff">
+                      <span style=3D"        color: #c00000;      ">Sender =
+not allowed</span>
+                    </font>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style=3D"        width: 100%;        padding-top: 0px;       =
+ padding-right: 10px;        padding-left: 10px;      ">
+            <br />
+            <table style=3D"        width: 100%;        padding-right: 0px;=
+        padding-left: 0px;        padding-top: 0px;        padding-bottom: =
+0px;        background-color: #f2f5fa;        margin-left: 0px;      ">
+              <tbody>
+                <tr>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 21px=
+;        font-weight: 500;        background-color: #f2f5fa;        padding=
+-top: 0px;        padding-bottom: 0px;        padding-left: 10px;        pa=
+dding-right: 10px;      ">How to Fix It</td>
+                </tr>
+                <tr>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 16px=
+;        font-weight: 400;        padding-top: 0px;        padding-bottom: =
+6px;        padding-left: 10px;        padding-right: 10px;        backgrou=
+nd-color: #f2f5fa;      ">Try one or more of the following:</td>
+                </tr>
+                <tr>
+                  <td style=3D"         padding-top: 0px;         padding-b=
+ottom: 0px;         padding-left: 0px;         padding-right: 0px;        b=
+order-spacing: 0px 0px;      ">
+                    <ul style=3D"        font-family: 'Segoe UI', Frutiger,=
+ Arial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 16=
+px;        font-weight: 400;        margin-left: 40px;        margin-bottom=
+: 5px;        background-color: #f2f5fa;        padding-top: 0px;        pa=
+dding-bottom: 0px;        padding-left: 6px;        padding-right: 6px;    =
+  ">
+                      <li>If you're a member of the group, you might be reg=
+istered with an email address other than 010f01a21fb834e0-c6bf421d-ca38-49d=
+6-b1d8-054062b2b3a3-000000@ses.enproinc.live. Resend your message using the=
+ email address where you received a welcome message from the group.</li>
+                      <li>Ask the group owner to add 010f01a21fb834e0-c6bf4=
+21d-ca38-49d6-b1d8-054062b2b3a3-000000@ses.enproinc.live as a group member.=
+ If you don't know who the group owner is, contact the organization's custo=
+mer service department for assistance.</li>
+                      <li>Ask the group owner to allow people outside their=
+ organization to send email to the group.</li>
+                    </ul>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style=3D"        font-family: 'Segoe UI', Frutiger, Arial, sa=
+ns-serif;        -ms-text-size-adjust: 100%;        font-size: 14px;       =
+ font-weight: 400;        padding-top: 10px;        padding-bottom: 0px;   =
+     padding-bottom: 4px;      ">
+            <br />
+            <em />
+          </td>
+        </tr>
+        <tr>
+          <td style=3D"        -ms-text-size-adjust: 100%;        font-size=
+: 0px;        line-height: 0px;        padding-top: 0px;        padding-bot=
+tom: 0px;      ">
+            <hr />
+          </td>
+        </tr>
+        <tr>
+          <td style=3D"        font-family: 'Segoe UI', Frutiger, Arial, sa=
+ns-serif;        -ms-text-size-adjust: 100%;        font-size: 21px;       =
+ font-weight: 500;      ">
+            <br />More Info for Email Admins</td>
+        </tr>
+        <tr>
+          <td style=3D"        font-family: 'Segoe UI', Frutiger, Arial, sa=
+ns-serif;        -ms-text-size-adjust: 100%;        font-size: 14px;      "=
+>
+            <em>Status code: 550 5.7.193</em>
+            <br />
+            <br />The Microsoft 365 group, lax@teuinc.com, is configured to=
+ reject messages sent to it from outside its organization -- unless the sen=
+der is a guest group member. 010f01a21fb834e0-c6bf421d-ca38-49d6-b1d8-05406=
+2b2b3a3-000000@ses.enproinc.live isn't part of the organization, and it isn=
+'t a guest group member.<br /><br />If you're the group's email admin or ow=
+ner, check if the sender is a member of the group, but is registered under =
+a different email address. Alternatively, the group owner, or email admin, =
+can add 010f01a21fb834e0-c6bf421d-ca38-49d6-b1d8-054062b2b3a3-000000@ses.en=
+proinc.live as a guest member of the group.<br /><br /></td>
+        </tr>
+        <tr>
+          <td style=3D"        font-family: 'Segoe UI', Frutiger, Arial, sa=
+ns-serif;        -ms-text-size-adjust: 100%;        font-size: 17px;       =
+ font-weight: 500;      ">Original Message Details</td>
+        </tr>
+        <tr>
+          <td style=3D"        font-size: 14px;        line-height: 20px;  =
+      font-family: 'Segoe UI', Frutiger, Arial, sans-serif;        -ms-text=
+-size-adjust: 100%;        font-weight: 500;      ">
+            <table style=3D"        width: 100%;        border-collapse: co=
+llapse;        margin-left: 10px;      ">
+              <tbody>
+                <tr>
+                  <td valign=3D"top" style=3D"        font-family: 'Segoe U=
+I', Frutiger, Arial, sans-serif;        font-size: 14px;        -ms-text-si=
+ze-adjust: 100%;        white-space: nowrap;        font-weight: 500;      =
+  width: 140px;      ">Created Date:</td>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 14px=
+;        font-weight: 400;      ">11/28/2026 1:14:55 AM</td>
+                </tr>
+                <tr>
+                  <td valign=3D"top" style=3D"        font-family: 'Segoe U=
+I', Frutiger, Arial, sans-serif;        font-size: 14px;        -ms-text-si=
+ze-adjust: 100%;        white-space: nowrap;        font-weight: 500;      =
+  width: 140px;      ">Sender Address:</td>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 14px=
+;        font-weight: 400;      ">010f01a21fb834e0-c6bf421d-ca38-49d6-b1d8-=
+054062b2b3a3-000000@ses.enproinc.live</td>
+                </tr>
+                <tr>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        font-size: 14px;        -ms-text-size-adjust: 100%=
+;        white-space: nowrap;        font-weight: 500;        width: 140px;=
+      ">Recipient Address:</td>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 14px=
+;        font-weight: 400;      ">lax@teuinc.com</td>
+                </tr>
+                <tr>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        font-size: 14px;        -ms-text-size-adjust: 100%=
+;        white-space: nowrap;        font-weight: 500;        width: 140px;=
+      ">Subject:</td>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 14px=
+;        font-weight: 400;      ">[BOND-2026-1392] Inquiry - Continuous Cus=
+toms Bond</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style=3D"        font-family: 'Segoe UI', Frutiger, Arial, sa=
+ns-serif;        -ms-text-size-adjust: 100%;        font-size: 17px;       =
+ font-weight: 500;      ">
+            <br />Error Details</td>
+        </tr>
+        <tr>
+          <td style=3D"        font-size: 14px;        line-height: 20px;  =
+      font-family: 'Segoe UI', Frutiger, Arial, sans-serif;        -ms-text=
+-size-adjust: 100%;        font-weight: 500;      ">
+            <table style=3D"        width: 100%;        border-collapse: co=
+llapse;        margin-left: 10px;      ">
+              <tbody>
+                <tr>
+                  <td valign=3D"top" style=3D"        font-family: 'Segoe U=
+I', Frutiger, Arial, sans-serif;        font-size: 14px;        -ms-text-si=
+ze-adjust: 100%;        white-space: nowrap;        font-weight: 500;      =
+  width: 140px;      ">Error:</td>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 14px=
+;        font-weight: 400;      ">
+                    <em>550 5.7.193 UnifiedGroupAgent; Delivery failed beca=
+use the sender isn't a group member or external senders aren't permitted to=
+ send to this group.</em>
+                  </td>
+                </tr>
+                <tr>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        font-size: 14px;        -ms-text-size-adjust: 100%=
+;        white-space: nowrap;        font-weight: 500;        width: 140px;=
+      ">Message rejected by:</td>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 14px=
+;        font-weight: 400;      ">CH2PR14MB4149.namprd14.prod.outlook.com</=
+td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style=3D"        font-family: 'Segoe UI', Frutiger, Arial, sa=
+ns-serif;        -ms-text-size-adjust: 100%;        font-size: 17px;       =
+ font-weight: 500;      ">
+            <br />Notification Details</td>
+        </tr>
+        <tr>
+          <td style=3D"        font-size: 14px;        line-height: 20px;  =
+      font-family: 'Segoe UI', Frutiger, Arial, sans-serif;        -ms-text=
+-size-adjust: 100%;        font-weight: 500;      ">
+            <table style=3D"        width: 100%;        border-collapse: co=
+llapse;        margin-left: 10px;      ">
+              <tbody>
+                <tr>
+                  <td valign=3D"top" style=3D"        font-family: 'Segoe U=
+I', Frutiger, Arial, sans-serif;        font-size: 14px;        -ms-text-si=
+ze-adjust: 100%;        white-space: nowrap;        font-weight: 500;      =
+  width: 140px;      ">Sent by:</td>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 14px=
+;        font-weight: 400;      ">
+                    <em>CH2PR14MB4149.namprd14.prod.outlook.com</em>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <br />
+    <table style=3D"width: 880px;" cellspacing=3D"0">
+      <tr>
+        <td colspan=3D"6" style=3D"        padding-top: 4px;        border-=
+bottom: 1px solid #999999;        padding-bottom: 4px;        line-height: =
+120%;        font-size: 17px;        font-family: 'Segoe UI', Frutiger, Ari=
+al, sans-serif;        -ms-text-size-adjust: 100%;        font-weight: 500;=
+      ">Message Hops</td>
+      </tr>
+      <tr>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        background-color: #f2f5fa;        border-bottom: 1p=
+x solid #999999;        white-space: nowrap;        padding: 8px;      ">HO=
+P</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        background-color: #f2f5fa;        border-bottom: 1p=
+x solid #999999;        white-space: nowrap;        padding: 8px;        wi=
+dth: 80px;      ">TIME (UTC)</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        background-color: #f2f5fa;        border-bottom: 1p=
+x solid #999999;        white-space: nowrap;        padding: 8px;      ">FR=
+OM</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        background-color: #f2f5fa;        border-bottom: 1p=
+x solid #999999;        white-space: nowrap;        padding: 8px;      ">TO=
+</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        background-color: #f2f5fa;        border-bottom: 1p=
+x solid #999999;        white-space: nowrap;        padding: 8px;      ">WI=
+TH</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        background-color: #f2f5fa;        border-bottom: 1p=
+x solid #999999;        white-space: nowrap;        padding: 8px;      ">RE=
+LAY TIME</td>
+      </tr>
+      <tr>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: center;      ">1</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;        width: 80px;      ">11/28/2026<br />1:1=
+4:56 AM</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">e226-5.smtp-out.us-east-2.amazonses.com=
+</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">LV8PEPF00000068.mail.protection.outlook=
+.com</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">Microsoft SMTP Server (version=3DTLS1_3=
+, cipher=3DTLS_AES_256_GCM_SHA384)</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">1&nbsp;sec</td>
+      </tr>
+      <tr>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: center;      ">2</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;        width: 80px;      ">11/28/2026<br />1:1=
+4:57 AM</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">LV8PEPF00000068.namprd03.prod.outlook.c=
+om</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">BN0PR07CA0008.outlook.office365.com</td=
+>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">Microsoft SMTP Server (version=3DTLS1_3=
+, cipher=3DTLS_AES_256_GCM_SHA384)</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">1&nbsp;sec</td>
+      </tr>
+      <tr>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: center;      ">3</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;        width: 80px;      ">11/28/2026<br />1:1=
+4:57 AM</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">BN0PR07CA0008.namprd07.prod.outlook.com=
+</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">CH2PR14MB4149.namprd14.prod.outlook.com=
+</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">Microsoft SMTP Server (version=3DTLS1_2=
+, cipher=3DTLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384)</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">*</td>
+      </tr>
+    </table>
+    <p style=3D"        font-family: 'Segoe UI', Frutiger, Arial, sans-seri=
+f;        -ms-text-size-adjust: 100%;        font-size: 17px;        font-w=
+eight: 500;        padding-top: 4px;        padding-bottom: 0;        margi=
+n-top: 19px;        margin-bottom: 5px;      ">Original Message Headers</p>
+    <pre style=3D"        color: gray;        white-space: pre;        padd=
+ing-top: 0;        margin-top: 5px;      ">Received: from BN0PR07CA0008.nam=
+prd07.prod.outlook.com (2603:10b6:408:141::35)
+ by CH2PR14MB4149.namprd14.prod.outlook.com (2603:10b6:610:7a::19) with
+ Microsoft SMTP Server (version=3DTLS1_2,
+ cipher=3DTLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.639.13; Sat, 28 N=
+ov
+ 2026 01:14:57 +0000
+Received: from LV8PEPF00000068.namprd03.prod.outlook.com
+ (2603:10b6:408:141:cafe::8d) by BN0PR07CA0008.outlook.office365.com
+ (2603:10b6:408:141::35) with Microsoft SMTP Server (version=3DTLS1_3,
+ cipher=3DTLS_AES_256_GCM_SHA384) id 15.21.662.11 via Frontend Transport; S=
+at,
+ 28 Nov 2026 01:14:57 +0000
+Authentication-Results: mx.microsoft.com 1; spf=3Dpass (sender IP is
+ 23.251.226.5) smtp.mailfrom=3Dses.enproinc.live; dkim=3Dpass (signature wa=
+s
+ verified) header.d=3Denproinc.live;dkim=3Dpass (signature was verified)
+ header.d=3Damazonses.com;dkim=3Dfail (signature did not verify)
+ header.d=3Denproinc.live;dmarc=3Dpass action=3Dnone header.from=3Denproinc=
+.live;
+Received-SPF: Pass (protection.outlook.com: domain of ses.enproinc.live
+ designates 23.251.226.5 as permitted sender) receiver=3Dprotection.outlook=
+.com;
+ client-ip=3D23.251.226.5; helo=3De226-5.smtp-out.us-east-2.amazonses.com; =
+pr=3DC
+Received: from e226-5.smtp-out.us-east-2.amazonses.com (23.251.226.5) by
+ LV8PEPF00000068.mail.protection.outlook.com (10.167.248.41) with Microsoft
+ SMTP Server (version=3DTLS1_3, cipher=3DTLS_AES_256_GCM_SHA384) id 15.21.6=
+88.5
+ via Frontend Transport; Sat, 28 Nov 2026 01:14:56 +0000
+DKIM-Signature: v=3D1; a=3Drsa-sha256; q=3Ddns/txt; c=3Drelaxed/simple;
+	s=3Dr4wjrqmvj7c7i3qqm3u5abt4binxyy4v; d=3Denproinc.live; t=3D1795828496;
+	h=3DFrom:To:Subject:Message-ID:Content-Type:Content-Transfer-Encoding:MIME=
+-Version:Date;
+	bh=3DW07aRTTYIm8/agKRAl4RUXv5Z9wZG6buC9vX8Y3EjSM=3D;
+	b=3DVcOLGYuvfpOgAEKYyMW8ApeVgaiCqggu+G2FbXeItzUrt4jpV9xiU7NLdhybtSKB
+	MQeGUKg0P99M0rLuayQC5JsmLyMyncJXIfInFshBtdUy5xjvp4rQxqNr1laoSQatRrV
+	lVEepzqsrf8pzR8IdxMAvsM/0x+zZ21RQIl4/hKLwM+apC5IX2fepWvgVcm24BBGWOO
+	7PdfBnOb4ptJC6fxNpvJgWqiBHNj8jQyenYjgh4kucg3KToFiGt5BL5cuPt1DceUe4M
+	iG/HalxO0pXSz+DpEwL6ATfJq7PMNwb3wBkwx/YN1fr7bFXz849nWjXLcW/uPCzWtac
+	2Nq6Pt2cPA=3D=3D
+DKIM-Signature: v=3D1; a=3Drsa-sha256; q=3Ddns/txt; c=3Drelaxed/simple;
+	s=3Dkra23psoka5qyyh6gdejiiuof3nluwuz; d=3Damazonses.com; t=3D1795828496;
+	h=3DFrom:To:Subject:Message-ID:Content-Type:Content-Transfer-Encoding:MIME=
+-Version:Date:Feedback-ID;
+	bh=3DW07aRTTYIm8/agKRAl4RUXv5Z9wZG6buC9vX8Y3EjSM=3D;
+	b=3DhRRA/T5OOW4+D54vV0WfEMqQiiV3YZvdV3df5FMY5WKp3VjCntjZrBW76pws201B
+	Movl/hlSEaSEnLztE7ntfGG2YLeEHx8AjJaUNe8YgZa10Z5yR3vAudT5PCxx9T13j8+
+	EA0KsSzq++Z4PrXkHFSuLQ+y1qk3W18PZmuS3llw=3D
+DKIM-Signature: v=3D1; a=3Drsa-sha256; c=3Drelaxed/relaxed; d=3Denproinc.li=
+ve;
+	s=3Ddkim; t=3D1795828495; h=3Dfrom:subject:message-id:to:mime-version:cont=
+ent-type:
+	 content-transfer-encoding; bh=3DW07aRTTYIm8/agKRAl4RUXv5Z9wZG6buC9vX8Y3Ej=
+SM=3D;
+	b=3Dd66uyH328DE0l4T+dUqvadMvaD/x+6UUk4gHWcmluIHKEhjNtQn7pbyB5nEu1dJ7QJzkF2
+	aotsOZv15R6rgIikjliO7kgPQC1ddwcOCjvk20Ft0G44lmf33TK1LXVTX1rkbKFrfqLNIK
+	mcpG+GDXgJ9TG1yQynNq9fFxSiN5K3W6wYVHi3sF/4AY87Z0ZR9n9I0sB2G4nUakqlgmZA
+	4q1QUPCtcSB2JXQopmuLidtcxhL3hY94mw7scF1mAAJZNgV8BxrWcPUb1YaMC0WsZgRQIL
+	ogxrIus/B3MVQsYolY0pVg7E+sKSc6B25VPoNrjBlwX0yyl4efM4bsZxccRyjA=3D=3D
+From: amanuelafeworktiku@enproinc.live
+To: lax@teuinc.com
+Subject: [BOND-2026-1392] Inquiry - Continuous Customs Bond
+Message-ID: &lt;010f01a21fb834e0-c6bf421d-ca38-49d6-b1d8-054062b2b3a3-00000=
+0@us-east-2.amazonses.com&gt;
+Content-Type: text/plain; charset=3D"utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
+Date: Sat, 28 Nov 2026 01:14:55 +0000
+Feedback-ID: ::1.us-east-2.dnBLFQvZ7DBnA5nHg3QcqhG4UiG8AnTuix0bXTff/SU=3D:A=
+mazonSES
+X-SES-Outgoing: 2026.11.28-23.251.226.5
+Return-Path:
+	010f01a21fb834e0-c6bf421d-ca38-49d6-b1d8-054062b2b3a3-000000@ses.enproinc.=
+live
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: eff3e159-41a9-440c-802d-d53fc680d737:0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV8PEPF00000068:EE_|CH2PR14MB4149:EE_
+X-MS-Office365-Filtering-Correlation-Id: 88a4f957-63eb-4411-5392-08df4ced04=
+1c
+</pre>
+  </body>
+</html>=
+
+--4ae022c8-0582-4a56-b1cc-59a802712faf--
+
+--6c0446b7-f142-48d6-ac52-7240f1898a8b
+Content-Type: message/delivery-status
+
+Reporting-MTA: dns;CH2PR14MB4149.namprd14.prod.outlook.com
+Received-From-MTA: dns;e226-5.smtp-out.us-east-2.amazonses.com
+Arrival-Date: Sat, 28 Nov 2026 01:14:57 +0000
+
+Final-Recipient: rfc822;lax@teuinc.com
+Action: failed
+Status: 5.7.193
+Diagnostic-Code: smtp;550 5.7.193 UnifiedGroupAgent; Delivery failed because the sender isn't a group member or external senders aren't permitted to send to this group.
+
+
+--6c0446b7-f142-48d6-ac52-7240f1898a8b
+Content-Type: message/rfc822
+
+Received: from BN0PR07CA0008.namprd07.prod.outlook.com (2603:10b6:408:141::35)
+ by CH2PR14MB4149.namprd14.prod.outlook.com (2603:10b6:610:7a::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.639.13; Sat, 28 Nov
+ 2026 01:14:57 +0000
+Received: from LV8PEPF00000068.namprd03.prod.outlook.com
+ (2603:10b6:408:141:cafe::8d) by BN0PR07CA0008.outlook.office365.com
+ (2603:10b6:408:141::35) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.662.11 via Frontend Transport; Sat,
+ 28 Nov 2026 01:14:57 +0000
+Authentication-Results: mx.microsoft.com 1; spf=pass (sender IP is
+ 23.251.226.5) smtp.mailfrom=ses.enproinc.live; dkim=pass (signature was
+ verified) header.d=enproinc.live;dkim=pass (signature was verified)
+ header.d=amazonses.com;dkim=fail (signature did not verify)
+ header.d=enproinc.live;dmarc=pass action=none header.from=enproinc.live;
+Received-SPF: Pass (protection.outlook.com: domain of ses.enproinc.live
+ designates 23.251.226.5 as permitted sender) receiver=protection.outlook.com;
+ client-ip=23.251.226.5; helo=e226-5.smtp-out.us-east-2.amazonses.com; pr=C
+Received: from e226-5.smtp-out.us-east-2.amazonses.com (23.251.226.5) by
+ LV8PEPF00000068.mail.protection.outlook.com (10.167.248.41) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.688.5
+ via Frontend Transport; Sat, 28 Nov 2026 01:14:56 +0000
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=r4wjrqmvj7c7i3qqm3u5abt4binxyy4v; d=enproinc.live; t=1795828496;
+	h=From:To:Subject:Message-ID:Content-Type:Content-Transfer-Encoding:MIME-Version:Date;
+	bh=W07aRTTYIm8/agKRAl4RUXv5Z9wZG6buC9vX8Y3EjSM=;
+	b=VcOLGYuvfpOgAEKYyMW8ApeVgaiCqggu+G2FbXeItzUrt4jpV9xiU7NLdhybtSKB
+	MQeGUKg0P99M0rLuayQC5JsmLyMyncJXIfInFshBtdUy5xjvp4rQxqNr1laoSQatRrV
+	lVEepzqsrf8pzR8IdxMAvsM/0x+zZ21RQIl4/hKLwM+apC5IX2fepWvgVcm24BBGWOO
+	7PdfBnOb4ptJC6fxNpvJgWqiBHNj8jQyenYjgh4kucg3KToFiGt5BL5cuPt1DceUe4M
+	iG/HalxO0pXSz+DpEwL6ATfJq7PMNwb3wBkwx/YN1fr7bFXz849nWjXLcW/uPCzWtac
+	2Nq6Pt2cPA==
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=kra23psoka5qyyh6gdejiiuof3nluwuz; d=amazonses.com; t=1795828496;
+	h=From:To:Subject:Message-ID:Content-Type:Content-Transfer-Encoding:MIME-Version:Date:Feedback-ID;
+	bh=W07aRTTYIm8/agKRAl4RUXv5Z9wZG6buC9vX8Y3EjSM=;
+	b=hRRA/T5OOW4+D54vV0WfEMqQiiV3YZvdV3df5FMY5WKp3VjCntjZrBW76pws201B
+	Movl/hlSEaSEnLztE7ntfGG2YLeEHx8AjJaUNe8YgZa10Z5yR3vAudT5PCxx9T13j8+
+	EA0KsSzq++Z4PrXkHFSuLQ+y1qk3W18PZmuS3llw=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=enproinc.live;
+	s=dkim; t=1795828495; h=from:subject:message-id:to:mime-version:content-type:
+	 content-transfer-encoding; bh=W07aRTTYIm8/agKRAl4RUXv5Z9wZG6buC9vX8Y3EjSM=;
+	b=d66uyH328DE0l4T+dUqvadMvaD/x+6UUk4gHWcmluIHKEhjNtQn7pbyB5nEu1dJ7QJzkF2
+	aotsOZv15R6rgIikjliO7kgPQC1ddwcOCjvk20Ft0G44lmf33TK1LXVTX1rkbKFrfqLNIK
+	mcpG+GDXgJ9TG1yQynNq9fFxSiN5K3W6wYVHi3sF/4AY87Z0ZR9n9I0sB2G4nUakqlgmZA
+	4q1QUPCtcSB2JXQopmuLidtcxhL3hY94mw7scF1mAAJZNgV8BxrWcPUb1YaMC0WsZgRQIL
+	ogxrIus/B3MVQsYolY0pVg7E+sKSc6B25VPoNrjBlwX0yyl4efM4bsZxccRyjA==
+From: amanuelafeworktiku@enproinc.live
+To: lax@teuinc.com
+Subject: [BOND-2026-1392] Inquiry - Continuous Customs Bond
+Message-ID: <010f01a21fb834e0-c6bf421d-ca38-49d6-b1d8-054062b2b3a3-000000@us-east-2.amazonses.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
+Date: Sat, 28 Nov 2026 01:14:55 +0000
+Feedback-ID: ::1.us-east-2.dnBLFQvZ7DBnA5nHg3QcqhG4UiG8AnTuix0bXTff/SU=:AmazonSES
+X-SES-Outgoing: 2026.11.28-23.251.226.5
+Return-Path:
+ 010f01a21fb834e0-c6bf421d-ca38-49d6-b1d8-054062b2b3a3-000000@ses.enproinc.live
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: eff3e159-41a9-440c-802d-d53fc680d737:0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV8PEPF00000068:EE_|CH2PR14MB4149:EE_
+X-MS-Office365-Filtering-Correlation-Id: 88a4f957-63eb-4411-5392-08df4ced041c
+
+Good morning,
+
+I'm writing to ask whether your agency could quote a customs bond for Enpro L=
+LC. Details below per our client application:
+
+01 / BOND REQUEST
+- Service requested: New bond
+- Bond coverage: Continuous Customs Bond
+- Activity code: 1 - Importer
+- Requested bond limit: USD 50,000
+
+02 / LEGAL ENTITY & IMPORTER ID
+- Exact legal entity: Enpro LLC
+- Entity type: LLC
+- State of formation: CA
+- EIN: 43-2207391
+- Principal address: 833 S SPRING ST STE 200, LOS ANGELES, CA, 90014
+
+03 / CONTACTS & AUTHORIZED SIGNER
+- Authorized signer: AMANUEL AFEWORK TIKU (Organizer)
+- Contact email: amanuelafeworktiku@enproinc.live
+- Phone: 2097764668
+
+Please reply with:
+1. Your price for this bond and the estimated processing time
+2. Your application requirements / intake checklist (entity & importer ID, co=
+ntacts & owners, merchandise & trade profile, customs operations, bond histor=
+y & compliance, and AD/CVD schedule if applicable)
+3. Documents you need from us - we have Articles of Formation, IRS EIN letter=
+ (CP575), W-9 and principal ID available
+
+Please let us know if you need anything else from our side.
+
+Thanks,
+AMANUEL AFEWORK TIKU
+Enpro LLC
+
+--6c0446b7-f142-48d6-ac52-7240f1898a8b--

@@ -1,0 +1,178 @@
+Return-Path: <>
+Delivered-To: brianamartin@flywirecompany.online
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id eE1XFZo2CmvRlycAQ1DlOA
+	(envelope-from <>)
+	for <brianamartin@flywirecompany.online>; Fri, 27 Nov 2026 21:04:10 -0500
+X-Original-To: brianamartin@flywirecompany.online
+Received: from e226-240.smtp-out.us-east-2.amazonses.com (e226-240.smtp-out.us-east-2.amazonses.com [23.251.226.240])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id B2636117752
+	for <brianamartin@flywirecompany.online>; Fri, 27 Nov 2026 21:04:09 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=VWVYf7ul;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	spf=pass (mail.pony-it.com: domain of e226-240.smtp-out.us-east-2.amazonses.com designates 23.251.226.240 as permitted sender) smtp.helo=e226-240.smtp-out.us-east-2.amazonses.com
+ARC-Seal: i=1; a=rsa-sha256; d=flywirecompany.online; s=dkim; cv=none;
+	t=1795831449;
+	b=nSk6fGN56bM46qTHeTsaQT+C1nlOymuEcuipPLJqSSoghHmnAm7XwcmdRNpIyBKEvmo/7c
+	8sx9gM4Fb/IpJtZxAQ7l2loq4Zpr9/dQEAJvO7A3YHhQUqGTg4zVDm9FTM/INy6ETBGL05
+	IC8lD4DLwJZWpCVRLHPRnTLIv93/ow7PrQwTG8blZfCekcdF1YObh43nalqD8YiqVW6Ime
+	b+o6H9ZT9koqHYO1V+UbMKWIrhT6Qc08tSgitwruv0Slt5BpjXui3Byq26hCSh3Ag3mgYo
+	gpy6ZpSmCq/8M/Im85o08rYdPIws3gLBgFFF2xJjjBNZeAopa9oXctYSNcfnxg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=flywirecompany.online; s=dkim; t=1795831449;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 dkim-signature; bh=MbT3Hrko6T68t9WWb85JZ+LlZCjV9RX9cPadE2rz09I=;
+	b=WQuQ5weRyvjDWu8i2VsLZ0aJfxvKC1OxSNY+b0AIe9+dTuoHiaw8qvJiwJmK5CZ+7BnPCe
+	wkB7Tv1hKhrOq1Lo3hQgXHiuLWboKCnrhGE6mHiOh9VZe8kIF4TYTYQyyHnhA+643EQmEP
+	WZstbmVhFXWvtGXMqmF8RjjGQWmczX9xZ22fLH67nJGA4EvLvbeU+85SYyLzsTEcaSibTK
+	09hrLrEpMMmuVGdbLT/USKRh8WhLwfTt0Ww9I/9+CHzGCC3PO07fT/GLDJYoPy/TOwa/jS
+	Bss1DvNieTB2+oPYuKPp30KG+nVhIQD3gNefadFf4jpBzP0dut1PUZjlHCNT8w==
+ARC-Authentication-Results: i=1;
+	mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=VWVYf7ul;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	spf=pass (mail.pony-it.com: domain of e226-240.smtp-out.us-east-2.amazonses.com designates 23.251.226.240 as permitted sender) smtp.helo=e226-240.smtp-out.us-east-2.amazonses.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=kra23psoka5qyyh6gdejiiuof3nluwuz; d=amazonses.com; t=1795831449;
+	h=Date:From:To:Message-ID:Subject:MIME-Version:Content-Type:Feedback-ID;
+	bh=9AYytqXSnmkRFjqSWf1AsMyw5ueMEEDyT9cHSp0e1OI=;
+	b=VWVYf7ulNMmbDgbwiku5XP1KS/DDPr5CO6TWGve5UNfBugphZEOGNl0/i8pvlE99
+	QZCI/NlA/H7NaaBtsT4VdJ60kW8SZ5YIdkoOzYRMYINlyHhs6B6Kn3rqMBlxyeL7Jmh
+	AaVBECiELqcu2BP5DUoppDZa3KrxN2IWzQZMftN4=
+Date: Sat, 28 Nov 2026 02:04:09 +0000
+From: MAILER-DAEMON@us-east-2.amazonses.com
+To: brianamartin@flywirecompany.online
+Message-ID: <010f01a21fe5461b-03dbb14f-9bd9-422b-8d55-e94535049c59-000000@us-east-2.amazonses.com>
+Subject: Delivery Status Notification (Failure)
+MIME-Version: 1.0
+Content-Type: multipart/report; 
+	boundary="----=_Part_4956508_1304572869.1795831449143"; 
+	report-type=delivery-status
+Feedback-ID: ::1.us-east-2.c0QCJwTJKDSb6mlKpIo5IpGwsngRMRBjZtJ48k4WYjY=:AmazonSES
+X-SES-Outgoing: 2026.11.28-23.251.226.240
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Result: default: False [-1.87 / 15.00];
+	BAYES_HAM(-5.50)[100.00%];
+	SEM_URIBL_FRESH15(3.00)[flywirecompany.online:email];
+	BAD_REP_POLICIES(2.00)[];
+	IP_REPUTATION_HAM(-1.17)[asn: 16509(-0.31), country: US(-0.01), ip: 23.251.226.240(-0.85)];
+	BOUNCE(-0.10)[DSN];
+	ONCE_RECEIVED(0.10)[];
+	MIME_GOOD(-0.10)[text/plain];
+	MIME_FROM_MX_GOOD(-0.10)[feedback-smtp.us-east-2.amazonses.com];
+	R_DKIM_ALLOW(0.00)[amazonses.com:s=kra23psoka5qyyh6gdejiiuof3nluwuz];
+	URIBL_BLOCKED(0.00)[flywirecompany.online:email,e226-240.smtp-out.us-east-2.amazonses.com:rdns,e226-240.smtp-out.us-east-2.amazonses.com:helo,amazonses.com:dkim,amazonses.com:url,us-east-2.amazonses.com:from_mime,us-east-2.amazonses.com:mid,cromex.net:email];
+	ARC_SIGNED(0.00)[flywirecompany.online:s=dkim:i=1];
+	RCPT_COUNT_ONE(0.00)[1];
+	RCPT_MAILCOW_DOMAIN(0.00)[flywirecompany.online];
+	MIME_TRACE(0.00)[0:~,1:+,2:~,3:~,4:+];
+	ARC_NA(0.00)[];
+	SUBJ_BOUNCE_WORDS(0.00)[];
+	DMARC_POLICY_ALLOW(0.00)[amazonses.com,quarantine];
+	DWL_DNSWL_NONE(0.00)[amazonses.com:dkim];
+	RCVD_COUNT_ZERO(0.00)[0];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_NONE(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	R_SPF_ALLOW(0.00)[+ip4:23.251.226.240:c];
+	FROM_NO_DN(0.00)[];
+	ASN(0.00)[asn:16509, ipnet:23.251.226.0/24, country:US];
+	DKIM_TRACE(0.00)[amazonses.com:+];
+	MISSING_XM_UA(0.00)[];
+	RCVD_IN_DNSWL_NONE(0.00)[23.251.226.240:from]
+X-Rspamd-Queue-Id: B2636117752
+
+------=_Part_4956508_1304572869.1795831449143
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Content-Description: Notification
+
+An error occurred while trying to deliver the mail to the following recipients:
+contacto@cromex.net
+------=_Part_4956508_1304572869.1795831449143
+Content-Type: message/delivery-status
+Content-Transfer-Encoding: 7bit
+Content-Description: Delivery Status Notification
+
+Reporting-MTA: dns; amazonses.com
+
+Action: failed
+Remote-MTA: dns; amazonses.com
+Final-Recipient: rfc822; contacto@cromex.net
+Diagnostic-Code: Amazon SES did not send the message to this address because it is on the suppression list for your account. For more information about removing addresses from the suppression list, see the Amazon SES Developer Guide at https://docs.aws.amazon.com/ses/latest/dg/sending-email-suppression-list.html
+Status: 5.1.1
+
+
+------=_Part_4956508_1304572869.1795831449143
+Content-Type: message/rfc822
+Content-Description: Undelivered Message
+
+Received: from mail.pony-it.com (mail.pony-it.com [15.204.205.80])
+        by email-smtp.amazonaws.com
+        with SMTP (SimpleEmailService-d-EU16YZHRL) id n2SwoQliSY0EQtoJWTpY
+        for contacto@cromex.net;
+        Sat, 28 Nov 2026 02:04:08 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id CEBDA117752
+	for <contacto@cromex.net>; Fri, 27 Nov 2026 21:04:07 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flywirecompany.online;
+	s=dkim; t=1795831448; h=from:subject:message-id:to:mime-version:content-type:
+	 content-transfer-encoding; bh=U1buIDB3OyIphDSskQhJY7zT1OfvUmc/gmAyvo/DaiA=;
+	b=i4szmeRQ6HKOHgk3F67cPT3icihtGvJiLzaAo1SMOsPS3viT6/NnNFZLPBF7eJSvr31ahj
+	HzhvzltIh5x+n3hNUm6cKJpJa5uXmm4PAL4iXWA3uiDfzus7urePO4hx6em+6VYaGJb4Xu
+	SYMCPp90R6tMnl4GpZy1sPZ5sYUvYGEOvDvBspHHUA6hNp+Ehb3j1Tf1JU/hIGnq2aKvGI
+	W5qSnDXZR3ERlmL0gqeGjSoVDibbvgTdgE18dpZnCe/SUbSUWHgQUv1XE7DfRRO6Yyd2Tt
+	UYnCLWqn/sgaWxsviV9fYhmGi8e1AirB7CIb3CPy5YG/ziplPypDZhzNxQZ/lg==
+From: brianamartin@flywirecompany.online
+To: contacto@cromex.net
+Subject: [BOND-2026-1589] Inquiry - Continuous Customs Bond
+Message-ID: <010f01a21fe544ea-6e644b76-530e-4fd1-9d0c-541881bc2500-000000@us-east-2.amazonses.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
+
+Hello,
+
+We're reaching out on behalf of Flywire LLC =E2=80=94 we're in the market for=
+ a customs bond and would appreciate a quote from you. Details below per our =
+client application:
+
+01 / BOND REQUEST
+- Service requested: New bond
+- Bond coverage: Continuous Customs Bond
+- Activity code: 1 - Importer
+- Requested bond limit: USD 50,000
+
+02 / LEGAL ENTITY & IMPORTER ID
+- Exact legal entity: Flywire LLC
+- Entity type: LLC
+- State of formation: CA
+- EIN: 43-2243657
+- Principal address: 1002 N PACIFIC AVE, SAN PEDRO, CA, 90731
+
+03 / CONTACTS & AUTHORIZED SIGNER
+- Authorized signer: BRIANA ROSE MARTIN (Organizer)
+- Contact email: brianamartin@flywirecompany.online
+- Phone: 18313255320
+
+Please reply with:
+1. Your price for this bond and the estimated processing time
+2. Your application requirements / intake checklist (entity & importer ID, co=
+ntacts & owners, merchandise & trade profile, customs operations, bond histor=
+y & compliance, and AD/CVD schedule if applicable)
+3. Documents you need from us - we have Articles of Formation, IRS EIN letter=
+ (CP575), W-9 and principal ID available
+
+Feel free to reach out if anything else comes up.
+
+Many thanks,
+BRIANA ROSE MARTIN
+Flywire LLC
+
+------=_Part_4956508_1304572869.1795831449143--

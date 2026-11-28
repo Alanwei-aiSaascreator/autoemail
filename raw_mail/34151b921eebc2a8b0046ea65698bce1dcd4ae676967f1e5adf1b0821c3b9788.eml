@@ -1,0 +1,270 @@
+Return-Path: <010f01a218cc0756-f03c6c5a-3b1c-47b6-b6d8-18db67511ec9-000000@mail11.docusign.net>
+Delivered-To: amanuelafeworktiku@enproinc.live
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id cKINNWNlCGtVvwkAQ1DlOA
+	(envelope-from <010f01a218cc0756-f03c6c5a-3b1c-47b6-b6d8-18db67511ec9-000000@mail11.docusign.net>)
+	for <amanuelafeworktiku@enproinc.live>; Thu, 26 Nov 2026 11:59:15 -0500
+X-Original-To: amanuelafeworktiku@enproinc.live
+Received: from a115-136.smtp-out.us-east-2.amazonses.com (a115-136.smtp-out.us-east-2.amazonses.com [54.240.115.136])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id ECE6110E0D5
+	for <amanuelafeworktiku@enproinc.live>; Thu, 26 Nov 2026 11:59:14 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=docusign.net header.s=awsses1 header.b="gRB0oy/P";
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=YbibDC9c;
+	spf=pass (mail.pony-it.com: domain of 010f01a218cc0756-f03c6c5a-3b1c-47b6-b6d8-18db67511ec9-000000@mail11.docusign.net designates 54.240.115.136 as permitted sender) smtp.mailfrom=010f01a218cc0756-f03c6c5a-3b1c-47b6-b6d8-18db67511ec9-000000@mail11.docusign.net;
+	dmarc=pass (policy=reject) header.from=docusign.net
+ARC-Seal: i=1; a=rsa-sha256; d=enproinc.live; s=dkim; cv=none; t=1795712355;
+	b=jlgxH5rDgH/hQp9aIywZSZhUvYt8eJ6am4VdfQEB+DSk3e8hvdu4rug0fdBGuHd7Q5302u
+	eitO5xDK0qbKqfZq5EVFZSpVpydlNMKxZ65HViqVNzs66XOpO6tlJbklNF0CL+ycYf3Nke
+	EiCR25RDG+O4TaU/HZtodGiOG94TmmWdIRUf31K9n6U6pCLKhvAFFlAaNvgJ8+Wh2WEFgy
+	NzJQuDyiI9UHmOi5VbPJJzd7pLEsbq5rbTtAFxBe5C2ShpNLfhEQ3yQXaYu3qnil1Hu3f2
+	XV5usNHwFtaIXeSx+tWfMAlNvWICwZsJZVqfJt4DBrjjvOTSN8uwv4S9OGaXsQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=enproinc.live;
+	s=dkim; t=1795712355; h=from:from:reply-to:reply-to:subject:subject:date:date:
+	 message-id:message-id:to:to:cc:mime-version:mime-version:
+	 content-type:content-type:dkim-signature;
+	bh=BRBD0hvCIz3PnkY1H+3GA8Z9DC56PQEHMub2/IM5/eU=;
+	b=ZrYVuFm4EPQl2o1dHj2F7mLt61V/G/dKPkCgEKTR/+dsDcDatihC6USSs0u0kE5+IaxTme
+	3aZP/fGKImKWuekaqzvy5587Ww7/plrkM9zXGzEC5eMnMrK+withbRea03Z1OBGMy373Hk
+	SVONWMavM7rZMsnAiQBfSKDNf9JQl34ToPlhzhp1Ttkd4yC8DbFzRSjkOoWL6yaGAxjrb4
+	NzSa0oOcwsPN0fHBiMB+2MaPZnNTyvwW1bBJ9sUuH/JDEG67kxvWrc7MhUfYs/ZHnCi6Fv
+	imfHEdXk63JOOrv8prf2KHwQPs5GPWF7bf+x+UL1+JFoOY4S1aEUz+gqmsjTww==
+ARC-Authentication-Results: i=1;
+	mail.pony-it.com;
+	dkim=pass header.d=docusign.net header.s=awsses1 header.b="gRB0oy/P";
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=YbibDC9c;
+	spf=pass (mail.pony-it.com: domain of 010f01a218cc0756-f03c6c5a-3b1c-47b6-b6d8-18db67511ec9-000000@mail11.docusign.net designates 54.240.115.136 as permitted sender) smtp.mailfrom=010f01a218cc0756-f03c6c5a-3b1c-47b6-b6d8-18db67511ec9-000000@mail11.docusign.net;
+	dmarc=pass (policy=reject) header.from=docusign.net
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple; s=awsses1;
+	d=docusign.net; t=1795712354;
+	h=From:Date:Subject:Message-Id:Reply-To:To:MIME-Version:Content-Type;
+	bh=6FTCtf+eXPAP5XwZPbKEIPyInrnhSlgNvLks7tgGp3A=;
+	b=gRB0oy/PXJtW14mGJ3aWgZF0cJ0Lnf4sVC59riD9xaFRkQ8ljY6rQe6kc1foVOEW
+	V1v56UR+oWlB+d4BuGofIlgVwZhTDEe1LVDiRINAjE4xKvF43ipWfx/3SzYfmHQdigB
+	HK4XiROYrKVUOhlVHuZKVPaUmRdbxaXNVLHrc4hrIzf1lXU/Z4TIe66xM6RxZKgpBWa
+	uRLsy5tE2+Bi2VH3bUFGdWjUecGt13ra8vteE1ejpxYjaGIvxabRl4emy0P75ULkNcS
+	tcIWDTHldv7FotFUjVfqJpiBnAjH3jun605ghNbiY1dvFDVx2iT4H6ahkGLKExgGW0H
+	+b8z/qHvWw==
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=kra23psoka5qyyh6gdejiiuof3nluwuz; d=amazonses.com; t=1795712354;
+	h=From:Date:Subject:Message-Id:Reply-To:Feedback-ID:To:MIME-Version:Content-Type;
+	bh=6FTCtf+eXPAP5XwZPbKEIPyInrnhSlgNvLks7tgGp3A=;
+	b=YbibDC9conawe+W5SPIQKep1zmaB9nn1qAAZR+9c0h3w/lmG2buH4X9kWY1iyN7z
+	Bn6n7SETbpwYAoTS7aiIEEWuhRKnBfxGFP7BXM+lVryrP4/tAOO72GEg74fmDoJRM14
+	K3EET1sLdBvllEikLbRxvqA38cKqqI40cRz2cVwY=
+From: Ryan Rodriguez via Docusign <dse_na2@docusign.net>
+Date: Thu, 26 Nov 2026 16:59:14 +0000
+Subject: Enpro LLC | C&R Customs Power of Attorney
+Message-ID: <010f01a218cc0756-f03c6c5a-3b1c-47b6-b6d8-18db67511ec9-000000@us-east-2.amazonses.com>
+Reply-To: Ryan Rodriguez <ryan@crcustomsbrokers.com>
+X-Notif-Svc: a08dfcef-f9d6-4f0f-8b9e-3b281e0fc9ac@NA.notifications.docusign.net
+X-Notif-Svc-Client: 33eb76dd-2540-4fe2-8a10-5e08f7182bd5
+Feedback-ID: 3:06b6cda9-c47d-407e-834e-75943454c19a:1.us-east-2.f8Gk7gBqzLYa5IsHjA0JR+SGLQHTdXtB+jyKPLyM1k8=:AmazonSES
+X-DS-Score: 3
+X-Return-Path: dse_na2@docusign.net
+X-SiteName: na2
+To: Amanuel Afework Tiku <amanuelafeworktiku@enproinc.live>
+MIME-Version: 1.0
+Content-Type: multipart/alternative; boundary="=-W3N5aB4PQuyYquCPQjTUdg==";
+	charset=utf-8
+X-SES-Outgoing: 2026.11.26-54.240.115.136
+X-Last-TLS-Session-Version: TLSv1.3
+X-Rspamd-Queue-Id: ECE6110E0D5
+X-Spamd-Result: default: False [-16.11 / 15.00];
+	WHITELIST_DMARC(-7.00)[docusign.net:D:+];
+	BAYES_HAM(-5.49)[99.97%];
+	DWL_DNSWL_MED(-2.00)[docusign.net:dkim];
+	DMARC_POLICY_ALLOW(-0.50)[docusign.net,reject];
+	RWL_MAILSPIKE_EXCELLENT(-0.40)[54.240.115.136:from];
+	IP_REPUTATION_HAM(-0.32)[asn: 16509(-0.31), country: US(-0.01), ip: 54.240.115.136(0.00)];
+	FORGED_SENDER(0.30)[dse_na2@docusign.net,010f01a218cc0756-f03c6c5a-3b1c-47b6-b6d8-18db67511ec9-000000@mail11.docusign.net];
+	R_DKIM_ALLOW(-0.20)[docusign.net:s=awsses1,amazonses.com:s=kra23psoka5qyyh6gdejiiuof3nluwuz];
+	R_SPF_ALLOW(-0.20)[+ip4:54.240.64.0/18:c];
+	MX_GOOD(-0.10)[feedback-smtp.us-east-2.amazonses.com];
+	MIME_GOOD(-0.10)[multipart/alternative,text/plain];
+	ONCE_RECEIVED(0.10)[];
+	MIME_FROM_MX_GOOD(-0.10)[mailcl.docusign.net];
+	REPLYTO_MX_GOOD(-0.10)[aspmx.l.google.com];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	ARC_NA(0.00)[];
+	RCPT_MAILCOW_DOMAIN(0.00)[enproinc.live];
+	DWL_DNSWL_NONE(0.00)[amazonses.com:dkim];
+	RCPT_COUNT_ONE(0.00)[1];
+	URIBL_BLOCKED(0.00)[amazonses.com:dkim,crcustomsbrokers.com:email,crcustomsbrokers.com:replyto];
+	RCVD_IN_DNSWL_NONE(0.00)[54.240.115.136:from];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_ZERO(0.00)[0];
+	ASN(0.00)[asn:16509, ipnet:54.240.114.0/23, country:US];
+	FROM_NEQ_ENVFROM(0.00)[dse_na2@docusign.net,010f01a218cc0756-f03c6c5a-3b1c-47b6-b6d8-18db67511ec9-000000@mail11.docusign.net];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_ALL(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	DKIM_TRACE(0.00)[docusign.net:+,amazonses.com:+];
+	HAS_REPLYTO(0.00)[ryan@crcustomsbrokers.com];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+	ARC_SIGNED(0.00)[enproinc.live:s=dkim:i=1]
+
+--=-W3N5aB4PQuyYquCPQjTUdg==
+Content-Type: text/plain; charset=utf-8
+
+Hello Amanuel Afework Tiku,
+
+Ryan Rodriguez has sent you a new Docusign document to view and sign. Please click on the link below to begin signing.
+
+Hi Amanuel, please complete and sign the Enpro LLC customs power of attorney if you are authorized to sign for the company. Use the document upload field in DocuSign for your company formation documents, IRS EIN confirmation, and corporate financial statements. Please do not email tax documents, IDs, or financial statements. Thank you, C&R Customs Brokerage Inc.
+
+    
+
+Review Document
+
+https://na2.docusign.net/Signing/EmailStart.aspx?a=8261427b-e08b-85a5-804b-f96af9fcc76d&etti=33&acct=17c58c99-3190-4883-ab60-6239f13b1580&er=25b40e81-dea7-808b-80fa-531f47555374
+
+If clicking the link does not work, you can highlight and copy the entire line above and paste it into your browser to get started.
+
+This message was sent to you by Ryan Rodriguez who is using the Docusign Electronic Signature Service. If you would rather not receive email from this sender you may contact the sender with your request.
+
+Do Not Share This Email
+This email contains a secure link to Docusign. Please do not share this email, link, or access code with others.
+
+Questions about the Document?
+If you need to modify the document or have questions about the details in the document, please reach out to the sender by emailing them directly.
+
+Stop receiving this email
+Report this email https://protect.docusign.net/report-abuse?e=AUtomjpFak9GlbPL0zFFi11dpXQG4eQYgxsO7IaBkqwRnJa2JhxjXBozXcAADskDLZ3D-rb2deovyfQwCfV73k5MwM13Mr7XMoNIST1apFhax2MlKvYU8dwi7PzH6MtitlxX7DmJ3zD_aZWG7B4Vt69aBtmOz5ahAjZiWIJ1JE_SbOzUDLKA_ie77fsCe_-RposBubp7hw-5QHWpc2SNx1SWYc0yQ2V43O65rtL4vSFQNmi2dlHjjuMXYL4m0o-N0W8xlfEOrhAJjAE_hkmuXlS5QGmt9b2175NESpfIDBch7h-eQvKDuDzfPYxWGHwxeG-UNg_bNDXzX0fbj13z7rpJuM-LLjiz7e7ZnUmjdEibdn6nrBsVHjfOeWXu_FmO-N7V6yqvNZzyO7UAjmM01wKNyMEI-7_9_9TrrKN3xROHbTKoIP8yWBY0pxgeopfQPtkl9neNRRvh_YyfGNP7m4M&lang=en
+Declining to sign 
+Managing notifications 
+
+If you have trouble signing, visit "How to Sign a Document" on our Docusign Support Center.
+https://support.docusign.com/s/articles/How-do-I-sign-a-DocuSign-document-Basic-Signing?language=en_US&#38;utm_campaign=GBL_XX_DBU_UPS_2211_SignNotificationEmailFooter&#38;utm_medium=product&#38;utm_source=postsend
+--=-W3N5aB4PQuyYquCPQjTUdg==
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<html lang=3D"en"><head><meta http-equiv=3D"Content-Type" content=3D"text/h=
+tml; charset=3DUTF-8"/><meta name=3D"viewport" content=3D"initial-scale=3D1=
+.0"/><meta name=3D"format-detection" content=3D"telephone=3Dno"/><title>Env=
+elopeActivation</title></head><body style=3D"padding:2%;font-family:Helveti=
+ca,Arial,Sans Serif;"><div style=3D"background-color:#260559;width:100%;hei=
+ght:4px;margin:0;padding:0;"></div><table role=3D'presentation' border=3D'0=
+' cellspacing=3D'0' cellpadding=3D'0' align=3D'center' width=3D"100%" dir=
+=3D""><tr><td></td><td width=3D"640"><table role=3D"presentation" style=3D"=
+mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;backgrou=
+nd-color:#ffffff;max-width:640px;"><tr><td style=3D"padding:28px 24px 22px;=
+" align=3D"center"><img style=3D"border:none;" width=3D"" src=3D"https://na=
+2.docusign.net/Member/Image.aspx?i=3Dlogo&l=3D649a81f5-8980-44bb-896c-5284e=
+5e1060c" alt=3D""/></td></tr><tr><td style=3D"padding:0px 24px 30px 24px;">=
+<table role=3D'presentation' border=3D'0' cellspacing=3D'0' cellpadding=3D'=
+0' width=3D'100%' align=3D'center' style=3D'background-color:#260559;color:=
+#FFFFFF;border-radius:16px;'><tr><td style=3D"padding:28px 36px 36px 36px;b=
+order-radius:16px;background-color:#260559;color:#FFFFFF;font-size:16px;fon=
+t-family:Helvetica,Arial,Sans Serif;width:100%;text-align:center;" align=3D=
+"center"><img width=3D"48" height=3D"48" src=3D"https://docucdn-a.akamaihd.=
+net/olive/images/2.98.0/email/iconSign.png" style=3D"width:48px;height:48px=
+;" alt=3D"" /><table role=3D'presentation' border=3D'0' cellspacing=3D'0' c=
+ellpadding=3D'0' width=3D'100%'><tr><td style=3D"padding-top:24px;font-size=
+:16px;font-family:Helvetica,Arial,Sans Serif;border:none;text-align:center;=
+color:#FFFFFF" align=3D"center"><h1 style=3D"display:inline;font-size:16px;=
+font-weight:normal"> Ryan Rodriguez sent you a document to review and sign.=
+ </h1></td></tr></table><table role=3D'presentation' border=3D'0' cellspaci=
+ng=3D'0' cellpadding=3D'0' width=3D'100%'><tr><td align=3D"center" style=3D=
+"padding-top:30px;"><div><table role=3D"presentation" cellspacing=3D"0" cel=
+lpadding=3D"0"><tr><td align=3D"center" height=3D"44" style=3D"font-size:15=
+px;color:#FFFFFF;background-color:#735AFF;font-family:Helvetica,Arial,Sans =
+Serif;font-weight:bold;text-align:center;text-decoration:none;;border-radiu=
+s:8px;background-color:#735AFF;;display: block;"><a href=3D"https://na2.doc=
+usign.net/Signing/EmailStart.aspx?a=3D8261427b-e08b-85a5-804b-f96af9fcc76d&=
+etti=3D33&acct=3D17c58c99-3190-4883-ab60-6239f13b1580&er=3D25b40e81-dea7-80=
+8b-80fa-531f47555374" style=3D"font-size:15px;color:#FFFFFF;background-colo=
+r:#735AFF;font-family:Helvetica,Arial,Sans Serif;font-weight:bold;text-alig=
+n:center;text-decoration:none;;border-radius:8px;background-color:#735AFF;;=
+display:inline-block"><span style=3D"padding:0px 24px;;line-height:44px;"><=
+!--[if mso]>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<![endif]--> Review Documen=
+t <!--[if mso]>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<![endif]--></span></a><=
+/td></tr></table></div></td></tr></table></td></tr></table></td></tr><tr><t=
+d style=3D"padding:0px 24px 24px 24px;color:#000000;font-size:16px;font-fam=
+ily:Helvetica,Arial,Sans Serif;background-color:white;"><div style=3D"borde=
+r-radius: 16px; border: 1px solid #dddddd;padding:24px 48px 24px 48px;"><ta=
+ble role=3D'presentation' border=3D'0' cellspacing=3D'0' cellpadding=3D'0' =
+style=3D'padding-top:10px'><tr><td style=3D"padding-right:12px;padding-bott=
+om:20px;"><img style=3D"height:40px;width:40px;border-radius:2px;" height=
+=3D"40" width=3D"40" src=3D"https://na2.docusign.net/Member/image.aspx?i=3D=
+logo&l=3D212f93d3-905a-4630-8834-831fba82a4ee" alt=3D"Picture of Ryan Rodri=
+guez" /></td><td style=3D"padding-bottom:20px;"><h2 style=3D"display:inline=
+;font-family:Helvetica,Arial,Sans Serif;font-weight:bold;line-height:18px;f=
+ont-size:15px;color:#333333;"> Ryan Rodriguez </h2><div style=3D"font-famil=
+y:Helvetica,Arial,Sans Serif;line-height:18px;font-size:15px;color:#666666;=
+">ryan@crcustomsbrokers.com</div></td></tr></table><span style=3D"font-size=
+:15px;color:#333333;font-family:Helvetica,Arial,Sans Serif;line-height:20px=
+;">Hi Amanuel, please complete and sign the Enpro LLC customs power of atto=
+rney if you are authorized to sign for the company. Use the document upload=
+ field in DocuSign for your company formation documents, IRS EIN confirmati=
+on, and corporate financial statements. Please do not email tax documents, =
+IDs, or financial statements. Thank you, C&R Customs Brokerage Inc.<br /></=
+span><br /></div></td></tr><tr><td style=3D"padding:0px 24px 0px 24px;backg=
+round-color:#ffffff;font-family:Helvetica,Arial,Sans Serif;font-size:11px;c=
+olor:#666666;"><table role=3D"presentation" border=3D"0" cellspacing=3D"0" =
+cellpadding=3D"0"><tbody><tr><td valign=3D"top" style=3D"font-family: Helve=
+tica,Arial,Sans Serif; font-size: 11px; color: #666666; vertical-align: top=
+;"><div style=3D"font-family:Helvetica,Arial,Sans Serif; font-size:11px; co=
+lor:#666666; padding: 2px 5px 0 0;">Powered by&#160;</div></td><td><img src=
+=3D"https://docucdn-a.akamaihd.net/olive/images/2.98.0/email/emailLogo.png"=
+ height=3D"19" alt=3D"Docusign" style=3D"border:none;" /></td></tr></tbody>=
+</table></td></tr><tr><td style=3D"padding:24px 24px 45px 24px;"><div style=
+=3D"margin:0 0 1em;font-family:Helvetica,Arial,Sans Serif;font-size:13px;co=
+lor:#130032;line-height:18px;"><h2 style=3D"display:inline;font-size:13px;f=
+ont-weight:bold">Do Not Share This Email</h2><br/><p style=3D"margin:0 0 1e=
+m;font-family:Helvetica,Arial,Sans Serif;font-size:13px;color:#130032;line-=
+height:18px;"> This email contains a secure link to Docusign. Please do not=
+ share this email, link, or access code with others.<br/></p></div><div sty=
+le=3D"margin:0 0 1em;font-family:Helvetica,Arial,Sans Serif;font-size:13px;=
+color:#130032;line-height:18px;"><h2 style=3D"display:inline;font-size:13px=
+;font-weight:bold">Alternate Signing Method</h2><br/><p style=3D"margin:0 0=
+ 1em;font-family:Helvetica,Arial,Sans Serif;font-size:13px;color:#130032;li=
+ne-height:18px;"> Visit Docusign.com, click 'Access Documents', and enter t=
+he security code:<br /> 8261427BE08B85A5804BF96AF9FCC76D2 </p></div><p styl=
+e=3D"margin:0 0 1em;font-family:Helvetica,Arial,Sans Serif;font-size:13px;c=
+olor:#130032;line-height:18px;">Copyright =C2=A9 2026 Docusign, Inc. All ri=
+ghts reserved. 221 Main Street, Suite 1550 San Francisco, CA 94105</p><p st=
+yle=3D"margin:0 0 1em;font-family:Helvetica,Arial,Sans Serif;font-size:13px=
+;color:#130032;line-height:18px;">This message was sent to you by Ryan Rodr=
+iguez who is using the Docusign Electronic Signature Service. If you would =
+rather not receive email from this sender you may contact the sender with y=
+our request.</p><p style=3D"margin:0 0 1em;font-family:Helvetica,Arial,Sans=
+ Serif;font-size:13px;color:#130032;line-height:18px;"><a href=3D'https://s=
+upport.docusign.com/s/contactSupport?language=3Den_US' style=3D'color:#1300=
+32;' >Contact Us</a> &#8195; <a href=3D'https://www.docusign.com/legal/term=
+s-and-conditions' style=3D'color:#130032;' >Terms of Use</a> &#8195; <a hre=
+f=3D'https://www.docusign.com/privacy' style=3D'color:#130032;' >Privacy</a=
+> &#8195; <a href=3D'https://support.docusign.com/' style=3D'color:#130032;=
+' >Support</a> &#8195;<a href=3D'https://protect.docusign.net/report-abuse?=
+e=3DAUtomjpFak9GlbPL0zFFi11dpXQG4eQYgxsO7IaBkqwRnJa2JhxjXBozXcAADskDLZ3D-rb=
+2deovyfQwCfV73k5MwM13Mr7XMoNIST1apFhax2MlKvYU8dwi7PzH6MtitlxX7DmJ3zD_aZWG7B=
+4Vt69aBtmOz5ahAjZiWIJ1JE_SbOzUDLKA_ie77fsCe_-RposBubp7hw-5QHWpc2SNx1SWYc0yQ=
+2V43O65rtL4vSFQNmi2dlHjjuMXYL4m0o-N0W8xlfEOrhAJjAE_hkmuXlS5QGmt9b2175NESpfI=
+DBch7h-eQvKDuDzfPYxWGHwxeG-UNg_bNDXzX0fbj13z7rpJuM-LLjiz7e7ZnUmjdEibdn6nrBs=
+VHjfOeWXu_FmO-N7V6yqvNZzyO7UAjmM01wKNyMEI-7_9_9TrrKN3xROHbTKoIP8yWBY0pxgeop=
+fQPtkl9neNRRvh_YyfGNP7m4M&lang=3Den' style=3D'color:#130032;' >Report Email=
+</a></p><p style=3D"margin:0 0 1em;font-family:Helvetica,Arial,Sans Serif;f=
+ont-size:13px;color:#130032;line-height:18px;"><a href=3D"https://www.docus=
+ign.com/features-and-benefits/mobile?utm_campaign=3DGBL_XX_DBU_UPS_2211_Sig=
+nNotificationEmailFooter&#38;utm_medium=3Dproduct&#38;utm_source=3Dpostsend=
+" style=3D"color:#130032;" >Download the Docusign App</a></p></td></tr></ta=
+ble></td><td></td></tr></table><span itemscope=3D"" itemtype=3D"http://sche=
+ma.org/EmailMessage"><meta itemprop=3D"text" content=3D"Ryan Rodriguez sent=
+ you a document to review and sign."/><span itemscope=3D"" itemprop=3D"abou=
+t" itemtype=3D"http://schema.org/CreativeWork"><span itemscope=3D"" itempro=
+p=3D"action" itemtype=3D"http://schema.org/ViewAction"><meta itemprop=3D"ur=
+l" content=3D"https://na2.docusign.net/Signing/EmailStart.aspx?a=3D8261427b=
+-e08b-85a5-804b-f96af9fcc76d&etti=3D33&acct=3D17c58c99-3190-4883-ab60-6239f=
+13b1580&er=3D25b40e81-dea7-808b-80fa-531f47555374"/><meta itemprop=3D"name"=
+ content=3D"View Documents"/></span></span></span><img alt=3D"" src=3D"http=
+s://2jxqrkdd.r.us-east-2.awstrack.me/I0/010f01a218cc0756-f03c6c5a-3b1c-47b6=
+-b6d8-18db67511ec9-000000/_WUebhu8YhZmXndDz5nmsYN1q1w=3D258" style=3D"displ=
+ay: none; width: 1px; height: 1px;">
+</body></html>
+--=-W3N5aB4PQuyYquCPQjTUdg==--

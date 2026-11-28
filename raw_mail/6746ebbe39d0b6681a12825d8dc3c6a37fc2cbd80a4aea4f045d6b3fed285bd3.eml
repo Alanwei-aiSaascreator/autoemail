@@ -1,0 +1,113 @@
+Return-Path: <darin@tcustomsinc.com>
+Delivered-To: chanrathanachouk@ordinaryusa.online
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id UDtiK1BHCmv2siwAQ1DlOA
+	(envelope-from <darin@tcustomsinc.com>)
+	for <chanrathanachouk@ordinaryusa.online>; Fri, 27 Nov 2026 22:15:28 -0500
+X-Original-To: chanrathanachouk@ordinaryusa.online
+Received: from vps116238.inmotionhosting.com (vps116238.inmotionhosting.com [216.194.173.120])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id 7A65610FAB4
+	for <chanrathanachouk@ordinaryusa.online>; Fri, 27 Nov 2026 22:15:27 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=tcustomsinc.com header.s=default header.b=DcP5RDi9;
+	dmarc=pass (policy=quarantine) header.from=tcustomsinc.com;
+	spf=pass (mail.pony-it.com: domain of darin@tcustomsinc.com designates 216.194.173.120 as permitted sender) smtp.mailfrom=darin@tcustomsinc.com
+ARC-Seal: i=1; a=rsa-sha256; d=ordinaryusa.online; s=dkim; cv=none;
+	t=1795835728;
+	b=UZq7owaIj6/UHAz/c6/yvuH2ff5A7ZSETIlD2N44KwZCbFzVNnV7m8Mi1eTW/vLrotOb7/
+	Bt+w3znYBH31tMYlUOHeFEgFXTmuwHnSXHv4EHIPMrzt/WG6c6vQkThOXbB2w4MbA6s5yK
+	2+XMBuMY/Ef9BJlOt8vuOuX3A0tFICoFRyX9tIhw6Ua82e++HEIkpcSur7jYe+G+1QZEnA
+	lY1fzghqcUJ7TnRzPgwTWuH4inGudqZ8gl7qv937Rxrs6b4Ter1fNEIQ2IZZmdmHjhQu8I
+	71WtkJ8iNPTJ1K+SCuYOdGPpzG5aWwSAgOqBzgIEPbC53zeQSaXvWqXNkZFi2w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=ordinaryusa.online; s=dkim; t=1795835728;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:dkim-signature;
+	bh=51zjVZybKzKS5BjR3uqxVP6fWdxTP/cZo7Tne5TlnOY=;
+	b=zvi2Y51ecBGX7N2BnRGVEZQOF3EIcNFbWB0seSasnmxYzGLE3aJd6DCuxAYFvEMWJtjLDA
+	7YXR0beclHAO1jfeIVa6HDe45jT11huN7mbqMnw21ud3Rz5V/DmdLUCsuxUYlx+dCHn+EO
+	E4tudiy4WT5fToYvqPHE6qIaTdM0YYp7ZMFVzcGQDStaoqWPIcWzAX5mgPOuI+T9l5zW5o
+	w2WmcKmrCTIsfMRti+DkJkfrv6dy7XVbNByMJsauIUyEBQacL9Hm3m8jcqrmtE31+Mn3V2
+	6gYMLhJfZukH06SW0t59o0zF/7iMkg9Gtwv2TGGcXEsQGVb54FDRjoMPtU2usw==
+ARC-Authentication-Results: i=1;
+	mail.pony-it.com;
+	dkim=pass header.d=tcustomsinc.com header.s=default header.b=DcP5RDi9;
+	dmarc=pass (policy=quarantine) header.from=tcustomsinc.com;
+	spf=pass (mail.pony-it.com: domain of darin@tcustomsinc.com designates 216.194.173.120 as permitted sender) smtp.mailfrom=darin@tcustomsinc.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=tcustomsinc.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+	Mime-Version:To:Subject:Message-Id:From:Date:Sender:Reply-To:Cc:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+	List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=51zjVZybKzKS5BjR3uqxVP6fWdxTP/cZo7Tne5TlnOY=; b=DcP5RDi9YouceoH82xOWrfX9pZ
+	yD5wI/QR4XFHazHIcm2eSL9Ai3lNoEiifr82uaR45Mpn5a67r56xrQWpcvvYjRuN5kqlScpeb6DIE
+	NDcpYQEWjKYL+qiSQfeE5gpx6/T9hdqd8bwstgMgtIrrTwxA5hNeBMPceZRoiTBFQe+8pJPvz2WJk
+	q7dX7NEwQ8yiZG3TIVlpeYA1rEQn2//VXMKDPRrlqcxaeP+1BoCJNRshOhv4NE+y7MTiMgQ0YQPri
+	XF7V3iZmYNnM6WCyclHSMiMGQ0qZHuuex6KyTY3vNJUR0YLbU2VeLBvKrpxaR7lKcADXJv59XT0Zi
+	vXSy9vzQ==;
+Received: from tcusto5 by vps116238.inmotionhosting.com with local (Exim 4.100.2)
+	(envelope-from <darin@tcustomsinc.com>)
+	id 1xX8uJ-0000000A6yA-05UI
+	for chanrathanachouk@ordinaryusa.online;
+	Fri, 27 Nov 2026 19:15:23 -0800
+Date: Sat, 28 Nov 2026 03:15:23 GMT
+From: "Darin Wells" <darin@tcustomsinc.com>
+Message-Id: <1795835723.fk0aNPiVb9sMnksL@vps116238.inmotionhosting.com>
+Precedence: auto_reply
+Subject: Thank you for reaching out to us.
+To: chanrathanachouk@ordinaryusa.online
+X-Autorespond: [BOND-2026-1855] Inquiry - Continuous Customs Bond
+X-Loop: chanrathanachouk@ordinaryusa.online
+X-Precedence: auto_reply
+Mime-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - vps116238.inmotionhosting.com
+X-AntiAbuse: Original Domain - ordinaryusa.online
+X-AntiAbuse: Originator/Caller UID/GID - [1001 1002] / [47 12]
+X-AntiAbuse: Sender Address Domain - tcustomsinc.com
+X-Get-Message-Sender-Via: vps116238.inmotionhosting.com: authenticated_id: tcusto5/from_h
+X-Authenticated-Sender: vps116238.inmotionhosting.com: darin@tcustomsinc.com
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Result: default: False [-1.24 / 15.00];
+	IP_REPUTATION_HAM(-0.80)[asn: 22611(-0.24), country: US(-0.01), ip: 216.194.173.120(-0.55)];
+	MV_CASE(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[tcustomsinc.com,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:216.194.173.120];
+	ONCE_RECEIVED(0.20)[];
+	R_DKIM_ALLOW(-0.20)[tcustomsinc.com:s=default];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.10)[mail.tcustomsinc.com];
+	BAYES_HAM(-0.04)[53.35%];
+	HAS_X_AS(0.00)[darin@tcustomsinc.com];
+	HAS_X_GMSV(0.00)[tcusto5/from_h];
+	RCPT_COUNT_ONE(0.00)[1];
+	RCPT_MAILCOW_DOMAIN(0.00)[ordinaryusa.online];
+	ARC_NA(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	ASN(0.00)[asn:22611, ipnet:216.194.172.0/23, country:US];
+	TO_DN_NONE(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_ONE(0.00)[1];
+	HAS_X_ANTIABUSE(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	DKIM_TRACE(0.00)[tcustomsinc.com:+];
+	ARC_SIGNED(0.00)[ordinaryusa.online:s=dkim:i=1]
+X-Rspamd-Queue-Id: 7A65610FAB4
+
+Dear Valued Customers,=0D
+Due to an increased number of requests regarding IEEPA refunds, our respons=
+e times may be longer than usual. Our team is actively reviewing all inquir=
+ies and will respond to yours as soon as possible.=0D
+=0D
+We appreciate your patience and thank you for your understanding.=0D

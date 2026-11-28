@@ -1,0 +1,168 @@
+Return-Path: <>
+Delivered-To: chanrathanachouk@ordinaryusa.online
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id cB1XG8LbCGvTpDcAQ1DlOA
+	(envelope-from <>)
+	for <chanrathanachouk@ordinaryusa.online>; Thu, 26 Nov 2026 20:24:18 -0500
+X-Original-To: chanrathanachouk@ordinaryusa.online
+Received: from e226-243.smtp-out.us-east-2.amazonses.com (e226-243.smtp-out.us-east-2.amazonses.com [23.251.226.243])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id D097311773C
+	for <chanrathanachouk@ordinaryusa.online>; Thu, 26 Nov 2026 20:24:17 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=Fffn+ES2;
+	dkim=fail ("headers rsa verify failed") header.d=csiis-biz.20260707.gappssmtp.com header.s=20260707 header.b=J7+GaFQI;
+	spf=pass (mail.pony-it.com: domain of e226-243.smtp-out.us-east-2.amazonses.com designates 23.251.226.243 as permitted sender) smtp.helo=e226-243.smtp-out.us-east-2.amazonses.com;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	arc=reject ("signature check failed: fail, {[1] = sig:google.com:reject}")
+ARC-Seal: i=2; a=rsa-sha256; d=ordinaryusa.online; s=dkim; cv=fail;
+	t=1795742658;
+	b=zx4PfH1ohqIuvL/Sl0Eu56LOy4hO0+ve0Lq/yXOmQHEo+MHam0dtoYOVNr2IOpje5E2pKY
+	0x+V5+y+lX9zzPxLr7ixeD+57/tQq8XKMMdH78tXTRRSAO2EnOLdjMQccRfVk1y3MqgTSZ
+	6H2NKzBKqeAwxkxyESZ6u49uWDTpK0ntTOKozuLOhomqZzoZChvvX83TDbczuLT0cgjZwk
+	h64X0/qrXy3w9x7YEXg+sXRoRWG1qfGVxE3CNCHbEtjBZB63g9jb31fGJdDsoK+l/I1U2Q
+	gBvSCr31xHWCUWZ+MNO1p7amB0dgC4Pub5Dg5ddcVo3GHONaKDq6ofL0siJ6Bg==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed;
+	d=ordinaryusa.online; s=dkim; t=1795742658;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:dkim-signature;
+	bh=U5LanS4mgLjQAFRqrZOkjHWWqS1cQxl4XqqfeFerLrw=;
+	b=GutBd4fYLVdsWxAdqZiItgrMyWez1+cPhKW54FUVVP382lox8C+qcKmFA3vObWXqxHz3Wa
+	HDX68Pr8Pc23voJKNxMsKvHtgCFJd5vbemjo8aadJ8kQ1X8YnnkNzX680WUSuHvV1/TbZF
+	bB+SfI0P4dGAlIat23wHrfeNsPLELWLnYD1J7LFwcVuv8Vwj+BxDBH2LqGO6x2ET7GSY+V
+	SfQJrrTSumevo1xJXxOIo/NgcOMrkbUDiLn9yzF1vh9aclI9NOqBmR9JD3jlbIXfmB31lr
+	20uW6T54hu5OJgHCe1StgTEo4IZbvUXApLavghP39EQi++PcZUst5w9UVjEqfA==
+ARC-Authentication-Results: i=2;
+	mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=Fffn+ES2;
+	dkim=fail ("headers rsa verify failed") header.d=csiis-biz.20260707.gappssmtp.com header.s=20260707 header.b=J7+GaFQI;
+	spf=pass (mail.pony-it.com: domain of e226-243.smtp-out.us-east-2.amazonses.com designates 23.251.226.243 as permitted sender) smtp.helo=e226-243.smtp-out.us-east-2.amazonses.com;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	arc=reject ("signature check failed: fail, {[1] = sig:google.com:reject}")
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=kra23psoka5qyyh6gdejiiuof3nluwuz; d=amazonses.com; t=1795742657;
+	h=To:From:Date:Message-ID:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Feedback-ID;
+	bh=U5LanS4mgLjQAFRqrZOkjHWWqS1cQxl4XqqfeFerLrw=;
+	b=Fffn+ES20vnQgJH/J7m6ucDDRhjpXDXi4BhdzpiTcgQhqqzncK3MEuwH/PIL4Bmh
+	l6L6yhceIInAbl+PUQSIL/vuECARezg9QViNKUzCbeLjZzjn5EqyD+Hem/3dKPq1JnI
+	GFWVzsdp9Hj8wS3QT+9bPq3als7WSVAecuCLlfS4=
+ARC-Seal: i=1; a=rsa-sha256; t=1795742656; cv=none;
+        d=google.com; s=arc-20260327;
+        b=NZqQoG9Xwe0tzYLQfMPJ4y48DPap3SIVhUiHJTZSS37/nk9B4OHTyjiDh/uNCbFHut
+         HCkIxGmjVgHZJbQymrhN7uqHb/Mu8r5BCPY6c6FP3iq7iKGpLId/KvUzYnJ14U3WVSjm
+         WwUpnPa48d+ZPjwMnAvelJNUuIihBdoiMOk+FPFYAivwL/aZdoM6DTAAffC6dN0kJd7e
+         idsWJ05sFpB4jzuJwTJ2rTXdO4pghhh3suPbqPKBBb+wxKYkX4fLuJXdz5Q29wjX2eMA
+         N1nYNluxoCyHSQOKXYFyvqFVdlU2mOg/nZR6eM9ssVY8D9PDj+uvX/2SSnGwSCdWo1YO
+         +/QQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=auto-submitted:precedence:content-disposition
+         :content-transfer-encoding:mime-version:subject:message-id:date:from
+         :to:dkim-signature;
+        bh=U5LanS4mgLjQAFRqrZOkjHWWqS1cQxl4XqqfeFerLrw=;
+        fh=zUZcfW1gMUSlOJIXMrNrDtXeFM+XbNMo7rDiCKm86yQ=;
+        b=WMHee+n12n6XG5mFKDyq3upb03RAI9xBSsUBMwj2WPTFRj9vYI3wDeZ3q0ptCJs0Lx
+         t0vwFsdCXLkcJtsyoOUirdl1bCrI4U5BUS/7R9VqJUuecRe8AfvzNFMgt0pxr5o3PqBq
+         I411rxaDqkWwjZw6Y+LgM+Lh23hXfLLznBFf+unIwx9LhTCaB58s3Z78Sw98HGDZGs8X
+         TEjxsaRKH3nVdmGTN3VWGlTOH51FB/fKM0dfw7zvbaVw3QkLxrCTyO3dWDkDlfNpz7Xs
+         eJ7/iKuu0h28s9MIy6ZVh0zpeFcih4J2Vtilyk1Jev6LgxUxzlp39sPEq5AOAy5IrESY
+         WM6w==;
+        darn=ses.ordinaryusa.online
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=csiis-biz.20260707.gappssmtp.com; s=20260707; t=1795742656; x=1796347456; darn=ses.ordinaryusa.online;
+        h=auto-submitted:precedence:content-disposition
+         :content-transfer-encoding:content-type:mime-version:subject
+         :message-id:date:from:to:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=U5LanS4mgLjQAFRqrZOkjHWWqS1cQxl4XqqfeFerLrw=;
+        b=J7+GaFQIeCpqG25P4S3NKpISB7x2wEWI9/3bUz7GI7PHY3wpuuX2m6ontxls/jBu7i
+         DqhPCyGH0bpbUlazDvgMrR9fsYvbKmF5wymbcgMjZGa1QxR7ewjBuQrCRwGBkm7TTYvH
+         xB2NgNToRE+E4y/EcljkhoWpFYUw7LEHp+gwWG/9lHzmlIOiTJ9E/r6LEHL5OFdF4xbA
+         G7heVAID6hRh/siELfxKSsmc7pbei7HZTjk/AwiZ8GZ4TnvkDEWnMRTDJmDqKUke5/hx
+         hPNf30ZD8LG+3mDC+AXWR9a8idTCWADEXMwQSgdpdLhQHBa+QcaeVsbZV1YkgriUPg/q
+         uvnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795742656; x=1796347456;
+        h=auto-submitted:precedence:content-disposition
+         :content-transfer-encoding:content-type:mime-version:subject
+         :message-id:date:from:to:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=U5LanS4mgLjQAFRqrZOkjHWWqS1cQxl4XqqfeFerLrw=;
+        b=DTEHCy3bf3j1qVX1GkSOi7Z0yvH7t2ifIbDoMLZJXvTQzf5fX4j9LzfOx3gzgcuEM4
+         afUlGQdEZ5r7vwCUzOknhLW9zr3Dn03qIpaHw3DrfFKQhP7IEUzqY7KKCkCMJM12Lu9T
+         Mw+a3qnSR3P++HJhpwSxXCOzT5L8Gra80I4bSmaQJKMYi1nmm5VCX62znG3Nf8J/yGaG
+         kRuwIhpLpgIY/B8a0tYRQAI50H898jacdrQ+N5tadf7gTir618bjZtJe9PyH9k6oEZ0B
+         AF3YpX1iDdXGbX3tGRpilL21B+d6cbx30DXC6/bLrCbgwpKiHUnFrEy1u1mzarEkpbzs
+         WCUg==
+X-Gm-Message-State: APuU4Z86BBi7AJOpd1iIWDFKyi9j/de8P3XLFrJgmj1xsW1ubzN2HjX/
+	Cd/NaKT4rXrzkuZ0oX32M0K+/pHYsrHt5NhCv6cDsELOfOg7EmjX+q5QD1DOLwkrKyGEDJn5O+K
+	TFNMWzrff+RtHdHy0bqmXND3ZNiPd4pGV53UP/zUjcrEKQr6b4mh8p2xcf/LWNPfRmXH33+ERLK
+	P1PmMvD8oMKaRs5SCHV3ulaBFmQqk=
+X-Gm-Gg: AZFdTZf1QYkGEM9n2JZ8ILQSpL5u+2ucv3doR0qvV27pO8lpQk6AxryUT/pg4qCRPe6
+	jO4TXrr6uXQQjtXF7pwHO+pTd1DzH7lzF9qpTuLERePdOT8tuNVHQ8ehXOJShmzmecU+knp83nq
+	zr6yir4+eY6BLSWpFjYMVADk3CZGu6s7Zl48mkffpwYOnsRxXlAhi17Wp7XEVLzR1XMqmTI5aZ/
+	IEx9oYLV1bBiJJYDnKd73G0JlRMCaHqpltxONAQipt4+NO+hSLY37wWWlDWJ1waqIgejroDz5Fn
+	bT2lQrx2JQd5+cHfDOK+j+SafFAmrv+IuD7CdGs/IrcMyMGCvaf3gSk+frDn6UhQ7ihYPIPReEb
+	GOIac3E6VVf34wfJm+aQbkAiZkryUbJtpxUTbuC7ytYT3ue/E27FuCm/7wq8ZT6kVw1Jr2ZwE+t
+	GLUj+z92/zwmUXvRLdlohyEXg+HQJ4GDHcTwZX3xHl8J2EeahKpCxvpg==
+X-Received: by 2002:a05:6808:1a0c:b0:4cb:818f:d56f with SMTP id 5614622812f47-57a0a4048femr24640039b6e.23.1795742656437;
+        Thu, 26 Nov 2026 17:24:16 -0800 (PST)
+To: chanrathanachouk@ordinaryusa.online
+From: MAILER-DAEMON@us-east-2.amazonses.com
+Date: Fri, 27 Nov 2026 01:24:17 +0000
+Message-ID: <010f01a21a9a6afb-ce8ea815-f763-4e79-b383-a5b5c74d1ac8-000000@us-east-2.amazonses.com>
+Subject: Happy Thanksgiving Re: [BOND-2026-0828] Inquiry - Continuous Customs Bond
+MIME-Version: 1.0
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+Precedence: bulk
+X-Autoreply: yes
+Auto-Submitted: auto-replied
+Feedback-ID: ::1.us-east-2.c0QCJwTJKDSb6mlKpIo5IpGwsngRMRBjZtJ48k4WYjY=:AmazonSES
+X-SES-Outgoing: 2026.11.27-23.251.226.243
+X-Last-TLS-Session-Version: TLSv1.3
+X-Rspamd-Queue-Id: D097311773C
+X-Spamd-Result: default: False [-3.40 / 15.00];
+	BAYES_HAM(-1.99)[88.07%];
+	IP_REPUTATION_HAM(-0.90)[asn: 16509(-0.31), country: US(-0.01), ip: 23.251.226.243(-0.58)];
+	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
+	R_DKIM_ALLOW(-0.20)[amazonses.com:s=kra23psoka5qyyh6gdejiiuof3nluwuz];
+	MIME_HTML_ONLY(0.20)[];
+	R_SPF_ALLOW(-0.20)[+ip4:23.251.226.243:c];
+	MIME_FROM_MX_GOOD(-0.10)[feedback-smtp.us-east-2.amazonses.com];
+	ARC_REJECT(0.10)[signature check failed: fail, {[1] = sig:google.com:reject}];
+	MIME_BASE64_TEXT(0.10)[];
+	ONCE_RECEIVED(0.10)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCPT_COUNT_ONE(0.00)[1];
+	MIME_TRACE(0.00)[0:~];
+	RCPT_MAILCOW_DOMAIN(0.00)[ordinaryusa.online];
+	ARC_SIGNED(0.00)[ordinaryusa.online:s=dkim:i=2];
+	PRECEDENCE_BULK(0.00)[];
+	DMARC_POLICY_ALLOW(0.00)[amazonses.com,quarantine];
+	RCVD_IN_DNSWL_NONE(0.00)[23.251.226.243:from];
+	RCVD_COUNT_ZERO(0.00)[0];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_NONE(0.00)[];
+	R_DKIM_REJECT(0.00)[csiis-biz.20260707.gappssmtp.com:s=20260707];
+	ASN(0.00)[asn:16509, ipnet:23.251.226.0/24, country:US];
+	MISSING_XM_UA(0.00)[];
+	FROM_NO_DN(0.00)[];
+	DKIM_TRACE(0.00)[amazonses.com:+,csiis-biz.20260707.gappssmtp.com:-];
+	DKIM_MIXED(0.00)[];
+	DWL_DNSWL_NONE(0.00)[amazonses.com:dkim]
+
+PGRpdiBkaXI9Imx0ciI+T3VyIG9mZmljZSB3aWxsIGJlIGNsb3NlZCBmcm9tIFRodXJzZGF5IDEx
+LzI2LzIwMjYgYW5kIEZyaWRheSAxMS8yNi8yMDI2LsKgIFRvIHNwZW5kIHRpbWUgd2l0aCBmYW1p
+bHkgb24gVGhhbmtzZ2l2aW5nLsKgIFdlIHdpbGwgYmUgb3BlbiBkdXJpbmcgbm9ybWFsIGJ1c2lu
+ZXNzIGhvdXJzIG9uIE1vbmRheSAxMS8zMC8yMDI2LjwvZGl2Pjxici8+PGJyLz4tLSA8YnIvPjxk
+aXYgZGlyPSJsdHIiPk1hcmMgQ2lzbmVyb3MsIEpyPGRpdj5DUyBJbm5vdmF0aXZlIEluc3VyYW5j
+ZSBTb2x1dGlvbnMsIExDPC9kaXY+PGRpdj4mcXVvdDtXZSBoYW5kbGUgSG9tZSAmYW1wOyBDb21t
+ZXJjaWFsIEluc3VyYW5jZSZxdW90O8KgPC9kaXY+PGRpdj4xODEzIEdyYW5kc3RhbmQgRHI8L2Rp
+dj48ZGl2PlNhbiBBbnRvbmlvLCBUeCA3ODIzODwvZGl2PjxkaXY+UEgjIDIxMC01NDEtODM5OcKg
+PC9kaXY+PC9kaXY+PGJyLz4NCg==

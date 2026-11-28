@@ -1,0 +1,174 @@
+Return-Path: <>
+Delivered-To: alexandradouglas@progynygroup.online
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id eFRNE07aCGvTpDcAQ1DlOA
+	(envelope-from <>)
+	for <alexandradouglas@progynygroup.online>; Thu, 26 Nov 2026 20:18:06 -0500
+X-Original-To: alexandradouglas@progynygroup.online
+Received: from e226-240.smtp-out.us-east-2.amazonses.com (e226-240.smtp-out.us-east-2.amazonses.com [23.251.226.240])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id A86AB11773C
+	for <alexandradouglas@progynygroup.online>; Thu, 26 Nov 2026 20:18:05 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=BdN7A5bP;
+	spf=pass (mail.pony-it.com: domain of e226-240.smtp-out.us-east-2.amazonses.com designates 23.251.226.240 as permitted sender) smtp.helo=e226-240.smtp-out.us-east-2.amazonses.com;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com
+ARC-Seal: i=1; a=rsa-sha256; d=progynygroup.online; s=dkim; cv=none;
+	t=1795742285;
+	b=aOCflrlAH3co46Zo7DB1zzywQ5qEMW4NVSNFLrNJABkggLxbcRiZc3ieeBSU4wRIppjzSM
+	/65uzqMT1Zd0DUvQK7LWt7viYmd5qz4SAWswOR/dlmJUH7dQsCtM2ay+2war28nzL2N0Im
+	vNxiACgl8E5Nw7zQG0RQGspF18k36VmfCg0QLqKPLPyzrTJt4g+Yop/dMamoIVJ3lFtG5b
+	f2G96229devB44FWEV49P+VVbfiBGUMDmdBf274srm5lpcYdI+ewuJWwgK4/lbBSQwFDOy
+	biuy+E7vsXVQZYUfefvf0sH/M7tIJJoR3+suVVvULHBrXHLEJmYed3WsHtWewg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=progynygroup.online; s=dkim; t=1795742285;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 dkim-signature; bh=o5Pv1L/Z8ZvAhWEwKiVv5xeP6jridMdJVb0fRw1f4Io=;
+	b=EbEGhebXv5Y8/kNciVW6QB2/l110w6ysNra6m9Z5IyGUccQulntpPpIA+jJpNLJUln08sc
+	y77G5gFWJxQTy2SU33pntWp20dhkHDMc1T86tjW5cqp0w+u08TwBMwuxJO8aGqsSVMpOkH
+	jt7+OLr+l2lFL8L4r/xFwZP7sennPx1ziFiYkiMNwvWOy2zpyr2AHdJq1O3n3fQu3od9N7
+	VQZ7SshNQXq3g3P9+l9yAJz/1hzZS7zmXV+zrceaT8Rknbj42+TPret3/3NDSAGGLXPVEe
+	/XSfwQEbRY92i4tK9h5nta6TZZzW4ghC9u4bSUlq56USnRQRSInbbvINKHCSLw==
+ARC-Authentication-Results: i=1;
+	mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=BdN7A5bP;
+	spf=pass (mail.pony-it.com: domain of e226-240.smtp-out.us-east-2.amazonses.com designates 23.251.226.240 as permitted sender) smtp.helo=e226-240.smtp-out.us-east-2.amazonses.com;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=kra23psoka5qyyh6gdejiiuof3nluwuz; d=amazonses.com; t=1795742285;
+	h=Date:From:To:Message-ID:Subject:MIME-Version:Content-Type:Feedback-ID;
+	bh=IX+QvGsYj7lEfGvnHIpZg866P5T1fOcE0Zb4ZUFpSxw=;
+	b=BdN7A5bPeGrfrbl7L75McTDT99Qq1KawoZbgsZml8jHpu2QukaClXC1fXZ+PU0Vp
+	P4DkZ8dGyIjO7VcI6tk3ssyJ44whseLrliGl419LzD3nLi0IhImrcSdqqfJ1g9RpQ3C
+	ZQasAO2+TgfOEvBZ6da86wv4ty9vo/V3DxVQEtD8=
+Date: Fri, 27 Nov 2026 01:18:05 +0000
+From: MAILER-DAEMON@us-east-2.amazonses.com
+To: alexandradouglas@progynygroup.online
+Message-ID: <010f01a21a94bce3-a78235e1-0ae7-458e-9de2-09faf5297a16-000000@us-east-2.amazonses.com>
+Subject: Delivery Status Notification (Failure)
+MIME-Version: 1.0
+Content-Type: multipart/report; 
+	boundary="----=_Part_3887017_2042472364.1795742285051"; 
+	report-type=delivery-status
+Feedback-ID: ::1.us-east-2.c0QCJwTJKDSb6mlKpIo5IpGwsngRMRBjZtJ48k4WYjY=:AmazonSES
+X-SES-Outgoing: 2026.11.27-23.251.226.240
+X-Last-TLS-Session-Version: TLSv1.3
+X-Rspamd-Queue-Id: A86AB11773C
+X-Spamd-Result: default: False [-1.87 / 15.00];
+	BAYES_HAM(-5.50)[100.00%];
+	SEM_URIBL_FRESH15(3.00)[progynygroup.online:email];
+	BAD_REP_POLICIES(2.00)[];
+	IP_REPUTATION_HAM(-1.17)[asn: 16509(-0.31), country: US(-0.01), ip: 23.251.226.240(-0.85)];
+	BOUNCE(-0.10)[DSN];
+	ONCE_RECEIVED(0.10)[];
+	MIME_GOOD(-0.10)[text/plain];
+	MIME_FROM_MX_GOOD(-0.10)[feedback-smtp.us-east-2.amazonses.com];
+	R_DKIM_ALLOW(0.00)[amazonses.com:s=kra23psoka5qyyh6gdejiiuof3nluwuz];
+	SUBJ_BOUNCE_WORDS(0.00)[];
+	ARC_SIGNED(0.00)[progynygroup.online:s=dkim:i=1];
+	RCPT_COUNT_ONE(0.00)[1];
+	RCPT_MAILCOW_DOMAIN(0.00)[progynygroup.online];
+	MIME_TRACE(0.00)[0:~,1:+,2:~,3:~,4:+];
+	ARC_NA(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DMARC_POLICY_ALLOW(0.00)[amazonses.com,quarantine];
+	DKIM_TRACE(0.00)[amazonses.com:+];
+	RCVD_COUNT_ZERO(0.00)[0];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_NONE(0.00)[];
+	DWL_DNSWL_NONE(0.00)[amazonses.com:dkim];
+	R_SPF_ALLOW(0.00)[+ip4:23.251.226.240:c];
+	FROM_NO_DN(0.00)[];
+	ASN(0.00)[asn:16509, ipnet:23.251.226.0/24, country:US];
+	MISSING_XM_UA(0.00)[];
+	RCVD_IN_DNSWL_NONE(0.00)[23.251.226.240:from]
+
+------=_Part_3887017_2042472364.1795742285051
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Content-Description: Notification
+
+An error occurred while trying to deliver the mail to the following recipients:
+thudson@statenational.com
+------=_Part_3887017_2042472364.1795742285051
+Content-Type: message/delivery-status
+Content-Transfer-Encoding: 7bit
+Content-Description: Delivery Status Notification
+
+Reporting-MTA: dns; amazonses.com
+
+Action: failed
+Remote-MTA: dns; amazonses.com
+Final-Recipient: rfc822; thudson@statenational.com
+Diagnostic-Code: Amazon SES did not send the message to this address because it is on the suppression list for your account. For more information about removing addresses from the suppression list, see the Amazon SES Developer Guide at https://docs.aws.amazon.com/ses/latest/dg/sending-email-suppression-list.html
+Status: 5.1.1
+
+
+------=_Part_3887017_2042472364.1795742285051
+Content-Type: message/rfc822
+Content-Description: Undelivered Message
+
+Received: from mail.pony-it.com (mail.pony-it.com [15.204.205.80])
+        by email-smtp.amazonaws.com
+        with SMTP (SimpleEmailService-d-X98JOE3RL) id g75jQZ3EV22hafemWmX5
+        for thudson@statenational.com;
+        Fri, 27 Nov 2026 01:18:04 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 75CAD11773C
+	for <thudson@statenational.com>; Thu, 26 Nov 2026 20:18:02 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=progynygroup.online;
+	s=dkim; t=1795742284; h=from:subject:message-id:to:mime-version:content-type:
+	 content-transfer-encoding; bh=wps7JvJzLlfKohD18VXy7D0ERjEj+/qmMhAtbsdG7BU=;
+	b=M9QDsVz5XNu0RstiNEgYARWCIA8ujQiNzLrOCIZvODyJh5n+D5p6865TkKP9qBB0K9eew9
+	0oWFWcesuKdO5r5HWyspWjnMEj3IXyrBJVbdL3mOe7ABtWWebs//ulmWXVV1sUeNaIRaXT
+	7Oum8A/YBdnSo0KpeatcAhkQy1/Z5yZBfL/0BZ6uYT1NdZjHbOV6bb/1ECIWBHc9Ad3OId
+	PmArb7DPVut1PGWfNbQ2H/2DmWgREWWWdreChg8obSSPBfH1np1ElQqkaik8dznJKQq2kV
+	lEW8dWRMSmhgTGvTLiP767rrpxg8Sp+SNqi+fbCwc3VgHmhX03NC43oMhRV74g==
+From: alexandradouglas@progynygroup.online
+To: thudson@statenational.com
+Subject: [BOND-2026-0783] Inquiry - Continuous Customs Bond
+Message-ID: <010f01a21a94bbf4-81d8a2cc-14a0-49e4-a47b-b6a69ce44df5-000000@us-east-2.amazonses.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
+
+Hello,
+
+Progyny LLC is looking to purchase a customs bond and would like to request a=
+ quote from your agency. Details below per our client application:
+
+01 / BOND REQUEST
+- Service requested: New bond
+- Bond coverage: Continuous Customs Bond
+- Activity code: 1 - Importer
+- Requested bond limit: USD 50,000
+
+02 / LEGAL ENTITY & IMPORTER ID
+- Exact legal entity: Progyny LLC
+- Entity type: LLC
+- State of formation: CA
+- EIN: 43-2141509
+- Principal address: 2653 PLEASANT HILL RD, PLEASANT HILL, CA, 94523
+
+03 / CONTACTS & AUTHORIZED SIGNER
+- Authorized signer: ALEXANDRA DOUGLAS (Organizer)
+- Contact email: alexandradouglas@progynygroup.online
+- Phone: 16262715296
+
+Please reply with:
+1. Your price for this bond and the estimated processing time
+2. Your application requirements / intake checklist (entity & importer ID, co=
+ntacts & owners, merchandise & trade profile, customs operations, bond histor=
+y & compliance, and AD/CVD schedule if applicable)
+3. Documents you need from us - we have Articles of Formation, IRS EIN letter=
+ (CP575), W-9 and principal ID available
+
+Best regards,
+ALEXANDRA DOUGLAS
+Progyny LLC
+
+------=_Part_3887017_2042472364.1795742285051--

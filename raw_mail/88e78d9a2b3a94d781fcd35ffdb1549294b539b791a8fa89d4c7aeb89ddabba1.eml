@@ -1,0 +1,189 @@
+Return-Path: <>
+Delivered-To: taylorjackson@pegasystems.online
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id wNp1K7xUCmslVzIAQ1DlOA
+	(envelope-from <>)
+	for <taylorjackson@pegasystems.online>; Fri, 27 Nov 2026 23:12:44 -0500
+X-Original-To: taylorjackson@pegasystems.online
+Received: from e226-242.smtp-out.us-east-2.amazonses.com (e226-242.smtp-out.us-east-2.amazonses.com [23.251.226.242])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id 2BD0210FAB4
+	for <taylorjackson@pegasystems.online>; Fri, 27 Nov 2026 23:12:44 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=COBHfvYt;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	spf=pass (mail.pony-it.com: domain of e226-242.smtp-out.us-east-2.amazonses.com designates 23.251.226.242 as permitted sender) smtp.helo=e226-242.smtp-out.us-east-2.amazonses.com
+ARC-Seal: i=1; a=rsa-sha256; d=pegasystems.online; s=dkim; cv=none;
+	t=1795839164;
+	b=Vs4OI2gCztpUsL3UGVsAnmFw6FuwuQHEGHyKWo4YeeDEUA3BDIxb7moIgqsf9cqiGMeMTh
+	JlBHHHHIjISycoEM3ynm6wQSlqAAhEWSOkw415ZnallARTw/sVzQ8Q2x/MI/T2A8KfUdkQ
+	2H07Wi+/Mx2Dn79z1Et9JWDZiAU91QuUoCEQu9/BGvVeUZl3Nn7CABBixzspLZJ2oknbVY
+	l9loTfq4R/713yMEwcs5ERXA5g3B5HGNg+mozOXe5IfYYLRTbAQ8li4xXvvDPoDSHP8Tyr
+	dSAZopevW64rHHQK7XciHmNzstAi+Hx8E3TdVFDKjJtxsc4e/ulARVN8MXbWmg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=pegasystems.online; s=dkim; t=1795839164;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 dkim-signature; bh=+N6eTbWLymJfDAfNtIcDhNRVWldruGVEgGVpx80rkAo=;
+	b=XI4tzN8xLXtrex6T8AXyuKQZuhT3KU+MFJAMONLQFt0PWPgJD4t7RAAko+1vgJwk7F4w3o
+	s3PHFpF1ypwDmdjTvv9vaN0NN7rTAvEpD/W4qQ/+evgKprefw2y5r2UhvFYIljDUXxKcz1
+	TMPTnEw6h8CZ9DIlgwwyLnykPJ2QZuxUzJZdly3fGfifcGYULtOTbFveLNNvyLG8mjfZqj
+	nnI2KD07doyzIou8pmiT5P0+xS3MsPzivaSVzBFI/XYRrFPSggIIBRPXdgdvosOZP+VjOh
+	6CqAQ8fEpN9lDqL7ASLmsVjVWrKsajNCyM3AjmRvRvraizv1cgkiz7wnyLjYmQ==
+ARC-Authentication-Results: i=1;
+	mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=COBHfvYt;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	spf=pass (mail.pony-it.com: domain of e226-242.smtp-out.us-east-2.amazonses.com designates 23.251.226.242 as permitted sender) smtp.helo=e226-242.smtp-out.us-east-2.amazonses.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=kra23psoka5qyyh6gdejiiuof3nluwuz; d=amazonses.com; t=1795839163;
+	h=Date:From:To:Message-ID:Subject:MIME-Version:Content-Type:Feedback-ID;
+	bh=zNpyFRMajSwnxLa7v3mnnbiDEesC6oZ4TiFhLq3r/4g=;
+	b=COBHfvYtU+UizTLM5Ubmkbo+ucvn+n1fHmLbMRJJDZjcKFcJcIGyCG1crreexjKe
+	L/0bJlPAyaOl+6TfHM1gOERQxL24t3tMeCgAdQJsYzTdSucvEmRZIsh0QTTB+7wrMIK
+	tXYNRZ9NgossN0WIapFOf3TkamdT7NJO6tV5axOs=
+Date: Sat, 28 Nov 2026 04:12:43 +0000
+From: MAILER-DAEMON@us-east-2.amazonses.com
+To: taylorjackson@pegasystems.online
+Message-ID: <010f01a2205afcaa-78d7d2eb-28db-4d2b-a812-310a0dad3358-000000@us-east-2.amazonses.com>
+Subject: Delivery Status Notification (Failure)
+MIME-Version: 1.0
+Content-Type: multipart/report; 
+	boundary="----=_Part_3349452_1106005735.1795839163595"; 
+	report-type=delivery-status
+Feedback-ID: ::1.us-east-2.c0QCJwTJKDSb6mlKpIo5IpGwsngRMRBjZtJ48k4WYjY=:AmazonSES
+X-SES-Outgoing: 2026.11.28-23.251.226.242
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Result: default: False [-7.78 / 15.00];
+	BAYES_HAM(-5.50)[100.00%];
+	IP_REPUTATION_HAM(-1.18)[asn: 16509(-0.31), country: US(-0.01), ip: 23.251.226.242(-0.85)];
+	DMARC_POLICY_ALLOW(-0.50)[amazonses.com,quarantine];
+	R_DKIM_ALLOW(-0.20)[amazonses.com:s=kra23psoka5qyyh6gdejiiuof3nluwuz];
+	R_SPF_ALLOW(-0.20)[+ip4:23.251.226.242:c];
+	ONCE_RECEIVED(0.10)[];
+	MIME_FROM_MX_GOOD(-0.10)[feedback-smtp.us-east-2.amazonses.com];
+	BOUNCE(-0.10)[DSN];
+	MIME_GOOD(-0.10)[text/plain];
+	ARC_NA(0.00)[];
+	RCPT_MAILCOW_DOMAIN(0.00)[pegasystems.online];
+	ASN(0.00)[asn:16509, ipnet:23.251.226.0/24, country:US];
+	RCPT_COUNT_ONE(0.00)[1];
+	TO_DN_NONE(0.00)[];
+	MIME_TRACE(0.00)[0:~,1:+,2:~,3:~,4:+];
+	ARC_SIGNED(0.00)[pegasystems.online:s=dkim:i=1];
+	RWL_MAILSPIKE_POSSIBLE(0.00)[23.251.226.242:from];
+	MID_RHS_MATCH_FROM(0.00)[];
+	SUBJ_BOUNCE_WORDS(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FROM_NO_DN(0.00)[];
+	URIBL_BLOCKED(0.00)[amazonses.com:dkim,amazonses.com:url,us-east-2.amazonses.com:from_mime,us-east-2.amazonses.com:mid,e226-242.smtp-out.us-east-2.amazonses.com:rdns,e226-242.smtp-out.us-east-2.amazonses.com:helo,pegasystems.online:email,jagro.com:email];
+	DKIM_TRACE(0.00)[amazonses.com:+];
+	DWL_DNSWL_NONE(0.00)[amazonses.com:dkim];
+	RCVD_COUNT_ZERO(0.00)[0];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_IN_DNSWL_NONE(0.00)[23.251.226.242:from]
+X-Rspamd-Queue-Id: 2BD0210FAB4
+
+------=_Part_3349452_1106005735.1795839163595
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Content-Description: Notification
+
+An error occurred while trying to deliver the mail to the following recipients:
+info@jagro.com
+------=_Part_3349452_1106005735.1795839163595
+Content-Type: message/delivery-status
+Content-Transfer-Encoding: 7bit
+Content-Description: Delivery Status Notification
+
+Reporting-MTA: dns; e226-4.smtp-out.us-east-2.amazonses.com
+
+Action: failed
+Final-Recipient: rfc822; info@jagro.com
+Diagnostic-Code: smtp; 550 blocked
+Status: 5.3.0
+
+
+------=_Part_3349452_1106005735.1795839163595
+Content-Type: message/rfc822
+Content-Description: Undelivered Message
+
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pegasystems.online;
+	s=dkim; t=1795839162; h=from:subject:message-id:to:mime-version:content-type:
+	 content-transfer-encoding; bh=SrJaZAMysOrwS+h4+ek0iSIfugtFHTlZAcDBbVNop64=;
+	b=C6DN2Sqfjz3ycNCrKnuQg4eGYdT/d6uSGs05xElPzzukijkvAvZs5p1tMbyUWBvRrQ2AGO
+	2+1OtoKc2+FCk7dTNqHZvRHya4rOR4u6ZngRIjYYnQGnwjnxUbpTQI/Y0gnj1SvZrL7pN2
+	bNws4PYsB0OlW1Sj7QGLfATmAHhvFBRFy96rWfYMDJHMgag79EgAo/r1zJKJ2P12kP+5VH
+	oj3axx/DIL1O7rc3o6m+0QMhUdHjxL2rFH1Hj6OtsKujmNblLLzmncgtMipioBNAWsMXRw
+	2BhsTjIg8drTo+6mr6Wq29D8gHM4KjiMb9EhCcAJ0c9GqGGoe4NyYCCsfe+0Pw==
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=kra23psoka5qyyh6gdejiiuof3nluwuz; d=amazonses.com; t=1795839163;
+	h=From:To:Subject:Message-ID:Content-Type:Content-Transfer-Encoding:MIME-Version:Date:Feedback-ID;
+	bh=SrJaZAMysOrwS+h4+ek0iSIfugtFHTlZAcDBbVNop64=;
+	b=gwrtt6yMXk9Xa4PvI20w1ndHNjBgR7LLeaSVS7D3ghWC/3uxL2+i2YxxD8/UqeRL
+	UXtMqjDb4z8SznQTm8kGi2uChoVU9DeLUPPK1LJqx6iaY4lkd3RItxRCUbZoMkSel5G
+	DNRmRZxXKxmgNHTt9PGH5goBoXmKbHubSVVdMzvA=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=exxa7gpzikksbqri4scggm7v4k22tji6; d=pegasystems.online;
+	t=1795839163;
+	h=From:To:Subject:Message-ID:Content-Type:Content-Transfer-Encoding:MIME-Version:Date;
+	bh=SrJaZAMysOrwS+h4+ek0iSIfugtFHTlZAcDBbVNop64=;
+	b=gOFEkchk8cs95sisfckAmpWRaEKEE53//cCGKVFmA8QPekb8lGQytf/gj1niQoUN
+	+RdruWfdJZycn0ylfDlSo6zqi9Qdd3iPGsl8YLNR6XGI/lTueIgT2zRyKq+/orMBnmj
+	FIzqNAZxXrR47HEOwx6Hwtn7jKTseSud9LdOVMscXjJYh78aPcJ53utiy42DoGiag/P
+	99Ek181CvT6Lb5HJmLGrK+qUDfImvxrckSw/WvuiYAK7QOhquMsoHDFIfMaWEOMpOGh
+	WMgDpS++CFZi1OdNPvo0L+tSiwLpaj2glxsFoZu3ejkVx/B6geHyY4He/EoAZIUqCxJ
+	xJIfSM/wzg==
+From: taylorjackson@pegasystems.online
+To: info@jagro.com
+Subject: [BOND-2026-2069] Inquiry - Continuous Customs Bond
+Message-ID: <010f01a2205afaae-06f95c0e-af78-4289-9d3a-481f3ad52d97-000000@us-east-2.amazonses.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
+Date: Sat, 28 Nov 2026 04:12:43 +0000
+Feedback-ID: ::1.us-east-2.dnBLFQvZ7DBnA5nHg3QcqhG4UiG8AnTuix0bXTff/SU=:AmazonSES
+
+Hello team,
+
+Pegasystems LLC is shopping for a customs bond at the moment, and your agency=
+ came up on our list. Could you send us a quote? Details below per our client=
+ application:
+
+01 / BOND REQUEST
+- Service requested: New bond
+- Bond coverage: Continuous Customs Bond
+- Activity code: 1 - Importer
+- Requested bond limit: USD 50,000
+
+02 / LEGAL ENTITY & IMPORTER ID
+- Exact legal entity: Pegasystems LLC
+- Entity type: LLC
+- State of formation: CA
+- EIN: 43-2272344
+- Principal address: 9281 OFFICE PARK CIR STE 158, ELK GROVE, CA, 95758
+
+03 / CONTACTS & AUTHORIZED SIGNER
+- Authorized signer: TAYLOR SIMMONE JACKSON (Organizer)
+- Contact email: taylorjackson@pegasystems.online
+- Phone: 17472187530
+
+Please reply with:
+1. Your price for this bond and the estimated processing time
+2. Your application requirements / intake checklist (entity & importer ID, co=
+ntacts & owners, merchandise & trade profile, customs operations, bond histor=
+y & compliance, and AD/CVD schedule if applicable)
+3. Documents you need from us - we have Articles of Formation, IRS EIN letter=
+ (CP575), W-9 and principal ID available
+
+Happy to provide anything else you may need.
+
+Thanks,
+TAYLOR SIMMONE JACKSON
+Pegasystems LLC
+
+------=_Part_3349452_1106005735.1795839163595--

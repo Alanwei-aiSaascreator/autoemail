@@ -1,0 +1,171 @@
+Return-Path: <>
+Delivered-To: amanuelafeworktiku@enproinc.live
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id KIlaA6PZCGvTpDcAQ1DlOA
+	(envelope-from <>)
+	for <amanuelafeworktiku@enproinc.live>; Thu, 26 Nov 2026 20:15:15 -0500
+X-Original-To: amanuelafeworktiku@enproinc.live
+Received: from e226-244.smtp-out.us-east-2.amazonses.com (e226-244.smtp-out.us-east-2.amazonses.com [23.251.226.244])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id 5C70B117AAF
+	for <amanuelafeworktiku@enproinc.live>; Thu, 26 Nov 2026 20:15:14 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=ZOWA91Fg;
+	spf=pass (mail.pony-it.com: domain of e226-244.smtp-out.us-east-2.amazonses.com designates 23.251.226.244 as permitted sender) smtp.helo=e226-244.smtp-out.us-east-2.amazonses.com;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com
+ARC-Seal: i=1; a=rsa-sha256; d=enproinc.live; s=dkim; cv=none; t=1795742114;
+	b=gmReXS5+OfJgBISD+8rX2rpQFnxR6h5acawbsyBarxS/uFCsg8KkYXiHSRfVdEnh4rozsJ
+	25CmEuYgn8VrPJC8jWWFLAPSf+kysgkJRuzgd0cOVdSTlMAjTrGqgUGMQN5FWV85LEW87V
+	F49vkp7X6UMvFTruU5PfO5DWc3YuO26Xb9wKBG0iCb2VMzVC07vZhA27L/dm02yEChaGSU
+	i+ZRiIDBleiAArt8oo0cmSsh8/1OfQkZNYjW5566GNK068ZvUc7ix/NQ74E0BIjalj32+H
+	PS66Aym5LKfwE3lx6Izaz4mhu4YEf1Eu4mcrI/azmyWb+sVlyMJpphRss558Vg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=enproinc.live;
+	s=dkim; t=1795742114;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 dkim-signature; bh=049sVu3v5hvQGsz2T1JZ0IBXSKGZKblDta5jL2RBVWg=;
+	b=g06peGDR6DTRU51w5XpVWjqBvUA/UOAj/QG0It1jirR3KFPOOgCsKCO3FOMuwYTEiN4BsR
+	xaUtl99Kj5CcqJy3AMUdoZtRwKEmR2wH0ramboOQu2TJz5mDpx35ZpjztXbohyOcb+Bn+r
+	vaYABmT2wLAAk418k0GmT4f66RCCFt3geqCgnfvBKZQ7qEUemTBX1IZGf2V4og9eGpeORa
+	W2oZXYMMBfb/XdV1iAdQ5ti7On2U7lSIR/OQsAe042gViWGy4GZv667NPGuWSzdT5isvcX
+	QzYczXrMomQLEdV9Uhk0ZHL8d6PxjO9H42vvKjIBf84q29iI33+oak5HToh1oQ==
+ARC-Authentication-Results: i=1;
+	mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=ZOWA91Fg;
+	spf=pass (mail.pony-it.com: domain of e226-244.smtp-out.us-east-2.amazonses.com designates 23.251.226.244 as permitted sender) smtp.helo=e226-244.smtp-out.us-east-2.amazonses.com;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=kra23psoka5qyyh6gdejiiuof3nluwuz; d=amazonses.com; t=1795742114;
+	h=Date:From:To:Message-ID:Subject:MIME-Version:Content-Type:Feedback-ID;
+	bh=P/4ZLCfcpyF3CW5DwrTF+STNNFRGtoirNy+YT2Qu8tg=;
+	b=ZOWA91FgCsZs4pI7BJFPUULbdaok90iz1Grf8BJql4OLGVYYY+VgBWn4Y5EPN+52
+	f6P7oQ1iqL1LFQd28MZwpKNU87XVUfzgWWfibsXE2mKLDPBytm6axk/JQdMMqyXj5AP
+	X0uS738GcApWSH9NCKCjD/F8SDWOhp8RjbZInkMw=
+Date: Fri, 27 Nov 2026 01:15:13 +0000
+From: MAILER-DAEMON@us-east-2.amazonses.com
+To: amanuelafeworktiku@enproinc.live
+Message-ID: <010f01a21a922018-3b93fdf1-890e-443f-abc6-a5667a80c360-000000@us-east-2.amazonses.com>
+Subject: Delivery Status Notification (Failure)
+MIME-Version: 1.0
+Content-Type: multipart/report; 
+	boundary="----=_Part_3686500_1912455910.1795742113845"; 
+	report-type=delivery-status
+Feedback-ID: ::1.us-east-2.c0QCJwTJKDSb6mlKpIo5IpGwsngRMRBjZtJ48k4WYjY=:AmazonSES
+X-SES-Outgoing: 2026.11.27-23.251.226.244
+X-Last-TLS-Session-Version: TLSv1.3
+X-Rspamd-Queue-Id: 5C70B117AAF
+X-Spamd-Result: default: False [-7.78 / 15.00];
+	BAYES_HAM(-5.50)[100.00%];
+	IP_REPUTATION_HAM(-1.18)[asn: 16509(-0.31), country: US(-0.01), ip: 23.251.226.244(-0.86)];
+	DMARC_POLICY_ALLOW(-0.50)[amazonses.com,quarantine];
+	R_DKIM_ALLOW(-0.20)[amazonses.com:s=kra23psoka5qyyh6gdejiiuof3nluwuz];
+	R_SPF_ALLOW(-0.20)[+ip4:23.251.226.244:c];
+	MIME_GOOD(-0.10)[text/plain];
+	ONCE_RECEIVED(0.10)[];
+	BOUNCE(-0.10)[DSN];
+	MIME_FROM_MX_GOOD(-0.10)[feedback-smtp.us-east-2.amazonses.com];
+	ASN(0.00)[asn:16509, ipnet:23.251.226.0/24, country:US];
+	DWL_DNSWL_NONE(0.00)[amazonses.com:dkim];
+	MISSING_XM_UA(0.00)[];
+	FROM_NO_DN(0.00)[];
+	MIME_TRACE(0.00)[0:~,1:+,2:~,3:~,4:+];
+	RCPT_COUNT_ONE(0.00)[1];
+	ARC_NA(0.00)[];
+	RCVD_COUNT_ZERO(0.00)[0];
+	RCPT_MAILCOW_DOMAIN(0.00)[enproinc.live];
+	TO_DN_NONE(0.00)[];
+	ARC_SIGNED(0.00)[enproinc.live:s=dkim:i=1];
+	RCVD_IN_DNSWL_NONE(0.00)[23.251.226.244:from];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	SUBJ_BOUNCE_WORDS(0.00)[];
+	DKIM_TRACE(0.00)[amazonses.com:+]
+
+------=_Part_3686500_1912455910.1795742113845
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Content-Description: Notification
+
+An error occurred while trying to deliver the mail to the following recipients:
+ana@aacustomsbrokers.us
+------=_Part_3686500_1912455910.1795742113845
+Content-Type: message/delivery-status
+Content-Transfer-Encoding: 7bit
+Content-Description: Delivery Status Notification
+
+Reporting-MTA: dns; amazonses.com
+
+Action: failed
+Remote-MTA: dns; amazonses.com
+Final-Recipient: rfc822; ana@aacustomsbrokers.us
+Diagnostic-Code: Amazon SES did not send the message to this address because it is on the suppression list for your account. For more information about removing addresses from the suppression list, see the Amazon SES Developer Guide at https://docs.aws.amazon.com/ses/latest/dg/sending-email-suppression-list.html
+Status: 5.1.1
+
+
+------=_Part_3686500_1912455910.1795742113845
+Content-Type: message/rfc822
+Content-Description: Undelivered Message
+
+Received: from mail.pony-it.com (mail.pony-it.com [15.204.205.80])
+        by email-smtp.amazonaws.com
+        with SMTP (SimpleEmailService-d-X98JOE3RL) id 4g0J9DQAZtb12hxeZ8yU
+        for ana@aacustomsbrokers.us;
+        Fri, 27 Nov 2026 01:15:13 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id A7D8211773C
+	for <ana@aacustomsbrokers.us>; Thu, 26 Nov 2026 20:15:12 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=enproinc.live;
+	s=dkim; t=1795742113; h=from:subject:message-id:to:mime-version:content-type:
+	 content-transfer-encoding; bh=OViJlaYKnr/MsHQtvyDBEZMZgVLat+AJHOOH5ySQvMQ=;
+	b=ZTe+azQXYjGTnOkj0uxDvbDnMm6KVARP7WwC/3kHktWFzS6s7bVVnc8pT6DCBFjY5erTId
+	af0uT/neohftWH6Qpk71mwPGgv5O4JrhP2HXADHHDwvi941lyYlSLr6qLrYLl6y4oRAjyK
+	MqwkdWaUOMcfLzGTAT49hZfuh9vIYyo9ailF4Een6QbbuW9RwglkOgs8q/c0bRSe4ViS0S
+	fA/6wyt8HrbqCNuqrkRsLvNFls78YHc9FnFH12rOSs8LDaRLzZ5bNF0iS/gwAkA7HbyEX1
+	mVV0SmZmy+Q5Z1wlfpAm+3g82Hx1ZW3iZEyGmXjjA91ha8V2S4PrtBj5zq+Wow==
+From: amanuelafeworktiku@enproinc.live
+To: ana@aacustomsbrokers.us
+Subject: [BOND-2026-0709] Inquiry - Continuous Customs Bond
+Message-ID: <010f01a21a921f33-e9bfa87b-3526-4938-bf22-3aadba46d8f9-000000@us-east-2.amazonses.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
+
+Hello,
+
+Enpro LLC is looking to purchase a customs bond and would like to request a q=
+uote from your agency. Details below per our client application:
+
+01 / BOND REQUEST
+- Service requested: New bond
+- Bond coverage: Continuous Customs Bond
+- Activity code: 1 - Importer
+- Requested bond limit: USD 50,000
+
+02 / LEGAL ENTITY & IMPORTER ID
+- Exact legal entity: Enpro LLC
+- Entity type: LLC
+- State of formation: CA
+- EIN: 43-2207391
+- Principal address: 833 S SPRING ST STE 200, LOS ANGELES, CA, 90014
+
+03 / CONTACTS & AUTHORIZED SIGNER
+- Authorized signer: AMANUEL AFEWORK TIKU (Organizer)
+- Contact email: amanuelafeworktiku@enproinc.live
+- Phone: 2097764668
+
+Please reply with:
+1. Your price for this bond and the estimated processing time
+2. Your application requirements / intake checklist (entity & importer ID, co=
+ntacts & owners, merchandise & trade profile, customs operations, bond histor=
+y & compliance, and AD/CVD schedule if applicable)
+3. Documents you need from us - we have Articles of Formation, IRS EIN letter=
+ (CP575), W-9 and principal ID available
+
+Best regards,
+AMANUEL AFEWORK TIKU
+Enpro LLC
+
+------=_Part_3686500_1912455910.1795742113845--

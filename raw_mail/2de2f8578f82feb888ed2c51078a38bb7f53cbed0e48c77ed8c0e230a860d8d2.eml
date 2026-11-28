@@ -1,0 +1,140 @@
+Return-Path: <shinghoyam.jfk@asonic-logistics.com>
+Delivered-To: brianamartin@flywirecompany.online
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id wOMjLt/YCGvTpDcAQ1DlOA
+	(envelope-from <shinghoyam.jfk@asonic-logistics.com>)
+	for <brianamartin@flywirecompany.online>; Thu, 26 Nov 2026 20:11:59 -0500
+X-Original-To: brianamartin@flywirecompany.online
+Received: from camel.aspen.relay.mailchannels.net (camel.aspen.relay.mailchannels.net [23.83.221.29])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id E342E10AD00
+	for <brianamartin@flywirecompany.online>; Thu, 26 Nov 2026 20:11:57 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=asonic-logistics.com header.s=default header.b=lcfPY2XT;
+	spf=pass (mail.pony-it.com: domain of shinghoyam.jfk@asonic-logistics.com designates 23.83.221.29 as permitted sender) smtp.mailfrom=shinghoyam.jfk@asonic-logistics.com;
+	dmarc=pass (policy=reject) header.from=asonic-logistics.com
+ARC-Seal: i=1; a=rsa-sha256; d=flywirecompany.online; s=dkim; cv=none;
+	t=1795741919;
+	b=l1CVLumHupZ5n3kmzhNsWMH+6NfOOSxBQqLDCLOjeC3j3oLaVBuXzjbwlIOz2HZ5ssMWrA
+	f1v/gKrH8DJ0+5WMeBWBk6p9rBR+SB911qFd6QppuYUeiLmfqgj9ewYra3GGLZDIst3nR4
+	5XfMXq6PxEMAYkMv+Xtpe6iXRkay/yGcq2amJV3tj8zkTPdK9Bqyl02zFoIxGa3gcEGxWF
+	S4OJWnJuwSxPJwaaL4RwHbh8MPhy/xDiSwF/pAmdKMP9fnjjUpUwckqpPRvBkIDT/wmjfx
+	pYTIsZByOlZbL2PWajTOomzDXqYPtkcBqitRFUttQnPbGpuV/LaUxKFlh68Llw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=flywirecompany.online; s=dkim; t=1795741919;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:dkim-signature;
+	bh=0sx+GuVPhqTVbkzdsPVT8X3cDwjekaRc4i3Tcl/UftQ=;
+	b=ZEdpJSK36PUUbDffxdNPokzEZxw8JnXSc9WMymktqQ92vzinxKYTAvizUqPjQellJ4FEh1
+	X8bBQl63aGuNMW6toXIqAQUKqzh0e91rwv2j7ZvZTONccfeycMSSiQSnIwVHywfl/Ab7Ed
+	0eSiOsLdkfNrxYr0n9jUGV6KvuCIT6E/MCnbw0U7m0wumVqEvVTGpbHtilJmqByyTyji3/
+	NMuVjyWz0fvk59Hg+04PzXS1UeZTpmHW/pxRjpLphPvyYOUrZEXTfPUS9vNocUkXz2ggKt
+	6V3PjzupQaYxcCcil7GmA8vDWscE+8UkvW1+QCofvwu8OEbCaIs/QfLOdBbqPw==
+ARC-Authentication-Results: i=1;
+	mail.pony-it.com;
+	dkim=pass header.d=asonic-logistics.com header.s=default header.b=lcfPY2XT;
+	spf=pass (mail.pony-it.com: domain of shinghoyam.jfk@asonic-logistics.com designates 23.83.221.29 as permitted sender) smtp.mailfrom=shinghoyam.jfk@asonic-logistics.com;
+	dmarc=pass (policy=reject) header.from=asonic-logistics.com
+X-Sender-Id:
+ gocloudeasypteltd|x-authuser|asoniclog@srv9106032401.gocloudserver.com
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+	by relay.mailchannels.net (Postfix) with ESMTP id 6FE9E402BBF
+	for <brianamartin@flywirecompany.online>; Fri, 27 Nov 2026 01:11:55 +0000 (UTC)
+Received: from srv9106032401.gocloudserver.com (trex-green-8.trex.outbound.svc.cluster.local [100.96.1.178])
+	(Authenticated sender: gocloudeasypteltd)
+	by relay.mailchannels.net (Postfix) with ESMTPA id E71A6402B3B
+	for <brianamartin@flywirecompany.online>; Fri, 27 Nov 2026 01:11:54 +0000 (UTC)
+X-Sender-Id:
+ gocloudeasypteltd|x-authuser|asoniclog@srv9106032401.gocloudserver.com
+X-MC-Relay: Bad
+X-MailChannels-SenderId:
+ gocloudeasypteltd|x-authuser|asoniclog@srv9106032401.gocloudserver.com
+X-MailChannels-Auth-Id: gocloudeasypteltd
+X-Duck-Irritate: 0950ee997e71da67_1795741915374_551521832
+X-MC-Loop-Signature: 1795741915374:740966202
+X-MC-Ingress-Time: 1795741915373
+Received: from srv9106032401.gocloudserver.com
+ (srv9106032401.gocloudserver.com [146.235.18.118])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+	by 100.96.1.178 (trex/8.0.2);
+	Fri, 27 Nov 2026 01:11:55 +0000
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=asonic-logistics.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+	Mime-Version:To:Subject:Message-Id:From:Date:Sender:Reply-To:Cc:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+	List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=0sx+GuVPhqTVbkzdsPVT8X3cDwjekaRc4i3Tcl/UftQ=; b=lcfPY2XTVRq1d6f6f1F4cbk840
+	1QDG5CF0mmoniZ9zzUcq+KHTSLj1Qi4F6Fl7lRR1tav9M9B7Jcmrruz6fVkRwZaBI25WnQClrVANH
+	VzoycZ2h8HubZC4EyCtgVSebLUEsDASZHnDK5nW5je3LonX274pxyLNc+xzT1sLWlHGM3CpYGZM8B
+	0R/+EUyS2wQKWPMghVNHw1FhtznyJzlVoCsMyfMclZObXhNksgyJHjKrzMkUG6x2AQONFM2rPZgVJ
+	hiur5zGlP1ZNxm5OvWHtx66Y1ExN9sk8XxDTbpf1ovgq+MdvvL8UlK+j5WnH+PEx0rgPiAcdASxdh
+	c7wu4wOQ==;
+Received: from asoniclog by srv9106032401.gocloudserver.com with local (Exim 4.100.1)
+	(envelope-from <shinghoyam.jfk@asonic-logistics.com>)
+	id 1xWkVE-00000003Pw4-1P58
+	for brianamartin@flywirecompany.online;
+	Fri, 27 Nov 2026 09:11:52 +0800
+Date: Fri, 27 Nov 2026 01:11:52 GMT
+From: "shinghoyam.jfk@asonic-logistics.com" <shinghoyam.jfk@asonic-logistics.com>
+Message-Id: <1795741912.TO5tv42S3uETan0f@srv9106032401.gocloudserver.com>
+Precedence: auto_reply
+Subject: =?UTF-8?B?T3V0IG9mIHRoZSBPZmZpY2UgLy8gT2ZmaWNlIENsb3N1cmUg4oCT?= =?UTF-8?B?IFRoYW5rc2dpdmluZyBIb2xpZGF5?=
+To: brianamartin@flywirecompany.online
+X-Autorespond: [BOND-2026-0734] Inquiry - Continuous Customs Bond
+X-Loop: brianamartin@flywirecompany.online
+X-Precedence: auto_reply
+Mime-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-AuthUser: asoniclog@srv9106032401.gocloudserver.com
+X-Last-TLS-Session-Version: TLSv1.3
+X-Rspamd-Queue-Id: E342E10AD00
+X-Spamd-Result: default: False [-4.39 / 15.00];
+	BAYES_HAM(-5.50)[99.99%];
+	FROM_DN_EQ_ADDR(1.00)[];
+	IP_REPUTATION_SPAM(0.71)[asn: 63213(0.18), country: CA(-0.01), ip: 23.83.221.29(0.00)];
+	MV_CASE(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[asonic-logistics.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip4:23.83.208.0/20];
+	R_DKIM_ALLOW(-0.20)[asonic-logistics.com:s=default];
+	MX_GOOD(-0.10)[mx2.mailchannels.net];
+	MIME_GOOD(-0.10)[text/plain];
+	ASN(0.00)[asn:63213, ipnet:23.83.220.0/23, country:CA];
+	PREVIOUSLY_DELIVERED(0.00)[brianamartin@flywirecompany.online];
+	RCPT_COUNT_ONE(0.00)[1];
+	MISSING_XM_UA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TO_DN_NONE(0.00)[];
+	ARC_SIGNED(0.00)[flywirecompany.online:s=dkim:i=1];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCPT_MAILCOW_DOMAIN(0.00)[flywirecompany.online];
+	RCVD_IN_DNSWL_NONE(0.00)[23.83.221.29:from];
+	DKIM_TRACE(0.00)[asonic-logistics.com:+]
+
+Thank you for your email.=0D
+=0D
+Please be advised that our office will be closed on Thursday, November 26, =
+and Friday, November 27, in observance of the Thanksgiving holiday.=0D
+=0D
+We will resume normal business operations on Monday, November 30.=0D
+=0D
+During this period, responses may be delayed. We will get back to you as so=
+on as possible upon our return.=0D
+=0D
+Thank you for your understanding.=0D
+=0D
+Wishing you and your family a Happy Thanksgiving!=0D
+=0D
+=0D
+Best Regards,=0D
+Shing Ho Yam=0D

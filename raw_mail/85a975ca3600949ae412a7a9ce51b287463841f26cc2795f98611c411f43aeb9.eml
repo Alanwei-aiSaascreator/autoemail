@@ -1,0 +1,343 @@
+Return-Path: <imports@cbsmco.com>
+Delivered-To: cynthiabulleck@jatendofoods.online
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id WGKcJoz6CWsMVRIAQ1DlOA
+	(envelope-from <imports@cbsmco.com>)
+	for <cynthiabulleck@jatendofoods.online>; Fri, 27 Nov 2026 16:47:56 -0500
+X-Original-To: cynthiabulleck@jatendofoods.online
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id 7AB6E117664
+	for <cynthiabulleck@jatendofoods.online>; Fri, 27 Nov 2026 16:47:55 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=cbsmco.com header.s=google header.b=CMKi60Dm;
+	dmarc=none;
+	spf=pass (mail.pony-it.com: domain of imports@cbsmco.com designates 209.85.218.50 as permitted sender) smtp.mailfrom=imports@cbsmco.com;
+	arc=pass ("google.com:s=arc-20260327:i=1")
+ARC-Seal: i=2; a=rsa-sha256; d=jatendofoods.online; s=dkim; cv=pass;
+	t=1795816076;
+	b=IkqP8lBpqm28Rwy7peR31/KHaitIQczotxbOHyhGp02qFT241OHg4bACBAP+Z4Ko9zmfCv
+	mahSyXKgSDu9wXPfDGZmMy1D5kPbuohIt/xSCf7QcrioNlt8gs5AHTx8J675tlVa5O59wv
+	JzTP+jcUTrOFYwiHRhfpGNEskv+qgHelip9QAWs5+LIg4pYKdH+0oVUH08KziPN0PNhdoY
+	jAkT78+8VBiqrJe3/6iEiQgumzweB2Ks6DUTv19zJ9BNaorBgSWwACgWMn1G5UWn1ZFEYY
+	z8/A4qgFkGC2kn8teVsunAFDUzdu0Xl3d8NZLcj+L5qdrI+fR7Bx9a/kwhNCbg==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed;
+	d=jatendofoods.online; s=dkim; t=1795816076;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references:dkim-signature;
+	bh=glmxyKd1ONfdQQfa3NJPHenH0pdQ3VjDYKGiPj0DXpQ=;
+	b=M10AmxglbsZjmtqHekzP0VDBFFvpXMaA/VBdJqkMsMO9t6zE9kTdD6SuUARLRXHHxeOVps
+	kaTcgAGdbuHrGXGABNXCjwywI79c4MgX+NMoGymERKsvlhn5+bW7LziBih66cT9IYKIoU2
+	6TtES+9nWklEdZH33eAGFkYw4yCUA+pDZj8JtNsguvwVdN7c4nCwuoR8/Tjh3P8PoP7fD8
+	L6BkyXSX5E/aV+TCGxo0yCaGJB4MiIAKDBrtQPIHKRtmTXNWuNiFQJT5ZMcHCaEGhqjeSk
+	Ewa2ES/Z6QACogKKgSTXESmRs9mAF+duBdpZ3DAW02D5spxDN/OdipfZ3EbIqA==
+ARC-Authentication-Results: i=2;
+	mail.pony-it.com;
+	dkim=pass header.d=cbsmco.com header.s=google header.b=CMKi60Dm;
+	dmarc=none;
+	spf=pass (mail.pony-it.com: domain of imports@cbsmco.com designates 209.85.218.50 as permitted sender) smtp.mailfrom=imports@cbsmco.com;
+	arc=pass ("google.com:s=arc-20260327:i=1")
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-c5133831027so1189930766b.2
+        for <cynthiabulleck@jatendofoods.online>; Fri, 27 Nov 2026 13:47:55 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795816074; cv=none;
+        d=google.com; s=arc-20260327;
+        b=OVIpR1+lDwU3m27XYIEDGfRaWP+P+c1cwnGOYKGa76WeJF3XtmA8o2vYHf/zLddT4N
+         mDokFr242G+m0p52biXraM4mTtjnWPEPLk9MxlLL7+xLILtdONGsf6KhM5BgffZt7Oyd
+         2/mp27XtU09NR4nMjIwSCF86LHjgJWntrux8vngOV0ZPiBAZBh+MMJKyasIGdPWm2lli
+         ZU5cv0uvFpMjYeFPEy1hvoKQVbd8U8IbxoPmzvJvPco6BvX5uprkmHsJBYu/MaYJGmdV
+         KsmIERzy/z/LS7DxQokXbAaErMBJ5zcmIiXMaK0IkPGXmb8tvpFZ+ZViBAL6rFTAkw7b
+         n6fg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :dkim-signature;
+        bh=glmxyKd1ONfdQQfa3NJPHenH0pdQ3VjDYKGiPj0DXpQ=;
+        fh=PHFIcb0+uT8xNOjSyl8J/HI7u8g5ckUhUDfKvul9/GE=;
+        b=igUHDo3BKihf8dkGu6BuwVwuxPpK0956Cqs9xPF9BDHR6rIthOfnN3U3RLpaAyk1UD
+         tRCjGZMrogK1ArR2QeAYsVmbApZ/1eIdgMpnfIDT0g4JStqOvuixDmLjsayIBaQ5mtTi
+         5N0OqBPqy47LZhIxukpOEEg6ypOnuCfOwFczwsUTWmohKPqR2ILkfHGW9a/PUOS8ja7M
+         cAXR49yK1rlrFzB8ntyIkXLC2FGca5Phc+iVh9q3EA1fAg8OrGP1xTsC1C485ryVA5R+
+         3hZl9XFzjEd/gKzXSzwl03g0nkFiHBxb/Ld+lPEatLS/46n82hBJ8kZ04i3sBjUIjRKK
+         G3Og==;
+        darn=jatendofoods.online
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cbsmco.com; s=google; t=1795816074; x=1796420874; darn=jatendofoods.online;
+        h=content-type:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=glmxyKd1ONfdQQfa3NJPHenH0pdQ3VjDYKGiPj0DXpQ=;
+        b=CMKi60DmfmfwgqXAVIc9feVMhjJfnlokqbn0paFl9nnwxGKRIDwrUuIbbFQpzEnYAT
+         EfOqKN7tkAbyfPIA+6xai2ZLSE3efsvTYnNEeSN3loCix7zdgIvhjDk4uhwKzkMAOom9
+         YtLvL8tcCn19/NIGBcR4LCLIaUySawTrX36YGJUCxTQyfhLpHUloO9SgCaIs6UyQAPaS
+         rgbkRCw1OQMBXSPyJnAWz1qSZWQ7V2DsEG3nSRJJlFQAN1UuyMZ6iGIc7WeG6PUQkjyr
+         tJ/cZeei5fgtjlYV6tgaT7nk5AROv1FVDjpFgnb3rek3lGnUs4j6HIfsV/P9EtDdoQBS
+         3jcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795816074; x=1796420874;
+        h=content-type:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=glmxyKd1ONfdQQfa3NJPHenH0pdQ3VjDYKGiPj0DXpQ=;
+        b=mJryVHRIaBrWBueRWDeVHgdLvoAKeuUZkno5XC6/znOGjUtQ9hHfDb+5W0f6CE6tEc
+         w1MoWp4bmcK0/EfqAK6safCMDU3s/own6sfyo6xUWtpwOD1X4m40nDcFLnlLPWNwGZ64
+         VKEJgGRBtenbN3KKZMlkJSs6pMA4jKRxPfv1rj3D50HOvcz2Qg4TUQOgcc200laSrrFS
+         o4BfdXerpEo+B6X4Fwqb70GVuCmH8PbcLD6PJcneR9WqkpHifBWi1pDQjYki1nne7Fxx
+         GDC1vOgAFZZw8TUGWMBNFySUdS9nRNcEqVHqyNG4vh2z7fZo3BVRB516pvNnI5yKg1Jr
+         2WMg==
+X-Gm-Message-State: APuU4Z8CR1rLB5LKkrv7ymznXnaZo4VgopW5HmUzkp2oieq9Utyevbi/
+	wFMLrogyLHUIk9iVeOj3bH/VpeRN9tt3CoBrf6ZmC5AkgWgocpe7ho0gzffNBIXlsjA6aN28Wdv
+	+RduCKqbezO9gGVj5GHSLnCFxg29f0x0nv4PJ6tk7goZklrhUfNrq7s4MzQ==
+X-Gm-Gg: AZFdTZfyEMDl/3+yrnY9p6K1J+suHwfuUFQ20Jn6ZI/35oVm/m4xhl8tM9+VZZZKJX5
+	i5DPmRromfl34jjaFb888inQm53Rp8B34bCUW28kOX+jCZayYNuYACj2xjUQ/jG/oL4CjJ7/Z6K
+	2uvvDdu7P/fdM9Ro8L11tKRkKWh1TeYk8B9cMCbp0WR+lTvY7O+txxi8lqhAB9trASmZXWz6pYQ
+	6J9Z1y6Eub0XMPVdBc++op8XAbf9uR+fVvtni4PwscelQa3WoRj4QxLxKgnZPAixA1ERhz3V0yz
+	jR7rAOKW+p+3/gR6Ckrv1B2NuUan7b6q+tIQIv1ASjznx99F6R0nEF5W8YPh73hMXbWXMoB6zpO
+	MBkwly1yo4A7Tojk7VfainUTnd0XtNag8T1p7cDH041Q8l7bzMqeWNlHNiYoWtUoVcaYe5VXR+F
+	IRd0KaIXApsxbg+bje44CKYipm107Vjpg+3dWCqOOWYiQmN3vx00TN4QXoAv0hvTjR5OL44ii+v
+	FmVYoyaWKgj
+X-Received: by 2002:a17:907:da0c:b0:c50:5545:b66f with SMTP id
+ a640c23a62f3a-c513a803353mr2013287766b.23.1795816073467; Fri, 27 Nov 2026
+ 13:47:53 -0800 (PST)
+MIME-Version: 1.0
+References: <010f01a21bfbfeaf-237f81f5-cf1c-41b6-ade0-ede9c0078362-000000@us-east-2.amazonses.com>
+In-Reply-To: <010f01a21bfbfeaf-237f81f5-cf1c-41b6-ade0-ede9c0078362-000000@us-east-2.amazonses.com>
+From: Customs Broker Suppliers CBS <imports@cbsmco.com>
+Date: Fri, 27 Nov 2026 16:47:17 -0500
+X-Gm-Features: Aa3M54oqGysJounJtSRsscH_4Er2JiQVSxsl4PBs9PV9HVjetQi1qJ8e5k29u9k
+Message-ID: <CAFgniKNSVN2-uqMdwG+8MUfPiuxTtbZNHH8+X5mh8BEAcNrSYQ@mail.gmail.com>
+Subject: Re: [BOND-2026-1280] Inquiry - Continuous Customs Bond
+To: cynthiabulleck@jatendofoods.online
+Content-Type: multipart/alternative; boundary="000000000000242d9e06614903c1"
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Result: default: False [-1.06 / 15.00];
+	BAYES_HAM(-5.50)[100.00%];
+	SEM_URIBL_FRESH15(3.00)[jatendofoods.online:email];
+	BAD_REP_POLICIES(2.00)[];
+	IP_REPUTATION_HAM(-0.26)[asn: 15169(-0.25), country: US(-0.01), ip: 209.85.218.50(0.00)];
+	MIME_GOOD(-0.10)[multipart/alternative,text/plain];
+	MX_GOOD(-0.10)[aspmx.l.google.com];
+	RWL_MAILSPIKE_GOOD(-0.10)[209.85.218.50:from];
+	RCVD_TLS_LAST(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCPT_MAILCOW_DOMAIN(0.00)[jatendofoods.online];
+	R_DKIM_ALLOW(0.00)[cbsmco.com:s=google];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	DMARC_NA(0.00)[cbsmco.com];
+	RCPT_COUNT_ONE(0.00)[1];
+	DKIM_TRACE(0.00)[cbsmco.com:+];
+	MISSING_XM_UA(0.00)[];
+	TO_DN_NONE(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	ARC_SIGNED(0.00)[jatendofoods.online:s=dkim:i=2];
+	PREVIOUSLY_DELIVERED(0.00)[cynthiabulleck@jatendofoods.online];
+	ARC_ALLOW(0.00)[google.com:s=arc-20260327:i=1];
+	R_SPF_ALLOW(0.00)[+ip4:209.85.128.0/17];
+	RCVD_COUNT_ONE(0.00)[1];
+	ASN(0.00)[asn:15169, ipnet:209.85.128.0/17, country:US];
+	RCVD_IN_DNSWL_NONE(0.00)[209.85.218.50:from]
+X-Rspamd-Queue-Id: 7AB6E117664
+
+--000000000000242d9e06614903c1
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hello Cynthia,
+
+Our service for applying for a continuous bond application: $100.00
+(non-refundable).
+
+Continuous Bond: $600 for one year, $900 for two years.
+
+Processing Time: 1-5 business days.
+
+Yes, before proceeding, can you please help me with the following:
+
+   - the beneficial ownership of your company, and the US status of its
+   owner(s)?
+   - what kind of articles does your copmany import?
+   - has your company previously applied for a continuous bond with another
+   broker or surety before contacting us?
+
+
+
+*Robert Santos*
+*Customs Broker Suppliers CBS Inc.*
+
+*4215 Lindy Circle. Orlando FL 32827E-Mail: imports@cbsmco.com
+<imports@cbsmco.com>*
+*Ph.(407)857-8814 *
+*www.customsbrokersuppliers.com <http://www.customsbrokersuppliers.com/>*
+
+*ADVISORIES*:
+
+   - *Pay your Invoice by the Due Date**: It is very important that you pay
+   our invoices by the due date. Unless otherwise explicitly agreed in writ=
+ing
+   between you and CBS Management, if our invoices go unpaid by the due dat=
+e,
+   we cannot pay or finalize your customs duties on your behalf on their du=
+e
+   date, putting you at risk for fines, penalties, and a blemished importin=
+g
+   record from/with U.S. Customs & Border Protection for which CBS is not
+   responsible.*
+   - *Checks as a Payment Method*: Starting June 01, 2022, CBS will no
+   longer accept checks as a payment method. Our invoices include our Wire,
+   ACH and Zelle information for rapid and efficient payments. Card payment=
+s
+   are still welcome.
+
+*STARTING ON JANUARY 1, 2023 ALL EMAILS MUST BE SENT TO OUR NEW EMAIL
+AT: imports@cbsmco.com <imports@cbsmco.com>*
+
+
+On Fri, Nov 27, 2026 at 2:50=E2=80=AFAM <cynthiabulleck@jatendofoods.online=
+> wrote:
+
+> Hello,
+>
+> JA Tendo Foods LLC is looking to purchase a customs bond and would like t=
+o
+> request a quote from your agency. Details below per our client applicatio=
+n:
+>
+> 01 / BOND REQUEST
+> - Service requested: New bond
+> - Bond coverage: Continuous Customs Bond
+> - Activity code: 1 - Importer
+> - Requested bond limit: USD 50,000
+>
+> 02 / LEGAL ENTITY & IMPORTER ID
+> - Exact legal entity: JA Tendo Foods LLC
+> - Entity type: LLC
+> - State of formation: CA
+> - EIN: 43-2417637
+> - Principal address: 7273 MURRAY DR STE 3, STOCKTON, CA, 95210
+> <https://www.google.com/maps/search/7273+MURRAY+DR+STE+3,+STOCKTON,+CA,+9=
+5210?entry=3Dgmail&source=3Dg>
+>
+> 03 / CONTACTS & AUTHORIZED SIGNER
+> - Authorized signer: CYNTHIA MARIE BULLECK (Organizer)
+> - Contact email: cynthiabulleck@jatendofoods.online
+> - Phone: 16505378868 <(650)%20537-8868>
+>
+> Please reply with:
+> 1. Your price for this bond and the estimated processing time
+> 2. Your application requirements / intake checklist (entity & importer ID=
+,
+> contacts & owners, merchandise & trade profile, customs operations, bond
+> history & compliance, and AD/CVD schedule if applicable)
+> 3. Documents you need from us - we have Articles of Formation, IRS EIN
+> letter (CP575), W-9 and principal ID available
+>
+> Best regards,
+> CYNTHIA MARIE BULLECK
+> JA Tendo Foods LLC
+>
+
+--000000000000242d9e06614903c1
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div>Hello Cynthia,</div><div><br></div><div>Our service f=
+or applying=C2=A0for a continuous bond application: $100.00 (non-refundable=
+).</div><div><br></div><div>Continuous Bond: $600 for one year, $900 for tw=
+o years.=C2=A0</div><div><br></div><div>Processing Time: 1-5 business days.=
+</div><div><br></div><div>Yes, before proceeding, can you please help me wi=
+th the following:</div><div><ul><li>the beneficial ownership of your compan=
+y, and the US status of its owner(s)?</li><li>what kind of articles does yo=
+ur copmany import?</li><li>has your company previously applied for a contin=
+uous bond with another broker or surety before contacting us?</li></ul></di=
+v><div><br></div><div><div dir=3D"ltr" class=3D"gmail_signature" data-smart=
+mail=3D"gmail_signature"><div dir=3D"ltr"><div><font size=3D"4" face=3D"ver=
+dana, sans-serif"><font color=3D"#000099"><b><br></b></font></font></div><d=
+iv><font size=3D"4" face=3D"verdana, sans-serif"><font color=3D"#000099"><b=
+>Robert Santos</b></font></font></div><div><font size=3D"4" face=3D"verdana=
+, sans-serif"><font color=3D"#000099"><b>Customs Broker Suppliers CBS Inc.<=
+/b></font><b><br></b></font></div><div><div dir=3D"ltr"><div dir=3D"ltr"><d=
+iv dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><div dir=
+=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr=
+"><div dir=3D"ltr"><div><span style=3D"background-color:rgb(0,0,153)"><span=
+ style=3D"background-color:rgb(204,204,255)"><span style=3D"background-colo=
+r:rgb(255,255,255)"><font color=3D"#000099" face=3D"verdana, sans-serif"><b=
+>4215 Lindy Circle. Orlando FL 32827<br>E-Mail:=C2=A0<a href=3D"mailto:impo=
+rts@cbsmco.com" target=3D"_blank">imports@cbsmco.com</a></b></font></span><=
+/span></span></div><div><span style=3D"background-color:rgb(0,0,153)"><span=
+ style=3D"background-color:rgb(204,204,255)"><span style=3D"background-colo=
+r:rgb(255,255,255)"><font color=3D"#000099" face=3D"verdana, sans-serif"><b=
+>Ph.(407)857-8814=C2=A0</b></font></span></span></span></div><div><span sty=
+le=3D"background-color:rgb(0,0,153)"><span style=3D"background-color:rgb(20=
+4,204,255)"><span style=3D"background-color:rgb(255,255,255)"><font color=
+=3D"#000099" face=3D"verdana, sans-serif"><b><a href=3D"http://www.customsb=
+rokersuppliers.com/" target=3D"_blank">www.customsbrokersuppliers.com</a></=
+b></font></span></span></span></div><div><br></div><div><b><font size=3D"1"=
+>ADVISORIES</font></b>:</div><div><ul><li><u style=3D"color:rgb(255,0,0);fo=
+nt-weight:bold;background-color:rgb(255,255,0)">Pay your Invoice by the Due=
+ Date</u><b><font color=3D"#ff0000">:=C2=A0</font><font color=3D"#000000">I=
+t is very important that you pay our invoices by the due date.=C2=A0<u>Unle=
+ss otherwise explicitly agreed in writing between you and CBS Management</u=
+>, if our invoices go unpaid by the due date, we cannot pay or finalize you=
+r customs duties on your behalf on their due date, putting you at risk for=
+=C2=A0<span style=3D"background-color:rgb(255,255,0)">fines, penalties, and=
+ a blemished importing record from/with U.S. Customs &amp; Border Protectio=
+n</span>=C2=A0for which CBS is not responsible.</font></b></li><li><font co=
+lor=3D"#ff0000"><b><u>Checks as a Payment Method</u></b></font>: Starting J=
+une 01, 2022, CBS will no longer accept checks as a payment method. Our inv=
+oices include our Wire, ACH and Zelle information for rapid and efficient p=
+ayments. Card payments are still welcome.<br></li></ul></div></div></div></=
+div></div></div></div></div></div></div></div></div></div></div><b style=3D=
+"color:rgb(34,34,34)"><font color=3D"#ff0000" size=3D"4"><span style=3D"bac=
+kground-color:rgb(255,255,0)">STARTING ON=C2=A0<u>JANUARY 1, 2023</u>=C2=A0=
+ALL EMAILS MUST BE SENT TO OUR NEW EMAIL AT:</span>=C2=A0<a href=3D"mailto:=
+imports@cbsmco.com" style=3D"color:rgb(17,85,204)" target=3D"_blank">import=
+s@cbsmco.com</a></font></b><br></div></div></div><br></div><br><div class=
+=3D"gmail_quote gmail_quote_container"><div dir=3D"ltr" class=3D"gmail_attr=
+">On Fri, Nov 27, 2026 at 2:50=E2=80=AFAM &lt;cynthiabulleck@jatendofoods.o=
+nline&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin=
+:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex"=
+>Hello,<br>
+<br>
+JA Tendo Foods LLC is looking to purchase a customs bond and would like to =
+request a quote from your agency. Details below per our client application:=
+<br>
+<br>
+01 / BOND REQUEST<br>
+- Service requested: New bond<br>
+- Bond coverage: Continuous Customs Bond<br>
+- Activity code: 1 - Importer<br>
+- Requested bond limit: USD 50,000<br>
+<br>
+02 / LEGAL ENTITY &amp; IMPORTER ID<br>
+- Exact legal entity: JA Tendo Foods LLC<br>
+- Entity type: LLC<br>
+- State of formation: CA<br>
+- EIN: 43-2417637<br>
+- Principal address: <a href=3D"https://www.google.com/maps/search/7273+MUR=
+RAY+DR+STE+3,+STOCKTON,+CA,+95210?entry=3Dgmail&amp;source=3Dg">7273 MURRAY=
+ DR STE 3, STOCKTON, CA, 95210</a><br>
+<br>
+03 / CONTACTS &amp; AUTHORIZED SIGNER<br>
+- Authorized signer: CYNTHIA MARIE BULLECK (Organizer)<br>
+- Contact email: cynthiabulleck@jatendofoods.online<br>
+- Phone: <a href=3D"tel:(650)%20537-8868" value=3D"+16505378868" target=3D"=
+_blank">16505378868</a><br>
+<br>
+Please reply with:<br>
+1. Your price for this bond and the estimated processing time<br>
+2. Your application requirements / intake checklist (entity &amp; importer =
+ID, contacts &amp; owners, merchandise &amp; trade profile, customs operati=
+ons, bond history &amp; compliance, and AD/CVD schedule if applicable)<br>
+3. Documents you need from us - we have Articles of Formation, IRS EIN lett=
+er (CP575), W-9 and principal ID available<br>
+<br>
+Best regards,<br>
+CYNTHIA MARIE BULLECK<br>
+JA Tendo Foods LLC<br>
+</blockquote></div>
+
+--000000000000242d9e06614903c1--

@@ -1,0 +1,882 @@
+Return-Path: <GFCanadaAcctSetUp@chrobinson.com>
+Delivered-To: amanuelafeworktiku@enproinc.live
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id iI1oDmi+CWtoGTsAQ1DlOA
+	(envelope-from <GFCanadaAcctSetUp@chrobinson.com>)
+	for <amanuelafeworktiku@enproinc.live>; Fri, 27 Nov 2026 12:31:20 -0500
+X-Original-To: amanuelafeworktiku@enproinc.live
+Received: from mx0a-0062fb01.pphosted.com (mx0a-0062fb01.pphosted.com [66.159.248.55])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id 3B6A11175C6
+	for <amanuelafeworktiku@enproinc.live>; Fri, 27 Nov 2026 12:31:19 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=chrobinson.com header.s=PPS1 header.b=GK596eWM;
+	dkim=fail ("body hash did not verify") header.d=chrobinson.com header.s=selector2 header.b=w2B+lr50;
+	dmarc=pass (policy=reject) header.from=chrobinson.com;
+	spf=pass (mail.pony-it.com: domain of GFCanadaAcctSetUp@chrobinson.com designates 66.159.248.55 as permitted sender) smtp.mailfrom=GFCanadaAcctSetUp@chrobinson.com;
+	arc=reject ("signature check failed: fail, {[1] = sig:microsoft.com:reject}")
+ARC-Seal: i=2; a=rsa-sha256; d=enproinc.live; s=dkim; cv=fail; t=1795800679;
+	b=HjBmUyrfi+NgQc036bXVvKqYuOSLvXYTQQnigWwS+r+R0qfQDlwg+UcP9wh3hf8hMAcAqh
+	hY07oFydnJOyZViLxyE1paFErv8s1b+p6f7kxmYMRIROFFDUGG6SkBdUzR4fDrn02+1tU0
+	uuHDZt99PmEFWAcEl2XZw2mXuDXz62jPpC6GSxBNl1babYAVlVgy8F3i9ao+j4lVxT/EDd
+	rTyrTm51p+w1NhXz2C1mdn3IBejOVDw2aRSwwPgj8x+GfCbs/Y69tiRtNpXg+2ZKCIeEkU
+	0jCbtxC4KiDXfGyjXD95383Y7KA/N8PgTLkQ0zmZWpr3/B4tnv8XCTzYtueRgQ==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=enproinc.live;
+	s=dkim; t=1795800679;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references:dkim-signature;
+	bh=XyLdm8zY41rV2JAj/iMrj8MUCFt/k/W3a0dDCfeAWhc=;
+	b=gbYkQqn+IV6rkvWtpkgnbogoRlolbMRH4jjmpTJmAHCqrsmrwjgHVB2mtlqE5AgN+AJCfi
+	OaEbruAZ5QXcnDO768ne/rTUBLvBIgbJxmp6sxfPwPIiNKJswc1vDu/nzVANzQmBDJqNtt
+	ZY1k9jTscU1PubVzTaXNQF5T2dYw3PVCf6Z1IhRXRZ2wmRzL0f54qebH4Blw5JWzp9iDUv
+	P6UIzufcD1nv1GgylGV3rG/T4Oy6bWyC2t/zlcgZJMEXG04uLefPLkI3hKmKcsqS6QwwKq
+	XFjVmZVd2VSXZibYR9SS/VVtrqNVgpIbJoxtGwqXAhRgXo9OSA0Ks/DsvGeB0A==
+ARC-Authentication-Results: i=2;
+	mail.pony-it.com;
+	dkim=pass header.d=chrobinson.com header.s=PPS1 header.b=GK596eWM;
+	dkim=fail ("body hash did not verify") header.d=chrobinson.com header.s=selector2 header.b=w2B+lr50;
+	dmarc=pass (policy=reject) header.from=chrobinson.com;
+	spf=pass (mail.pony-it.com: domain of GFCanadaAcctSetUp@chrobinson.com designates 66.159.248.55 as permitted sender) smtp.mailfrom=GFCanadaAcctSetUp@chrobinson.com;
+	arc=reject ("signature check failed: fail, {[1] = sig:microsoft.com:reject}")
+Received: from pps.filterd (m0443632.ppops.net [127.0.0.1])
+	by mx0a-0062fb01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6ARFnXce057504
+	for <amanuelafeworktiku@enproinc.live>; Fri, 27 Nov 2026 11:31:15 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=chrobinson.com;
+	 h=content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=PPS1; bh=XyLdm8zY41rV2JAj/iMrj8MUCFt/k
+	/W3a0dDCfeAWhc=; b=GK596eWMrdadN1sPoamBdDuYIU3JWea6AXJIvR5kXWWfS
+	yo+OVlrL4qBjfv8yZ9lvOF7iPVDzg9c1jLmKiNL/t/ytM0PWMdNAhKLznC5ihx1X
+	N3/FlU0ypVy/eRIyhNWoJPZ5NigY1gP5+vyqK0JRHwLQCe6r+dExo9bZAAJBsy/H
+	OqI2OWXAYSF8yew15v4cuSowLehySakiSiYeDpwm7KQF116ccZfynu5HLw9EG41/
+	m++dqqotkhwKI4GXSxBdkAp9gfFsaNW1l8N0VTzCwyC47GDHxTZLHyFKPy3ajS2n
+	eJmJgwJoAxBvyDFFjdtZxHLhwYw5APmSCaWAabTwg==
+Received: from bl2pr02cu003.outbound.protection.outlook.com (mail-eastusazon11011006.outbound.protection.outlook.com [52.101.52.6])
+	by mx0a-0062fb01.pphosted.com (PPS) with ESMTPS id 4j7bts0mqe-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT)
+	for <amanuelafeworktiku@enproinc.live>; Fri, 27 Nov 2026 11:31:14 -0600 (CST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=XNUxNUJFQZWb4QInWWO9p7YjHYQEhIBZID+XjW5GsVkn5VA9XPBYaQ0qcOFxQ7tLBhhte0JydFSfL/Dx+q6Wkf/xKcJcYPWBc9Hbp/mLRrWLPkWSWt+1g1WVEKxFuM1AxyZiDV+GaVA1/JN7RQBdYHJEeP34ROgAluXCipIo166xtoP3HpsI22Bmj4uhZDSqCAQMUBTWubNzLAgWX0eOY4z7vaxeTOBX+X4PPcpNytuSu4TdEbI9/rC5X7lWN7W/biw5mxS9xIMbYmFaEPRRoCrGINfxo0iMeiryKLYctrXiGlqrFQK5M406KRTmmzd1Ve4Duo5jopPuo/LBzRU57A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ndyqTB5yK4m6JfcALWUpFbiKuZaHXvsVWmLs6mWWZ/w=;
+ b=gbiShlhDBZgZtkOYh67NHLRgBRt8zNl5hZHNXuL172UG0G4ldpG3AL32bxItrV2uQOPcyRVN3zFjlIdWYtr+AGWXex2X5TPuQ0IDOANx3O/C0dnFkJr/GSEoryYGXEKO+/ejnxEmCxdOWpHyNBefowGwgDGyq3OzJ5qhLyRSRM/ODg0P/6R+tK+QJwUlzzLztI08+pJLRIgCz9jTL2HyTUUeurlH+HR8vzNGVXtsQZBwL+FykxdC76pGyLjRlzN0dqK3QU2OmI9GcnXZLSzqYjuUiQkStb69KZlUppDgz46qKJW+Qs8xgdMINcUUq7tXjg2uutEIKoiCKHsiO10dpA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=chrobinson.com; dmarc=pass action=none
+ header.from=chrobinson.com; dkim=pass header.d=chrobinson.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=chrobinson.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ndyqTB5yK4m6JfcALWUpFbiKuZaHXvsVWmLs6mWWZ/w=;
+ b=w2B+lr50nISJlezMZxYDax8qYb/xFv/LJwHMDTkMnniL/NtgbHrFPUL/iHvUWcsHHtDdJvr9yRP3H8i0pxV7jfhl43sahFUj798/KaEhRAe35KTmvFFJxycUtclftZN8gmu8n9a/w1btjPL0sdiu/xud3+K+Wqo+3XGI1N/o9GPbWJGP2kFgYB23UBUvxP0c23DDhQ6g3JWkBgyo72dIimnrilg9quJ3cvm5/YeFtveBsvz/Utai/m4opnPERiNqxDK56SnFrYMjpj3NY4K0TvKl2C4BvoFjYgE+7B30opz4ppQORmVksdqL5kSBE/SZ9dKJ+BQzK0Gu/1zbRJWSng==
+Received: from DM8PR19MB5269.namprd19.prod.outlook.com (2603:10b6:8:a::10) by
+ PH0PR19MB7494.namprd19.prod.outlook.com (2603:10b6:510:28d::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.662.10; Fri, 27 Nov
+ 2026 17:31:12 +0000
+Received: from DM8PR19MB5269.namprd19.prod.outlook.com
+ ([fe80::8ee:2efa:893b:a0fa]) by DM8PR19MB5269.namprd19.prod.outlook.com
+ ([fe80::8ee:2efa:893b:a0fa%5]) with mapi id 15.21.0662.007; Fri, 27 Nov 2026
+ 17:31:12 +0000
+From: GFCanadaAcctSetUp <GFCanadaAcctSetUp@chrobinson.com>
+To: "amanuelafeworktiku@enproinc.live" <amanuelafeworktiku@enproinc.live>
+Subject: FW: [BOND-2026-0707] Inquiry - Continuous Customs Bond
+Thread-Topic: [BOND-2026-0707] Inquiry - Continuous Customs Bond
+Thread-Index: AQHdfgvLe7C2HFf9OEyhv0GNVeDcOLdBHBUwgAEHfZCAAAkdUIAAALUQ
+Date: Fri, 27 Nov 2026 17:31:12 +0000
+Message-ID:
+ <DM8PR19MB52694AE45518C7946E5D0C48F3412@DM8PR19MB5269.namprd19.prod.outlook.com>
+References:
+ <010f01a21a8ba787-a28186f3-7a01-4c85-a916-57d7be6392ab-000000@us-east-2.amazonses.com>
+ <EAYPR19MB559184522E86B26F7D7B8E5E2880412@EAYPR19MB559184.namprd19.prod.outlook.com>
+ <DM8PR19MB5269B257C01E1D376E62666BF3412@DM8PR19MB5269.namprd19.prod.outlook.com>
+ <CH0PR19MB5267F8EB56B9E79DCF315B15AB412@CH0PR19MB5267.namprd19.prod.outlook.com>
+In-Reply-To:
+ <CH0PR19MB5267F8EB56B9E79DCF315B15AB412@CH0PR19MB5267.namprd19.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: yes
+X-MS-TNEF-Correlator:
+msip_labels:
+ MSIP_Label_417c030e-3084-44b4-9da9-df8ba1254a7e_ActionId=c42b969a-a71a-4851-b119-93a046af91ff;MSIP_Label_417c030e-3084-44b4-9da9-df8ba1254a7e_ContentBits=0;MSIP_Label_417c030e-3084-44b4-9da9-df8ba1254a7e_Enabled=true;MSIP_Label_417c030e-3084-44b4-9da9-df8ba1254a7e_Method=Standard;MSIP_Label_417c030e-3084-44b4-9da9-df8ba1254a7e_Name=Internal;MSIP_Label_417c030e-3084-44b4-9da9-df8ba1254a7e_SetDate=2026-11-27T16:53:30Z;MSIP_Label_417c030e-3084-44b4-9da9-df8ba1254a7e_SiteId=d441ad83-6235-46d6-ab1a-89744a91b1d8;MSIP_Label_417c030e-3084-44b4-9da9-df8ba1254a7e_Tag=10,
+ 3, 0, 1;
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM8PR19MB5269:EE_|PH0PR19MB7494:EE_
+x-ms-office365-filtering-correlation-id: ed32d4d2-42cb-4dc9-21e1-08df4cac3b3c
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|23010399003|6049299003|1800799024|366016|376014|11063799006|4143699003|6133799003|18002099003|22082099003|13003099007|4013099003|4053099003|8096899003|3613699012|260925021911599003|260925021311599003|10067099003|56012099006|261102123227099003|261028144727099003|261026140227099003|261026121527099003|261021121427099003|261022105027099003|261022075727099003|38070700021|260925022911599003;
+x-microsoft-antispam-message-info:
+ MMJe50ksxCcl7OOYGkgIm4toG1k2wrQD7+8WxK/jxGM1ggI+xJKNP5ykNi/JaPDtEFVXCHSvYmWWbsYA7nENHCJg0SvHQeuvcNLgaTTdUNPgl7lljg/RRXonr/C9pvCR9jIkYehWdtp9VmFMt20qHTz8TIQEF62dO870y85Kcy8ydLHtfc8gMrttHI8K3RDfEki6+hmd2lOFlbD0nUcXoYO6DBG/N9YTs50GKRA2flMos8OISBJ+n90YjslOEJhr+C4JOhwMMIDhkZnu8sOx0DXWtOjFJeBlj1tLleqWYUwJGxxqOc3qCr7DDBsAqus2HPJ/c5nix8jlhtb9pmW7gl3ofykD7XluNbcYMiZv+nnjMxv9IXanyVHFkreD9+Dj6VMyfQESl0Ga5VfF18K8345PC0ZzgO6eVGHEDslYa4GDRj3sflr84t1sx3CsykluR/krhbzvWg0aj8TLEnuItcc9vd8/Iov3rqonU6NNC4ysaQpZ5KIPLKYKbnX8zUDzf3u8ngVh/46OIQjDZ6+3kADzvf+llmrcO2wyLOlGnec/qLAuDfURIMoILuQOsY08BiyUwAAbks3BeP8nMz7vvBRgyNLSkceGf13OMGqC8tVslg0SfZ8mKHArS0AcyjA6hXsIDw9gQwYJDb74e0ylVnVd5SYPkCumEftXh2QTfuaKhhF5KhJhlvJrQkGKhOefY+lc5s6t7w3ruw1rnrUipQ==
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR19MB5269.namprd19.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(6049299003)(1800799024)(366016)(376014)(11063799006)(4143699003)(6133799003)(18002099003)(22082099003)(13003099007)(4013099003)(4053099003)(8096899003)(3613699012)(260925021911599003)(260925021311599003)(10067099003)(56012099006)(261102123227099003)(261028144727099003)(261026140227099003)(261026121527099003)(261021121427099003)(261022105027099003)(261022075727099003)(38070700021)(260925022911599003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?quSs7piBqkC9T9cfEeewK10jqYdjm/J9w2tZihE6bl0+QBqOi7SPokjqIePz?=
+ =?us-ascii?Q?3+10O/0PfVMW0dNsrtODtAjDfkxwZpqw4Dzci6NCqn27rE3Oq3l2pelqF5Ro?=
+ =?us-ascii?Q?Fv91pcDHXSuX4Urx2S7DsaAhzSP6XvthKIuYF3CodKbqQ05o+ONI87tbeHe1?=
+ =?us-ascii?Q?QhZwp+ivFGVTyU28uk27Um/3gRrWlvaG5JwaF492t1dtVkTK+5+K43+flzUY?=
+ =?us-ascii?Q?dtw2d/RoHFwMLdV9x/TsEzGvmc3oyJ38nOgK+6KD0MT9EcmvAOzaWE3DcN56?=
+ =?us-ascii?Q?vHmU+znn3aR7D7LQmuN8WIrcLve6sMlMdAkNufb2L1r0NeXu8tjwZ01S4Uq4?=
+ =?us-ascii?Q?s0w0kN1M+YHGAH/NGf2knDklC1uii18Vrx4SS797iUeDnIG6/RdLpQK4pUdC?=
+ =?us-ascii?Q?2m/uBrHLYAgsDGmCIDSNM4KVgIff0T+JAXC5qkdVuMe6X/82UhSHLL2NQyT7?=
+ =?us-ascii?Q?iUqTAK1piC2vuU5yBbgmb48mjNI50MlpXfuQsd21CCbjfC5El3DMnHpDocfc?=
+ =?us-ascii?Q?cYqa25QgvvG14qSlC5a/nKUaM2zwf7hW/PsDJWb9bGwSsuAbqqDkgfbIDvT1?=
+ =?us-ascii?Q?vHzJwyUKsw+vyJE1+gpd4qvb3RsT2EgBZ4xclqNCJJoSLPrQnZKyiWjZmNDd?=
+ =?us-ascii?Q?78m/DXtWsCrAT539rxwiVUuxfVXdUHkxTXqtRXNxZUT8tqlxqubr27aT5Cec?=
+ =?us-ascii?Q?ZVBjM9PKPIK9VutqpabIJ4+82UnbGmIOFiZursyzE7+Ob2FjyP9F33bBFej9?=
+ =?us-ascii?Q?cbmEZm9bbgtrjskei6w9hecDxANsw/eyiUHPNx9ffMUd4uL2XSbKaKU8E3Yd?=
+ =?us-ascii?Q?aTU5mILBEoltzVyrGmk4AeqQFKcsdNJgev6YJiYN63ym0rbuVpjqbJqah2EK?=
+ =?us-ascii?Q?1uLTkN9tIZwFdN8r3hGP50HX2bK75Anf5XAGc/aagekJhEUTX3y30t1dkSoE?=
+ =?us-ascii?Q?lxA2Xs57zpJex2oNGHAr2vxlXnD5/8GZyUFKcGT5FAs53z941fliBOUmhAwY?=
+ =?us-ascii?Q?QOhf9VeqD4GgofsMVRjUWIMRO+tBHnoPiYkt8CRxK/NuuxnGI5y/oxSY7Nnh?=
+ =?us-ascii?Q?AtaBhGvArVOpMgkOra7X7cODNbKXismN+50lVTqJlDcOIjwMzl8cy1DiG3u4?=
+ =?us-ascii?Q?WxW9XcODb2pl4VD7lnQ53rYKkVsj5OJdriw+opo3b38hGXI36XOvlTpT5K7b?=
+ =?us-ascii?Q?+eqoI6/9w8S8xD+Tq+AuD0Sl8bYCMyqStn7SpOXCWK9oFmYzCVfT5UDqwzZE?=
+ =?us-ascii?Q?BEaznfcrus/mOsvnxpJFe83ioPYIjp3HH9huA+dOtBWVeKarZMVwPrEdGxFQ?=
+ =?us-ascii?Q?Vc/r1dHqF1vWZnjQ6n0eWXU4OZctm9ydm4ldILXfiRcbiY0plcyb6EcCLZVZ?=
+ =?us-ascii?Q?dHGsiIVe9S1QJmELDlZQoTMQ5H62AJ2JgjEfoe2ahcT0GBZ2j9NYNsywltGo?=
+ =?us-ascii?Q?djOKATLgmDoh1hcGzVfXp1ztDNOeZQjdMczmHrwmzaPL/7AoWYU4RhjFU+yU?=
+ =?us-ascii?Q?szE7a18J4hmhLp60qxjwRUnw3UuawpSuvfgdPUMubHkCeehD5ofDPM8Iunpj?=
+ =?us-ascii?Q?mICqJ5P6wiTSUKkshidFjlGFuqU4xyTzk9jG51Cret6v2Fj/N4uT1GKOwE6L?=
+ =?us-ascii?Q?n0ZP2sv/D3bWjSSFcGFUu9Sg420bOC7rZ9jXCqUm6GvsIB8yC5RUweUeNMsg?=
+ =?us-ascii?Q?pD2GVOaAxWeFnyHwRI822Dcy+7EpjdDVE7ApM5zh/QAzJ1AWOawtVUDHjdIp?=
+ =?us-ascii?Q?Chx0gtjp+w=3D=3D?=
+Content-Type: multipart/related;
+	boundary="_004_DM8PR19MB52694AE45518C7946E5D0C48F3412DM8PR19MB5269namp_";
+	type="multipart/alternative"
+MIME-Version: 1.0
+X-Exchange-RoutingPolicyChecked:
+	fqSXmGFdSDzsZA5dAGSGFMSJd3Uz649s+WvY0+L654BvXtpYI4vnDcI+j3H8lEnotH5X+TQ9uYJ/Qb6j4ZrT74DevuzaZhyyVQFMHhq/om04Msyrb3s5/8TKmKYhNgdXmiJTGwuG2QTlyyMAS5TwMKIznD3Bm80CwpXZ9yXMll8k5aS1axhubaESdPJYg/Vq/KpKAjzKoUFNxnbmLdJpCm6Zql7HRx3+UlSvsicK6H3tZYKbTrkVwssj0BQapHAexikSQWQgVCTYA7zOQmN9M5vVK9Nlzhgo4DVScX/CXZMI2xI7hwmoHTBbrbY8qEImdYGpdLgkEpFkQ1mmizhvDA==
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	T5qoDZVrk3823LbdLJ5r648vmTTXnVj8O8UXoNBoE4MwiY+9U3yrqnwA4fKsZUyevldFWWpI59K192BysSzU7yggPqLJufKDh6ZHZZMdlmEzqGdioISZWrbRNFOHT8iXyfyAtkayWkg5rMeqT6HAcbwDoe5UQ6idMtn0sS1RgjNkX6jVhrEjhsqXOyAKPuxEnMWLW/5f/M503u+Cj7ZJ6mtnsgBw8xUd4pKkx88Y9FfKOjHh8+4heKyVm6qb98M4XoNaxCMjfIGOa0RXN1Zbo1cJPB72V4brTMU23Ch+DPghYaSdip0lgVPOwfkgkELLRrphu6rZzjDgSTSVhPS/lfhZJJJdeEiaENCUHN63cJ22HTLVh6WnrvD8FLG6vZ7YDRv5Tf/bCZ6iCnKyyv6LdTEHjL6J3A8HwztHCUkUWX7svg3SWT/0FG4NZ3KWWWwZRPj7I+ROfPqGuMpVf5WzPWeoGD89/U90cU1lPIL5yJzq+62pFF5nY78gaBJcgJPv5PXcrn4GS40L1IGitsQc562hO0OjC0zhIcOZroRwNO/5Hg9/sLCMAAEFzFtVhV3DSh5FSlkZoHtHRSTdvE8giL48mnNYSYsI2Ta9ugJ7PIgWuiQOgFd8CFuCWwjQ46En
+X-OriginatorOrg: chrobinson.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM8PR19MB5269.namprd19.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ed32d4d2-42cb-4dc9-21e1-08df4cac3b3c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Nov 2026 17:31:12.1533
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: d441ad83-6235-46d6-ab1a-89744a91b1d8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 6rRk6FSe7sypDi+rmTGHoJheIE5x5ExayudqIi/usnxdQvHOr/l0FzRZnw1/uDVGKlEGHNgKBK1gXzvReN1zPg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR19MB7494
+X-Proofpoint-ORIG-GUID: CQ3_OAWw0qO44PzqEJYt3PCpp9LRp6n6
+X-Authority-Analysis: v=2.4 cv=V4joQuni c=1 sm=1 tr=0 ts=6b09be62 cx=c_pps
+ a=Al0BzvsZ99ielPXA9PThCA==:117 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=wiCK4zIcXxQJ/IvVle8ofNRVih8=:19 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19
+ a=xqWC_Br6kY4A:10 a=zJRp6_cAMcgA:10 a=XW5gFAnkZvAA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=hGXtS4lma8lnbW8l7vnH:22 a=Gb1w_rwt5i6Ja1qJ5_ZC:22
+ a=DPNsCAOpAAAA:8 a=TARmQ2o8kKkmlQqZC14A:9 a=lqcHg5cX4UMA:10 a=CjuIK1q_8ugA:10
+ a=yMhMjlubAAAA:8 a=SSmOFEACAAAA:8 a=E67jpnHxo2Ilf7BZHTkA:9
+ a=8YaEZKsvb8P3csHM:21 a=gKO2Hq4RSVkA:10 a=UiCQ7L4-1S4A:10 a=hTZeC7Yk6K0A:10
+ a=frz4AuCg-hUA:10 a=HXjIzolwW10A:10 a=T6a71-JsGAwA:10
+ a=bGb0Cf3PLl3W1s4hebTV:22
+X-Proofpoint-GUID: CQ3_OAWw0qO44PzqEJYt3PCpp9LRp6n6
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTI3MDA2OSBTYWx0ZWRfX4NuqGzUnor24
+ JSX08Ko/IYiX8GC6XaOjAk05Kw8cD0RsIUg2MscAhBERMlnn8aUzwX4DPv5HDLwDaGWRP8lIgo1
+ AgWKhgnXvHnGmM4kxQN59tX5qT4rUCqcnuNbjljg93+EamdLLvjlYmoTU4PhisBjBEzuhcPOil1
+ 71f7k+wIQ3S27McZP7fidQlZDYVhJfQ4zz8g+/16tnKcnoYhx8c1rsJ1/93qeaWlYcLC8scRc8q
+ 3hp8qnbc8bBNJR4051RTuSXtgr6DecZJ/UAScMvprQ1eQrgO9Za9Y7tG46wMpeJWAR/uDCB2jFL
+ u8xhkSV8lqEOJtMqpQS50dFyE55mq/3f25eDWEpPVjQ1nle8jJOIp8xTcI1Isd/M47c+bspFEKO
+ a4KEZ0dvO8STPFb31VORH/ou6D9fNHQTUcKrcQ1aerpJAltAHw+fv1ma5GWz182l+Q1sNLM/XxV
+ DdRSjezVG27cLMx+X3w==
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTI3MDA2OSBTYWx0ZWRfX3ef7ZTdN/sxL
+ GluchXZ4X9J3pYYKMEmYbJ7v1TfbBY1B5CpoD9Pomcdpno77YBppuYOCf0sdbijGpVAZGaXDivM
+ Kpeb1Wu4zruVWbUlvMeBbn3ijTgmyIObQMnnqu5K6GyveXQZsO1t
+X-Proofpoint-Virus-Version: 
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1011 bulkscore=0 adultscore=0 lowpriorityscore=0 spamscore=0
+ impostorscore=0 suspectscore=0 priorityscore=1501 phishscore=0 malwarescore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2611040001 definitions=main-2611270069
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Result: default: False [-7.37 / 15.00];
+	BAYES_HAM(-5.50)[100.00%];
+	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
+	RWL_MAILSPIKE_EXCELLENT(-0.40)[66.159.248.55:from];
+	IP_REPUTATION_HAM(-0.37)[asn: 26211(-0.36), country: US(-0.01), ip: 66.159.248.55(0.00)];
+	R_DKIM_ALLOW(-0.20)[chrobinson.com:s=PPS1];
+	R_SPF_ALLOW(-0.20)[+ip4:66.159.248.55];
+	MX_GOOD(-0.10)[mxb-0062fb01.gslb.pphosted.com];
+	MIME_GOOD(-0.10)[multipart/related,multipart/alternative,text/plain];
+	RCVD_IN_DNSWL_LOW(-0.10)[66.159.248.55:from];
+	ARC_REJECT(0.10)[signature check failed: fail, {[1] = sig:microsoft.com:reject}];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_ONE(0.00)[1];
+	RCPT_MAILCOW_DOMAIN(0.00)[enproinc.live];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+,1:+,2:+,3:~,4:~];
+	R_DKIM_REJECT(0.00)[chrobinson.com:s=selector2];
+	ARC_SIGNED(0.00)[enproinc.live:s=dkim:i=2];
+	PREVIOUSLY_DELIVERED(0.00)[amanuelafeworktiku@enproinc.live];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_EQ_ADDR_ALL(0.00)[];
+	ASN(0.00)[asn:26211, ipnet:66.159.248.0/23, country:US];
+	DKIM_MIXED(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	DMARC_POLICY_ALLOW(0.00)[chrobinson.com,reject];
+	DKIM_TRACE(0.00)[chrobinson.com:+,chrobinson.com:-];
+	RCVD_IN_DNSWL_NONE(0.00)[52.101.52.6:received]
+X-Rspamd-Queue-Id: 3B6A11175C6
+
+--_004_DM8PR19MB52694AE45518C7946E5D0C48F3412DM8PR19MB5269namp_
+Content-Type: multipart/alternative;
+	boundary="_000_DM8PR19MB52694AE45518C7946E5D0C48F3412DM8PR19MB5269namp_"
+
+--_000_DM8PR19MB52694AE45518C7946E5D0C48F3412DM8PR19MB5269namp_
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+Hello,
+The EIN listed below is not an active customer in our system.  We are unabl=
+e to apply for continuous bonds for importers who do not have an active POA=
+ on file with C.H. Robinson.
+As CH Robinson is a Freight Forwarder, not a surety agency, the importer wo=
+uld first have to be setup with a POA before we can proceed with the bond a=
+pplication.
+
+Don't miss a beat in global trade!
+Client Advisories | C.H. Robinson<https://www.chrobinson.com/en-us/resource=
+s/insights-and-advisories/client-advisories/>
+U.S. Tariff Timeline | C.H. Robinson<https://sitecore.chrobinson.com/en-us/=
+resources/insights-and-advisories/trade-tariff-insights/tariff-timeline/?sc=
+_mode=3Dnormal>
+
+Best regards,
+Jessica White, CCS
+Compliance Analyst | US Central Region
+
+C.H. Robinson
+1701 Golf Rd. Tower 1 Suite 800 | Rolling Meadows, IL 60008 United States
+Direct: 470.283.7601
+Office hours are 8:00AM - 4:30PM EST.
+jessica.white2@chrobinson.com<mailto:jessica.white2@chrobinson.com>
+www.chrobinson.com<http://www.chrobinson.com/>
+
+[cid:image001.png@01DD7E6A.B4E19A20]
+
+
+
+
+
+
+-----Original Message-----
+
+From: amanuelafeworktiku@enproinc.live<mailto:amanuelafeworktiku@enproinc.l=
+ive> <amanuelafeworktiku@enproinc.live<mailto:amanuelafeworktiku@enproinc.l=
+ive>>
+
+Sent: Thursday, November 26, 2026 8:08 PM
+
+To: dl-mil-pars <dl-mil-pars@chrobinson.com<mailto:dl-mil-pars@chrobinson.c=
+om>>
+
+Subject: [BOND-2026-0707] Inquiry - Continuous Customs Bond
+
+
+
+[EXTERNAL EMAIL] CAUTION: This email originated from outside of the organiz=
+ation. Do not click links or open attachments unless you recognize the send=
+er and know the content is safe. chrexternaltag
+
+
+
+Hello,
+
+
+
+Enpro LLC is looking to purchase a customs bond and would like to request a=
+ quote from your agency. Details below per our client application:
+
+
+
+01 / BOND REQUEST
+
+- Service requested: New bond
+
+- Bond coverage: Continuous Customs Bond
+
+- Activity code: 1 - Importer
+
+- Requested bond limit: USD 50,000
+
+
+
+02 / LEGAL ENTITY & IMPORTER ID
+
+- Exact legal entity: Enpro LLC
+
+- Entity type: LLC
+
+- State of formation: CA
+
+- EIN: 43-2207391
+
+- Principal address: 833 S SPRING ST STE 200, LOS ANGELES, CA, 90014
+
+
+
+03 / CONTACTS & AUTHORIZED SIGNER
+
+- Authorized signer: AMANUEL AFEWORK TIKU (Organizer)
+
+- Contact email: amanuelafeworktiku@enproinc.live<mailto:amanuelafeworktiku=
+@enproinc.live>
+
+- Phone: 2097764668
+
+
+
+Please reply with:
+
+1. Your price for this bond and the estimated processing time 2. Your appli=
+cation requirements / intake checklist (entity & importer ID, contacts & ow=
+ners, merchandise & trade profile, customs operations, bond history & compl=
+iance, and AD/CVD schedule if applicable) 3. Documents you need from us - w=
+e have Articles of Formation, IRS EIN letter (CP575), W-9 and principal ID =
+available
+
+
+
+Best regards,
+
+AMANUEL AFEWORK TIKU
+
+Enpro LLC
+
+**********************************************************************
+This email and any files transmitted with it are confidential and intended =
+solely for the use of the individual or entity to whom they are addressed. =
+If you are not the named addressee you should not disseminate, distribute o=
+r copy this e-mail. Please notify the sender immediately by e-mail if you h=
+ave received this e-mail by mistake and delete this e-mail from your system=
+. Please note that any views or opinions presented in this email are solely=
+ those of the author and do not necessarily represent those of the sender o=
+f the e-mail. The sender of the e-mail accepts no liability for any damage =
+caused by any virus transmitted by this email. _PPS
+
+--_000_DM8PR19MB52694AE45518C7946E5D0C48F3412DM8PR19MB5269namp_
+Content-Type: text/html; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
+osoft-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
+xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
+//www.w3.org/TR/REC-html40">
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii">
+<meta name=3D"Generator" content=3D"Microsoft Word 15 (filtered medium)">
+<!--[if !mso]><style>v\:* {behavior:url(#default#VML);}
+o\:* {behavior:url(#default#VML);}
+w\:* {behavior:url(#default#VML);}
+.shape {behavior:url(#default#VML);}
+</style><![endif]--><style><!--
+/* Font Definitions */
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+@font-face
+	{font-family:Aptos;}
+/* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0cm;
+	font-size:12.0pt;
+	font-family:"Aptos",sans-serif;}
+a:link, span.MsoHyperlink
+	{mso-style-priority:99;
+	color:#467886;
+	text-decoration:underline;}
+p.MsoPlainText, li.MsoPlainText, div.MsoPlainText
+	{mso-style-priority:99;
+	mso-style-link:"Plain Text Char";
+	margin:0cm;
+	font-size:11.0pt;
+	font-family:"Calibri",sans-serif;
+	mso-ligatures:standardcontextual;}
+span.PlainTextChar
+	{mso-style-name:"Plain Text Char";
+	mso-style-priority:99;
+	mso-style-link:"Plain Text";
+	font-family:"Calibri",sans-serif;}
+span.EmailStyle23
+	{mso-style-type:personal-reply;
+	font-family:"Aptos",sans-serif;
+	color:windowtext;}
+.MsoChpDefault
+	{mso-style-type:export-only;
+	font-size:10.0pt;
+	mso-ligatures:none;}
+@page WordSection1
+	{size:612.0pt 792.0pt;
+	margin:72.0pt 72.0pt 72.0pt 72.0pt;}
+div.WordSection1
+	{page:WordSection1;}
+--></style><!--[if gte mso 9]><xml>
+<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
+</xml><![endif]--><!--[if gte mso 9]><xml>
+<o:shapelayout v:ext=3D"edit">
+<o:idmap v:ext=3D"edit" data=3D"1" />
+</o:shapelayout></xml><![endif]-->
+</head>
+<body lang=3D"EN-CA" link=3D"#467886" vlink=3D"#96607D" style=3D"word-wrap:=
+break-word">
+<div class=3D"WordSection1">
+<p class=3D"MsoNormal"><span lang=3D"EN-US">Hello,<o:p></o:p></span></p>
+<p class=3D"MsoNormal"><span lang=3D"EN-US">The EIN listed below is not an =
+active customer in our system.&nbsp; We are unable to apply for continuous =
+bonds for importers who do not have an active POA on file with C.H. Robinso=
+n.&nbsp;
+<o:p></o:p></span></p>
+<p class=3D"MsoNormal"><span lang=3D"EN-US">As CH Robinson is a Freight For=
+warder, not a surety
+</span>agency, t<span lang=3D"EN-US">he importer would first have to be set=
+up with a POA before we can proceed with the bond application.&nbsp;
+<o:p></o:p></span></p>
+<p class=3D"MsoNormal" style=3D"background:white"><span lang=3D"EN-US" styl=
+e=3D"color:#201F1E;mso-ligatures:standardcontextual"><o:p>&nbsp;</o:p></spa=
+n></p>
+<p class=3D"MsoNormal" style=3D"mso-margin-top-alt:auto;mso-margin-bottom-a=
+lt:auto"><span lang=3D"EN-US" style=3D"font-size:10.0pt;mso-ligatures:stand=
+ardcontextual">Don&#8217;t miss a beat in global trade!<o:p></o:p></span></=
+p>
+<p class=3D"MsoNormal" style=3D"mso-margin-top-alt:auto;mso-margin-bottom-a=
+lt:auto"><span lang=3D"EN-US" style=3D"font-size:10.0pt;mso-ligatures:stand=
+ardcontextual"><a href=3D"https://www.chrobinson.com/en-us/resources/insigh=
+ts-and-advisories/client-advisories/">Client
+ Advisories | C.H. Robinson</a><o:p></o:p></span></p>
+<p class=3D"MsoNormal" style=3D"mso-margin-top-alt:auto;mso-margin-bottom-a=
+lt:auto"><span lang=3D"EN-US" style=3D"font-size:10.0pt;mso-ligatures:stand=
+ardcontextual"><a href=3D"https://sitecore.chrobinson.com/en-us/resources/i=
+nsights-and-advisories/trade-tariff-insights/tariff-timeline/?sc_mode=3Dnor=
+mal">U.S.
+ Tariff Timeline | C.H. Robinson</a><o:p></o:p></span></p>
+<p class=3D"MsoNormal" style=3D"background:white"><span lang=3D"EN-US" styl=
+e=3D"color:#201F1E;mso-ligatures:standardcontextual"><o:p>&nbsp;</o:p></spa=
+n></p>
+<p class=3D"MsoNormal" style=3D"background:white"><span lang=3D"EN-US" styl=
+e=3D"color:#201F1E;mso-ligatures:standardcontextual">Best regards,</span><s=
+pan lang=3D"EN-US" style=3D"font-size:11.0pt;font-family:&quot;Calibri&quot=
+;,sans-serif;color:#201F1E;mso-ligatures:standardcontextual;mso-fareast-lan=
+guage:JA"><o:p></o:p></span></p>
+<p class=3D"MsoNormal"><span lang=3D"EN-US" style=3D"font-size:10.0pt;font-=
+family:&quot;Arial&quot;,sans-serif;color:#0079AF;background:white;mso-liga=
+tures:standardcontextual">Jessica White, CCS&nbsp;<o:p></o:p></span></p>
+<p class=3D"MsoNormal"><span lang=3D"EN-US" style=3D"font-size:10.0pt;font-=
+family:&quot;Arial&quot;,sans-serif;color:#767171;background:white;mso-liga=
+tures:standardcontextual">Compliance Analyst</span><span lang=3D"EN-US" sty=
+le=3D"font-size:10.0pt;mso-ligatures:standardcontextual">
+ | </span><span lang=3D"EN-US" style=3D"font-size:10.0pt;font-family:&quot;=
+Arial&quot;,sans-serif;color:#767171;background:white;mso-ligatures:standar=
+dcontextual">US Central Region</span><span lang=3D"EN-US" style=3D"font-siz=
+e:10.0pt;mso-ligatures:standardcontextual">
+<o:p></o:p></span></p>
+<p class=3D"MsoNormal"><span lang=3D"EN-US" style=3D"font-size:10.0pt;mso-l=
+igatures:standardcontextual"><o:p>&nbsp;</o:p></span></p>
+<p class=3D"MsoNormal"><span lang=3D"EN-US" style=3D"font-size:9.0pt;font-f=
+amily:&quot;Arial&quot;,sans-serif;color:#767171;background:white;mso-ligat=
+ures:standardcontextual">C.H. Robinson</span><span lang=3D"EN-US" style=3D"=
+font-size:9.0pt;font-family:&quot;Arial&quot;,sans-serif;color:black;mso-li=
+gatures:standardcontextual">
+<o:p></o:p></span></p>
+<p class=3D"MsoNormal"><span lang=3D"EN-US" style=3D"font-size:9.0pt;font-f=
+amily:&quot;Arial&quot;,sans-serif;color:#7F7F7F;mso-ligatures:standardcont=
+extual">1701 Golf Rd. Tower 1 Suite 800 | Rolling Meadows, IL 60008</span><=
+span lang=3D"EN-US" style=3D"mso-ligatures:standardcontextual">
+</span><span lang=3D"EN-US" style=3D"font-size:9.0pt;font-family:&quot;Aria=
+l&quot;,sans-serif;color:#7F7F7F;mso-ligatures:standardcontextual">United S=
+tates</span><span lang=3D"EN-US" style=3D"font-size:9.0pt;font-family:&quot=
+;Arial&quot;,sans-serif;color:#767171;background:white;mso-ligatures:standa=
+rdcontextual">
+</span><span lang=3D"EN-US" style=3D"font-size:9.0pt;font-family:&quot;Aria=
+l&quot;,sans-serif;color:#7F7F7F;mso-ligatures:standardcontextual"><o:p></o=
+:p></span></p>
+<p class=3D"MsoNormal"><span lang=3D"EN-US" style=3D"font-size:9.0pt;font-f=
+amily:&quot;Arial&quot;,sans-serif;color:#767171;background:white;mso-ligat=
+ures:standardcontextual">Direct: 470.283.7601
+<o:p></o:p></span></p>
+<p class=3D"MsoNormal"><span lang=3D"EN-US" style=3D"font-size:9.0pt;font-f=
+amily:&quot;Arial&quot;,sans-serif;color:#767171;mso-ligatures:standardcont=
+extual">Office hours are 8:00AM &#8211; 4:30PM EST.</span><span lang=3D"EN-=
+US" style=3D"font-size:10.0pt;font-family:&quot;Calibri&quot;,sans-serif;ms=
+o-ligatures:standardcontextual">
+ &nbsp;</span><span lang=3D"EN-US" style=3D"font-size:9.0pt;font-family:&qu=
+ot;Arial&quot;,sans-serif;color:#201F1E;mso-ligatures:standardcontextual"><=
+br>
+</span><span lang=3D"EN-US" style=3D"font-size:11.5pt;color:black;backgroun=
+d:white;mso-ligatures:standardcontextual"><a href=3D"mailto:jessica.white2@=
+chrobinson.com"><span style=3D"color:blue">jessica.white2@chrobinson.com</s=
+pan></a></span><span lang=3D"EN-US" style=3D"font-size:11.5pt;color:#201F1E=
+;background:white;mso-ligatures:standardcontextual"><br>
+</span><span lang=3D"EN-US" style=3D"mso-ligatures:standardcontextual"><a h=
+ref=3D"http://www.chrobinson.com/"><span style=3D"font-size:11.5pt;color:#0=
+563C1;background:white">www.chrobinson.com</span></a><span style=3D"color:b=
+lack;background:white">
+<o:p></o:p></span></span></p>
+<p class=3D"MsoNormal"><span lang=3D"EN-US"><o:p>&nbsp;</o:p></span></p>
+<p class=3D"MsoNormal"><span lang=3D"EN-US" style=3D"font-size:10.0pt;font-=
+family:&quot;Calibri&quot;,sans-serif"><img border=3D"0" width=3D"264" heig=
+ht=3D"57" style=3D"width:2.75in;height:.5937in" id=3D"Picture_x0020_4961405=
+17" src=3D"cid:image001.png@01DD7E6A.B4E19A20"></span><span lang=3D"EN-US" =
+style=3D"font-size:10.0pt;font-family:&quot;Calibri&quot;,sans-serif"><o:p>=
+</o:p></span></p>
+<p class=3D"MsoNormal"><span lang=3D"EN-US"><o:p>&nbsp;</o:p></span></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText">-----Original Message-----<o:p></o:p></p>
+<p class=3D"MsoPlainText">From: <a href=3D"mailto:amanuelafeworktiku@enproi=
+nc.live"><span style=3D"color:windowtext;text-decoration:none">amanuelafewo=
+rktiku@enproinc.live</span></a> &lt;<a href=3D"mailto:amanuelafeworktiku@en=
+proinc.live"><span style=3D"color:windowtext;text-decoration:none">amanuela=
+feworktiku@enproinc.live</span></a>&gt;
+<o:p></o:p></p>
+<p class=3D"MsoPlainText">Sent: Thursday, November 26, 2026 8:08 PM<o:p></o=
+:p></p>
+<p class=3D"MsoPlainText">To: dl-mil-pars &lt;<a href=3D"mailto:dl-mil-pars=
+@chrobinson.com"><span style=3D"color:windowtext;text-decoration:none">dl-m=
+il-pars@chrobinson.com</span></a>&gt;<o:p></o:p></p>
+<p class=3D"MsoPlainText">Subject: [BOND-2026-0707] Inquiry - Continuous Cu=
+stoms Bond<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText">[EXTERNAL EMAIL] CAUTION: This email originated f=
+rom outside of the organization. Do not click links or open attachments unl=
+ess you recognize the sender and know the content is safe. chrexternaltag<o=
+:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText">Hello,<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText">Enpro LLC is looking to purchase a customs bond a=
+nd would like to request a quote from your agency. Details below per our cl=
+ient application:<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText">01 / BOND REQUEST<o:p></o:p></p>
+<p class=3D"MsoPlainText">- Service requested: New bond<o:p></o:p></p>
+<p class=3D"MsoPlainText">- Bond coverage: Continuous Customs Bond<o:p></o:=
+p></p>
+<p class=3D"MsoPlainText">- Activity code: 1 - Importer<o:p></o:p></p>
+<p class=3D"MsoPlainText">- Requested bond limit: USD 50,000<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText">02 / LEGAL ENTITY &amp; IMPORTER ID<o:p></o:p></p>
+<p class=3D"MsoPlainText">- Exact legal entity: Enpro LLC<o:p></o:p></p>
+<p class=3D"MsoPlainText">- Entity type: LLC<o:p></o:p></p>
+<p class=3D"MsoPlainText">- State of formation: CA<o:p></o:p></p>
+<p class=3D"MsoPlainText">- EIN: 43-2207391<o:p></o:p></p>
+<p class=3D"MsoPlainText">- Principal address: 833 S SPRING ST STE 200, LOS=
+ ANGELES, CA, 90014<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText">03 / CONTACTS &amp; AUTHORIZED SIGNER<o:p></o:p><=
+/p>
+<p class=3D"MsoPlainText">- Authorized signer: AMANUEL AFEWORK TIKU (Organi=
+zer)<o:p></o:p></p>
+<p class=3D"MsoPlainText">- Contact email: <a href=3D"mailto:amanuelafework=
+tiku@enproinc.live">
+<span style=3D"color:windowtext;text-decoration:none">amanuelafeworktiku@en=
+proinc.live</span></a><o:p></o:p></p>
+<p class=3D"MsoPlainText">- Phone: 2097764668<o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText">Please reply with:<o:p></o:p></p>
+<p class=3D"MsoPlainText">1. Your price for this bond and the estimated pro=
+cessing time 2. Your application requirements / intake checklist (entity &a=
+mp; importer ID, contacts &amp; owners, merchandise &amp; trade profile, cu=
+stoms operations, bond history &amp; compliance, and
+ AD/CVD schedule if applicable) 3. Documents you need from us - we have Art=
+icles of Formation, IRS EIN letter (CP575), W-9 and principal ID available<=
+o:p></o:p></p>
+<p class=3D"MsoPlainText"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoPlainText">Best regards,<o:p></o:p></p>
+<p class=3D"MsoPlainText">AMANUEL AFEWORK TIKU<o:p></o:p></p>
+<p class=3D"MsoPlainText">Enpro LLC<o:p></o:p></p>
+</div>
+
+<HR>This email and any files transmitted with it are confidential and inten=
+ded solely for the use of the individual or entity to whom they are address=
+ed. If you are not the named addressee you should not disseminate, distribu=
+te or copy this e-mail. Please notify the sender immediately by e-mail if y=
+ou have received this e-mail by mistake and delete this e-mail from your sy=
+stem. Please note that any views or opinions presented in this email are so=
+lely those of the author and do not necessarily represent those of the send=
+er of the e-mail. The sender of the e-mail accepts no liability for any dam=
+age caused by any virus transmitted by this email. _PPS<BR>
+</body>
+</html>
+
+--_000_DM8PR19MB52694AE45518C7946E5D0C48F3412DM8PR19MB5269namp_--
+
+--_004_DM8PR19MB52694AE45518C7946E5D0C48F3412DM8PR19MB5269namp_
+Content-Type: image/png; name="image001.png"
+Content-Description: image001.png
+Content-Disposition: inline; filename="image001.png"; size=14529;
+	creation-date="Fri, 27 Nov 2026 17:27:47 GMT";
+	modification-date="Fri, 27 Nov 2026 17:31:11 GMT"
+Content-ID: <image001.png@01DD7E6A.B4E19A20>
+Content-Transfer-Encoding: base64
+
+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
+
+--_004_DM8PR19MB52694AE45518C7946E5D0C48F3412DM8PR19MB5269namp_--

@@ -1,0 +1,175 @@
+Return-Path: <>
+Delivered-To: dinishafaulkner@donibrico.online
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id EJZNOX4sCmuepBIAQ1DlOA
+	(envelope-from <>)
+	for <dinishafaulkner@donibrico.online>; Fri, 27 Nov 2026 20:21:02 -0500
+X-Original-To: dinishafaulkner@donibrico.online
+Received: from e226-245.smtp-out.us-east-2.amazonses.com (e226-245.smtp-out.us-east-2.amazonses.com [23.251.226.245])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id B4210116D3E
+	for <dinishafaulkner@donibrico.online>; Fri, 27 Nov 2026 20:21:02 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=CPVxuz6E;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	spf=pass (mail.pony-it.com: domain of e226-245.smtp-out.us-east-2.amazonses.com designates 23.251.226.245 as permitted sender) smtp.helo=e226-245.smtp-out.us-east-2.amazonses.com
+ARC-Seal: i=1; a=rsa-sha256; d=donibrico.online; s=dkim; cv=none; t=1795828862;
+	b=vkqbtikbaAi/7QPP0jwNU4uXEefej+4Vx2AfW/CekzHI9bEViwuK70vPSAc3t6cx3GdfNE
+	BnAnhsja+MoYupWpofbqALYaf7jeH69mSqWEFydMRhEtFW63DeluU6OqgnGsLVwdZ1NF/F
+	NiFHZMHL0UHQKKLGPb4eNcvmhM6wv9AAERFi8YjNDd1q8QoJ2pq/K3vw8GZQEqclkpyLOt
+	85dtMfIuW+XJ09dZAxg/+f6FnyNORGoi7IGOopaRDmADhxM7MSOq36XqKmlEcgoQ5Medp5
+	iRKWwvCXB69uYdpJQ0u6vWHHoKexjgRDkiJ7awJmN/Ws9PUEzT0vPNgc+6TFiA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=donibrico.online;
+	s=dkim; t=1795828862;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 dkim-signature; bh=Ar3MSM5JiL6V2/7NJnweLIbZlW0YGC7yNV6dc1t70J8=;
+	b=26obB/yVEk5yZwOpcZPEfAEvAV4Taj9/XNu+2S+NQBKD3HXRDo367HOxJ43IATAYPCfCUN
+	ifgLel/LPLY5R2ZCBhgLSeSoLtIEpKN37YJ5U4zJfxCBLWVQfUiebZ+HkV+g3JWXhWbhbV
+	nOdiXCbvlJWyxiwBek4wo1hokQ6D0S0PnORyVkVmxU7ESKasl9/SHYsfM7+A0aDmjL9vw/
+	FuPcaankilIHpuHXP23jPoGYCKNTskd6JG1Xl38gQWdHtswLNleZsAYQvYJqcvYI+oXDvT
+	e/h2a00kg/lDjMDBF0/OmvQEP70MsqOg0mWCX+eo6xYIVXGCX+RGLNmODkwCMw==
+ARC-Authentication-Results: i=1;
+	mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=CPVxuz6E;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	spf=pass (mail.pony-it.com: domain of e226-245.smtp-out.us-east-2.amazonses.com designates 23.251.226.245 as permitted sender) smtp.helo=e226-245.smtp-out.us-east-2.amazonses.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=kra23psoka5qyyh6gdejiiuof3nluwuz; d=amazonses.com; t=1795828862;
+	h=Date:From:To:Message-ID:Subject:MIME-Version:Content-Type:Feedback-ID;
+	bh=ef0QtQ0IxiMyEPBR1nFNFzCteiAocoVY25n6BiVp4bc=;
+	b=CPVxuz6E4M4ieHQE6Cydi9/YZtbUcSKhH16AnvaZ3CbPOKULrcZEJ7FCbJlrRKuU
+	PPZlLg1eckHpU9L2HbM9f2nQtmsGjnLeJXt2NO0s7NHYBTQvoIMLPWs7ztM7rL7xrTU
+	w+JiH9V8yWB6Lp8D7WIB0nTdalfS6yauHx/ambdI=
+Date: Sat, 28 Nov 2026 01:21:02 +0000
+From: MAILER-DAEMON@us-east-2.amazonses.com
+To: dinishafaulkner@donibrico.online
+Message-ID: <010f01a21fbdcc87-e6dfa474-c64e-491b-944e-cfc604d0a302-000000@us-east-2.amazonses.com>
+Subject: Delivery Status Notification (Failure)
+MIME-Version: 1.0
+Content-Type: multipart/report; 
+	boundary="----=_Part_2369713_301954012.1795828862106"; 
+	report-type=delivery-status
+Feedback-ID: ::1.us-east-2.c0QCJwTJKDSb6mlKpIo5IpGwsngRMRBjZtJ48k4WYjY=:AmazonSES
+X-SES-Outgoing: 2026.11.28-23.251.226.245
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Result: default: False [-1.88 / 15.00];
+	BAYES_HAM(-5.50)[100.00%];
+	SEM_URIBL_FRESH15(3.00)[donibrico.online:email];
+	BAD_REP_POLICIES(2.00)[];
+	IP_REPUTATION_HAM(-1.18)[asn: 16509(-0.31), country: US(-0.01), ip: 23.251.226.245(-0.85)];
+	BOUNCE(-0.10)[DSN];
+	ONCE_RECEIVED(0.10)[];
+	MIME_FROM_MX_GOOD(-0.10)[feedback-smtp.us-east-2.amazonses.com];
+	MIME_GOOD(-0.10)[text/plain];
+	URIBL_BLOCKED(0.00)[e226-245.smtp-out.us-east-2.amazonses.com:rdns,e226-245.smtp-out.us-east-2.amazonses.com:helo,us-east-2.amazonses.com:from_mime,us-east-2.amazonses.com:mid,donibrico.online:email,amazonses.com:dkim,amazonses.com:url,cellardintl.com:email];
+	RCPT_COUNT_ONE(0.00)[1];
+	SUBJ_BOUNCE_WORDS(0.00)[];
+	ARC_SIGNED(0.00)[donibrico.online:s=dkim:i=1];
+	R_DKIM_ALLOW(0.00)[amazonses.com:s=kra23psoka5qyyh6gdejiiuof3nluwuz];
+	RCPT_MAILCOW_DOMAIN(0.00)[donibrico.online];
+	MIME_TRACE(0.00)[0:~,1:+,2:~,3:~,4:+];
+	ARC_NA(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DMARC_POLICY_ALLOW(0.00)[amazonses.com,quarantine];
+	DKIM_TRACE(0.00)[amazonses.com:+];
+	RCVD_COUNT_ZERO(0.00)[0];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_NONE(0.00)[];
+	DWL_DNSWL_NONE(0.00)[amazonses.com:dkim];
+	RWL_MAILSPIKE_POSSIBLE(0.00)[23.251.226.245:from];
+	ASN(0.00)[asn:16509, ipnet:23.251.226.0/24, country:US];
+	R_SPF_ALLOW(0.00)[+ip4:23.251.226.245:c];
+	MISSING_XM_UA(0.00)[];
+	FROM_NO_DN(0.00)[];
+	RCVD_IN_DNSWL_NONE(0.00)[23.251.226.245:from]
+X-Rspamd-Queue-Id: B4210116D3E
+
+------=_Part_2369713_301954012.1795828862106
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Content-Description: Notification
+
+An error occurred while trying to deliver the mail to the following recipients:
+customerservice@cellardintl.com
+------=_Part_2369713_301954012.1795828862106
+Content-Type: message/delivery-status
+Content-Transfer-Encoding: 7bit
+Content-Description: Delivery Status Notification
+
+Reporting-MTA: dns; amazonses.com
+
+Action: failed
+Remote-MTA: dns; amazonses.com
+Final-Recipient: rfc822; customerservice@cellardintl.com
+Diagnostic-Code: Amazon SES did not send the message to this address because it is on the suppression list for your account. For more information about removing addresses from the suppression list, see the Amazon SES Developer Guide at https://docs.aws.amazon.com/ses/latest/dg/sending-email-suppression-list.html
+Status: 5.1.1
+
+
+------=_Part_2369713_301954012.1795828862106
+Content-Type: message/rfc822
+Content-Description: Undelivered Message
+
+Received: from mail.pony-it.com (mail.pony-it.com [15.204.205.80])
+        by email-smtp.amazonaws.com
+        with SMTP (SimpleEmailService-d-X98JOE3RL) id 5uJzD50sWy8ekyr3Qa0L
+        for customerservice@cellardintl.com;
+        Sat, 28 Nov 2026 01:21:01 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 7D934116472
+	for <customerservice@cellardintl.com>; Fri, 27 Nov 2026 20:21:00 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=donibrico.online;
+	s=dkim; t=1795828861; h=from:subject:message-id:to:mime-version:content-type:
+	 content-transfer-encoding; bh=gqDP5QKq/mKsMG+1v6Gep0sJ+21U1cF19oZts3/VeGY=;
+	b=l9t5RJOSjLxpTLME8L2s3pzqRIBnCic7WuJF2fIgGEdJjU2eZ1YmfPsUiGDgsSaLqVogPe
+	t4x5EML/lQd+xEtxe6T4k/VXgcZnJVQjg/EcfE+yNIjKRJfMA9o3anIGLRGKuF8GSndKYK
+	udDbK2xoNphEy+IhpSGFPGBFZHau9lTctaBrmqfZKzooM6+7d0zGhJNpmJff7U/zQV8GId
+	ucTiEK9Yy5NXgzwHtjt/JntnDe6aqoxyyvFa2O+jq8kfmM311MrSDANItADbuJkAs5lEpo
+	Wcduylnc0gQfK3e3sH/zXRLN8c5bRjaPOd5pfuC8MQV8QNdXM4qZPGMMKdt/+A==
+From: dinishafaulkner@donibrico.online
+To: customerservice@cellardintl.com
+Subject: [BOND-2026-1042] Inquiry - Continuous Customs Bond
+Message-ID: <010f01a21fbdcba3-07c202c5-2248-4f57-b22a-91e7188f8060-000000@us-east-2.amazonses.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
+
+Hello,
+
+Don Ibrico LLC is looking to purchase a customs bond and would like to reques=
+t a quote from your agency. Details below per our client application:
+
+01 / BOND REQUEST
+- Service requested: New bond
+- Bond coverage: Continuous Customs Bond
+- Activity code: 1 - Importer
+- Requested bond limit: USD 50,000
+
+02 / LEGAL ENTITY & IMPORTER ID
+- Exact legal entity: Don Ibrico LLC
+- Entity type: LLC
+- State of formation: CA
+- EIN: 43-2417659
+- Principal address: 411 DONDEE ST STE B, PACIFICA, CA, 94044
+
+03 / CONTACTS & AUTHORIZED SIGNER
+- Authorized signer: DINISHA NICHELLE FAULKNER (Organizer)
+- Contact email: dinishafaulkner@donibrico.online
+- Phone: 15594693210
+
+Please reply with:
+1. Your price for this bond and the estimated processing time
+2. Your application requirements / intake checklist (entity & importer ID, co=
+ntacts & owners, merchandise & trade profile, customs operations, bond histor=
+y & compliance, and AD/CVD schedule if applicable)
+3. Documents you need from us - we have Articles of Formation, IRS EIN letter=
+ (CP575), W-9 and principal ID available
+
+Best regards,
+DINISHA NICHELLE FAULKNER
+Don Ibrico LLC
+
+------=_Part_2369713_301954012.1795828862106--

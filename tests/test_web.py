@@ -254,7 +254,7 @@ def test_llm_page_renders(session, world):
 
     page = render_llm(session)
 
-    assert "LLM 统计" in page
+    assert "LLM 观察" in page
     assert "影子对比分布" in page
 
 

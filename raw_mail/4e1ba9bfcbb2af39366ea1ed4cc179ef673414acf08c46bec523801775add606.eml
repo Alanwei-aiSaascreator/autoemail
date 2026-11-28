@@ -1,0 +1,187 @@
+Return-Path: <>
+Delivered-To: chanrathanachouk@ordinaryusa.online
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id sBLzF+4rCmuepBIAQ1DlOA
+	(envelope-from <>)
+	for <chanrathanachouk@ordinaryusa.online>; Fri, 27 Nov 2026 20:18:38 -0500
+X-Original-To: chanrathanachouk@ordinaryusa.online
+Received: from e226-240.smtp-out.us-east-2.amazonses.com (e226-240.smtp-out.us-east-2.amazonses.com [23.251.226.240])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id 92D6310F800
+	for <chanrathanachouk@ordinaryusa.online>; Fri, 27 Nov 2026 20:18:37 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b="lW/WHlvL";
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	spf=pass (mail.pony-it.com: domain of e226-240.smtp-out.us-east-2.amazonses.com designates 23.251.226.240 as permitted sender) smtp.helo=e226-240.smtp-out.us-east-2.amazonses.com
+ARC-Seal: i=1; a=rsa-sha256; d=ordinaryusa.online; s=dkim; cv=none;
+	t=1795828717;
+	b=0IVhWdIa+eKHbbyUEsNjVGwZubmlfI6JiTP3LqsAr/nj8SW3grLeZlgpIvqJ6cuNY5h8Nx
+	rnrYp/gShA3nqxQ/HD5DU9ZEibzODNFkbHrzqosSLw1zLLC9TqYVEK+bUHRutVUUw7Rud8
+	AKMepwLBnmlG+r4srfqdefzDUwe6Sbg5zbTrIWKQZZcw/gi1ChshECKpfsSKmBQh0hIQ7v
+	/aJYnk0KXjiHIVotNvIPUxmPCRQt9ohTeYT0IKZqRBL+r20Iyuz8trfGb3cH9BmoN3iAV0
+	prMOL4Oo7YuZLJZBfarPDt4AGxkQFfQoPxKZ5077f46/lYBPUcXYvarzJGwRbA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=ordinaryusa.online; s=dkim; t=1795828717;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 dkim-signature; bh=iLWT3NKY24pxRuSSuFHBDZ1PFYNtFlkHHLm38GyeQpc=;
+	b=Lpfvf4RD76AlY3wPFNvJwb1ooxvRsFkqsmyYu7WkEA/3lXZqthHC4vP+D4UG5q+2tPCH9W
+	CaNY/2Exwge7NzW2UvLdRubXOv0Y6zAKwCXP86g5bAqOKLhJWzaqGzjGsp318MUIJumHwT
+	QfW8z7HPpPO01X5DVeU7gZFj4VqM3JX0AtXwG62DH+6Q8Vxo/DzdDUoKW/kC4EIN1vb05d
+	SUg45cZmps0+dIFF3Ozdk6nImBuemeUNKFtVv3eRog0+7MY967OGDN0/+MJjw1Grpy3NF8
+	oZ+yXxQN7o9eRLi2bSaHE3BNW7gSMkSLMF4vP3RGSGvPno8lOtKgMLdYTV20zA==
+ARC-Authentication-Results: i=1;
+	mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b="lW/WHlvL";
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	spf=pass (mail.pony-it.com: domain of e226-240.smtp-out.us-east-2.amazonses.com designates 23.251.226.240 as permitted sender) smtp.helo=e226-240.smtp-out.us-east-2.amazonses.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=kra23psoka5qyyh6gdejiiuof3nluwuz; d=amazonses.com; t=1795828717;
+	h=Date:From:To:Message-ID:Subject:MIME-Version:Content-Type:Feedback-ID;
+	bh=zlDxOFSnmnSdaU8lrDnpB/iHqaB5uBoNPUhFuQw5tuw=;
+	b=lW/WHlvLwjByVBT6807ZS7eSoCEqsatVNFI+tH4OiJvUma0nL2duWtJ/iQzL4oqi
+	xm2XhH0Qg6ycFzJA6YVmPYVlpPLRBofY+THdL92XxQzQt/sHLs+j73HrbBPhwafkByc
+	tVoLr69mnBCZb4UleAdshW2NGrI5fFSe1zpL21OA=
+Date: Sat, 28 Nov 2026 01:18:36 +0000
+From: MAILER-DAEMON@us-east-2.amazonses.com
+To: chanrathanachouk@ordinaryusa.online
+Message-ID: <010f01a21fbb957d-b3a2a76e-5838-4eb9-997f-15fe08b7ace6-000000@us-east-2.amazonses.com>
+Subject: Delivery Status Notification (Failure)
+MIME-Version: 1.0
+Content-Type: multipart/report; 
+	boundary="----=_Part_1554121_1941542290.1795828716949"; 
+	report-type=delivery-status
+Feedback-ID: ::1.us-east-2.c0QCJwTJKDSb6mlKpIo5IpGwsngRMRBjZtJ48k4WYjY=:AmazonSES
+X-SES-Outgoing: 2026.11.28-23.251.226.240
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Result: default: False [-1.87 / 15.00];
+	BAYES_HAM(-5.50)[100.00%];
+	SEM_URIBL_FRESH15(3.00)[ordinaryusa.online:email];
+	BAD_REP_POLICIES(2.00)[];
+	IP_REPUTATION_HAM(-1.17)[asn: 16509(-0.31), country: US(-0.01), ip: 23.251.226.240(-0.85)];
+	BOUNCE(-0.10)[DSN];
+	ONCE_RECEIVED(0.10)[];
+	MIME_GOOD(-0.10)[text/plain];
+	MIME_FROM_MX_GOOD(-0.10)[feedback-smtp.us-east-2.amazonses.com];
+	R_DKIM_ALLOW(0.00)[amazonses.com:s=kra23psoka5qyyh6gdejiiuof3nluwuz];
+	URIBL_BLOCKED(0.00)[us-east-2.amazonses.com:from_mime,us-east-2.amazonses.com:mid,e226-240.smtp-out.us-east-2.amazonses.com:rdns,e226-240.smtp-out.us-east-2.amazonses.com:helo,amazonses.com:dkim,amazonses.com:url,ordinaryusa.online:email];
+	DWL_DNSWL_NONE(0.00)[amazonses.com:dkim];
+	RCPT_COUNT_ONE(0.00)[1];
+	RCPT_MAILCOW_DOMAIN(0.00)[ordinaryusa.online];
+	MIME_TRACE(0.00)[0:~,1:+,2:~,3:~,4:+];
+	ARC_NA(0.00)[];
+	SUBJ_BOUNCE_WORDS(0.00)[];
+	DMARC_POLICY_ALLOW(0.00)[amazonses.com,quarantine];
+	ARC_SIGNED(0.00)[ordinaryusa.online:s=dkim:i=1];
+	RCVD_COUNT_ZERO(0.00)[0];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_NONE(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	R_SPF_ALLOW(0.00)[+ip4:23.251.226.240:c];
+	FROM_NO_DN(0.00)[];
+	ASN(0.00)[asn:16509, ipnet:23.251.226.0/24, country:US];
+	DKIM_TRACE(0.00)[amazonses.com:+];
+	MISSING_XM_UA(0.00)[];
+	RCVD_IN_DNSWL_NONE(0.00)[23.251.226.240:from]
+X-Rspamd-Queue-Id: 92D6310F800
+
+------=_Part_1554121_1941542290.1795828716949
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Content-Description: Notification
+
+An error occurred while trying to deliver the mail to the following recipients:
+bonds@pbgbonds.com
+------=_Part_1554121_1941542290.1795828716949
+Content-Type: message/delivery-status
+Content-Transfer-Encoding: 7bit
+Content-Description: Delivery Status Notification
+
+Reporting-MTA: dns; e226-1.smtp-out.us-east-2.amazonses.com
+
+Action: failed
+Final-Recipient: rfc822; bonds@pbgbonds.com
+Diagnostic-Code: smtp; 554 5.7.1 <bonds@pbgbonds.com>: Relay access denied
+Status: 5.7.1
+
+
+------=_Part_1554121_1941542290.1795828716949
+Content-Type: message/rfc822
+Content-Description: Undelivered Message
+
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ordinaryusa.online;
+	s=dkim; t=1795828715; h=from:subject:message-id:to:mime-version:content-type:
+	 content-transfer-encoding; bh=vZQVgZDAcwEsTcoO3jQ0dsnNtXJPtpTtQY12gJ55rRw=;
+	b=ETtMtXqsASwV6hgQ2WlgUmoNzqcCiFYdKi54HIO10skKrUmsV/lluJY95Wt0Zz7uIuGdT1
+	KZfgpRN6u5yQoc+M6J/kjY8rOOxyuue2AkB9yjvNJ4Jc6D1q4jh1g7yEm7cDXbJxcGbTfG
+	Iw2wPk0IPyOKg5IXbUSfbS3A1+vay0Y3mOKNrs0yOkZ6v0OIozcgTQiAOOjRP2dOVIB+Lo
+	H/X/bEx80Dj/cFUzPuE4Va6GXZpOSbLTxORw4Ng4zcW55Sl8jTCQ/suOM2I69YaFdnVbJ6
+	IdrdcCWpp7oqtukfn8EpoTFoET+IrWtF5KpL9HI5LgaO8Q9QFISzj7gt702eSg==
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=kra23psoka5qyyh6gdejiiuof3nluwuz; d=amazonses.com; t=1795828716;
+	h=From:To:Subject:Message-ID:Content-Type:Content-Transfer-Encoding:MIME-Version:Date:Feedback-ID;
+	bh=vZQVgZDAcwEsTcoO3jQ0dsnNtXJPtpTtQY12gJ55rRw=;
+	b=WO+rbrHIaqzBsvND88LmHyw6DeKEvtC+lShy0puFv/3SsIi97J/2ZnLe0bfDuSqB
+	Q59n70+8y3PSaDvLwmXdwN/sIXlEWqMwQHWozuXJ/YRn366n7vPrUP7hKtwJiL9fGPP
+	/2IsG5fOi1OiJnkXRFZEfZhB1lPOJrZgvJ4HGMzc=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=p47t74kdzu4snpsunfds5vwa3j4rvwwd; d=ordinaryusa.online;
+	t=1795828716;
+	h=From:To:Subject:Message-ID:Content-Type:Content-Transfer-Encoding:MIME-Version:Date;
+	bh=vZQVgZDAcwEsTcoO3jQ0dsnNtXJPtpTtQY12gJ55rRw=;
+	b=csWtsbmvAI3mDiPfas+bfl5N8nkwqcOxGGXYijMgUeLMRgci7mcLIdZKcb5UXcEN
+	ChX8QcK3Zjo/4jmtgo2qBI4E9xktnJAipH+KA7z5gBJHY3C0d3GgMy6S45yEK8gHBpo
+	wnHc6AA3DgBVAUIn5jTguApqxmGQ8jE3DCk8/3UBdCXa3knctrE4I0X72uUk+e2eW2c
+	ZnMyz6O1lRpEdnwkCtCZyNkR+crFvAFnJ9v9ggNkIm6fYuIsaAWU2jGbeCiI7KtGXb+
+	X59SBeoh9GDjtnu7bKwwJw5Wf3Eq4Z3T2fGKo3OJM/P1J/d56lc1GtwAlQuUnSbP/sl
+	0sUGD5Fuxw==
+From: chanrathanachouk@ordinaryusa.online
+To: bonds@pbgbonds.com
+Subject: [BOND-2026-1024] Inquiry - Continuous Customs Bond
+Message-ID: <010f01a21fbb90e3-d53acfc1-ed70-410a-8eee-e7b106034859-000000@us-east-2.amazonses.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
+Date: Sat, 28 Nov 2026 01:18:35 +0000
+Feedback-ID: ::1.us-east-2.dnBLFQvZ7DBnA5nHg3QcqhG4UiG8AnTuix0bXTff/SU=:AmazonSES
+
+Hello,
+
+The Ordinary LLC is looking to purchase a customs bond and would like to requ=
+est a quote from your agency. Details below per our client application:
+
+01 / BOND REQUEST
+- Service requested: New bond
+- Bond coverage: Continuous Customs Bond
+- Activity code: 1 - Importer
+- Requested bond limit: USD 50,000
+
+02 / LEGAL ENTITY & IMPORTER ID
+- Exact legal entity: The Ordinary LLC
+- Entity type: LLC
+- State of formation: CA
+- EIN: 43-2416938
+- Principal address: 1699 AIRLINE HWY, HOLLISTER, CA, 95023
+
+03 / CONTACTS & AUTHORIZED SIGNER
+- Authorized signer: CHANRATHANA JENNIFER CHOUK (Organizer)
+- Contact email: chanrathanachouk@ordinaryusa.online
+- Phone: 15599376472
+
+Please reply with:
+1. Your price for this bond and the estimated processing time
+2. Your application requirements / intake checklist (entity & importer ID, co=
+ntacts & owners, merchandise & trade profile, customs operations, bond histor=
+y & compliance, and AD/CVD schedule if applicable)
+3. Documents you need from us - we have Articles of Formation, IRS EIN letter=
+ (CP575), W-9 and principal ID available
+
+Best regards,
+CHANRATHANA JENNIFER CHOUK
+The Ordinary LLC
+
+------=_Part_1554121_1941542290.1795828716949--

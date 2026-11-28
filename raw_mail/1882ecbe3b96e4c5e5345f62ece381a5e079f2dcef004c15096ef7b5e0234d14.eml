@@ -1,0 +1,195 @@
+Return-Path: <>
+Delivered-To: brianamartin@flywirecompany.online
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id oLFmKV4gCWvb2RIAQ1DlOA
+	(envelope-from <>)
+	for <brianamartin@flywirecompany.online>; Fri, 27 Nov 2026 01:17:02 -0500
+X-Original-To: brianamartin@flywirecompany.online
+Received: from us-smtp-delivery-220.mimecast.com (us-smtp-delivery-220.mimecast.com [170.10.133.220])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id C8B23115B8A
+	for <brianamartin@flywirecompany.online>; Fri, 27 Nov 2026 01:17:01 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=none;
+	dmarc=fail reason="SPF not aligned (strict), No valid DKIM" header.from=propellerbonds.com (policy=quarantine);
+	spf=pass (mail.pony-it.com: domain of us-smtp-delivery-220.mimecast.com designates 170.10.133.220 as permitted sender) smtp.helo=us-smtp-delivery-220.mimecast.com
+ARC-Seal: i=1; a=rsa-sha256; d=flywirecompany.online; s=dkim; cv=none;
+	t=1795760222;
+	b=HOl38lJ0epm+vyHcH9f6c6Ieedulw79/rVJy3Y9bVYWaEH1VgfX750cOJzlFCAeypq+hq7
+	scEXmjxawBOrpxIsg6lOHzkvLEsD1F6+TiqeTD8rNO2tjoV4KxxbTE/3Lu622LTx8vEeQW
+	X1/O/kM+7gNQs8+RGFWFsmnZMDCr6QmpqSArJ+J75MZY7LkXcpzYOvjIxp23ChHRib6yvr
+	i/AN/cuqbuq6wYTbO9FBC8KerfmkMy4PSP3TJZazqW1HPk0OggOQFq89DRY9/GhK/+a1G9
+	OYTXBq3vG4dsQxsl5l55HjIJSbR0NY2W36veOpNMOLcTFGDWLMiHJJfpYobF3w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=flywirecompany.online; s=dkim; t=1795760222;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=BG5oRyLrJqYgJ6/VJAdPR96pP/ke/SfNQWa7G3rfsGQ=;
+	b=hH9saZx4Uytvn5KWOQvGPu5CJR552HXdH05gnYjIViWFVTmcytZ5VsqS/X33bg2wtn5mVx
+	FILakNXFtGggGJ+kaiRpFQBa0ebC3P7BwOuBuJBp2aJ67KEGAMFBP+fuQ98TiTCfEMZYg0
+	b4Us2yf9p3ZAT2J/ba5aymRz2LlVlP7F1KmSVkTwW4Kgl3H7Op494ez19EGOk8NnYm1E4l
+	zMsjsWHgr/So1/ozHRd6xZKB0NQaLOL9FHyNggxDO/IixsuuUxqc+F3oMUD9iAa/1FB4aS
+	lMoY9NZ8nZGw5vt09x+bEpPMKSp1wOisJJfIMk8EH1oQyJkNw/zrb04uAzUAGg==
+ARC-Authentication-Results: i=1;
+	mail.pony-it.com;
+	dkim=none;
+	dmarc=fail reason="SPF not aligned (strict), No valid DKIM" header.from=propellerbonds.com (policy=quarantine);
+	spf=pass (mail.pony-it.com: domain of us-smtp-delivery-220.mimecast.com designates 170.10.133.220 as permitted sender) smtp.helo=us-smtp-delivery-220.mimecast.com
+X-MC-Rep: binary re
+Received: from CY7PR03CU001.outbound.protection.outlook.com
+ (mail-westcentralusazhn15010019.outbound.protection.outlook.com
+ [52.102.133.19]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-22-o94ZgkR6O8S49DwJx3u4Xw-2; Fri, 27 Nov 2026 06:16:59 +0000
+X-MC-Unique: o94ZgkR6O8S49DwJx3u4Xw-2
+X-Mimecast-MFC-AGG-ID: o94ZgkR6O8S49DwJx3u4Xw_1795760219
+Received: from DM6PR14MB3822.namprd14.prod.outlook.com (2603:10b6:5:1b5::16)
+ by SN7PR14MB6469.namprd14.prod.outlook.com (2603:10b6:806:342::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.662.4; Fri, 27 Nov
+ 2026 06:16:56 +0000
+Received: from DM6PR14MB3822.namprd14.prod.outlook.com ([::1]) by
+ DM6PR14MB3822.namprd14.prod.outlook.com ([fe80::3627:1704:f136:d7fc%7]) with
+ Microsoft SMTP Server id 15.21.0662.007; Fri, 27 Nov 2026 06:16:56 +0000
+From: support Propeller Bonds <support@propellerbonds.com>
+To: "brianamartin@flywirecompany.online" <brianamartin@flywirecompany.online>
+Subject: Automatic reply: [BOND-2026-0832] Inquiry - Continuous Customs Bond
+Thread-Topic: [BOND-2026-0832] Inquiry - Continuous Customs Bond
+Thread-Index: AQHdfjbmTSUjbi4zWkyoWSvJkTWRR7dBcWA1
+Date: Fri, 27 Nov 2026 06:16:56 +0000
+Message-ID: <3c303246f4f14af6a43f7e9f2954df73@DM6PR14MB3822.namprd14.prod.outlook.com>
+References: <010f01a21ba60ded-97e83bf5-5585-49d5-9537-bcfa219d07ec-000000@us-east-2.amazonses.com>
+In-Reply-To: <010f01a21ba60ded-97e83bf5-5585-49d5-9537-bcfa219d07ec-000000@us-east-2.amazonses.com>
+X-MS-Has-Attach: 
+X-Auto-Response-Suppress: All
+X-MS-Exchange-Inbox-Rules-Loop: support@propellerbonds.com
+X-MS-TNEF-Correlator: 
+x-ms-exchange-parent-message-id: <010f01a21ba60ded-97e83bf5-5585-49d5-9537-bcfa219d07ec-000000@us-east-2.amazonses.com>
+auto-submitted: auto-generated
+x-ms-exchange-generated-message-source: Mailbox Rules Agent
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM6PR14MB3822:EE_|SN7PR14MB6469:EE_
+x-ms-office365-filtering-correlation-id: 4bb5d523-b0d8-4461-c113-08df4c4e09d1
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|50650200027|376014|10070799003|1800799024|366016|3613699012|10067099003|260925021911599003|11063799006|261022105027099003|56012099006|260925021311599003|260925022911599003|261026140227099003|261028144727099003|18002099003|22082099003|5133699003|8096899003|12063799003|80100003
+x-microsoft-antispam-message-info: R8HxIy25at4Zj5hbxl7pmz7k08EHJXonbQf6Il06is1wWUIJL9NAZLBk9auIN++Af6+TMfl3BfbENZoV7lf9RVPAJP2xMOLoxz47HZiIT3Ren8DStpZFQ6hIEGdl4/AtlrShyamIdxv4HtvJ7RvbFREAAfGdHpm72+AGDDd4Ys4HAbooYv11IYk9Nx1PDPBcSsRQn9AVDoThbyKNTMMC4y7TaCdXGvEHc7NrDfrl1ZllR+trMhdbqgqxufPMaTM2dCFpiiMLWY8X41aExSZe5OACdIE8Q30ZyCTCuN3d4UoxH6BEO9iQV8PLYzz8G7iI4RfqsI2hmGMg0FI1yfYZiT/76Y/zvh1fsfcNh3vExSlcMRDgQBSIAgTbDSZIYizREawK5zo+72xGYOftT21rW2lmzgxvPQDUuZhuvNHPX4vIdHydm2SWX1CckLoNqF2qZD/T1bOHKVk59DNe2+Ov40EJ5j8HQjpcLrzqW8SKukmNmFTZRQoamni1JvVIQX5FUrimVwNb4M7Nryer9SSttSKYHjI/pUOLB22x8gZ06Zy9UlalY3arQ1K3qPo1cpP7h8gyvpoO9kDtbKFa7+6ceYNfbpWUTRaPuhlWuBSHpmK6W6fl4H2V5UqCSJ6pkZ4/eF8wanhMf9CYpyNvC4MXhiJhmmagWC0q66kB3Segd2oKVa3s4gakJG7v0FESu/OnbQhn/FpQJt0YbeQYk20G6ukIDqCaH4ThS5//UK9D1+Q=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR14MB3822.namprd14.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(50650200027)(376014)(10070799003)(1800799024)(366016)(3613699012)(10067099003)(260925021911599003)(11063799006)(261022105027099003)(56012099006)(260925021311599003)(260925022911599003)(261026140227099003)(261028144727099003)(18002099003)(22082099003)(5133699003)(8096899003)(12063799003)(80100003);DIR:OUT;SFP:1501
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: LTSgghJ3kKxIeO9StWyuXInI29pHJcS0nxXbRUSrfSBeNhQQzZcaMci+PRWWLdzsAMxfgS4MTfCATvx+a4gzU1fE3qs1G/bh092yobn574/HGDcUVM7WhoYNFlYlt3oqHgOREhcakSB9XIRz163XxUwgaaVwUkOf8fGsdHWxj8DrrbjXBMp/GJF1ZNtg1X/sIrERIPqBIq26KhV5D4CbpbMtWXxtKmWVeMAXOgvpuBiRmdoGf4eG5VFQ1eT9LEe6DZDqHLZVQE1SVYeSEqU4DW6dvLcpsSaymNB5NDqEHWxg3RJNrr7G8v/PdXUOTxfdqYEzDCYcn8/MTjszZ15YzVI6M4fn34v/pyUt+cSYiNNhqwunSFROPu1S9702As23sNVNrvaSjwIpsf0jXai7xOrkKxwEOyjWgqKO+0UFcno5jj3h94JwMmqcqnt10sPg
+MIME-Version: 1.0
+X-Exchange-RoutingPolicyChecked: J2LOfL1YDQU29/qRp31DHE3uuu5LCLgtkwvD09IetZNPjgui0aD8/wg/mnyfvek0z1TsI52XArm4/dShTqa9LLSgwzChdNeVBqUf1ffKOTer9LRjquEOEx9e4j+ZjJ7wH7EBW97m+CNV0WNBoJEYUx46t6FCAOhFB6awDuToFwUPLVqWEuc81LPPNCWFN35kXBCw0y2xp/pOoZ3rfIv+/19IRiJFAbz29a6o2/XO/URTIdyZ6qiuBp7c1mZy2dBtz01arGFJMSaMq52KFFexSaD6WV9lxHbGpTkfBaCbXux75CwjfpAscCTFVULedoXcf225zR5KbARb9nftw1uNnw==
+X-OriginatorOrg: propellerbonds.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR14MB3822.namprd14.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4bb5d523-b0d8-4461-c113-08df4c4e09d1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Nov 2026 06:16:56.5522
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 441d4a8f-7999-4d6a-9670-672cf8d03e35
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR14MB6469
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: yeyWIM4IA0XVJJWVmNTSl3d_gfzmOxCfHIHE888UKlY_1795760219
+X-Mimecast-Originator: propellerbonds.com
+Content-Type: multipart/alternative;
+	boundary="_000_3c303246f4f14af6a43f7e9f2954df73DM6PR14MB3822namprd14pr_"
+X-Last-TLS-Session-Version: TLSv1.3
+X-Rspamd-Queue-Id: C8B23115B8A
+X-Spamd-Result: default: False [6.72 / 15.00];
+	DMARC_POLICY_QUARANTINE(8.00)[propellerbonds.com : SPF not aligned (strict), No valid DKIM,quarantine];
+	BAYES_HAM(-0.58)[75.50%];
+	IP_REPUTATION_HAM(-0.20)[asn: 30031(-0.19), country: US(-0.01), ip: 170.10.133.220(0.00)];
+	R_SPF_ALLOW(-0.20)[+a];
+	MIME_FROM_MX_GOOD(-0.10)[us-smtp-inbound-1.mimecast.com];
+	MIME_GOOD(-0.10)[multipart/alternative,text/plain];
+	RCVD_IN_DNSWL_LOW(-0.10)[170.10.133.220:from];
+	RCVD_IN_DNSWL_NONE(0.00)[52.102.133.19:received];
+	ARC_NA(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	ASN(0.00)[asn:30031, ipnet:170.10.132.0/23, country:US];
+	FROM_HAS_DN(0.00)[];
+	RCPT_MAILCOW_DOMAIN(0.00)[flywirecompany.online];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	TO_DN_EQ_ADDR_ALL(0.00)[];
+	RCPT_COUNT_ONE(0.00)[1];
+	RCVD_TLS_LAST(0.00)[];
+	R_DKIM_NA(0.00)[];
+	RCVD_COUNT_THREE(0.00)[3];
+	ARC_SIGNED(0.00)[flywirecompany.online:s=dkim:i=1]
+
+--_000_3c303246f4f14af6a43f7e9f2954df73DM6PR14MB3822namprd14pr_
+Content-Type: text/plain; charset=WINDOWS-1252
+Content-Transfer-Encoding: quoted-printable
+
+Thank you for your email!
+
+The support team has received your email and is working diligently on your =
+request. You can expect a response in 24 hours or less excluding weekends a=
+nd holidays. You may also contact us at our support phone line: 815-595-208=
+8.
+
+Thank you for your patience!
+
+Have a wonderful day!
+
+
+
+--_000_3c303246f4f14af6a43f7e9f2954df73DM6PR14MB3822namprd14pr_
+Content-Type: text/html; charset=WINDOWS-1252
+Content-Transfer-Encoding: quoted-printable
+
+<html>
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
+>
+</head>
+<body>
+<div style=3D"font-family:Aptos,Aptos_EmbeddedFont,Aptos_MSFontService,Cali=
+bri,Helvetica,sans-serif; font-size:12pt; color:rgb(0,0,0)">
+Thank you for your email!</div>
+<div style=3D"direction:ltr; text-align:left; margin:0px; font-family:Aptos=
+,Aptos_EmbeddedFont,Aptos_MSFontService,Calibri,Helvetica,sans-serif; font-=
+size:12pt; color:rgb(0,0,0)">
+<br>
+</div>
+<div style=3D"font-family:Aptos,Aptos_EmbeddedFont,Aptos_MSFontService,Cali=
+bri,Helvetica,sans-serif; font-size:12pt; color:rgb(0,0,0)">
+The support team has received your email and is working diligently on your =
+request. You can expect a response in 24 hours or less excluding weekends a=
+nd holidays. You may also contact us at our support phone line: 815-595-208=
+8.</div>
+<div style=3D"font-family:Aptos,Aptos_EmbeddedFont,Aptos_MSFontService,Cali=
+bri,Helvetica,sans-serif; font-size:12pt; color:rgb(0,0,0)">
+<br>
+</div>
+<div style=3D"text-align:left; text-indent:0px; margin:0px; font-family:Apt=
+os,Aptos_EmbeddedFont,Aptos_MSFontService,Calibri,Helvetica,sans-serif; fon=
+t-size:12pt; color:rgb(0,0,0)">
+Thank you for your patience!&nbsp;</div>
+<div style=3D"font-family:Aptos,Aptos_EmbeddedFont,Aptos_MSFontService,Cali=
+bri,Helvetica,sans-serif; font-size:12pt; color:rgb(0,0,0)">
+<br>
+Have a wonderful day!</div>
+<div style=3D"text-align:left; text-indent:0px; margin:0px; font-family:Apt=
+os,Aptos_EmbeddedFont,Aptos_MSFontService,Calibri,Helvetica,sans-serif; fon=
+t-size:12pt; color:rgb(200,38,19)">
+<b><br>
+</b></div>
+<div style=3D"text-align:left; margin:0px; font-family:Aptos,Aptos_Embedded=
+Font,Aptos_MSFontService,Calibri,Helvetica,sans-serif; font-size:12pt; colo=
+r:rgb(0,0,0)">
+<br>
+</div>
+<div style=3D"font-family:Aptos,Aptos_EmbeddedFont,Aptos_MSFontService,Cali=
+bri,Helvetica,sans-serif; font-size:12pt; color:rgb(0,0,0)">
+<br>
+</div>
+</body>
+</html>
+--_000_3c303246f4f14af6a43f7e9f2954df73DM6PR14MB3822namprd14pr_--
+

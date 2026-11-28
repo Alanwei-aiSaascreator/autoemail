@@ -961,69 +961,412 @@
       "page_count": 7,
       "role": "agent_inbound",
       "field_mapping": {
-        "p001": {"today": "%Y-%m-%d"},
+        "p001": {
+          "today": "%Y-%m-%d"
+        },
         "p002": "principal_full_name",
         "p003": "legal_name",
-        "p004": {"template": "{addr_line1}, {addr_city}, {addr_state} {addr_zip}"},
+        "p004": {
+          "template": "{addr_line1}, {addr_city}, {addr_state} {addr_zip}"
+        },
         "p005": "phone",
         "p006": "mailbox_email",
-        "p008": {"template": "Owner / Import Operator, {legal_name}"},
-        "p009": {"const": "Single"},
-        "p014": {"const": "Individual"},
-        "p015": {"const": "Own"},
-        "p016": {"const": "0"},
-        "as01": {"const": "62,000"},
-        "as02": {"const": "25,000"},
-        "as03": {"const": "85,000"},
-        "as04": {"const": "145,000"},
-        "as05": {"const": "545,000"},
-        "as07": {"const": "12,000"},
-        "as08": {"const": "60,000"},
-        "as10": {"const": "38,000"},
-        "as11": {"const": "15,000"},
-        "as13": {"const": "987,000"},
-        "li01": {"const": "312,000"},
-        "li04": {"const": "4,500"},
-        "li05": {"const": "16,800"},
-        "li11": {"const": "333,300"},
-        "li12": {"const": "653,700"},
-        "in01": {"const": "98,000"},
-        "in02": {"const": "6,500"},
-        "in03": {"const": "18,000"},
-        "in05": {"const": "3,200"},
-        "in07": {"const": "125,700"},
-        "bk01": {"const": "JPMorgan Chase, San Francisco CA branch; applicant 100%; personal checking; USD; $38,000"},
-        "bk02": {"const": "Wells Fargo, Pacifica CA branch; applicant 100%; personal savings; USD; $24,000"},
-        "bk03": {"const": "Ally Bank; applicant 100%; 12-month certificate of deposit; USD; $25,000"},
-        "bk04": {"const": "N"},
-        "sc01": {"const": "Fidelity Investments; applicant 100%; taxable brokerage; cost $52,000; market $85,000"},
-        "sc04": {"const": "Vanguard IRA / rollover 401(k); applicant 100%; market $145,000"},
-        "sc05": {"const": "N"},
-        "re01": {"const": "Primary residence (address on file with underwriter); single family; applicant 100%"},
-        "re02": {"const": "100%; acquired 2018; purchase $410,000; current $545,000"},
-        "re03": {"const": "Wells Fargo Home Mortgage; balance $312,000; $2,050/mo"},
-        "ins01": {"const": "State Farm Life Insurance Co.; owner/insured: applicant"},
-        "ins02": {"const": "Beneficiary: estate; face $250,000; cash surrender value $12,000"},
-        "ins03": {"const": "0"},
-        "bs01": {"template": "{legal_name}, import/wholesale LLC; principal owner 100%"},
-        "bs02": {"const": "Company net worth approx $192,000; ownership interest value $60,000"},
-        "db01": {"const": "JPMorgan Chase; credit cards; current balance $4,500; $150/mo"},
-        "db02": {"const": "$150/mo; revolving; none pledged"},
-        "db05": {"const": "Wells Fargo Home Mortgage; first lien on primary residence; balance $312,000"},
-        "db06": {"const": "N/A"},
-        "q001": {"const": "Y"},
-        "q002": {"const": "N"},
-        "q003": {"const": "N"},
-        "q004": {"const": "N"},
-        "q005": {"const": "N"},
-        "q006": {"const": "N"},
-        "q010": {"const": "Y"},
+        "p008": {
+          "template": "Owner / Import Operator, {legal_name}"
+        },
+        "p009": {
+          "const": "Single"
+        },
+        "p014": {
+          "const": "Individual"
+        },
+        "p015": {
+          "const": "Own"
+        },
+        "p016": {
+          "const": "0"
+        },
+        "as01": {
+          "const": "62,000"
+        },
+        "as02": {
+          "const": "25,000"
+        },
+        "as03": {
+          "const": "85,000"
+        },
+        "as04": {
+          "const": "145,000"
+        },
+        "as05": {
+          "const": "545,000"
+        },
+        "as07": {
+          "const": "12,000"
+        },
+        "as08": {
+          "const": "60,000"
+        },
+        "as10": {
+          "const": "38,000"
+        },
+        "as11": {
+          "const": "15,000"
+        },
+        "as13": {
+          "const": "987,000"
+        },
+        "li01": {
+          "const": "312,000"
+        },
+        "li04": {
+          "const": "4,500"
+        },
+        "li05": {
+          "const": "16,800"
+        },
+        "li11": {
+          "const": "333,300"
+        },
+        "li12": {
+          "const": "653,700"
+        },
+        "in01": {
+          "const": "98,000"
+        },
+        "in02": {
+          "const": "6,500"
+        },
+        "in03": {
+          "const": "18,000"
+        },
+        "in05": {
+          "const": "3,200"
+        },
+        "in07": {
+          "const": "125,700"
+        },
+        "bk01": {
+          "const": "JPMorgan Chase, San Francisco CA branch; applicant 100%; personal checking; USD; $38,000"
+        },
+        "bk02": {
+          "const": "Wells Fargo, Pacifica CA branch; applicant 100%; personal savings; USD; $24,000"
+        },
+        "bk03": {
+          "const": "Ally Bank; applicant 100%; 12-month certificate of deposit; USD; $25,000"
+        },
+        "bk04": {
+          "const": "N"
+        },
+        "sc01": {
+          "const": "Fidelity Investments; applicant 100%; taxable brokerage; cost $52,000; market $85,000"
+        },
+        "sc04": {
+          "const": "Vanguard IRA / rollover 401(k); applicant 100%; market $145,000"
+        },
+        "sc05": {
+          "const": "N"
+        },
+        "re01": {
+          "const": "Primary residence (address on file with underwriter); single family; applicant 100%"
+        },
+        "re02": {
+          "const": "100%; acquired 2018; purchase $410,000; current $545,000"
+        },
+        "re03": {
+          "const": "Wells Fargo Home Mortgage; balance $312,000; $2,050/mo"
+        },
+        "ins01": {
+          "const": "State Farm Life Insurance Co.; owner/insured: applicant"
+        },
+        "ins02": {
+          "const": "Beneficiary: estate; face $250,000; cash surrender value $12,000"
+        },
+        "ins03": {
+          "const": "0"
+        },
+        "bs01": {
+          "template": "{legal_name}, import/wholesale LLC; principal owner 100%"
+        },
+        "bs02": {
+          "const": "Company net worth approx $192,000; ownership interest value $60,000"
+        },
+        "db01": {
+          "const": "JPMorgan Chase; credit cards; current balance $4,500; $150/mo"
+        },
+        "db02": {
+          "const": "$150/mo; revolving; none pledged"
+        },
+        "db05": {
+          "const": "Wells Fargo Home Mortgage; first lien on primary residence; balance $312,000"
+        },
+        "db06": {
+          "const": "N/A"
+        },
+        "q001": {
+          "const": "Y"
+        },
+        "q002": {
+          "const": "N"
+        },
+        "q003": {
+          "const": "N"
+        },
+        "q004": {
+          "const": "N"
+        },
+        "q005": {
+          "const": "N"
+        },
+        "q006": {
+          "const": "N"
+        },
+        "q010": {
+          "const": "Y"
+        },
         "q011": "principal_full_name",
-        "q012": {"today": "%Y-%m-%d"},
-        "q015": {"const": "N"},
-        "q016": {"const": "N"}
+        "q012": {
+          "today": "%Y-%m-%d"
+        },
+        "q015": {
+          "const": "N"
+        },
+        "q016": {
+          "const": "N"
+        }
       },
-      "signature_anchor": {"field": "q011", "gap": 5, "height": 24}
+      "signature_anchor": {
+        "field": "q011",
+        "gap": 5,
+        "height": 24
+      }
+    },
+    {
+      "format_id": "personal_financial_statement_llm_0b62afe9",
+      "type_id": "personal_financial_statement",
+      "field_names": [
+        "Button3",
+        "Instrm_Age",
+        "Instrm_Age2",
+        "Instrm_CheckBox1",
+        "Instrm_CheckBox2",
+        "Instrm_CheckBox3",
+        "Instrm_CheckBox4",
+        "Instrm_CheckBox5",
+        "Instrm_CheckBox6",
+        "Instrm_Date",
+        "Instrm_Occupation",
+        "Instrm_SSN",
+        "Instrm_SSN2",
+        "Instrm_Signature1",
+        "Instrm_Signature2",
+        "Instrm_Spouse",
+        "Instrm_freetext1",
+        "Instrm_freetext10",
+        "Instrm_freetext100",
+        "Instrm_freetext101",
+        "Instrm_freetext102",
+        "Instrm_freetext103",
+        "Instrm_freetext104",
+        "Instrm_freetext105",
+        "Instrm_freetext106",
+        "Instrm_freetext107",
+        "Instrm_freetext108",
+        "Instrm_freetext109",
+        "Instrm_freetext11",
+        "Instrm_freetext110",
+        "Instrm_freetext111",
+        "Instrm_freetext112",
+        "Instrm_freetext113",
+        "Instrm_freetext114",
+        "Instrm_freetext115",
+        "Instrm_freetext116",
+        "Instrm_freetext117",
+        "Instrm_freetext118",
+        "Instrm_freetext119",
+        "Instrm_freetext12",
+        "Instrm_freetext120",
+        "Instrm_freetext121",
+        "Instrm_freetext122",
+        "Instrm_freetext123",
+        "Instrm_freetext124",
+        "Instrm_freetext125",
+        "Instrm_freetext126",
+        "Instrm_freetext127",
+        "Instrm_freetext128",
+        "Instrm_freetext129",
+        "Instrm_freetext13",
+        "Instrm_freetext130",
+        "Instrm_freetext131",
+        "Instrm_freetext132",
+        "Instrm_freetext133",
+        "Instrm_freetext134",
+        "Instrm_freetext135",
+        "Instrm_freetext136",
+        "Instrm_freetext137",
+        "Instrm_freetext138",
+        "Instrm_freetext139",
+        "Instrm_freetext14",
+        "Instrm_freetext140",
+        "Instrm_freetext141",
+        "Instrm_freetext142",
+        "Instrm_freetext143",
+        "Instrm_freetext144",
+        "Instrm_freetext145",
+        "Instrm_freetext146",
+        "Instrm_freetext147",
+        "Instrm_freetext148",
+        "Instrm_freetext149",
+        "Instrm_freetext15",
+        "Instrm_freetext150",
+        "Instrm_freetext151",
+        "Instrm_freetext152",
+        "Instrm_freetext153",
+        "Instrm_freetext154",
+        "Instrm_freetext155",
+        "Instrm_freetext156",
+        "Instrm_freetext157",
+        "Instrm_freetext158",
+        "Instrm_freetext159",
+        "Instrm_freetext16",
+        "Instrm_freetext160",
+        "Instrm_freetext161",
+        "Instrm_freetext162",
+        "Instrm_freetext163",
+        "Instrm_freetext164",
+        "Instrm_freetext165",
+        "Instrm_freetext166",
+        "Instrm_freetext167",
+        "Instrm_freetext168",
+        "Instrm_freetext169",
+        "Instrm_freetext17",
+        "Instrm_freetext170",
+        "Instrm_freetext171",
+        "Instrm_freetext172",
+        "Instrm_freetext173",
+        "Instrm_freetext174",
+        "Instrm_freetext175",
+        "Instrm_freetext176",
+        "Instrm_freetext177",
+        "Instrm_freetext178",
+        "Instrm_freetext179",
+        "Instrm_freetext18",
+        "Instrm_freetext180",
+        "Instrm_freetext181",
+        "Instrm_freetext182",
+        "Instrm_freetext183",
+        "Instrm_freetext184",
+        "Instrm_freetext185",
+        "Instrm_freetext186",
+        "Instrm_freetext187",
+        "Instrm_freetext188",
+        "Instrm_freetext189",
+        "Instrm_freetext19",
+        "Instrm_freetext190",
+        "Instrm_freetext191",
+        "Instrm_freetext192",
+        "Instrm_freetext2",
+        "Instrm_freetext20",
+        "Instrm_freetext21",
+        "Instrm_freetext22",
+        "Instrm_freetext23",
+        "Instrm_freetext24",
+        "Instrm_freetext25",
+        "Instrm_freetext26",
+        "Instrm_freetext27",
+        "Instrm_freetext28",
+        "Instrm_freetext29",
+        "Instrm_freetext3",
+        "Instrm_freetext30",
+        "Instrm_freetext31",
+        "Instrm_freetext32",
+        "Instrm_freetext33",
+        "Instrm_freetext34",
+        "Instrm_freetext35",
+        "Instrm_freetext36",
+        "Instrm_freetext37",
+        "Instrm_freetext38",
+        "Instrm_freetext39",
+        "Instrm_freetext4",
+        "Instrm_freetext40",
+        "Instrm_freetext41",
+        "Instrm_freetext42",
+        "Instrm_freetext43",
+        "Instrm_freetext44",
+        "Instrm_freetext45",
+        "Instrm_freetext46",
+        "Instrm_freetext47",
+        "Instrm_freetext48",
+        "Instrm_freetext49",
+        "Instrm_freetext5",
+        "Instrm_freetext50",
+        "Instrm_freetext51",
+        "Instrm_freetext52",
+        "Instrm_freetext53",
+        "Instrm_freetext54",
+        "Instrm_freetext55",
+        "Instrm_freetext56",
+        "Instrm_freetext57",
+        "Instrm_freetext58",
+        "Instrm_freetext59",
+        "Instrm_freetext6",
+        "Instrm_freetext60",
+        "Instrm_freetext61",
+        "Instrm_freetext62",
+        "Instrm_freetext63",
+        "Instrm_freetext64",
+        "Instrm_freetext65",
+        "Instrm_freetext66",
+        "Instrm_freetext67",
+        "Instrm_freetext68",
+        "Instrm_freetext69",
+        "Instrm_freetext7",
+        "Instrm_freetext70",
+        "Instrm_freetext71",
+        "Instrm_freetext72",
+        "Instrm_freetext73",
+        "Instrm_freetext74",
+        "Instrm_freetext75",
+        "Instrm_freetext76",
+        "Instrm_freetext77",
+        "Instrm_freetext78",
+        "Instrm_freetext79",
+        "Instrm_freetext8",
+        "Instrm_freetext80",
+        "Instrm_freetext81",
+        "Instrm_freetext82",
+        "Instrm_freetext83",
+        "Instrm_freetext84",
+        "Instrm_freetext85",
+        "Instrm_freetext86",
+        "Instrm_freetext87",
+        "Instrm_freetext88",
+        "Instrm_freetext89",
+        "Instrm_freetext9",
+        "Instrm_freetext90",
+        "Instrm_freetext91",
+        "Instrm_freetext92",
+        "Instrm_freetext94",
+        "Instrm_freetext95",
+        "Instrm_freetext96",
+        "Instrm_freetext97",
+        "Instrm_freetext98",
+        "Instrm_freetext99",
+        "PolAdd",
+        "PrincipalName"
+      ],
+      "page_count": 2,
+      "role": "agent_inbound",
+      "field_mapping": {
+        "Instrm_Date": {
+          "today": "%m/%d/%Y"
+        },
+        "Instrm_SSN": "ssn",
+        "Instrm_SSN2": "ssn",
+        "Instrm_Signature1": "signer_name",
+        "Instrm_Signature2": "signer_name"
+      },
+      "note": "llm_generated：LLM 为已知类型的新格式自动生成的字段映射，以填表报告的 skipped/unmapped_fields 为线索人工校对"
     }
   ],
   "flat_forms": [

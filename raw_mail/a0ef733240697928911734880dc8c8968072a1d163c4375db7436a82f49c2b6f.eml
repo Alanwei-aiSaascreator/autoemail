@@ -1,0 +1,271 @@
+Return-Path: <>
+Delivered-To: dinishafaulkner@donibrico.online
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id SH+SCiVNCmslVzIAQ1DlOA
+	(envelope-from <>)
+	for <dinishafaulkner@donibrico.online>; Fri, 27 Nov 2026 22:40:21 -0500
+X-Original-To: dinishafaulkner@donibrico.online
+Received: from e226-245.smtp-out.us-east-2.amazonses.com (e226-245.smtp-out.us-east-2.amazonses.com [23.251.226.245])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id 516B310FAB4
+	for <dinishafaulkner@donibrico.online>; Fri, 27 Nov 2026 22:40:20 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=Xo27+j2n;
+	dkim=fail ("headers rsa verify failed") header.d=googlemail.com header.s=20260707 header.b=x6mzC9qD;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	spf=pass (mail.pony-it.com: domain of e226-245.smtp-out.us-east-2.amazonses.com designates 23.251.226.245 as permitted sender) smtp.helo=e226-245.smtp-out.us-east-2.amazonses.com
+ARC-Seal: i=1; a=rsa-sha256; d=donibrico.online; s=dkim; cv=none; t=1795837220;
+	b=gbNE5iWwWM8P6II/yXwVhSi4QJ6eG7ap3G3y9u6aQSWPqts0YNXwz2rbmd0yy4u2EfHEhx
+	SlQI3kq17YD6ap9ixAOPF2sHGmDnKR2ZVa9asrDH3z5/bWGEavW6Hw4USSelJSMP8WvsIF
+	k8zDPx/ttVXI7wJTwBb9bSEG9tWCti1peOigOXM9rpsKZrbcphMrVf1M/BL+zEhpn7NnBR
+	trO+c1T1uCxhFeqjyTxQ3LMmd5JHQmk0CJYedsczjvVzH8MQ/DPwNbCMZZ9Lot9wS/+8OW
+	yzedrAW+xRSHr1dcS+t7jNTO8TLmpwv6OTVXFPtiLHE6S9cevk4IyHQqhuivkQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=donibrico.online;
+	s=dkim; t=1795837220;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:dkim-signature;
+	bh=9PTM9WCAGoVh+YhflYhg6yQPxBak2XoAgTKVtPZfhVI=;
+	b=BWgIlAyw4uYoOpJmyE4Zt6V2lAw/DmXxvV7jlrfT0p+sSgxRM+QvSXCIUCoaa+oOMYvXte
+	EQvmGnPJ58IQrG8fncm4JGbZ3DdkEB67MjKdFdCXU+fkYB0SLqDJO410Y8xVnkgoTOhKXV
+	8rIOthWepX5Cr7/RE1FAeXnEWMywW4N89+hPjUqhplgpg2latWj0CHE8SYZa0PZ86fZ1jV
+	ugaLkwvSOgM4v+BBWrY4R6Zz7H2dOrJgot+rkNUAGB6nzX+Yoziv6vgjXhc9bZjP5mj4i8
+	s4kn9X51ZL/lVz6g8x9qox4210Lffz3oHRmBUZxThqsYQZnl6JcSE81pahUrCw==
+ARC-Authentication-Results: i=1;
+	mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=Xo27+j2n;
+	dkim=fail ("headers rsa verify failed") header.d=googlemail.com header.s=20260707 header.b=x6mzC9qD;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	spf=pass (mail.pony-it.com: domain of e226-245.smtp-out.us-east-2.amazonses.com designates 23.251.226.245 as permitted sender) smtp.helo=e226-245.smtp-out.us-east-2.amazonses.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=kra23psoka5qyyh6gdejiiuof3nluwuz; d=amazonses.com; t=1795837219;
+	h=MIME-Version:To:Message-ID:Date:From:Subject:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:Feedback-ID;
+	bh=tKklpo0DAWZbfp5nZs1wqL5v76adAps6oee4kQLvDcQ=;
+	b=Xo27+j2nX2Rbcyg3QxJNFRzUuvyRgGxW1xPuPyxoRkpxnW5/HspG0QQJBemQnfmQ
+	7S3FPAPLg1r5pUrAz8QaSmyxqDM1t7dAfHeVnxUA/w/26tcZg7UakBDuALd0SveftqU
+	06dAPJvZMZnpe0nAP7Jdi3E4RM2dTXqBs5s6r0dw=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20260707; t=1795837214; x=1796442014; darn=ses.donibrico.online;
+        h=content-transfer-encoding:content-type:in-reply-to:references
+         :subject:from:date:message-id:auto-submitted:to:mime-version:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=9PTM9WCAGoVh+YhflYhg6yQPxBak2XoAgTKVtPZfhVI=;
+        b=x6mzC9qDgnN3vrenaPVh3HUcDZ+/L01H0gwu4vMWhmnU1Cc9OBUFX/V895TIe6pGDn
+         E0M50ovgWSF8Og54Iff/kvIx4JETDw980mjI0/87ZVryXd3J18yrO4Ln7l6yxK1Fa6mb
+         I4rsvtTH77WE/g/1GN+bSid7mVSLBFnLLbXjXcDnALEQJIy8wmUisRN3cMih/uOlU39E
+         YwxB2sKJQVfYuTnO7vAEO0OEy8VXrpP8I+b9GGzYaHXk6FOeB0CQkbRBneF58Aq5Hu8B
+         BlupZ66TEm5fPic13vKi842tULhDKppqJkOdDWgKpvKXPK6ssqcHaPAzMpFy1WoZ0bS2
+         Fn4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795837214; x=1796442014;
+        h=content-transfer-encoding:content-type:in-reply-to:references
+         :subject:from:date:message-id:auto-submitted:to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=9PTM9WCAGoVh+YhflYhg6yQPxBak2XoAgTKVtPZfhVI=;
+        b=C3a7ZglDS3UUjZP5HHiLFX2k7CxTbpQTs/ECzX7E47gx1A5L7H2T4FqcwZ+63HmHJ6
+         QZJtPjrjmSytu802cQ7n3CThJ7/BNUznMRH2L+7++k2vjglrAWILhm/IVs2xVAAVD99c
+         dbF5ZIqF/h+KX6+b1TfT5gn2vdqr2YeY3+3KSjfaRIhD5QeNGwr/3uInEwgoyV8rDoCa
+         8yhFESPM5JXcn2VHw9MAroZH8fZ/rh7MfklOgai5p4nAunGMxkRLqZa2YhgEXUWKCUSD
+         2iM1ZbNRyTxKbZdvcHuikxb160xR0I5RzPaaPrOn0yzC5TyLyCk69tnv/yX4FvtB5Uag
+         72rw==
+X-Gm-Message-State: APuU4Z8mYQEa7fn3we0ncelLBdtAPewv2BsDK3YOPhTtb+7cvwWeNDFK
+	yT9RDAxf5acDJH0IwNHWG7flwf6WGsdOPEfdQ7ai2JOpc1O+tCtmDbFsuJeZSezpJJT9GSEYMRD
+	xvHh55sQfPy5zEizPoJrI5kXalhUPKUnk+Qkhx/TuHjP5xG8PGOscr2kX3A==
+X-Received: by 2002:a05:6820:1383:b0:716:d78a:1008 with SMTP id 006d021491bc7-71b394bcb58mr21605708eaf.46.1795837213909;
+        Fri, 27 Nov 2026 19:40:13 -0800 (PST)
+MIME-Version: 1.0
+To: dinishafaulkner@donibrico.online
+Auto-Submitted: auto-replied
+Message-ID: <010f01a2203d3f5a-5aa8e7d8-c3eb-4490-82e7-e877b31992f7-000000@us-east-2.amazonses.com>
+Date: Sat, 28 Nov 2026 03:40:19 +0000
+From: MAILER-DAEMON@us-east-2.amazonses.com
+Subject: Delivery Status Notification (Failure)
+References: <010f01a2203d386c-04a4de1b-df36-4287-82b2-6f34e272b458-000000@us-east-2.amazonses.com>
+In-Reply-To: <010f01a2203d386c-04a4de1b-df36-4287-82b2-6f34e272b458-000000@us-east-2.amazonses.com>
+X-Failed-Recipients: info@mborder.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Feedback-ID: ::1.us-east-2.c0QCJwTJKDSb6mlKpIo5IpGwsngRMRBjZtJ48k4WYjY=:AmazonSES
+X-SES-Outgoing: 2026.11.28-23.251.226.245
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Result: default: False [-2.02 / 15.00];
+	BAYES_HAM(-5.50)[100.00%];
+	SEM_URIBL_FRESH15(3.00)[donibrico.online:email];
+	BAD_REP_POLICIES(2.00)[];
+	IP_REPUTATION_HAM(-1.18)[asn: 16509(-0.31), country: US(-0.01), ip: 23.251.226.245(-0.85)];
+	R_DKIM_ALLOW(-0.20)[amazonses.com:s=kra23psoka5qyyh6gdejiiuof3nluwuz];
+	MIME_GOOD(-0.10)[text/plain];
+	MIME_FROM_MX_GOOD(-0.10)[feedback-smtp.us-east-2.amazonses.com];
+	ONCE_RECEIVED(0.10)[];
+	BOUNCE(-0.05)[mailer-daemon+subj];
+	RCPT_MAILCOW_DOMAIN(0.00)[donibrico.online];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	ARC_SIGNED(0.00)[donibrico.online:s=dkim:i=1];
+	ARC_NA(0.00)[];
+	SUBJ_BOUNCE_WORDS(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	URIBL_BLOCKED(0.00)[us-east-2.amazonses.com:from_mime,us-east-2.amazonses.com:mid,amazonses.com:dkim,amazonses.com:email,amazonses.com:url,donibrico.online:email,mborder.com:url,mborder.com:email,e226-245.smtp-out.us-east-2.amazonses.com:rdns,e226-245.smtp-out.us-east-2.amazonses.com:helo];
+	RCPT_COUNT_ONE(0.00)[1];
+	R_DKIM_REJECT(0.00)[googlemail.com:s=20260707];
+	DMARC_POLICY_ALLOW(0.00)[amazonses.com,quarantine];
+	DKIM_TRACE(0.00)[amazonses.com:+,googlemail.com:-];
+	RCVD_COUNT_ZERO(0.00)[0];
+	RWL_MAILSPIKE_POSSIBLE(0.00)[23.251.226.245:from];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_NONE(0.00)[];
+	DWL_DNSWL_NONE(0.00)[amazonses.com:dkim];
+	R_SPF_ALLOW(0.00)[+ip4:23.251.226.245:c];
+	FROM_NO_DN(0.00)[];
+	DKIM_MIXED(0.00)[];
+	ASN(0.00)[asn:16509, ipnet:23.251.226.0/24, country:US];
+	DMARC_POLICY_ALLOW_WITH_FAILURES(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	RCVD_IN_DNSWL_NONE(0.00)[23.251.226.245:from]
+X-Rspamd-Queue-Id: 516B310FAB4
+
+Hello dinishafaulkner@donibrico.online,
+
+We're writing to let you know that the group you tried to contact (info) ma=
+y not exist, or you may not have permission to post messages to the group. =
+A few more details on why you weren't able to post:
+
+ * You might have spelled or formatted the group name incorrectly.
+ * The owner of the group may have removed this group.
+ * You may need to join the group before receiving permission to post.
+ * This group may not be open to posting.
+
+If you have questions related to this or any other Google Group, visit the =
+Help Center at https://support.google.com/a/mborder.com/bin/topic.py?topic=
+=3D25838.
+
+Thanks,
+
+mborder.com admins
+
+
+
+----- Original message -----
+
+X-Received: by 2002:a05:6820:1383:b0:716:d78a:1008 with SMTP id 006d021491b=
+c7-71b394bcb58mr21605698eaf.46.1795837213657;
+        Fri, 27 Nov 2026 19:40:13 -0800 (PST)
+ARC-Seal: i=3D1; a=3Drsa-sha256; t=3D1795837213; cv=3Dnone;
+        d=3Dgoogle.com; s=3Darc-20260327;
+        b=3DRS0rzYZoH24pNOb2LXPlBCSseTeaZApxaS/DGkhYzH12Dy21rEUuSaaIaXeaN6y=
+xP/
+         WP5kQFiKdJqzV3KfilrNrcsVra6W4mrufkYUZEQ198iIwihqsCr4JDMLjRNK/CwLLF=
+2G
+         oQJFhnShCVxIwbG4rRgotYAPVPSOj18H8HJg+yvOyYpsZ1r/+ASZQBdeuj6V6ht8J4=
+Rq
+         /BgPLyP0zzP5CCEKYgdEe/1pAbjP+om2L++yuoS6AhQBcTKZKPZBZeGPL8hbdMaPPu=
+U3
+         xQ9ePaZabo4NP/MXz76Wnd/wn9FGY+DcUSB3rtYbb7PIt65YNC0+selsZkwasbEGM0=
+ar
+         npNg=3D=3D
+ARC-Message-Signature: i=3D1; a=3Drsa-sha256; c=3Drelaxed/relaxed; d=3Dgoog=
+le.com; s=3Darc-20260327;
+        h=3Dfeedback-id:date:mime-version:content-transfer-encoding:message=
+-id
+         :subject:to:from:dkim-signature:dkim-signature:dkim-signature;
+        bh=3DAQxxKjlJSWDFZZZBF9IBGjJwSjTyqyvp/WUPVaINH3w=3D;
+        fh=3DonHWy94ynNz2sMLIHk/77hgk4NZu7B0bRYJjr6A0Lcs=3D;
+        b=3DLH8fx6eIJ/v5wKWeVS/4rX6Iw37R3ktDhOu9vFKmQEqtv9TRBJC/jjq4uu+myp7=
+Kpm
+         1HiPzomM2JweAQFjup5lpnQeR1L5Us65fGxyj6AI8oISTbyIlhRa07SHcEzYCLVigX=
+D1
+         +3lccUTKn4JVy2JSC6OPGU8lZJVBsaWPhcto1WXk7hJXcIpCUYmPr0fySC/XgtNYOI=
+dz
+         DVjhjmKsm/8zVTSVC934CVR7rOyH6xkEWaKjmQf1mWpJcRBeUSXz8ao+RVUCjxr1Zb=
+D0
+         nvR8E+LUqQq/AH0/eb9/B7e1Z7RM77WXiKPtJ9/JshayCcnL+zcoVmzYRza184RXCf=
+p2
+         x8Ww=3D=3D;
+        dara=3Dgoogle.com
+ARC-Authentication-Results: i=3D1; mx.google.com;
+       dkim=3Dpass header.i=3D@donibrico.online header.s=3Dmkns64cuyn5dbmak=
+f4q6fii7nkdnikps header.b=3DxehnsYWW;
+       dkim=3Dpass header.i=3D@amazonses.com header.s=3Dkra23psoka5qyyh6gde=
+jiiuof3nluwuz header.b=3DXcWL2Qvi;
+       dkim=3Dfail header.i=3D@donibrico.online header.s=3Ddkim header.b=3D=
+qCTgvlQ7;
+       spf=3Dpass (google.com: domain of 010f01a2203d386c-04a4de1b-df36-428=
+7-82b2-6f34e272b458-000000@ses.donibrico.online designates 23.251.226.2 as =
+permitted sender) smtp.mailfrom=3D010f01a2203d386c-04a4de1b-df36-4287-82b2-=
+6f34e272b458-000000@ses.donibrico.online;
+       dmarc=3Dpass (p=3DNONE sp=3DNONE dis=3DNONE) header.from=3Ddonibrico=
+.online
+Return-Path: <010f01a2203d386c-04a4de1b-df36-4287-82b2-6f34e272b458-000000@=
+ses.donibrico.online>
+Received: from e226-2.smtp-out.us-east-2.amazonses.com (e226-2.smtp-out.us-=
+east-2.amazonses.com. [23.251.226.2])
+        by mx.google.com with ESMTPS id 586e51a60fabf-4bc63522588si40625730=
+fac.329.2026.11.27.19.40.13
+        for <info@mborder.com>
+        (version=3DTLS1_3 cipher=3DTLS_AES_128_GCM_SHA256 bits=3D128/128);
+        Fri, 27 Nov 2026 19:40:13 -0800 (PST)
+Received-SPF: pass (google.com: domain of 010f01a2203d386c-04a4de1b-df36-42=
+87-82b2-6f34e272b458-000000@ses.donibrico.online designates 23.251.226.2 as=
+ permitted sender) client-ip=3D23.251.226.2;
+Authentication-Results: mx.google.com;
+       dkim=3Dpass header.i=3D@donibrico.online header.s=3Dmkns64cuyn5dbmak=
+f4q6fii7nkdnikps header.b=3DxehnsYWW;
+       dkim=3Dpass header.i=3D@amazonses.com header.s=3Dkra23psoka5qyyh6gde=
+jiiuof3nluwuz header.b=3DXcWL2Qvi;
+       dkim=3Dfail header.i=3D@donibrico.online header.s=3Ddkim header.b=3D=
+qCTgvlQ7;
+       spf=3Dpass (google.com: domain of 010f01a2203d386c-04a4de1b-df36-428=
+7-82b2-6f34e272b458-000000@ses.donibrico.online designates 23.251.226.2 as =
+permitted sender) smtp.mailfrom=3D010f01a2203d386c-04a4de1b-df36-4287-82b2-=
+6f34e272b458-000000@ses.donibrico.online;
+       dmarc=3Dpass (p=3DNONE sp=3DNONE dis=3DNONE) header.from=3Ddonibrico=
+.online
+DKIM-Signature: v=3D1; a=3Drsa-sha256; q=3Ddns/txt; c=3Drelaxed/simple;
+	s=3Dmkns64cuyn5dbmakf4q6fii7nkdnikps; d=3Ddonibrico.online;
+	t=3D1795837213;
+	h=3DFrom:To:Subject:Message-ID:Content-Type:Content-Transfer-Encoding:MIME=
+-Version:Date;
+	bh=3DAQxxKjlJSWDFZZZBF9IBGjJwSjTyqyvp/WUPVaINH3w=3D;
+	b=3DxehnsYWWGpwRKyfrKhm9Uswm7MW2UMoP5EagC8sm1ziFHE+TAIC3Q0Te75O9aiyN
+	2rMZpzLOk5Oofj/MiCPaeBBLxxf8TlQafv/P+yfbfFpeFvViLpgSpjf/5NFTebAwrDz
+	S5TLDLuU8g5XurfJ2O1HIU7j+aH+uu7zbmn+o6X+NBSb/4eYBIqzmMVl1APRjPwnw7f
+	NLoBaVtwXdh/qQCWzyCWl+7AG7PxERuJyZa1VMrg3bXaJuiWQqg3zjThh0y1vlh63sL
+	bc32I6qycb5/tVCMUPd8O7rg4rkURysBdMplwfUAsgsrR4pdY7f6m6gchJkbSLnmgfn
+	bMX7GqCgCA=3D=3D
+DKIM-Signature: v=3D1; a=3Drsa-sha256; q=3Ddns/txt; c=3Drelaxed/simple;
+	s=3Dkra23psoka5qyyh6gdejiiuof3nluwuz; d=3Damazonses.com; t=3D1795837213;
+	h=3DFrom:To:Subject:Message-ID:Content-Type:Content-Transfer-Encoding:MIME=
+-Version:Date:Feedback-ID;
+	bh=3DAQxxKjlJSWDFZZZBF9IBGjJwSjTyqyvp/WUPVaINH3w=3D;
+	b=3DXcWL2QvigUUpqJRXHgRNdJYRl9YG9d3ZNBYREpMR/rA5M1bAUUTmMcTfoSy0SHJH
+	n8Tq3jGhzFINajGBGhXK1Wj75f4OvA4MDNOfEPe4q0b5HXb4BTs+TzFwrViqY0pQakp
+	8YdnfIjLigxpwmx5D/qJlfFHLj/Q7JegL+tbdScY=3D
+DKIM-Signature: v=3D1; a=3Drsa-sha256; c=3Drelaxed/relaxed; d=3Ddonibrico.o=
+nline;
+	s=3Ddkim; t=3D1795837212; h=3Dfrom:subject:message-id:to:mime-version:cont=
+ent-type:
+	 content-transfer-encoding; bh=3DAQxxKjlJSWDFZZZBF9IBGjJwSjTyqyvp/WUPVaINH=
+3w=3D;
+	b=3DqCTgvlQ7DUErKeYxOJsn+kfG2pzPDLqP682ck1FWpQAgY8hnSnzeeiQa38ewLC19HZ4SgE
+	EJt6+uRSpwai1k93YzOO6io1y5L+hlC6RoHOdwE1YMF+vnHHwiCse6WxlqJapa6ahSAG2c
+	P0gBpjqAWAvc2D6oOJt5ZnLPipf0KAQJXmIeLRl6P5RcyuWDmLq65n94P/SJY9FxhmpacM
+	N89VC6VljUVyq51EyJGLRs68TbR1aPGNZCUStefUYdjWIFLq5F93EpcSoEJcnBjH8fK63f
+	QlICKQRJyNGLBkE0+pCuBggAQHJzubi4vLqSvp/53rvnHBxyz4HavwfCsoRg+g=3D=3D
+From: dinishafaulkner@donibrico.online
+To: info@mborder.com
+Subject: [BOND-2026-1947] Inquiry - Continuous Customs Bond
+Message-ID: <010f01a2203d386c-04a4de1b-df36-4287-82b2-6f34e272b458-000000@u=
+s-east-2.amazonses.com>
+Content-Type: text/plain; charset=3D"utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
+Date: Sat, 28 Nov 2026 03:40:12 +0000
+Feedback-ID: ::1.us-east-2.dnBLFQvZ7DBnA5nHg3QcqhG4UiG8AnTuix0bXTff/SU=3D:A=
+mazonSES
+X-SES-Outgoing: 2026.11.28-23.251.226.2
+

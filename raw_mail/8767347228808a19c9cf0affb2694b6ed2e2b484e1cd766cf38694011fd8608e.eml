@@ -1,0 +1,170 @@
+Return-Path: <>
+Delivered-To: brianamartin@flywirecompany.online
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id CHDJMWcpCmuepBIAQ1DlOA
+	(envelope-from <>)
+	for <brianamartin@flywirecompany.online>; Fri, 27 Nov 2026 20:07:51 -0500
+X-Original-To: brianamartin@flywirecompany.online
+Received: from e226-245.smtp-out.us-east-2.amazonses.com (e226-245.smtp-out.us-east-2.amazonses.com [23.251.226.245])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id 6172110F800
+	for <brianamartin@flywirecompany.online>; Fri, 27 Nov 2026 20:07:51 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=laklPCdy;
+	dkim=fail ("headers rsa verify failed") header.d=csiis-biz.20260707.gappssmtp.com header.s=20260707 header.b=SkK0aBrN;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	spf=pass (mail.pony-it.com: domain of e226-245.smtp-out.us-east-2.amazonses.com designates 23.251.226.245 as permitted sender) smtp.helo=e226-245.smtp-out.us-east-2.amazonses.com;
+	arc=reject ("signature check failed: fail, {[1] = sig:google.com:reject}")
+ARC-Seal: i=2; a=rsa-sha256; d=flywirecompany.online; s=dkim; cv=fail;
+	t=1795828071;
+	b=Dr9BJi/jR9ANIhNmF4Hgu+j9/o5Gy/ejULA6Ibn+sMEgKzR1kXJBgunm5xrgni03CC2nJZ
+	L0UA5D9L6nC6EE7/PKiO/OCeda6MaoOFMchzz0Rtu5ceKQBjUpAl18ptT/mRKMwCJJdMG2
+	P/vnUt4eTn4kRYWZ0nuim4PcWtca+LIqnZDnS5RMPaZV+hV8PSzgqHlrEwsPLbhRKqXlyf
+	fo/xl+5CxSJVDgpC9FFBjgvZrrJwIxu2xL8L2ycJccC10rOjahrRWf5KQZ7M4FQO3q4rml
+	hodW4+ZPtPmNnnUp4PLW/TGbhNZla1NK5Oh/eUmJr+c91F8RLkl43SE5qCcnBA==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed;
+	d=flywirecompany.online; s=dkim; t=1795828071;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:dkim-signature;
+	bh=U5LanS4mgLjQAFRqrZOkjHWWqS1cQxl4XqqfeFerLrw=;
+	b=oGHba3A5PP0n80SHbn9HLPm5+4yEsUvCWOazugTXrk8qaopAIDVVtatl6rjtmnBo8id9kt
+	pGkUhxtWCXglLeV4dgnc9YdI2OPEw16IZZaECIH5SHNpfYIva8+DdNvS/2DzzmGa0I+yDi
+	0gA1LBw+UMM0aguaS9zxfuRwt/q6DB7POjo1P+7imcqDalYjpprT+QSia1WhAc9mnrNgQw
+	d1wXzLHaE5ObwVfwrmJEga6zx2ASVdRH7+q4bbW7S9PppuKWwyDsxhBTXS9hVpF6VHPN7n
+	g7qxw7A6CBoYKYIE0ygPCRofSq2dGd5cpCfw04cfHfnORO16PV5nqEIqqgVP2Q==
+ARC-Authentication-Results: i=2;
+	mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=laklPCdy;
+	dkim=fail ("headers rsa verify failed") header.d=csiis-biz.20260707.gappssmtp.com header.s=20260707 header.b=SkK0aBrN;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	spf=pass (mail.pony-it.com: domain of e226-245.smtp-out.us-east-2.amazonses.com designates 23.251.226.245 as permitted sender) smtp.helo=e226-245.smtp-out.us-east-2.amazonses.com;
+	arc=reject ("signature check failed: fail, {[1] = sig:google.com:reject}")
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=kra23psoka5qyyh6gdejiiuof3nluwuz; d=amazonses.com; t=1795828071;
+	h=To:From:Date:Message-ID:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Feedback-ID;
+	bh=U5LanS4mgLjQAFRqrZOkjHWWqS1cQxl4XqqfeFerLrw=;
+	b=laklPCdyCWppb0yh5hrwGkHa5OTOqW1YDOJ0BbCVD1jUYjQMAA7dzqpaeIDKGi9m
+	/WhLEB2OsiU3xgfL7/yDfVKQX8vKnc79h/YpsbwBXX25tb90qq9y+JkULbt9YhaddxB
+	x+zNIQ1TA/FInTboXr7eIPycDwd5l7V1RmDIWEio=
+ARC-Seal: i=1; a=rsa-sha256; t=1795828070; cv=none;
+        d=google.com; s=arc-20260327;
+        b=COjH1BVugKpwCQeflN/76Rn/vf6sPMRDtu+NiKSypV5YHGT4xcGZW17/hnM1N2Vn9W
+         ecjl1RDTMEOCwdnMpAGWWyM6OTdrMis5kgjsPgFGxlQVE3kfGPUWwtwEmX0i9NUEUmBS
+         dJx1dmQHCc7sho030lrb0cqIKght9XCJ91KgEmi2jg2OwxVTkPFwvxUY/bIoJ94uEoYR
+         ESawyOBtyVDKblG13647QokBqZhyitv0qchKN0ijzSbUkiCvTdaIvIaZziTPoI8MCoEr
+         SOOne0gf4/jxi+wBgMZtWuhCkYSGid0hwYypfRN01KTAKWzSqHII2929nsQSoIDYtZvo
+         W78w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=auto-submitted:precedence:content-disposition
+         :content-transfer-encoding:mime-version:subject:message-id:date:from
+         :to:dkim-signature;
+        bh=U5LanS4mgLjQAFRqrZOkjHWWqS1cQxl4XqqfeFerLrw=;
+        fh=ir5RKGapfJmC5W8xOSvuYBB5FQB3c1h9EavPlwT8tnI=;
+        b=Y8eMGdYtpiq+Jq7Lbciv21ktIL4CvEfAxyQeAP9K4Wrq4dbtxZUHFtb5BXpf9rnsp1
+         tQ7vDElmDafUIUVH7K/2sEpsc89hBevqPrCM3ZR2kxFJsUDubB+MJdZvcf5HbM78hkFh
+         btqfLtINBpi+fqQMZfiAyOdXJeRMKu+NdIAbzRHtkp4DI51LvFLke322UqMs0EDqkiN3
+         l+OxAJjHjf0LA0t5GNu6IfibdL+27AL4t+RI1OvNUgdUmG5gS4Zh8Pq+8dkKWF34y+P2
+         MSw4DtLSKPltdxOZ62AnsF5azEi7DH2bQ+4KZJxCKhGW2MZloSe/mROe4JTXCR+EoEGQ
+         AFrQ==;
+        darn=ses.flywirecompany.online
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=csiis-biz.20260707.gappssmtp.com; s=20260707; t=1795828070; x=1796432870; darn=ses.flywirecompany.online;
+        h=auto-submitted:precedence:content-disposition
+         :content-transfer-encoding:content-type:mime-version:subject
+         :message-id:date:from:to:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=U5LanS4mgLjQAFRqrZOkjHWWqS1cQxl4XqqfeFerLrw=;
+        b=SkK0aBrN0eH4vkBLwJrWJ9Z04N77bB/AmkUhINJTarm5nISukCvk0ZCX8O6xYQCwiH
+         YFLH3wE4r0kKSy3H7bcSIEGu5IDTcFdkAPhf7N2ONgxlvwJqEI3/pF46V8WG7/hVFvwD
+         8M9BIyrupMAXBz/fOJNmz+Hq/UUEbjg8+a8eN8cZdJ/e9IPrJpGciDJXH2vnyR3RRYUS
+         dYC2idi+iegB63tzKWDGXduBBfcG0hIdYkVycD1xpoMdDd3HED5+ZKLAakpBhcI60UnE
+         4cLnSUq3X59zbB2Hl0FQ52mLLF4ulyrfSgN1XSmiJIcHL89/maBBzjsLl8gsQ5iPHmqe
+         PP7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795828070; x=1796432870;
+        h=auto-submitted:precedence:content-disposition
+         :content-transfer-encoding:content-type:mime-version:subject
+         :message-id:date:from:to:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=U5LanS4mgLjQAFRqrZOkjHWWqS1cQxl4XqqfeFerLrw=;
+        b=H9k7iwpSDLmtLMWArJqYDYRCerZLg3smo4ht+eZUf6+p3BUCwCbuIFaAaM2L6FetTt
+         DSIJGwxSjn6oyYqbT5654D3IcXx0f5HUEa9Jalk2qCQTfg5YOYQuGElYFl+dem09r/O6
+         LiPsK93OuXDTAJ3jYpBvMAAK8R7G2Ai7Czoapm7VaNcyqRtTpoJNtxpizY0mRnb5JjGa
+         FZOrpDXK4Q7sptR0eGinOO7cvBo3ynQEmkBlcqnb9jptFsqLUIkopMPGM+fYK5PztxIX
+         0fNkVc8Oy/8U+ZKibkqkY0RQjonqGCKWTJ89g+9fA6q018fKwF8S1vwYCrSHqUUKeK9Y
+         peFg==
+X-Gm-Message-State: APuU4Z92H7wDr3Jt1xjFULb7Ai9lTUCeDo9Mteh4AS2loC2axgGnvP4k
+	qoGeMNuIOR1ps9o5jYPRvGof6qSaLtHoYXHPZDMqkaORoc004JVY2gTv1sXb5JzC2tcnoiKmvl6
+	6hggVP1RaXfEbK/KOYdnb4sjrETcb3JCmtPQeRPTjo5oHknsxveBBd7TltLyPp7KARUV2zPnFAt
+	ee/Z+4SV1ikWc23PsDvmKa/k+HZ8w=
+X-Gm-Gg: AZFdTZfBkAG8rYm9uLRb3Bt7nTgpljNpHfT184iP+JWYDh/j+X5oNDk0Zr8P+S/I58+
+	oX57a8T0upRIPe4KdeMRx+YG8vHgxtDek/mEyVmVojmurGotnIU3OEWTmvYS2o15myN/t2eDsAb
+	/Dbl+FDozQkOX/dFMhsxjKU0XrEShjlHKZ3HyqKWHg65yq6hgg5ZseZxwW/MZIr96PbzFq1Qf5N
+	XHr1FS4rENzWytLHsZyFwHV8Ll/m4ZxJgwgDShQU+VeAsHVkuan7eM9sfb8ARdaYuEDT51r+NmT
+	eQvLhA1g4A3c4yfhWvpFAInGnEpYsmxRS4QYF6Ylig2BaawRk3H1LuapLESlz/o6ytYkFds4Lzp
+	1ufuc0UxysgrlNnwJkZ2obKmoazZOZvsl10qyh0nWWQyvFtcACs+6aTpD+w7TLQelhr9Ek4YtSr
+	2+U64dlVIoNHtAOVcsJ8ZtB28xsaxAOCC4
+X-Received: by 2002:a05:6808:250d:b0:564:3072:3830 with SMTP id 5614622812f47-5797bc93f11mr16988524b6e.8.1795828069999;
+        Fri, 27 Nov 2026 17:07:49 -0800 (PST)
+To: brianamartin@flywirecompany.online
+From: MAILER-DAEMON@us-east-2.amazonses.com
+Date: Sat, 28 Nov 2026 01:07:50 +0000
+Message-ID: <010f01a21fb1b9a1-a3556361-67e9-41a9-9ebb-96cbbf7a97d0-000000@us-east-2.amazonses.com>
+Subject: Happy Thanksgiving Re: [BOND-2026-0947] Inquiry - Continuous Customs Bond
+MIME-Version: 1.0
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: base64
+Content-Disposition: inline
+Precedence: bulk
+X-Autoreply: yes
+Auto-Submitted: auto-replied
+Feedback-ID: ::1.us-east-2.c0QCJwTJKDSb6mlKpIo5IpGwsngRMRBjZtJ48k4WYjY=:AmazonSES
+X-SES-Outgoing: 2026.11.28-23.251.226.245
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Result: default: False [-3.67 / 15.00];
+	BAYES_HAM(-1.99)[88.07%];
+	IP_REPUTATION_HAM(-1.18)[asn: 16509(-0.31), country: US(-0.01), ip: 23.251.226.245(-0.85)];
+	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
+	MIME_HTML_ONLY(0.20)[];
+	R_DKIM_ALLOW(-0.20)[amazonses.com:s=kra23psoka5qyyh6gdejiiuof3nluwuz];
+	R_SPF_ALLOW(-0.20)[+ip4:23.251.226.245:c];
+	ARC_REJECT(0.10)[signature check failed: fail, {[1] = sig:google.com:reject}];
+	MIME_FROM_MX_GOOD(-0.10)[feedback-smtp.us-east-2.amazonses.com];
+	ONCE_RECEIVED(0.10)[];
+	MIME_BASE64_TEXT(0.10)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	URIBL_BLOCKED(0.00)[e226-245.smtp-out.us-east-2.amazonses.com:rdns,e226-245.smtp-out.us-east-2.amazonses.com:helo,amazonses.com:dkim,us-east-2.amazonses.com:from_mime,us-east-2.amazonses.com:mid];
+	RCPT_MAILCOW_DOMAIN(0.00)[flywirecompany.online];
+	MIME_TRACE(0.00)[0:~];
+	RCPT_COUNT_ONE(0.00)[1];
+	ARC_SIGNED(0.00)[flywirecompany.online:s=dkim:i=2];
+	PRECEDENCE_BULK(0.00)[];
+	DMARC_POLICY_ALLOW(0.00)[amazonses.com,quarantine];
+	DWL_DNSWL_NONE(0.00)[amazonses.com:dkim];
+	RCVD_COUNT_ZERO(0.00)[0];
+	RWL_MAILSPIKE_POSSIBLE(0.00)[23.251.226.245:from];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_NONE(0.00)[];
+	R_DKIM_REJECT(0.00)[csiis-biz.20260707.gappssmtp.com:s=20260707];
+	ASN(0.00)[asn:16509, ipnet:23.251.226.0/24, country:US];
+	MISSING_XM_UA(0.00)[];
+	FROM_NO_DN(0.00)[];
+	DKIM_TRACE(0.00)[amazonses.com:+,csiis-biz.20260707.gappssmtp.com:-];
+	DKIM_MIXED(0.00)[];
+	RCVD_IN_DNSWL_NONE(0.00)[23.251.226.245:from]
+X-Rspamd-Queue-Id: 6172110F800
+
+PGRpdiBkaXI9Imx0ciI+T3VyIG9mZmljZSB3aWxsIGJlIGNsb3NlZCBmcm9tIFRodXJzZGF5IDEx
+LzI2LzIwMjYgYW5kIEZyaWRheSAxMS8yNi8yMDI2LsKgIFRvIHNwZW5kIHRpbWUgd2l0aCBmYW1p
+bHkgb24gVGhhbmtzZ2l2aW5nLsKgIFdlIHdpbGwgYmUgb3BlbiBkdXJpbmcgbm9ybWFsIGJ1c2lu
+ZXNzIGhvdXJzIG9uIE1vbmRheSAxMS8zMC8yMDI2LjwvZGl2Pjxici8+PGJyLz4tLSA8YnIvPjxk
+aXYgZGlyPSJsdHIiPk1hcmMgQ2lzbmVyb3MsIEpyPGRpdj5DUyBJbm5vdmF0aXZlIEluc3VyYW5j
+ZSBTb2x1dGlvbnMsIExDPC9kaXY+PGRpdj4mcXVvdDtXZSBoYW5kbGUgSG9tZSAmYW1wOyBDb21t
+ZXJjaWFsIEluc3VyYW5jZSZxdW90O8KgPC9kaXY+PGRpdj4xODEzIEdyYW5kc3RhbmQgRHI8L2Rp
+dj48ZGl2PlNhbiBBbnRvbmlvLCBUeCA3ODIzODwvZGl2PjxkaXY+UEgjIDIxMC01NDEtODM5OcKg
+PC9kaXY+PC9kaXY+PGJyLz4NCg==

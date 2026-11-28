@@ -1,0 +1,164 @@
+Return-Path: <>
+Delivered-To: marywladkowski@underarmourco.online
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id OKNpLuUyCmvRlycAQ1DlOA
+	(envelope-from <>)
+	for <marywladkowski@underarmourco.online>; Fri, 27 Nov 2026 20:48:21 -0500
+X-Original-To: marywladkowski@underarmourco.online
+Received: from e226-245.smtp-out.us-east-2.amazonses.com (e226-245.smtp-out.us-east-2.amazonses.com [23.251.226.245])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id 549DC114AD0
+	for <marywladkowski@underarmourco.online>; Fri, 27 Nov 2026 20:48:21 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=ZXseXOet;
+	dkim=fail ("headers rsa verify failed") header.d=islandpetmovers.com header.s=s1-ionos header.b=RD1lfktu;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	spf=pass (mail.pony-it.com: domain of e226-245.smtp-out.us-east-2.amazonses.com designates 23.251.226.245 as permitted sender) smtp.helo=e226-245.smtp-out.us-east-2.amazonses.com
+ARC-Seal: i=1; a=rsa-sha256; d=underarmourco.online; s=dkim; cv=none;
+	t=1795830501;
+	b=iKY31uENEE7HSoqAQNBDQUcohx4XjNten8mrb0FeLNrg6JbHl/olmxHDI4zWR+oyK07HAy
+	grh9UY1IDtlIMle1t7d+aUVfo+0X7R5Sqng3cVdX2IFN52fiUJrZ8S4txNcUKVBVvRuoqb
+	WyglwJFtjNlfQlmk/SMQbPyetChUjZHh5SVaBjVukwPG3OzeEt43RPL+2u24YAuoGZS9Ob
+	VMj43PFbH6JiW2P9L9wpJLOue3RNo1xe3onVnBdcOdMG+Cl7RR3cIgoKIAbxr3lvNYNByG
+	A4sV7eBRW7ajigxnx6wfD8OTYL8CE2aO0UuIpz5lEPK/QVs6k1KfWvQBCMBtww==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=underarmourco.online; s=dkim; t=1795830501;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:dkim-signature;
+	bh=CG+KstIeDVRYQUcxCgJppnJkwrAsRN97dD6E/IlJkPE=;
+	b=KF3HF0fU8Lp5p/bsbkg1PBz5N0crmpSmdG8O+ugOwMCqNk4LoetNc/ttDi9CZgo8upjNQu
+	gviKJogwyC6imIEcY5mZovqiLw+IBGdh0atJuzcxqAWkFZvFRcbyLhgpMcQfo+quvKd/AB
+	oKOzjIhUc5w67vqv4wDKigEmIvDZCGfcLG4XTpmbwzaiUkwLmO7utps7DxLF+AwKU4PZ8X
+	NalNg0I95lvl4SQtdm25/mHrbc4zwN4jhg0+MnFkrbmpyrAfwethGktUej9z3pP/6HDDH5
+	8GPvvHUeKSakkEq30e6Sn+qlUbJ9MGvjK4fZ8l4CPwHqRS6mu3zSdFrRr43u2w==
+ARC-Authentication-Results: i=1;
+	mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=ZXseXOet;
+	dkim=fail ("headers rsa verify failed") header.d=islandpetmovers.com header.s=s1-ionos header.b=RD1lfktu;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	spf=pass (mail.pony-it.com: domain of e226-245.smtp-out.us-east-2.amazonses.com designates 23.251.226.245 as permitted sender) smtp.helo=e226-245.smtp-out.us-east-2.amazonses.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=kra23psoka5qyyh6gdejiiuof3nluwuz; d=amazonses.com; t=1795830500;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Type:Content-Transfer-Encoding:Feedback-ID;
+	bh=CG+KstIeDVRYQUcxCgJppnJkwrAsRN97dD6E/IlJkPE=;
+	b=ZXseXOetD2bgP3q9Vm6mLQ/rJjH2J7cTSAdISCM1T9hdtSBXIBmV+V9d4A8tEIBm
+	RiwfZL/Za6iIzfZb5yw9RPvui/HkWMBY5i46NKtTJo3d22PxCxtuVbw63ibgLUfxaIB
+	0sD3Yr4QsrqZmRuoZlOQi7A8r9Vh/a+xhRX3EdLM=
+DKIM2-Signature:  i=1; m=1; t=1795830497;
+ mf=PD4=;
+ rt=PDAxMGYwMWEyMWZkNmJjZGEtNDBmNjA1N2QtNTcwMC00M2YyLTkyNjMtYzM5NmQ3NTYyNjE0LTAwMDAwMEBzZXMudW5kZXJhcm1vdXJjby5vbmxpbmU+;
+ d=islandpetmovers.com;
+ s=s1-ionos:rsa-sha256:d1wINRpmDioy5iMxQcTbMo49qUI+
+   27UWmfDhoF0Z3d/fcnRbZzIBZb2Ex8csn4ZNOp2UiALE5JIKHqFj87IheORdPzJdpjXcYJTj70e
+   teT98FLS9ly38vbEynUiTMSf1DPJtPYDsjimNK07lSdI7WDerEnNHi/GJe0uvuBIqRqSg4n/ecn
+   0K83JO+64r7eAGSLBU4OmOrjBVsmCS9Nq3BAG+sNPYTSRStUK33Fs/RPeK6xQNB7NJ1fHdaD/OO
+   FMQ9gmMifD6aybhvrN6V5b+ph7xcjmcZ7+NBmK8uNSKNVCS6Xiv3ZVValyfI6C9OvvYvmwIWl2W
+   2vEBRcS+6kgCrg==;
+Message-Instance:  m=1;
+ h=sha256:
+   57bLBprvyR3tXkWl6pK36wHR7dtEzop/DXctj3kE1R0=:
+   CG+KstIeDVRYQUcxCgJppnJkwrAsRN97dD6E/IlJkPE=,
+  sha512:
+   9nt12JABwV0U94LR/Ymsl96g3+2CL2UzXBz0gYVOlkIsu6Qyd0BYQeHWNiyrz8TVYRn6EjNb6+8AxSstZEHkdA==:
+   3IxYMP1f/gp2wiSd/UWjCTv/VPMo+fpbb9kMMpu8aCWwt7P0UwtEnDG+26Z0V6KjPGEuBZnSncBjbuIeHhfwFg==;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=islandpetmovers.com; s=s1-ionos; t=1795830497; x=1796435297;
+	i=info@islandpetmovers.com;
+	bh=CG+KstIeDVRYQUcxCgJppnJkwrAsRN97dD6E/IlJkPE=;
+	h=X-UI-Sender-Class:From:To:Subject:Date:Message-ID:In-Reply-To:
+	 References:MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=RD1lfktuIkAxyW/z1Rbo1e68VYng2bpzCEdQRAv+OrptEDl6xVMgIGr6sQNqt8K4
+	 fg3EfzoXKH2oCmvh4QqvQREAV0JogiAdavafh7AU4Mc0ZnROYYH8euXtUNAh3ZnyS
+	 b3R4e4eXmpzHLYKeedWMsU43MDbGhmBqdJkHEpAuWE2QmF8yl654ngFBZMg/NMUiT
+	 CqtTfF4n1PyUyg1ZutRJqyPfgPv73Tatw6wk91qzW6czmgYUCfyRMV7JEWmkj6R3H
+	 04O3R9NMP2+j1mPy1bOXaNAa4BR4O5InuLY6ehOj+aj823bUrWiHN6sEO9TQrWL4I
+	 YyAy+bwAIk+7OAqb4w==
+X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
+From: MAILER-DAEMON@us-east-2.amazonses.com
+To: marywladkowski@underarmourco.online
+Subject: Autoresponse -  Island Pet =?utf-8?q?Movers_?=
+Date: Sat, 28 Nov 2026 01:48:20 +0000
+Message-ID: <010f01a21fd6c43d-20506f95-156a-4c63-9474-4497ac955d56-000000@us-east-2.amazonses.com>
+In-Reply-To: =?utf-8?q?<010f01a21fd6bcda-40f6057d-5700-43f2-9263-c396d7562?=
+ =?utf-8?q?614-000000@us-east-2.amazonses.com>?=
+References: =?utf-8?q?<010f01a21fd6bcda-40f6057d-5700-43f2-9263-c396d75626?=
+ =?utf-8?q?14-000000@us-east-2.amazonses.com>?=
+MIME-Version: 1.0
+Auto-Submitted: auto-replied (vacation)
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: base64
+UI-OutboundReport: notjunk:1;M01:P0:rVQ/Vs29dik=;7DXMR55WbLGUJLgr4L8cie8hfvB
+ skU7O2/DqWwMa5RQaV/Q0yee4ER+dIEXcS+EbL8Zk/Kp9pS03kfxAema1BeOhCkRGHKLKVwNj
+ lbfD+8eV6x3Kg/LetmN/fIX7R6YRefq8Qn9KQUJ9aCVhwwLKIC/wVv+BbUWqwt68SMsAXVl1t
+ 7W20BsSzqBnAUF6lZL8o0uTHA9Emfbaul/kbXUaKmHVYLccRzcBNrEtGZC/4QfwMJfGJdHqpG
+ vltHbjtKvb39XnhnVppKnpabfd3Awin1IGs6d7FmDynDUkV0+Z91OlxBjEjPdqz9K+HjCaqXm
+ CtC8daJtS2olc7x9VLpx3/cA56ocA2B7hOjp9dxpXdN2FtmGxRkP0iDDM91dTjvIocgwjicfG
+ 9m52XEmfT4wYuaM/7LUEjkny7X7BC9KHc1RPqA8RdaKIJIDwxYx5Pxh7+HxaN1m2vHI5mIUzd
+ 9qNVg72Jm/2CsBBMncUUbOCzhwSSCj0s0RS35c2IWBFOcqltA/IfPc2JK1W6FoKqxb3wkX9cX
+ oZQ6EGwLPi5YA1CSetUHPo/6qI5Vo6zxrmJoWEqVTHM45kWLszzy0/k/aFUlR/Vd2zhL1XcKu
+ 5hchq4k4RSR1gbMk7cPPRjmfsOH8k32aPF7jGgEiwnW2J2oNMOjRRQhQv/SxjJ66ErbIfC2L9
+ 4XuI6gbfBkCRaOV2d35yy6oxScU9T6AyH1brDjdpIPAe+b17JCGQ+TRX6bc2ucrsa4V1mhg68
+ cvcoNvYmnZwQBuSH4PvivVzg0g+SbaunQe53dBF0EhM5XtZ6tt9ZpMX+0q/reFEhVk0RcvZFu
+ 7q
+Feedback-ID: ::1.us-east-2.c0QCJwTJKDSb6mlKpIo5IpGwsngRMRBjZtJ48k4WYjY=:AmazonSES
+X-SES-Outgoing: 2026.11.28-23.251.226.245
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Result: default: False [-4.84 / 15.00];
+	BAYES_HAM(-5.46)[99.92%];
+	SUBJ_EXCESS_QP(1.20)[];
+	IP_REPUTATION_HAM(-1.18)[asn: 16509(-0.31), country: US(-0.01), ip: 23.251.226.245(-0.85)];
+	MIME_BASE64_TEXT_BOGUS(1.00)[];
+	SUBJECT_ENDS_SPACES(0.50)[];
+	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:23.251.226.245:c];
+	R_DKIM_ALLOW(-0.20)[amazonses.com:s=kra23psoka5qyyh6gdejiiuof3nluwuz];
+	MIME_GOOD(-0.10)[text/plain];
+	ONCE_RECEIVED(0.10)[];
+	MIME_FROM_MX_GOOD(-0.10)[feedback-smtp.us-east-2.amazonses.com];
+	MIME_BASE64_TEXT(0.10)[];
+	TO_DN_NONE(0.00)[];
+	RCPT_COUNT_ONE(0.00)[1];
+	ARC_NA(0.00)[];
+	RCPT_MAILCOW_DOMAIN(0.00)[underarmourco.online];
+	DWL_DNSWL_NONE(0.00)[amazonses.com:dkim];
+	MIME_TRACE(0.00)[0:+];
+	URIBL_BLOCKED(0.00)[amazonses.com:dkim,us-east-2.amazonses.com:from_mime,us-east-2.amazonses.com:mid,e226-245.smtp-out.us-east-2.amazonses.com:rdns,e226-245.smtp-out.us-east-2.amazonses.com:helo,islandpetmovers.com:url];
+	DMARC_POLICY_ALLOW(0.00)[amazonses.com,quarantine];
+	R_DKIM_REJECT(0.00)[islandpetmovers.com:s=s1-ionos];
+	RWL_MAILSPIKE_POSSIBLE(0.00)[23.251.226.245:from];
+	ASN(0.00)[asn:16509, ipnet:23.251.226.0/24, country:US];
+	RCVD_COUNT_ZERO(0.00)[0];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FROM_NO_DN(0.00)[];
+	DKIM_MIXED(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	RCVD_IN_DNSWL_NONE(0.00)[23.251.226.245:from];
+	DKIM_TRACE(0.00)[amazonses.com:+,islandpetmovers.com:-];
+	ARC_SIGNED(0.00)[underarmourco.online:s=dkim:i=1]
+X-Rspamd-Queue-Id: 549DC114AD0
+
+QWxvaGEsCkR1ZSB0byB0aGUgaGlnaCBkZW1hbmQgb2YgcGV0IHJlbG9jYXRpb24gZHVyaW5nIFBD
+UyBzZWFzb24sIGlzc3VlcyByZWxhdGVkIHRvIENPVklEIGFuZCB2ZXJ5IGxpbWl0ZWQgdHJhdmVs
+IG9wdGlvbnMgd2UgYXJlIGV4cGVyaWVuY2luZyBhIGhpZ2ggbnVtYmVyIG9mIHJlcXVlc3RzIGZv
+ciBzZXJ2aWNlcy4gV2UgYXJlIGdldHRpbmcgdG8gZW1haWxzIGFzIHF1aWNrbHkgYXMgd2UgY2Fu
+CgpXZSBkbyBub3QgcHJvdmlkZSBxdW90ZXMgb3ZlciB0aGUgcGhvbmUsIGluIG9yZGVyIHRvIHBy
+b3ZpZGUgeW91IGEgcXVvdGUsIHBldCBzaXplLCBicmVlZCwgYW5kIGRlc3RpbmF0aW9uIHdpbGwg
+YWxsIGFmZmVjdCB0aGUgb3ZlcmFsbCBjb3N0cyBvZiB5b3VyIHBldCdzIHJlbG9jYXRpb24uIFlv
+dSBNVVNUIGNvbXBsZXRlIG91ciByZXF1ZXN0IGZvcm0gaW4gb3JkZXIgdG8gcmVjZWl2ZSBhIHF1
+b3RlIGZyb20gdXMuIFdlIGFyZSBjdXJyZW50bHkgcmV0dXJuaW5nIHF1b3RlcyBhcHByb3hpbWF0
+ZWx5IDQgZGF5cyBmcm9tIHJlY2VpcHQuCgpXZSB1bmRlcnN0YW5kIG1hbnkgYXJlIHZlcnkgbGFz
+dCBtaW51dGUgY2lyY3Vtc3RhbmNlcywgaWYgd2UgYXJlIHVuYWJsZSB0byBnZXQgYmFjayB0byB5
+b3UgaW4geW91ciBkZXNpcmVkIHRpbWUgZnJhbWUsIHdlIGFwb2xvZ2l6ZS4gUGxlYXNlIGJlIEtJ
+TkQsIGFuZCBiZSBwYXRpZW50IGFzIHdlIGFyZSBhbHNvIHdvcmtpbmcgd2l0aCBvdXIgY2xpZW50
+cyB3aG8gYXJlIHRyYXZlbGluZyB0aGlzIHdlZWsuCgpQbGVhc2UgZm9sbG93IHRoaXMgbGluayB0
+byBjb21wbGV0ZSB5b3VyIHJlcXVlc3QuICB3d3cuaXNsYW5kcGV0bW92ZXJzLmNvbS9jb250YWN0
+IGFuZCB0aGVuIGtlZXAgYW4gZXllIG9uIHlvdXIgc3BhbSBmb2xkZXIuIFdlIGFyZSBjbG9zZWQg
+b24gd2Vla2VuZHMgYW5kIGhvbGlkYXlzLg==

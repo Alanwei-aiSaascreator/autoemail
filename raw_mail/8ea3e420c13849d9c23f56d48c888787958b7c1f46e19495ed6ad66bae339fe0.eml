@@ -1,0 +1,875 @@
+Return-Path: <jjboll@jjboll.net>
+Delivered-To: alexandradouglas@progynygroup.online
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id EAPECnNACmv2siwAQ1DlOA
+	(envelope-from <jjboll@jjboll.net>)
+	for <alexandradouglas@progynygroup.online>; Fri, 27 Nov 2026 21:46:11 -0500
+X-Original-To: alexandradouglas@progynygroup.online
+Received: from dispatch1-usg2.ppe-hosted.com (dispatch1-usg2.ppe-hosted.com [205.220.189.81])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id 39ACA10EF09
+	for <alexandradouglas@progynygroup.online>; Fri, 27 Nov 2026 21:46:10 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=none;
+	dmarc=none;
+	spf=pass (mail.pony-it.com: domain of jjboll@jjboll.net designates 205.220.189.81 as permitted sender) smtp.mailfrom=jjboll@jjboll.net;
+	arc=reject ("signature check failed: fail, {[1] = sig:microsoft.com:reject}")
+ARC-Seal: i=2; a=rsa-sha256; d=progynygroup.online; s=dkim; cv=fail;
+	t=1795833970;
+	b=EyEcpRIfSU3Cb2MU7OzCWz1CPsMOPCMOizxN91vX8kzH8ct36qyyoErQnmOZwuCPBrDZSN
+	4O67weP0ZGPRSUOnSnyTTbbJ1klrI87+JPgMn44xV676xwwGtaATeLqAuOsShUIkkUsSrp
+	9zAQZ4RCVWnEFmv2Zq3NoB08GjsCZynrtMi0S76wGFYT5ZwujBcPwwlbOvNQInqZ3r/k+3
+	yiUkRtR0VIDs2t41qX9QfeCoPmyy/nPbed6Z+3CZTIYoccD1j9j1EkiJMvXZ4ovooXZ3YF
+	oWNoC6x6Z1cqYRdG9e9fjGElco6K0Bf9yn7v3U5XrXqsrVYaHxXhpMb/GNQ3/Q==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed;
+	d=progynygroup.online; s=dkim; t=1795833970;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xPKkThU3+lPhEK6UcKLGJo7xCz8aVacU7s8OKuntFp0=;
+	b=Qr3SjMUmRJDCzsyyy/1YF7vYb5s1Hjt8CazuxNOLFUHR+mYDikTp43P2/FPME5jb5UHERH
+	i0lRriK0xAiYwgj+cNfiBhpE1OcqFV8Ux3MnE9kRIMthW4Yecg91YAgx4yZJhQV1rIlIc1
+	xOFJUZAvJIXzry5VevpA/RPrIAvIRJeWHmeLU+0n++VQNf3GXT7SPGV9ClnaP2/LqlmiPk
+	fYbGcjrdpoNezK/C97mwuzqEfkGtaLKAuco3dq5j08FSATmDQeQV/35fZ50CG9FmYH/g0Y
+	BfdoGxFuPQEhueFDlxu8fEY9UwSqUBQYff4WRTGm1gnSmTebJANsSv5URgxO8w==
+ARC-Authentication-Results: i=2;
+	mail.pony-it.com;
+	dkim=none;
+	dmarc=none;
+	spf=pass (mail.pony-it.com: domain of jjboll@jjboll.net designates 205.220.189.81 as permitted sender) smtp.mailfrom=jjboll@jjboll.net;
+	arc=reject ("signature check failed: fail, {[1] = sig:microsoft.com:reject}")
+Received: from m0467921.ppops.net (ip6-localhost [127.0.0.1])
+	by engine.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTP id 222BF20060
+	for <alexandradouglas@progynygroup.online>; Sat, 28 Nov 2026 02:46:06 +0000 (UTC)
+X-Virus-Scanned: Proofpoint Essentials engine
+Received: from SJ2PR03CU001.outbound.protection.outlook.com (mail-westusazon11022074.outbound.protection.outlook.com [52.101.43.74])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits))
+	(No client certificate requested)
+	by mx1-usg2.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTPS id 1453F80056
+	for <alexandradouglas@progynygroup.online>; Sat, 28 Nov 2026 02:46:05 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=etC46FXdLKgASEdxu+Ib/FkZ6aq+ofkQX7UDYVhBKzmBWz9vBcP0KaNwJJt0WfnK7JaaQI9d56gX0M84JIKFGkS5DouLaaFzSjPSqHLVxLlr5jEVXDNzAlZiKTeKW+IGYtb0ujHpFanZkPEWABYnXuRklaPDtH3UG6Wr+29XOsb/mrCbfAd7LRmsaYTaH8Bwu8NkCorT7rgfaTg9sVf7tcFn45SyKoK75JZhnJM62Mm3xZN7jCHq5asXMsXj1vRsaIoiqLDkhBUoK5XEtzzfwCyo3mC0bdi5eFIrfx0BNYbqvVRevu0MSWudMEnSj1g9eUGdxoQql9HkBYYOYat0HA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gBqcRy403ETbNbL3PNAM1Sl0BV8z8Xu9UsoWKTQu/VA=;
+ b=eCdBMN3Eg/OJL2aDqjJjqP+s168WZaz6iow9RdjkxyzKEljPjamoToRl8w3BuyWuBox9G5OmeUbiUvws1pXah7DVw81ks69qow/z45JuEppubrwaIx+j5qHUgS0Hhu7SxPeVd6/U3i+EBwQ6dMEDBzFrB+StuCrArvf6XoQICk7lxpREW+yExMTWREj0VfLGdLTLxWIQM0QxF0f9TDiy8H5HUG2YIoxFHAOHPCLvZJTAt6iGZUgKkI4E1hyD4wGyZG6IlKMh56plpULuJ9gDVHTaZBOwWzbw50u27V3QZ98AvEPGQ5Dmn85n0GaOnzzm16W4y2WTRP0YtXklUd+QPA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=jjboll.net; dmarc=pass action=none header.from=jjboll.net;
+ dkim=pass header.d=jjboll.net; arc=none
+Received: from DS0PR16MB6974.namprd16.prod.outlook.com (2603:10b6:8:313::20)
+ by SA6PR16MB6621.namprd16.prod.outlook.com (2603:10b6:806:40d::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.662.10; Sat, 28 Nov
+ 2026 02:46:02 +0000
+Received: from DS0PR16MB6974.namprd16.prod.outlook.com
+ ([fe80::9508:26d5:c711:e9b2]) by DS0PR16MB6974.namprd16.prod.outlook.com
+ ([fe80::9508:26d5:c711:e9b2%6]) with mapi id 15.21.0662.007; Sat, 28 Nov 2026
+ 02:46:02 +0000
+From: "J.J Boll Associates Inc." <jjboll@jjboll.net>
+To: "alexandradouglas@progynygroup.online"
+	<alexandradouglas@progynygroup.online>
+CC: "J.J Boll Associates Inc." <jjboll@jjboll.net>
+Subject: Re: [BOND-2026-1737] Inquiry - Continuous Customs Bond
+Thread-Topic: [BOND-2026-1737] Inquiry - Continuous Customs Bond
+Thread-Index: AQHdfuJEcfD2NNZRd0u+AyZgt9AmObdCx0ms
+Date: Sat, 28 Nov 2026 02:46:02 +0000
+Message-ID:
+ <DS0PR16MB6974BC0112F15BA45525F3E1AB402@DS0PR16MB6974.namprd16.prod.outlook.com>
+References:
+ <010f01a220095061-2b693857-bd1e-44ca-acae-146fafee5fae-000000@us-east-2.amazonses.com>
+In-Reply-To:
+ <010f01a220095061-2b693857-bd1e-44ca-acae-146fafee5fae-000000@us-east-2.amazonses.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: yes
+X-MS-TNEF-Correlator:
+msip_labels:
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DS0PR16MB6974:EE_|SA6PR16MB6621:EE_
+x-ms-office365-filtering-correlation-id: ead77bb4-8be9-4ddb-9034-08df4cf9bda5
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|376014|6049299003|366016|1800799024|23010399003|5023799004|6133799003|261009223027099003|22082099003|18002099003|13003099007|4053099003|4013099003|8096899003|3613699012|260925021911599003|260925021311599003|260925022911599003|10067099003|56012099006|261102130727099003|261102123227099003|261026121527099003|261022105027099003|261028144727099003|261022075727099003|261026140227099003|261019132127099003|261019141927099003|261019150727099003|261019143827099003|261021121427099003|38070700021|7055299009;
+x-microsoft-antispam-message-info:
+ DdyXdc8DJHs6vSowXrzmEJVXQHoqvQcn5q8jMfqvLytTIo9jwe1PsjnLho66UhvaAfdGyTqxc0Sb5FVGTuSfF8ihA9OHhLi22li9bwH/J7U6Qj06sfodwK4Joed9ua4UBrA7BFGgYIE+VkYg8Ch0D43GtOefalYIerKFT6Fo/IBq+FQNnwS6u1Tpl24zAuPpfjCXFnGmsVxx66WYw7yvOXzfk8USXkSbQ2YT5QcK/1k+77alAPsbPaD8s0CF09jAGZsZKq6yKXVprugj79Fy7J/K3edr+VJs9h7b7arNbV4d6P07ZWSJ+6toMqnJstgSsM5KyAxyIeQGHLftWlOZDOUBlpezseoLVVufz9ZjVmldwyZJ1gsa3j2XY9kl+1ppY09yeExZxg/4eN1Ucv9J516T+Wo3RCfrPDdIADnmcUHAmYG+a1Ce5ZtXFkw7ZDnK135finiu25twm4eWpriogJ9RUUpA5EaT8VOxmH1ZEWE4m3pMi5IZBaxBhrOum5OM/BGHbAkYOD59h8hUXF1G+eWZ5ehU4L5mYUNXzkW3QOS2iI8sxn1+Tq/eCom/dQCpByJvmI11XQBT1TpWQOdolfJVk++gufUv1LQVz89q+JEMGulm5w85enuEFtbyAFg65wMi5Z2sAIkiSof8w5pRDSQqViOjzvEY2PfgSzUMQf6sgMIUSPVyZXyuO9i+AZ/AHMT4e/v4MY9k7pqTMHlFvj7HnJnnaOxN9poLyZcy3go=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR16MB6974.namprd16.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(6049299003)(366016)(1800799024)(23010399003)(5023799004)(6133799003)(261009223027099003)(22082099003)(18002099003)(13003099007)(4053099003)(4013099003)(8096899003)(3613699012)(260925021911599003)(260925021311599003)(260925022911599003)(10067099003)(56012099006)(261102130727099003)(261102123227099003)(261026121527099003)(261022105027099003)(261028144727099003)(261022075727099003)(261026140227099003)(261019132127099003)(261019141927099003)(261019150727099003)(261019143827099003)(261021121427099003)(38070700021)(7055299009);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?pYBak9aJ03yVSQmRoZWCCRQljm4NG9wEe+typszG9vusjd1+lBqvQL/tIM3k?=
+ =?us-ascii?Q?IGNhubostlyHEhE6+sXT4SuPBfoz90qFDQQK+JbnaMk1JCyTyWlH/X/mLcvZ?=
+ =?us-ascii?Q?hajSHPYe8VFFr62SL5awLw3Ck58L/IQ6beM4QVL2DEuhdhg1fFH8GOLEjAHp?=
+ =?us-ascii?Q?gbfJcAsbyyEBkYohDfAoIFr7D6oHbf0tTqAUx0S5u8kz7PoOiNS+EWXfdEY/?=
+ =?us-ascii?Q?F1ZWUftCW63hGBQLk6fdbT7pJ7/RJSNtr9SUfEH3pPusUGZxUWuMFWZcfg6+?=
+ =?us-ascii?Q?oCaTYKLUjwSYVWeinbK7s8k+E7gJ+SyYtlO2TMh7ZwzOh46gtyJ1I75XjwuD?=
+ =?us-ascii?Q?rq/FbIfgQCBgKtg9BEPj5Is2b7y9zoRlX5AcpVX4LmnIQAafUVETCBzGAS6M?=
+ =?us-ascii?Q?QJ638kPYQSFSZXTdD5xQ+GLrNG9JKcLhYrrcrizg9athiPndct3be/EDyUYv?=
+ =?us-ascii?Q?bGOhoVREwuB673Rfol82YY2XxUwaNHsgh0kjoEpBm1aYYSTu4A04RcJB9CJR?=
+ =?us-ascii?Q?9PYvxKtNSw7m69TmkRJ69Q8FO9V9jF6pI/Ac05IIeZB+/FyrAd71ZkLrpL35?=
+ =?us-ascii?Q?Qy+oF6ndTlH8DmDOwfa/tiVXZsVIPxM3/FiLBVQcouWg7Y8tCk6hIT0duET/?=
+ =?us-ascii?Q?0dR5sUTvjBvcqFjqaVe3TRYhHYeGpYEXMI/xvGAmFnVzJktDkY5zp+O3T975?=
+ =?us-ascii?Q?CJldm1uI8LbjZkF5SRKZNO0xrbuII8bFwmvTGd98QX6Ge+MwLWtkUnhg9zTW?=
+ =?us-ascii?Q?79y8MNEy0Lf/8+afxb01LzReZgljjCQd0BjmjwcJcCr0oov3ogtrXbICb/Tv?=
+ =?us-ascii?Q?N5tn2KigOxDImCZc8AV7H4WDbHU/2ubB2mu5HzDSSV6qXG99CNGp68TGowtu?=
+ =?us-ascii?Q?JvuFDpXgovJfRpAr70/G2yQ7C8B9Gmk3WdOYEYhTDrnyOOtfRwgj+9gf5d4D?=
+ =?us-ascii?Q?HnUeMlnRFar4m82sPvOE74h4eDuSUHMtPOu7ANwR6gSJvNf0hm+jYaWDjERF?=
+ =?us-ascii?Q?ur+o6tNQgZSDKwZByObCu7SeVbDwZeQg5jXQpaynlwrKZqU92yqmq3WQwGfy?=
+ =?us-ascii?Q?esLrjWT50kJ70ugraPLQYr907fpK70kJ85GG2La8O7xFL0YjHikCXz3s9Osk?=
+ =?us-ascii?Q?ykkfWEs8r0g98+OAONqP1ZtRfXFyx+bkjWhA+dWJMi4NrPMDniuG7y3hqJIQ?=
+ =?us-ascii?Q?A0I1885k9R0mEf61vpH27ATJ7H76s6ZSmZYwjaE6qRb2H2P8EgJ5p/Jc4W4P?=
+ =?us-ascii?Q?3f/RGzlUTpPXnMwDd7bxywCUypVL9c7+YtDEgEj/XMIgBhUvrW2ZzbGz5zX8?=
+ =?us-ascii?Q?C2douC7EgWEw2KE4dvaf5l783ZkYoBJGjTGo3dJzl9BbSzF5hqxLTNv4Z8n2?=
+ =?us-ascii?Q?uMjm1ARmGytkcLC5NjD4xa+h7I5hJl/oivaUuDGz1ExmwquA+IHkXQMnDOAg?=
+ =?us-ascii?Q?fQXLX8cvgGo+v86+y5mvuym7lUOxTi5ta/ESR1Pt8S7v6S1zqsEyKzSb0mRA?=
+ =?us-ascii?Q?wkEXgN+o+xA5D6cFRsQaEKjNuxeXJhColl6hwO+3CaEkoZ0+GloE3JwNQXFf?=
+ =?us-ascii?Q?BxEwEx2uJMMZdg72838ubNJUzYDvFTVVdxS/ixZ4+1pRNPzIZ0//lIuz9zN6?=
+ =?us-ascii?Q?4+USkKeEEf1V85XCdT2tEukIkLih3D1KhuFWOMqWwkX71sC3StAtjrqYXi+M?=
+ =?us-ascii?Q?a2IVnAHBBeFQSNMo/OZZkGK0TQP2D6LW2/fjRcU7soQTCVEi?=
+Content-Type: multipart/related;
+	boundary="_005_DS0PR16MB6974BC0112F15BA45525F3E1AB402DS0PR16MB6974namp_";
+	type="multipart/alternative"
+MIME-Version: 1.0
+X-Exchange-RoutingPolicyChecked:
+	b9AVnbgMccRn0J6lX6jKHmBlg1jSv9DywoZwlsou06ew5izYEsLZaI2aFQeptuirUFMIMKW4lTaA5pIP1rYAPvCG+N4w72kddfw2Tl2ynWjjawu+fEcknR4/G227EOkrBnCucp6T3l2h9cJa/qY8QwWOeNDcSLp4VWmp3InIolrN/FIvqdUcItuodX1v27QJDI1nLRaN/jJ8juDeZ2krQyFQF39SV+lAlt/eViaqXgE6APVB03NMRXu/hqmKaVMuy5BL6PCrw6iUaHSgsjlSr/H93w5cZlPBw0eTs+R3fBmtm5Y17ck4FO1l8hP+UFR1ky+yH9mQAuRih+nZgGEbGA==
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	PpkZEDm5Sw/3XN3eMUY1Bw/j95OEZfFbol+LcETnGJxPBYdo/aoLwQJceTYZ8ZRcUduaqKAR8Ewwh/DNJ9Zo+uW/3mxQgvmjDKfZ3rRL+6n+J48i+WRifWwpoM+hplDIeC9VGauKCdTuy1UTDDIB4U80IlQl8D+Uu8D3t+VfD9GqyPwL+W+2rCHKrvZOWdwZXZaTx6mfMHQUpGa5EV36T+69siTGILnZ1m22OvPHik3EEEWwxFWIc0nfXLUcK0KgUpowaCKWThdwGrA5s1Wad0/1l+TQ5l280c+sSTP6EEyletzBy1WSCC7iQLEmWgHFaU6UBN1Ri1jl99vQR4CiXxs/ECFkHMA/1pw9PAe462wS4CVSUtrln/wVt/3p79BWtI+Ch7gE9ZmyrkMFoXYwCIAiQ4xMWVf7bdm94VS4234jueOoF05qukSwDAcgeAGe1e4ToGs+CFeu/2I8TjFHIAg8wbnO7eRDZlA/bNaUl/5eG0ACeqdgL11OuD4ByIi1lrAVp6Xr6aLHnFqvNcs4/NHTjiU2XSXncDjRMdHjVcf3W6ZQQHoZyPVyJlI4AXas7Ko6nC9qSUYYYQZOWLCz/GGJu23ONX6Ly2vekfmglEA=
+X-OriginatorOrg: jjboll.net
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR16MB6974.namprd16.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ead77bb4-8be9-4ddb-9034-08df4cf9bda5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Nov 2026 02:46:02.2022
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 22898d58-d682-4b96-a70f-777957f6b086
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 8CRSp9LPxPZoedvJ7UmCqeHJ+QRfDPid6hY2kE10Ym8n080G25ojeea/zfTameqvZl0/atjdMz8xpFmck5sbiA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA6PR16MB6621
+X-MDID: 1795833965-2k2BwqU9QCG7
+X-PPE-STACK: {"stack":"usg2"}
+X-MDID-O:
+ usg2;us-east-1f;1795833965;2k2BwqU9QCG7;<jjboll@jjboll.net>;15a2fca2e5467d2ab7617c7cf1b94788
+X-PPE-TRUSTED: V=1;DIR=OUT;
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Result: default: False [1.60 / 15.00];
+	BAYES_HAM(-4.17)[96.59%];
+	SEM_URIBL_FRESH15(3.00)[progynygroup.online:email];
+	BAD_REP_POLICIES(2.00)[];
+	MIME_BAD_ATTACHMENT(1.60)[png:image/jpeg];
+	RWL_MAILSPIKE_EXCELLENT(-0.40)[205.220.189.81:from];
+	IP_REPUTATION_HAM(-0.29)[asn: 14618(-0.28), country: US(-0.01), ip: 205.220.189.81(0.00)];
+	MX_GOOD(-0.10)[mx2-usg2.ppe-hosted.com];
+	ARC_REJECT(0.10)[signature check failed: fail, {[1] = sig:microsoft.com:reject}];
+	MIME_GOOD(-0.10)[multipart/related,multipart/alternative,text/plain];
+	RCVD_IN_DNSWL_LOW(-0.10)[205.220.189.81:from];
+	MANY_INVISIBLE_PARTS(0.05)[1];
+	ASN(0.00)[asn:14618, ipnet:205.220.189.0/24, country:US];
+	PREVIOUSLY_DELIVERED(0.00)[alexandradouglas@progynygroup.online];
+	RCPT_COUNT_TWO(0.00)[2];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCPT_MAILCOW_DOMAIN(0.00)[progynygroup.online];
+	MIME_TRACE(0.00)[0:+,1:+,2:+,3:~,4:~,5:~];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	DMARC_NA(0.00)[jjboll.net];
+	RCVD_TLS_LAST(0.00)[];
+	R_SPF_ALLOW(0.00)[+a:dispatch-usg2.ppe-hosted.com];
+	MISSING_XM_UA(0.00)[];
+	URIBL_BLOCKED(0.00)[progynygroup.online:email,outlook.com:url,inky.com:url,dispatch1-usg2.ppe-hosted.com:rdns,dispatch1-usg2.ppe-hosted.com:helo,jjboll.net:url,jjboll.net:email,jjboll.net:from_mime,jjboll.net:from_smtp,cloud-protect.net:url,DS0PR16MB6974.namprd16.prod.outlook.com:mid];
+	ARC_SIGNED(0.00)[progynygroup.online:s=dkim:i=2];
+	R_DKIM_NA(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_MATCH_ENVRCPT_SOME(0.00)[];
+	RCVD_IN_DNSWL_NONE(0.00)[52.101.43.74:received]
+X-Rspamd-Queue-Id: 39ACA10EF09
+
+--_005_DS0PR16MB6974BC0112F15BA45525F3E1AB402DS0PR16MB6974namp_
+Content-Type: multipart/alternative;
+	boundary="_000_DS0PR16MB6974BC0112F15BA45525F3E1AB402DS0PR16MB6974namp_"
+
+--_000_DS0PR16MB6974BC0112F15BA45525F3E1AB402DS0PR16MB6974namp_
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+Hello
+
+Please let us know where you obtained our information
+
+
+Thank You
+
+Gerald R.
+
+J.J. BOLL ASSOCIATES, INC.
+
+J.J. BOLL EXPRESS TRUCKING
+
+940 Roosevelt St
+
+Franklin Square NY 11010
+
+Customs clearance in all U.S Ports
+
+Office # 718-233-8001
+
+Fax # 718-233-8004
+
+E-mail: jjboll@jjboll.net<mailto:jjboll@jjboll.net>
+
+Website: WWW.JJBOLL.NET<mailto:JJBOLL@JJBOLL.NET>
+
+To make payments click below:
+
+[Logo, icon  Description automatically generated]<https://shared.outlook.in=
+ky.com/link?domain=3Dnam02.safelinks.protection.outlook.com&t=3Dh.eJxdUm1v2=
+jAQ_isVUvg0JWc7zksltEIQVRh86FbIxjfHdiAQ4iwJpO3U_95zu0nbpLPP9_I8p7vzr9GlrUa3=
+N6ND3zfdrefV4gzU7UShq7I-dW7Tml7LvjS1ay59ZczJlebsfUbY5B3jsKlDFyiiadxGPEvR7o3=
+NQVd3KBtRK_Q6bNHqPbI4bL755tDgqmtl2lShTSMfWDhWohcT4E6YAMHrmFcIRYAP_7BiWHJKlR=
+I8j6XPJC0kUxCpnLJCqJwHmFIwzf0iz4kupK80FTGgAilzrQopYsvy-wQsIj5jjHLOQwp-ZPGb-=
+lSbocbXY7Zo8vtdlzMV6edllh5NuU78YXWcDuv5tFwlywfr29Lqsn5JrT17LNMgPZGDyAZrf98m=
+abCuAVtFQgZgy37IuHvv-goOnd3PFzue_dTJssSSA92ZL-GP2W67WdGv2f6pecKcjSjOhwckGre=
+60-1VqwmMPt2MTnaFte5NuyeUkICE4B2Puamquw_lYtCLIxIIzWMRyBjCQmiIuA88BBwmgKIeCc=
+IowhFQcIFZXm15_2zi7u892Kiy0f-dvf1O5PUN01i4yA.MEYCIQDlQJSsMABvVKFL7krZDd_m-f=
+c1fFaPnF6yTWXmKUBoAwIhANPP7yZ_HaNUYltXIdVOetkGgUlIVpqoVz1qPoaxRLzt>
+
+
+
+ [11]
+
+** J.J. BOLL ASSOCIATES A WELL-ESTABLISHED C-TPAT CERTIFIED COMPANY **
+
+** Servicing the import and export community for over 35 years **
+
+Please be aware that Importer Security Filings (ISF) submitted after 3:00 P=
+M will be processed on the next business day. Our daily cutoff time for all=
+ ISF filings is 3:00 PM. We cannot be held responsible for late ISF filings=
+ or any associated penalties.
+
+Note: U.S. Customs and Border Protection (CBP) requires ISF submissions no =
+later than 24 hours before cargo is loaded onto a vessel bound for the Unit=
+ed States. Late filings can result in penalties of $5,000 per infraction.
+
+Please ensure that all necessary documentation is provided to us well befor=
+e the 3:00 PM cutoff to facilitate timely processing and compliance with CB=
+P regulations.
+
+Thank you for your attention to this matter.
+________________________________
+From: alexandradouglas@progynygroup.online <alexandradouglas@progynygroup.o=
+nline>
+Sent: Friday, November 27, 2026 9:43 PM
+To: J.J Boll Associates Inc. <jjboll@jjboll.net>
+Subject: [BOND-2026-1737] Inquiry - Continuous Customs Bond
+
+Hi there, I'm writing to ask whether your agency could quote a customs bond=
+ for Progyny LLC. Details below per our client application: 01 / BOND REQUE=
+ST - Service requested: New bond - Bond coverage: Continuous Customs Bond -=
+ Activity code:
+NkdkJdXPPEBannerStart
+Be Careful With This Message
+From (alexandradouglas@progynygroup.online)<https://godaddy2.cloud-protect.=
+net/email-details/?k=3Dk1&payload=3D53616c7465645f5fa54afe5c0ff4ed507d8cbc3=
+05dcafedebc7fcd68943c8af64383ea9928248e88ec4737bf040f840c19db3c71e0ffbf5be3=
+ddcaa88905388638738e1d8382dfec1a9a87735912c8513571022dacde059ad9b78daf1eb46=
+082e8eab0cf421c68aae9e6b6a11fc1bf5b62fbe809a06b2c6f2e7fb9135a8d7b24e2800090=
+e624cf0c54dc5489d107a8bc357d876cc3776f0df70352143ab30da4b75c5d4f92825893f3e=
+9bee82869e8ebaf90ec58670f081b124adc51de9a636cc0de30793b5861b9da98b056290260=
+ccbd33b027a21175b435a51fb64ae57c705e45f9e19930299da1acca19b1338b3f>
+Learn More<https://godaddy2.cloud-protect.net/email-details/?k=3Dk1&payload=
+=3D53616c7465645f5fa54afe5c0ff4ed507d8cbc305dcafedebc7fcd68943c8af64383ea99=
+28248e88ec4737bf040f840c19db3c71e0ffbf5be3ddcaa88905388638738e1d8382dfec1a9=
+a87735912c8513571022dacde059ad9b78daf1eb46082e8eab0cf421c68aae9e6b6a11fc1bf=
+5b62fbe809a06b2c6f2e7fb9135a8d7b24e2800090e624cf0c54dc5489d107a8bc357d876cc=
+3776f0df70352143ab30da4b75c5d4f92825893f3e9bee82869e8ebaf90ec58670f081b124a=
+dc51de9a636cc0de30793b5861b9da98b056290260ccbd33b027a21175b435a51fb64ae57c7=
+05e45f9e19930299da1acca19b1338b3f>
+Newly Registered Domain
+The message was sent from a domain that has been recently registered and co=
+uld be for the purpose of sending spam or malware.
+NkdkJdXPPEBannerEnd
+
+Hi there,
+
+I'm writing to ask whether your agency could quote a customs bond for Progy=
+ny LLC. Details below per our client application:
+
+01 / BOND REQUEST
+- Service requested: New bond
+- Bond coverage: Continuous Customs Bond
+- Activity code: 1 - Importer
+- Requested bond limit: USD 50,000
+
+02 / LEGAL ENTITY & IMPORTER ID
+- Exact legal entity: Progyny LLC
+- Entity type: LLC
+- State of formation: CA
+- EIN: 43-2141509
+- Principal address: 2653 PLEASANT HILL RD, PLEASANT HILL, CA, 94523
+
+03 / CONTACTS & AUTHORIZED SIGNER
+- Authorized signer: ALEXANDRA DOUGLAS (Organizer)
+- Contact email: alexandradouglas@progynygroup.online
+- Phone: 16262715296
+
+Please reply with:
+1. Your price for this bond and the estimated processing time
+2. Your application requirements / intake checklist (entity & importer ID, =
+contacts & owners, merchandise & trade profile, customs operations, bond hi=
+story & compliance, and AD/CVD schedule if applicable)
+3. Documents you need from us - we have Articles of Formation, IRS EIN lett=
+er (CP575), W-9 and principal ID available
+
+Happy to provide anything else you may need.
+
+Regards,
+ALEXANDRA DOUGLAS
+Progyny LLC
+
+
+--_000_DS0PR16MB6974BC0112F15BA45525F3E1AB402DS0PR16MB6974namp_
+Content-Type: text/html; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+Content-length: 10911
+
+<html>
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii">
+<style type=3D"text/css" style=3D"display:none;"> P {margin-top:0;margin-bo=
+ttom:0;} </style>
+</head>
+<body dir=3D"ltr">
+<div class=3D"elementToProof" style=3D"font-family: Calibri, Helvetica, san=
+s-serif; font-size: 12pt; color: rgb(0, 0, 0);">
+Hello&nbsp;</div>
+<div class=3D"elementToProof" style=3D"font-family: Calibri, Helvetica, san=
+s-serif; font-size: 12pt; color: rgb(0, 0, 0);">
+<br>
+</div>
+<div class=3D"elementToProof" style=3D"font-family: Calibri, Helvetica, san=
+s-serif; font-size: 12pt; color: rgb(0, 0, 0);">
+Please let us know where you obtained our information&nbsp;</div>
+<div id=3D"Signature" class=3D"elementToProof" data-signature-name=3D"Geral=
+d R.">
+<div class=3D"elementToProof" style=3D"font-family: Calibri, Helvetica, san=
+s-serif; font-size: 12pt; color: rgb(0, 0, 0);">
+<br>
+</div>
+<p class=3D"elementToProof" style=3D"margin: 0in; font-family: Calibri, san=
+s-serif;">
+<span style=3D"font-size: 12pt; color: rgb(0, 0, 0);">Thank You</span></p>
+<div class=3D"elementToProof" style=3D"margin: 0in; font-family: Calibri, s=
+ans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
+<br>
+</div>
+<div class=3D"elementToProof" style=3D"margin: 0in; font-family: Calibri, s=
+ans-serif; font-size: 11pt; color: rgb(0, 0, 0);">
+Gerald R.</div>
+<p class=3D"elementToProof" style=3D"margin: 0in; font-family: Calibri, san=
+s-serif; font-size: 11pt;">
+J.J. BOLL ASSOCIATES, INC.</p>
+<p class=3D"elementToProof" style=3D"margin: 0in; font-family: Calibri, san=
+s-serif; font-size: 11pt;">
+J.J. BOLL EXPRESS TRUCKING</p>
+<p class=3D"elementToProof" style=3D"margin: 0in; font-family: Calibri, san=
+s-serif; font-size: 11pt;">
+940 Roosevelt St</p>
+<p class=3D"elementToProof" style=3D"margin: 0in; font-family: Calibri, san=
+s-serif; font-size: 11pt;">
+Franklin Square NY 11010</p>
+<p class=3D"elementToProof" style=3D"margin: 0in; font-family: Calibri, san=
+s-serif; font-size: 11pt;">
+Customs clearance in all U.S Ports</p>
+<p class=3D"elementToProof" style=3D"margin: 0in; font-family: Calibri, san=
+s-serif; font-size: 11pt;">
+Office # 718-233-8001</p>
+<p class=3D"elementToProof" style=3D"margin: 0in; font-family: Calibri, san=
+s-serif; font-size: 11pt;">
+Fax # 718-233-8004</p>
+<p class=3D"elementToProof" style=3D"margin: 0in; font-family: Calibri, san=
+s-serif; font-size: 11pt;">
+E-mail: <span style=3D"color: blue;"><a href=3D"mailto:jjboll@jjboll.net" s=
+tyle=3D"color: blue; margin-top: 0px; margin-bottom: 0px;"><u>jjboll@jjboll=
+.net</u></a></span></p>
+<p class=3D"elementToProof" style=3D"margin: 0in; font-family: Calibri, san=
+s-serif; font-size: 11pt;">
+Website: <u>WWW.</u><span style=3D"color: blue;"><a href=3D"mailto:JJBOLL@J=
+JBOLL.NET" style=3D"color: blue; margin-top: 0px; margin-bottom: 0px;"><u>J=
+JBOLL.NET</u></a></span></p>
+<p class=3D"elementToProof" style=3D"margin: 0in; font-family: Calibri, san=
+s-serif; font-size: 11pt;">
+To make payments click below:</p>
+<p class=3D"elementToProof" style=3D"margin: 0in; font-family: Calibri, san=
+s-serif; font-size: 11pt;">
+<span style=3D"color: rgb(0, 0, 0);"><a href=3D"https://shared.outlook.inky=
+.com/link?domain=3Dnam02.safelinks.protection.outlook.com&amp;t=3Dh.eJxdUm1=
+v2jAQ_isVUvg0JWc7zksltEIQVRh86FbIxjfHdiAQ4iwJpO3U_95zu0nbpLPP9_I8p7vzr9GlrU=
+a3N6ND3zfdrefV4gzU7UShq7I-dW7Tml7LvjS1ay59ZczJlebsfUbY5B3jsKlDFyiiadxGPEvR7=
+o3NQVd3KBtRK_Q6bNHqPbI4bL755tDgqmtl2lShTSMfWDhWohcT4E6YAMHrmFcIRYAP_7BiWHJK=
+lRI8j6XPJC0kUxCpnLJCqJwHmFIwzf0iz4kupK80FTGgAilzrQopYsvy-wQsIj5jjHLOQwp-ZPG=
+b-lSbocbXY7Zo8vtdlzMV6edllh5NuU78YXWcDuv5tFwlywfr29Lqsn5JrT17LNMgPZGDyAZrf9=
+8mabCuAVtFQgZgy37IuHvv-goOnd3PFzue_dTJssSSA92ZL-GP2W67WdGv2f6pecKcjSjOhwckG=
+re60-1VqwmMPt2MTnaFte5NuyeUkICE4B2Puamquw_lYtCLIxIIzWMRyBjCQmiIuA88BBwmgKIe=
+CcIowhFQcIFZXm15_2zi7u892Kiy0f-dvf1O5PUN01i4yA.MEYCIQDlQJSsMABvVKFL7krZDd_m=
+-fc1fFaPnF6yTWXmKUBoAwIhANPP7yZ_HaNUYltXIdVOetkGgUlIVpqoVz1qPoaxRLzt" style=
+=3D"color: rgb(0, 0, 0); margin-top: 0px; margin-bottom: 0px;"><u><img alt=
+=3D"Logo, icon
+
+Description automatically generated" width=3D"147" height=3D"35" style=3D"w=
+idth: 147px; height: 35px; margin-top: 0px; margin-bottom: 0px;" size=3D"42=
+68" data-outlook-trace=3D"F:1|T:1" src=3D"cid:e40edbb6-f342-48ea-9bc1-b4984=
+dda1e74"></u></a><br>
+</span></p>
+<p class=3D"elementToProof" style=3D"margin: 0in; font-family: Calibri, san=
+s-serif; font-size: 11pt;">
+&nbsp;</p>
+<p class=3D"elementToProof" style=3D"text-align: center; margin: 0in; font-=
+family: Calibri, sans-serif; font-size: 11pt;">
+<span style=3D"font-size: 12pt;">&nbsp;</span><img alt=3D"11" id=3D"x_x_x_x=
+_x_image_0" width=3D"431" height=3D"117" style=3D"width: 431px; height: 117=
+px; margin-top: 0px; margin-bottom: 0px;" size=3D"7786" data-outlook-trace=
+=3D"F:1|T:1" src=3D"cid:f54a7b61-3531-407b-81e9-a4154db47fc7"></p>
+<p class=3D"elementToProof" style=3D"text-align: center; margin: 0in; font-=
+family: Calibri, sans-serif; font-size: 11pt;">
+<span style=3D"font-family: &quot;Arial Black&quot;, sans-serif;"><b><i><u>=
+** J.J. BOLL ASSOCIATES A WELL-ESTABLISHED C-TPAT CERTIFIED COMPANY **</u><=
+/i></b></span></p>
+<p class=3D"elementToProof" style=3D"text-align: center; margin: 0in; font-=
+family: Calibri, sans-serif; font-size: 11pt;">
+<span style=3D"font-family: &quot;Arial Black&quot;, sans-serif; color: rgb=
+(0, 0, 0);"><b><i><u>** Servicing the import and export community for over =
+35 years **</u></i></b></span></p>
+<p class=3D"elementToProof" style=3D"text-align: center; text-indent: 0px; =
+line-height: normal; margin: 0px; font-family: Calibri, sans-serif; font-si=
+ze: 11pt;">
+<span style=3D"font-family: &quot;Arial Black&quot;, sans-serif; color: red=
+;"><b><i><u>Please be aware that Importer Security Filings (ISF) submitted =
+after 3:00 PM will be processed on the next business day. Our daily cutoff =
+time for all ISF filings is 3:00 PM. We cannot
+ be held responsible for late ISF filings or any associated penalties.</u><=
+/i></b></span></p>
+<div class=3D"elementToProof" style=3D"text-align: center; text-indent: 0px=
+; line-height: normal; margin: 0px; min-height: 21.8px; font-family: &quot;=
+Arial Black&quot;, sans-serif; font-size: 11pt; color: red;">
+<b><i><u><br>
+</u></i></b></div>
+<div class=3D"elementToProof" style=3D"text-align: center; text-indent: 0px=
+; line-height: normal; margin: 0px; font-family: &quot;Arial Black&quot;, s=
+ans-serif; font-size: 11pt; color: red;">
+<b><i><u>Note: U.S. Customs and Border Protection (CBP) requires ISF submis=
+sions no later than 24 hours before cargo is loaded onto a vessel bound for=
+ the United States. Late filings can result in penalties of $5,000 per infr=
+action.</u></i></b></div>
+<div class=3D"elementToProof" style=3D"text-align: center; text-indent: 0px=
+; line-height: normal; margin: 0px; min-height: 21.8px; font-family: &quot;=
+Arial Black&quot;, sans-serif; font-size: 11pt; color: red;">
+<b><i><u><br>
+</u></i></b></div>
+<div class=3D"elementToProof" style=3D"text-align: center; text-indent: 0px=
+; line-height: normal; margin: 0px; font-family: &quot;Arial Black&quot;, s=
+ans-serif; font-size: 11pt; color: red;">
+<b><i><u>Please ensure that all necessary documentation is provided to us w=
+ell before the 3:00 PM cutoff to facilitate timely processing and complianc=
+e with CBP regulations.</u></i></b></div>
+<div class=3D"elementToProof" style=3D"text-align: center; text-indent: 0px=
+; line-height: normal; margin: 0px; min-height: 21.8px; font-family: &quot;=
+Arial Black&quot;, sans-serif; font-size: 11pt; color: red;">
+<b><i><u><br>
+</u></i></b></div>
+<div class=3D"elementToProof" style=3D"text-align: center; text-indent: 0px=
+; line-height: normal; margin: 0px; font-family: &quot;Arial Black&quot;, s=
+ans-serif; font-size: 11pt; color: red;">
+<b><i><u>Thank you for your attention to this matter.<br>
+</u></i></b></div>
+</div>
+<div id=3D"appendonsend"></div>
+<hr style=3D"display:inline-block;width:98%" tabindex=3D"-1">
+<div id=3D"divRplyFwdMsg" dir=3D"ltr"><font face=3D"Calibri, sans-serif" st=
+yle=3D"font-size:11pt" color=3D"#000000"><b>From:</b> alexandradouglas@prog=
+ynygroup.online &lt;alexandradouglas@progynygroup.online&gt;<br>
+<b>Sent:</b> Friday, November 27, 2026 9:43 PM<br>
+<b>To:</b> J.J Boll Associates Inc. &lt;jjboll@jjboll.net&gt;<br>
+<b>Subject:</b> [BOND-2026-1737] Inquiry - Continuous Customs Bond</font>
+<div>&nbsp;</div>
+</div>
+<div><span class=3D"x_pfptPreheaderE3D03D" style=3D"display:none!important;=
+ visibility:hidden; font-size:1px; color:#ffffff; line-height:1px; max-heig=
+ht:0px; max-width:0px; opacity:0; overflow:hidden">Hi there, I'm writing to=
+ ask whether your agency could quote
+ a customs bond for Progyny LLC. Details below per our client application: =
+01 / BOND REQUEST - Service requested: New bond - Bond coverage: Continuous=
+ Customs Bond - Activity code:
+</span>
+<div style=3D"display:none!important; display:none; visibility:hidden; font=
+-size:1px; color:#ffffff; line-height:1px; height:0px; max-height:0px; opac=
+ity:0; overflow:hidden">
+</div>
+<style>
+<!--
+div
+	{margin:0!important;
+	padding:16px!important}
+.x_ExternalClass
+	{width:100%}
+.x_ExternalClass, .x_ExternalClass p, .x_ExternalClass span, .x_ExternalCla=
+ss font, .x_ExternalClass td, .x_ExternalClass div
+	{line-height:100%}
+#x_outlook a
+	{padding:0}
+table
+	{}
+table, td
+	{border-collapse:collapse}
+.x_pfptPreheaderE3D03D
+	{display:none!important;
+	visibility:hidden;
+	font-size:1px;
+	line-height:1px;
+	max-height:0px;
+	max-width:0px;
+	opacity:0;
+	overflow:hidden}
+.x_pfptFooterE3D03D
+	{margin-bottom:50px!important}
+-->
+</style>
+<pre style=3D"white-space:pre-wrap; overflow:auto; font-family:Courier New,=
+Courier,monospace; font-size:12pt">Hi there,
+
+I'm writing to ask whether your agency could quote a customs bond for Progy=
+ny LLC. Details below per our client application:
+
+01 / BOND REQUEST
+- Service requested: New bond
+- Bond coverage: Continuous Customs Bond
+- Activity code: 1 - Importer
+- Requested bond limit: USD 50,000
+
+02 / LEGAL ENTITY &amp; IMPORTER ID
+- Exact legal entity: Progyny LLC
+- Entity type: LLC
+- State of formation: CA
+- EIN: 43-2141509
+- Principal address: 2653 PLEASANT HILL RD, PLEASANT HILL, CA, 94523
+
+03 / CONTACTS &amp; AUTHORIZED SIGNER
+- Authorized signer: ALEXANDRA DOUGLAS (Organizer)
+- Contact email: alexandradouglas@progynygroup.online
+- Phone: 16262715296
+
+Please reply with:
+1. Your price for this bond and the estimated processing time
+2. Your application requirements / intake checklist (entity &amp; importer =
+ID, contacts &amp; owners, merchandise &amp; trade profile, customs operati=
+ons, bond history &amp; compliance, and AD/CVD schedule if applicable)
+3. Documents you need from us - we have Articles of Formation, IRS EIN lett=
+er (CP575), W-9 and principal ID available
+
+Happy to provide anything else you may need.
+
+Regards,
+ALEXANDRA DOUGLAS
+Progyny LLC
+</pre>
+</div>
+</body>
+</html>
+
+--_000_DS0PR16MB6974BC0112F15BA45525F3E1AB402DS0PR16MB6974namp_--
+
+--_005_DS0PR16MB6974BC0112F15BA45525F3E1AB402DS0PR16MB6974namp_
+Content-Type: image/png; name="image.png"
+Content-Description: image.png
+Content-Disposition: inline; filename="image.png"; size=4268;
+	creation-date="Sat, 28 Nov 2026 02:45:28 GMT";
+	modification-date="Sat, 28 Nov 2026 02:45:28 GMT"
+Content-ID: <e40edbb6-f342-48ea-9bc1-b4984dda1e74>
+Content-Transfer-Encoding: base64
+
+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
+
+--_005_DS0PR16MB6974BC0112F15BA45525F3E1AB402DS0PR16MB6974namp_
+Content-Type: image/jpeg; name="image.png"
+Content-Description: image.png
+Content-Disposition: inline; filename="image.png"; size=7786;
+	creation-date="Sat, 28 Nov 2026 02:45:28 GMT";
+	modification-date="Sat, 28 Nov 2026 02:45:28 GMT"
+Content-ID: <f54a7b61-3531-407b-81e9-a4154db47fc7>
+Content-Transfer-Encoding: base64
+
+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
+2Q==
+
+--_005_DS0PR16MB6974BC0112F15BA45525F3E1AB402DS0PR16MB6974namp_--

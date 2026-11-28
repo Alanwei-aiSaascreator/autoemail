@@ -1,0 +1,196 @@
+Return-Path: <>
+Delivered-To: brianamartin@flywirecompany.online
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id QFUrIZ8hCWvb2RIAQ1DlOA
+	(envelope-from <>)
+	for <brianamartin@flywirecompany.online>; Fri, 27 Nov 2026 01:22:23 -0500
+X-Original-To: brianamartin@flywirecompany.online
+Received: from us-smtp-delivery-221.mimecast.com (us-smtp-delivery-221.mimecast.com [170.10.129.221])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id 690B0115B89
+	for <brianamartin@flywirecompany.online>; Fri, 27 Nov 2026 01:22:22 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=alliant.com header.s=mimecast20241023 header.b=cofKgQsk;
+	dmarc=pass (policy=reject) header.from=alliant.com;
+	spf=pass (mail.pony-it.com: domain of us-smtp-delivery-221.mimecast.com designates 170.10.129.221 as permitted sender) smtp.helo=us-smtp-delivery-221.mimecast.com
+ARC-Seal: i=1; a=rsa-sha256; d=flywirecompany.online; s=dkim; cv=none;
+	t=1795760543;
+	b=OYDC76E/fPEGwAV8Ic+BAP50zs3OzyCGW4GxvUpOmK34Pyqq5abqPrBHNHw5FwNPm60BgI
+	o4oUEzOkAjvL07aKOj/kVpAoPLHNN0MbSetWD2SUB3x4PijONMpr6w0igg6OSPUedxk9Os
+	kHJib/27NYlx0qVydBG+JbNdGqJ9TG7EWFh5pSjxtFcXBLC2JVST9+3I0CrIzxdi8MzwHV
+	Hyah3BnLvTQBZ7ADabbeT6vF/7OX8qmJQ5bBbatqT5yDuelsmgGOmaKxPheURsUB6yiwIG
+	o2q3E+9FujiUJZ4ydczHpfdiBsZsEyYEyt05kvJb/J9GUPrmecOTV7tBDQy5AA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=flywirecompany.online; s=dkim; t=1795760543;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references:dkim-signature;
+	bh=dw+FygANunzHu6GbYXEPoDzlrsp4m0OaqdTkVr45t3c=;
+	b=QudiozWpvojFbHaaOIJJkU4GpQmSNJ31oI46zzhKjQNZJ0CGWX86/CWFLUVYAeApKanHuH
+	syG3v0UTyvZ3ZlmKLKgvskQ2WuKH4oy7IUxypg/nbg28wqZ8HTVUWt58NZlyqBfd/+jSBN
+	NWjybHS2vxAtBclPYw+/b7yrbu10rjaYirJEkvELrZ+hHh4LJhOtebUyB/yp/9uJuhxYqd
+	7KW0gxOH0fOSw4QKsEqIeAgnhzgr1QOst8ANGv77whJrzyqjMQL/b4frnYmyC7Ub7csBiU
+	QwkouWVJvqtvjZJg3PZjqelbPxfNGkw0xXJdppF8zRd4zbS9JK7PzC/KJLTTFg==
+ARC-Authentication-Results: i=1;
+	mail.pony-it.com;
+	dkim=pass header.d=alliant.com header.s=mimecast20241023 header.b=cofKgQsk;
+	dmarc=pass (policy=reject) header.from=alliant.com;
+	spf=pass (mail.pony-it.com: domain of us-smtp-delivery-221.mimecast.com designates 170.10.129.221 as permitted sender) smtp.helo=us-smtp-delivery-221.mimecast.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliant.com;
+	s=mimecast20241023; t=1795760541;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=dw+FygANunzHu6GbYXEPoDzlrsp4m0OaqdTkVr45t3c=;
+	b=cofKgQskQiLc+ECxc9720LzV5wvzYz0CZnmot6DvS778V/A3kKWBfyoE46w+nDFKhocCpv
+	WskwjCPY9O5NJ5gjFYDE5+lQRJ7N8Yp4GwQ48oYgHpXURPqz10+L+Nzs/M92yStCVxIj1A
+	3f9zjWOwv+KF94aMik0JGhbD6rPoFd+cLsS1Ockbcat8xfPG5Gln44mGZlNI5+NcNWacyF
+	+NuJYFtRLmOty/SD5k68r4vM1C90ocoeJtuXCMKa+CNyRkHfDMFo9Ub3aTqUeqi9R2rzpr
+	AROqONKVDSsutyRcClhw15/BV0Mu829xItJUTzLGPZz13R3149X2ty22G8sikQ==
+Received: from CY7PR03CU001.outbound.protection.outlook.com
+ (mail-westcentralusazhn15010019.outbound.protection.outlook.com
+ [52.102.133.19]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-691-2vYHE37wMQyh9Z-UkyWdvQ-1; Fri, 27 Nov 2026 06:22:19 +0000
+X-MC-Unique: 2vYHE37wMQyh9Z-UkyWdvQ-1
+X-Mimecast-MFC-AGG-ID: 2vYHE37wMQyh9Z-UkyWdvQ_1795760538
+Received: from PH0PR14MB5177.namprd14.prod.outlook.com (2603:10b6:510:eb::8)
+ by DSWPR14MB958470.namprd14.prod.outlook.com (2603:10b6:8:4e2::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.639.12; Fri, 27 Nov
+ 2026 06:22:16 +0000
+Received: from PH0PR14MB5177.namprd14.prod.outlook.com ([::1]) by
+ PH0PR14MB5177.namprd14.prod.outlook.com ([fe80::a65b:3ccd:1018:65c%5]) with
+ Microsoft SMTP Server id 15.21.0662.007; Fri, 27 Nov 2026 06:22:16 +0000
+From: Rachelle Rheault <rrheault@alliant.com>
+To: "brianamartin@flywirecompany.online" <brianamartin@flywirecompany.online>
+Subject: Automatic reply: [BOND-2026-0858] Inquiry - Continuous Customs Bond
+Thread-Topic: [BOND-2026-0858] Inquiry - Continuous Customs Bond
+Thread-Index: AQHdfjelWqNtiTJK80+1dhFffksmd7dBct1V
+Date: Fri, 27 Nov 2026 06:22:16 +0000
+Message-ID: <6e09cd50110a410db052705b8bbceb9e@PH0PR14MB5177.namprd14.prod.outlook.com>
+References: <010f01a21bab0f43-bce7a068-2c52-45e9-95c3-a6318318fdd5-000000@us-east-2.amazonses.com>
+In-Reply-To: <010f01a21bab0f43-bce7a068-2c52-45e9-95c3-a6318318fdd5-000000@us-east-2.amazonses.com>
+X-MS-Has-Attach: 
+X-Auto-Response-Suppress: All
+X-MS-Exchange-Inbox-Rules-Loop: rrheault@alliant.com
+X-MS-TNEF-Correlator: 
+x-ms-exchange-parent-message-id: <010f01a21bab0f43-bce7a068-2c52-45e9-95c3-a6318318fdd5-000000@us-east-2.amazonses.com>
+auto-submitted: auto-generated
+x-ms-exchange-generated-message-source: Mailbox Rules Agent
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH0PR14MB5177:EE_|DSWPR14MB958470:EE_
+x-ms-office365-filtering-correlation-id: 2d47ecda-6127-4fc5-2936-08df4c4ec8af
+x-exclaimerhostedsignatures-messageprocessed: true
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|50650200027|1800799024|10070799003|376014|366016|10067099003|3613699012|56012099006|11063799006|261022105027099003|261028144727099003|261026140227099003|18002099003|22082099003|5133699003|8096899003|12063799003|80100003
+x-microsoft-antispam-message-info: vMaFm3AWcS3h/85k+ilFvc3Ysj/73BP3AWpk/38txaKiKZoKT4dxNxbZhx0LoQFjLXYutXi8BObFIOudnuQ6KsTzqnVHoYWM04sScHtRYE8mF4zkv5gk8EMPccE3jJ1k7LwsKmCS7KtKWQTDyCG4QnFyQ3JnlT0BUwS9BQR7755izxdYHEvW6BEni5LW3zJLCDnh1BsKlUzfe36bfWhXZifhY7KdRGYsvqWkb9LfnpwXIneda5yFrRqijIYOcpw9Hi+Yq2MY9FE9ZhSIzFbHZcdpnp6vpOj8C7eoOPSWiNCc4deBCAzPDymFNSpSa74FlPnK06s7CGDR/ikSH0HUxNmOpYDBRtV21Zsut1eYi3fJ8yjUQnX0W20xkYzqIe8SQ9h3F/OtetGDyE9oaxT/qVD4v8wd2e4HRwUYohMK8aAv7at8tgwSgH+DcA1769/SQiMS0rpX90qhFT1maOhkA/T5VEnZ3AiwFO5Tsx1+D3UtxH1Y2hJOBWQ3YstwJoq+3w9s6ddXZTUXhwnQpUUwZgmlxVuXtyRpfUA3eLwZXZJiJmN4MYZ0Xajut5wlJeYUwsMtBtylgVL3fX4MuCTczqUyd1ZCUecUd8Fu99Trw6GYsWqVayWM7NfkKqO1waQxUuiQwf42Cul3jtTyTLqrAs3uNWlkJxYERhvNihXIc9dnGfkvnEWTy9HsGQyCy40xzzW3t+SXoIcBF5bbPQN0bd+XJ+hsDHx+ctZmfmXp/0E=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR14MB5177.namprd14.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(50650200027)(1800799024)(10070799003)(376014)(366016)(10067099003)(3613699012)(56012099006)(11063799006)(261022105027099003)(261028144727099003)(261026140227099003)(18002099003)(22082099003)(5133699003)(8096899003)(12063799003)(80100003);DIR:OUT;SFP:1501
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: sqLNIa1FIMKe2Wz9PyLVft6YDHxTeNEoPwbvGwDC6NbqTaMz2zX9IYMdQm/f8b7kIe663DqE5v3ICI+Opk3WpNT/XRMimD8ujtDlsKtpEHjcuVBoJ1ArpfdAh4+Qd/Sxg5DVbpBHMIKzS0w2LefiT68zYDE1SqDyYPcc4xjkJ8oK9qxjbuHJZKee8Q1rHvX0OMDY4QEtfa8ZGqsFAeH4FnS3NGlaowP44wT8JGSIoJGr+fNQTiy8fTg7oNfYfz1zKmmtb6GY6n2WimZkQn0j8MAgqBSwU6y0cfq4bHlqkqbTzsbVII2gVylN1RGxueHvGQvuxIjjae7MhWgQ2H7HWM6PZdlZMPFXOsw9IrhV0f3RruJh6HNbuOTNX6Cb4RwNbUFu3Z4s7AI0Oyf19yajU47HXF7jqN3avJY0fg4RnSXadEOSCc8po+I+VskqIhzA
+MIME-Version: 1.0
+X-Exchange-RoutingPolicyChecked: Eju+xTJNKMrDFh5X5qGuQV2jTrdbugYZ5+Yzz3MqZENodYYmOEhJNwUc2fKH6YQApC/+lhn+KYLyE3IxLqomEZZP60MJkxYKszGVexFPTQ4QaiV2WwEfrmzxGrKzffFfgKxuCmaHRWpreNSH+e2Ezb0HYxFF/5sUiUxUlmfkasxIhjF15f7FLqrtLC+RVh76KLJVPKYwa6EBm86HYarXDwrGQokpIT2V5ekvW1upR4MNbMaj6ZQKWtQjf/Q2xqslSgKYS4Cey03ppx3of323kdkYtW77dc/JSsl6ZZeJMDlnGF4mUgTJRRm7bdfak42jsryMiBlJGAApC9uWnsyrRg==
+X-OriginatorOrg: alliant.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR14MB5177.namprd14.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2d47ecda-6127-4fc5-2936-08df4c4ec8af
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Nov 2026 06:22:16.7812
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 1b075f8c-e7ed-42d5-9042-2b7bd52cec8b
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DSWPR14MB958470
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: VvY20K9_Xa_jL4EpAQYY097RP6-4p2FC2ZthpxpAqHs_1795760538
+X-Mimecast-Originator: alliant.com
+Content-Type: multipart/alternative;
+	boundary="_000_6e09cd50110a410db052705b8bbceb9ePH0PR14MB5177namprd14pr_"
+X-Last-TLS-Session-Version: TLSv1.3
+X-Rspamd-Queue-Id: 690B0115B89
+X-Spamd-Result: default: False [-1.67 / 15.00];
+	DMARC_POLICY_ALLOW(-0.50)[alliant.com,reject];
+	BAYES_HAM(-0.27)[68.73%];
+	R_DKIM_ALLOW(-0.20)[alliant.com:s=mimecast20241023];
+	R_SPF_ALLOW(-0.20)[+a];
+	IP_REPUTATION_HAM(-0.20)[asn: 30031(-0.19), country: US(-0.01), ip: 170.10.129.221(0.00)];
+	MIME_FROM_MX_GOOD(-0.10)[us-smtp-inbound-1.mimecast.com];
+	MIME_GOOD(-0.10)[multipart/alternative,text/plain];
+	RCVD_IN_DNSWL_LOW(-0.10)[170.10.129.221:from];
+	MISSING_XM_UA(0.00)[];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	ARC_NA(0.00)[];
+	ASN(0.00)[asn:30031, ipnet:170.10.128.0/23, country:US];
+	TO_DN_EQ_ADDR_ALL(0.00)[];
+	RCPT_COUNT_ONE(0.00)[1];
+	RCPT_MAILCOW_DOMAIN(0.00)[flywirecompany.online];
+	RCVD_TLS_LAST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	ARC_SIGNED(0.00)[flywirecompany.online:s=dkim:i=1];
+	RCVD_IN_DNSWL_NONE(0.00)[52.102.133.19:received];
+	RCVD_COUNT_THREE(0.00)[3];
+	DKIM_TRACE(0.00)[alliant.com:+]
+
+--_000_6e09cd50110a410db052705b8bbceb9ePH0PR14MB5177namprd14pr_
+Content-Type: text/plain; charset=WINDOWS-1252
+Content-Transfer-Encoding: quoted-printable
+
+Thank you for your email. Our office is closed for the Thanksgiving holiday=
+ and will reopen on Monday, November 30. I will respond to your email as so=
+on as I am able.
+
+
+--_000_6e09cd50110a410db052705b8bbceb9ePH0PR14MB5177namprd14pr_
+Content-Type: text/html; charset=WINDOWS-1252
+Content-Transfer-Encoding: quoted-printable
+
+<html xmlns:o=3D"urn:schemas-microsoft-com:office:office" xmlns:w=3D"urn:sc=
+hemas-microsoft-com:office:word" xmlns:m=3D"http://schemas.microsoft.com/of=
+fice/2004/12/omml" xmlns=3D"http://www.w3.org/TR/REC-html40">
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
+>
+<meta name=3D"Generator" content=3D"Microsoft Word 15 (filtered medium)">
+<style><!--
+/* Font Definitions */
+@font-face
+=09{font-family:"Cambria Math";
+=09panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+=09{font-family:Aptos;}
+/* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+=09{margin:0in;
+=09font-size:12.0pt;
+=09font-family:"Aptos",sans-serif;
+=09mso-ligatures:standardcontextual;}
+span.EmailStyle17
+=09{mso-style-type:personal-compose;
+=09font-family:"Aptos",sans-serif;
+=09color:black;}
+.MsoChpDefault
+=09{mso-style-type:export-only;}
+@page WordSection1
+=09{size:8.5in 11.0in;
+=09margin:1.0in 1.0in 1.0in 1.0in;}
+div.WordSection1
+=09{page:WordSection1;}
+--></style>
+</head>
+<body lang=3D"EN-US" link=3D"#467886" vlink=3D"#96607D" style=3D"word-wrap:=
+break-word">
+<div class=3D"WordSection1">
+<p class=3D"MsoNormal" style=3D"text-autospace:none"><span style=3D"color:b=
+lack">Thank you for your email. Our office is closed for the Thanksgiving h=
+oliday and will reopen on Monday, November 30. I will respond to your email=
+ as soon as I am able.</span><o:p></o:p></p>
+<p class=3D"MsoNormal" style=3D"text-autospace:none"><o:p>&nbsp;</o:p></p>
+</div>
+</body>
+</html>
+
+--_000_6e09cd50110a410db052705b8bbceb9ePH0PR14MB5177namprd14pr_--
+

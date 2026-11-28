@@ -1,0 +1,271 @@
+Return-Path: <>
+Delivered-To: brianamartin@flywirecompany.online
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id eNq5IF4pCmuepBIAQ1DlOA
+	(envelope-from <>)
+	for <brianamartin@flywirecompany.online>; Fri, 27 Nov 2026 20:07:42 -0500
+X-Original-To: brianamartin@flywirecompany.online
+Received: from e226-241.smtp-out.us-east-2.amazonses.com (e226-241.smtp-out.us-east-2.amazonses.com [23.251.226.241])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id 00D2310F800
+	for <brianamartin@flywirecompany.online>; Fri, 27 Nov 2026 20:07:41 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=cQQnHDPR;
+	dkim=fail ("headers rsa verify failed") header.d=googlemail.com header.s=20260707 header.b=O666HMo9;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	spf=pass (mail.pony-it.com: domain of e226-241.smtp-out.us-east-2.amazonses.com designates 23.251.226.241 as permitted sender) smtp.helo=e226-241.smtp-out.us-east-2.amazonses.com
+ARC-Seal: i=1; a=rsa-sha256; d=flywirecompany.online; s=dkim; cv=none;
+	t=1795828062;
+	b=V6k0DxKiJYegXo/SPnJqzohlRCa4tnKncAlMszjmdGt4UDmpQYhKW6v3F9C62Be1aW7fCP
+	ux6ANRbR6206i/ihYziBsHfR0PhFXt9qN5vaV195E03I9zGMtDaLyM6Dq5pCWpPEeX/CR3
+	UBCUfDlRCNJBsBXPphe/3r7jpPUNw0uGGoeqI8VY3uWuK6tjUoWAbz3XOW/zX9/UiEG0cF
+	I0AzdmMsmiPfXZDZ75vmM26jAKvrpEq5cdueCGsFCDFMqCJKKt+wxnOWnmznL5LB2fM/0h
+	F2Pjav8PAu2FlImz4Aqmm6WNTxIdJOJTgojTIqUM8gR7OuSktZ1EUMfpFzYNBQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=flywirecompany.online; s=dkim; t=1795828062;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:dkim-signature;
+	bh=Fh85yiN50x5YERXcsh4sE/vUC98kkkZrViNk9NkU5Qs=;
+	b=Bbrk+u+NC8o6nhG9v4piRPg5u+jJXoTkjV/eDzLLYHy2/pC7qspR2iiO9+c2dOyGleTD04
+	GdZvXlTNmOoq5vev574BEogk74nrEICjsGYLh4yfbppiL54oOjUWUopUC0dzyRRtS2udYW
+	N1Nuv6nAOkf1eZQDshV9PlAYt11+2jNRYAtFWwAVKQcL0FIOD2B23WrMwMhi84IvVo227j
+	KcJxUEdFVn4gTmoLQ9fORzn0lzuo7+sU3XkywOz2O6xWEfzraXe/IcaLdvF/F+PtUrPGpT
+	m6v3Aht79X9LkMxkzzmGJKCqgIu6h+OIci5JdCRB6DcBzqgYCwc0fnJzybwiGA==
+ARC-Authentication-Results: i=1;
+	mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=cQQnHDPR;
+	dkim=fail ("headers rsa verify failed") header.d=googlemail.com header.s=20260707 header.b=O666HMo9;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	spf=pass (mail.pony-it.com: domain of e226-241.smtp-out.us-east-2.amazonses.com designates 23.251.226.241 as permitted sender) smtp.helo=e226-241.smtp-out.us-east-2.amazonses.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=kra23psoka5qyyh6gdejiiuof3nluwuz; d=amazonses.com; t=1795828061;
+	h=MIME-Version:To:Message-ID:Date:From:Subject:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:Feedback-ID;
+	bh=7ne5wegAnoi4dapcCqm7FE5U6KDYzmBb0uRpUg1P+o4=;
+	b=cQQnHDPRxak25P/z9ILTqhoLFVJAoUjlxPdw2X5QZ/aOifk7hi+Ruq3qR6y6QN56
+	7NIoGstbylJKTXZS7ko08S8QK0Y2oyMLEvpzJgxy0FK9WAnGgAnwvSY0C5VlhXgpz91
+	u8/WfIx7z7jmQGwzHI3Cg1M8FXLsLflyArlOX35c=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20260707; t=1795828060; x=1796432860; darn=ses.flywirecompany.online;
+        h=content-transfer-encoding:content-type:in-reply-to:references
+         :subject:from:date:message-id:auto-submitted:to:mime-version:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=Fh85yiN50x5YERXcsh4sE/vUC98kkkZrViNk9NkU5Qs=;
+        b=O666HMo9qiccuytcEgEfzNMZz2n45/d+Bn5H4AWoxTVdVm15QC7bWiJDnxbBV0FzOs
+         PZVDWVYXSB5ypy7byROuT5RsaS5rQpb/+QpfI2/45hclPWRqTV/FR+9FfQA9+aySUYeB
+         WsV+Ay5O9r3q781xXN95mjHpo9yXB+4rGvd08+ErZ/7IUXP9shcBYxp2NXiHG0FkrgMK
+         KbyuyHpGTIZ4G/DfbcT0H2dKj12OE6DuFRcsZgbau8cv32df88Ykdoixdemnuyyu2YfN
+         8ssr8IgVlSrxbQUjbbRwwdRXNx+i0ygiR4ehLPH6/vh8DMplAED8B6YpqmrF9/RZZvtr
+         8GvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795828060; x=1796432860;
+        h=content-transfer-encoding:content-type:in-reply-to:references
+         :subject:from:date:message-id:auto-submitted:to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Fh85yiN50x5YERXcsh4sE/vUC98kkkZrViNk9NkU5Qs=;
+        b=ozRlybwzCgixOdh+vhnQqcd1oxJqunroVP+wgZ8OVzRgOS4Mlszty6QHW6iw+X9fH8
+         gzR9keupLV2+FvMKSkEq+EBDBAHpGq3ZfitNk+NzQWdncnoKY4Wb/eyl7qFmDriO5qnJ
+         MrjDVrIdFZK+VZfRH3NVM5feOrh1HYOSvV/s79LVh2gnSDxKSyWLYfL3BcisfusSjGvY
+         T0WeS9xivzZHvHcVFbDXkWJZfNykaK0WMH1DIGVwWuqmvfZTJdXb5IgoAj/FjHsE44Xr
+         qol7mxbZnCQSmJRsuVQqpTItoaVYCU5YHetAQoPzgydr8e9KJADMELUK4zVihMGbZmTi
+         SRZQ==
+X-Gm-Message-State: APuU4Z/geqXZogJW/LUG/sHa+1pag1Jwzm/SLMhE3UNtJHRzm+7iTNug
+	cbhWaOiPa25CO3NXP9LDn09Zf9xREb5/Tk1EPQsE7KOPrWkWnOUfMM3F/XK2D4TBKfDDhpIlcz9
+	QTrpNdMj/SoYBW7dcuSibyGujSgPvO1eIdbUGY7adPL4pmZ1RCDOhSYpyBw==
+X-Received: by 2002:a05:6808:c1d3:b0:576:4595:9822 with SMTP id 5614622812f47-57a090056a1mr26783715b6e.24.1795828060675;
+        Fri, 27 Nov 2026 17:07:40 -0800 (PST)
+MIME-Version: 1.0
+To: brianamartin@flywirecompany.online
+Auto-Submitted: auto-replied
+Message-ID: <010f01a21fb194e3-9bb9f369-28a6-4cc7-9095-be1b67107e69-000000@us-east-2.amazonses.com>
+Date: Sat, 28 Nov 2026 01:07:41 +0000
+From: MAILER-DAEMON@us-east-2.amazonses.com
+Subject: Delivery Status Notification (Failure)
+References: <010f01a21fb18dd0-a6e5f96d-3ddc-4805-822b-3afd77a71c40-000000@us-east-2.amazonses.com>
+In-Reply-To: <010f01a21fb18dd0-a6e5f96d-3ddc-4805-822b-3afd77a71c40-000000@us-east-2.amazonses.com>
+X-Failed-Recipients: customsbroker@spiritchbinc.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Feedback-ID: ::1.us-east-2.c0QCJwTJKDSb6mlKpIo5IpGwsngRMRBjZtJ48k4WYjY=:AmazonSES
+X-SES-Outgoing: 2026.11.28-23.251.226.241
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Result: default: False [-2.02 / 15.00];
+	BAYES_HAM(-5.50)[99.99%];
+	SEM_URIBL_FRESH15(3.00)[flywirecompany.online:email];
+	BAD_REP_POLICIES(2.00)[];
+	IP_REPUTATION_HAM(-1.17)[asn: 16509(-0.31), country: US(-0.01), ip: 23.251.226.241(-0.85)];
+	R_DKIM_ALLOW(-0.20)[amazonses.com:s=kra23psoka5qyyh6gdejiiuof3nluwuz];
+	MIME_GOOD(-0.10)[text/plain];
+	MIME_FROM_MX_GOOD(-0.10)[feedback-smtp.us-east-2.amazonses.com];
+	ONCE_RECEIVED(0.10)[];
+	BOUNCE(-0.05)[mailer-daemon+subj];
+	FROM_NO_DN(0.00)[];
+	RCPT_MAILCOW_DOMAIN(0.00)[flywirecompany.online];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_COUNT_ZERO(0.00)[0];
+	URIBL_BLOCKED(0.00)[us-east-2.amazonses.com:from_mime,us-east-2.amazonses.com:mid,amazonses.com:dkim,amazonses.com:email,amazonses.com:url,e226-241.smtp-out.us-east-2.amazonses.com:rdns,e226-241.smtp-out.us-east-2.amazonses.com:helo,flywirecompany.online:email,spiritchbinc.com:url,spiritchbinc.com:email];
+	RCPT_COUNT_ONE(0.00)[1];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	DWL_DNSWL_NONE(0.00)[amazonses.com:dkim];
+	TO_DN_NONE(0.00)[];
+	ASN(0.00)[asn:16509, ipnet:23.251.226.0/24, country:US];
+	SUBJ_BOUNCE_WORDS(0.00)[];
+	R_SPF_ALLOW(0.00)[+ip4:23.251.226.241:c];
+	DKIM_MIXED(0.00)[];
+	DMARC_POLICY_ALLOW_WITH_FAILURES(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_TRACE(0.00)[amazonses.com:+,googlemail.com:-];
+	ARC_SIGNED(0.00)[flywirecompany.online:s=dkim:i=1];
+	DMARC_POLICY_ALLOW(0.00)[amazonses.com,quarantine];
+	R_DKIM_REJECT(0.00)[googlemail.com:s=20260707];
+	RCVD_IN_DNSWL_NONE(0.00)[23.251.226.241:from]
+X-Rspamd-Queue-Id: 00D2310F800
+
+Hello brianamartin@flywirecompany.online,
+
+We're writing to let you know that the group you tried to contact (contact)=
+ may not exist, or you may not have permission to post messages to the grou=
+p. A few more details on why you weren't able to post:
+
+ * You might have spelled or formatted the group name incorrectly.
+ * The owner of the group may have removed this group.
+ * You may need to join the group before receiving permission to post.
+ * This group may not be open to posting.
+
+If you have questions related to this or any other Google Group, visit the =
+Help Center at https://support.google.com/a/spiritchbinc.com/bin/topic.py?t=
+opic=3D25838.
+
+Thanks,
+
+spiritchbinc.com admins
+
+
+
+----- Original message -----
+
+X-Received: by 2002:a05:6808:c1d3:b0:576:4595:9822 with SMTP id 5614622812f=
+47-57a090056a1mr26783702b6e.24.1795828060386;
+        Fri, 27 Nov 2026 17:07:40 -0800 (PST)
+ARC-Seal: i=3D1; a=3Drsa-sha256; t=3D1795828060; cv=3Dnone;
+        d=3Dgoogle.com; s=3Darc-20260327;
+        b=3DAp4cGBOlqnIPUnJhewcl/ViSs+PHqccTO8fz6yiSr4JGXjfpyWTsQaz5xnVIHv3=
+QeU
+         ndidVQ6J1Cclv5bWsVfKfbmdRirXKch91mRfYBcBdG4eDv4g23NdRG5Xrf9CLYn1JZ=
+SG
+         kSugiBH51JgIrCH49J1G9hSKg6KQNIe7SdtfYHY3Pwy72SjWkHJobJA/rZ2PQTSvfT=
+sM
+         hY3TY8inkLmi9GSQicpDm8lA/keQwk777iriI6FUf5936QAk2vHAvdDKe944PC43aN=
+a+
+         q+pzkdmCYgsUW5W8RXbPTH8bG3x+hlrrWvoTr6727XQYjPR5KkFC7HiSbe0XNpf61l=
+3+
+         ankg=3D=3D
+ARC-Message-Signature: i=3D1; a=3Drsa-sha256; c=3Drelaxed/relaxed; d=3Dgoog=
+le.com; s=3Darc-20260327;
+        h=3Dfeedback-id:date:mime-version:content-transfer-encoding:message=
+-id
+         :subject:to:from:dkim-signature:dkim-signature:dkim-signature;
+        bh=3DG2khUtFjsYWSGreCNPIn+owvVy0mv4TGQBnlATtwHy0=3D;
+        fh=3D+cHszpmDQ+9iBi+hhCM01IdmPNBMZzsLN3ZoTraIx4s=3D;
+        b=3DrsGyoz1OMTf8oG7WOPG9gMx+JICx+N0wfHA9V2LpE4/LErChVEDgifh+nMnL8vN=
+msR
+         L2Qw7HMB9W5cnVBssKYt9RKrSydMoJmWySubDgp2TokM1UHISYSyha1/w1CeVic2y6=
+3y
+         gcAhYBIjf+aqZ09vRpl+SAEtQ0Yj9QWO2/rJgNEOkgmMF2i8mkY2ZmOiVE7jLAvRkz=
+cF
+         V55uNObtRvvG65I41W4B5Nwd2IfT/GEUy8X/sV3DT/sXe6/hfY+gBLI8+XoM3IeYdp=
+R3
+         HUrSvmB08+uzxk6i1c37Yi1S/5m4OBtlSjQbV+nESveM2N/WZt0mhN5/Afi1MbUSax=
+ak
+         m09g=3D=3D;
+        dara=3Dgoogle.com
+ARC-Authentication-Results: i=3D1; mx.google.com;
+       dkim=3Dpass header.i=3D@flywirecompany.online header.s=3Dmah27rqqzj7=
+fw47so3uwxywr7xf6pomu header.b=3DsICCXLlR;
+       dkim=3Dpass header.i=3D@amazonses.com header.s=3Dkra23psoka5qyyh6gde=
+jiiuof3nluwuz header.b=3DDSM+wGNu;
+       dkim=3Dfail header.i=3D@flywirecompany.online header.s=3Ddkim header=
+.b=3DmzzfsOUL;
+       spf=3Dpass (google.com: domain of 010f01a21fb18dd0-a6e5f96d-3ddc-480=
+5-822b-3afd77a71c40-000000@ses.flywirecompany.online designates 23.251.226.=
+6 as permitted sender) smtp.mailfrom=3D010f01a21fb18dd0-a6e5f96d-3ddc-4805-=
+822b-3afd77a71c40-000000@ses.flywirecompany.online;
+       dmarc=3Dpass (p=3DNONE sp=3DNONE dis=3DNONE) header.from=3Dflywireco=
+mpany.online
+Return-Path: <010f01a21fb18dd0-a6e5f96d-3ddc-4805-822b-3afd77a71c40-000000@=
+ses.flywirecompany.online>
+Received: from e226-6.smtp-out.us-east-2.amazonses.com (e226-6.smtp-out.us-=
+east-2.amazonses.com. [23.251.226.6])
+        by mx.google.com with ESMTPS id 5614622812f47-57a34b5c7ccsi34425213=
+b6e.56.2026.11.27.17.07.40
+        for <customsbroker@spiritchbinc.com>
+        (version=3DTLS1_3 cipher=3DTLS_AES_128_GCM_SHA256 bits=3D128/128);
+        Fri, 27 Nov 2026 17:07:40 -0800 (PST)
+Received-SPF: pass (google.com: domain of 010f01a21fb18dd0-a6e5f96d-3ddc-48=
+05-822b-3afd77a71c40-000000@ses.flywirecompany.online designates 23.251.226=
+.6 as permitted sender) client-ip=3D23.251.226.6;
+Authentication-Results: mx.google.com;
+       dkim=3Dpass header.i=3D@flywirecompany.online header.s=3Dmah27rqqzj7=
+fw47so3uwxywr7xf6pomu header.b=3DsICCXLlR;
+       dkim=3Dpass header.i=3D@amazonses.com header.s=3Dkra23psoka5qyyh6gde=
+jiiuof3nluwuz header.b=3DDSM+wGNu;
+       dkim=3Dfail header.i=3D@flywirecompany.online header.s=3Ddkim header=
+.b=3DmzzfsOUL;
+       spf=3Dpass (google.com: domain of 010f01a21fb18dd0-a6e5f96d-3ddc-480=
+5-822b-3afd77a71c40-000000@ses.flywirecompany.online designates 23.251.226.=
+6 as permitted sender) smtp.mailfrom=3D010f01a21fb18dd0-a6e5f96d-3ddc-4805-=
+822b-3afd77a71c40-000000@ses.flywirecompany.online;
+       dmarc=3Dpass (p=3DNONE sp=3DNONE dis=3DNONE) header.from=3Dflywireco=
+mpany.online
+DKIM-Signature: v=3D1; a=3Drsa-sha256; q=3Ddns/txt; c=3Drelaxed/simple;
+	s=3Dmah27rqqzj7fw47so3uwxywr7xf6pomu; d=3Dflywirecompany.online;
+	t=3D1795828059;
+	h=3DFrom:To:Subject:Message-ID:Content-Type:Content-Transfer-Encoding:MIME=
+-Version:Date;
+	bh=3DG2khUtFjsYWSGreCNPIn+owvVy0mv4TGQBnlATtwHy0=3D;
+	b=3DsICCXLlRvGRgnzzP2hyi8imZf8vvL+BjPzveIwcDU4vSBNmOOgtM537JpPxtOPJP
+	AsHhGk2WlTDM7im0nyGIijZEfY7kF5gJb5uwt/ru02hKFuL17omTXzR1Ocp35moA544
+	ZOO4Hk8rhmTCoiTYzWeJxFqp/YSkYJa0BnZEUZvMmzPIJXcZckY7nagc7ryGwKmSwMb
+	uHwlcNRbvzzFnPQbgQ+DZE1LEsTfKNVohW4j4m1GletraqWrAcUx/TWEvISPIplYmdZ
+	dKhtu2f6giaUhdEYSpUzDvU8swmEBhzlCkix7hqbtqGwIKLLqU0xmxdF/YqrvlVknhs
+	Nw5YWsSe5A=3D=3D
+DKIM-Signature: v=3D1; a=3Drsa-sha256; q=3Ddns/txt; c=3Drelaxed/simple;
+	s=3Dkra23psoka5qyyh6gdejiiuof3nluwuz; d=3Damazonses.com; t=3D1795828059;
+	h=3DFrom:To:Subject:Message-ID:Content-Type:Content-Transfer-Encoding:MIME=
+-Version:Date:Feedback-ID;
+	bh=3DG2khUtFjsYWSGreCNPIn+owvVy0mv4TGQBnlATtwHy0=3D;
+	b=3DDSM+wGNuKXHsA0+80+9WZN/kJ+Cdd+NVAmvz9CrpDanM+CLZKp538dHD+z32BAmT
+	e9TX52xnyfPOGKlx9cxzlpaSMZytKUJER3CREhBa0ekYOLXKErsNNrxVhK25D6U1KwD
+	FP7NC27lxUCZkKXGbo16VTJ0WtpncWLFRqJqw1s4=3D
+DKIM-Signature: v=3D1; a=3Drsa-sha256; c=3Drelaxed/relaxed; d=3Dflywirecomp=
+any.online;
+	s=3Ddkim; t=3D1795828059; h=3Dfrom:subject:message-id:to:mime-version:cont=
+ent-type:
+	 content-transfer-encoding; bh=3DG2khUtFjsYWSGreCNPIn+owvVy0mv4TGQBnlATtwH=
+y0=3D;
+	b=3DmzzfsOULjwRYAjsZsL0yQejEBMHd5Prxzksk4doEV+jwa5iSiOtzIsR+y031eChzF1ge0w
+	SYxgxKPxJpu7Z+XX21wjDBMYmGQjWdORoqpneWEXg8KxjUUA5jUwIb5wwgAIXwrOgpW+AF
+	n4FoZX+NK9lFxuwpKmwLZchwJ6opeaqcJ8jYMjpab5Vu4FQ87T7T8dEF9V1jU604KIoYow
+	WtHvJy7vmHaxHwFMkKbsqofzBGvn57FLIILWVtgWCzbAPOctVHqVUYAjvN3OONuEe23imv
+	Zh8UNwGekFYn9AdjXg6LrhGNTKswx5FCZT8Ws1dY/yGlJ/mn1jQAmbGz4yMo8w=3D=3D
+From: brianamartin@flywirecompany.online
+To: customsbroker@spiritchbinc.com
+Subject: [BOND-2026-0946] Inquiry - Continuous Customs Bond
+Message-ID: <010f01a21fb18dd0-a6e5f96d-3ddc-4805-822b-3afd77a71c40-000000@u=
+s-east-2.amazonses.com>
+Content-Type: text/plain; charset=3D"utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
+Date: Sat, 28 Nov 2026 01:07:39 +0000
+Feedback-ID: ::1.us-east-2.dnBLFQvZ7DBnA5nHg3QcqhG4UiG8AnTuix0bXTff/SU=3D:A=
+mazonSES
+X-SES-Outgoing: 2026.11.28-23.251.226.6
+

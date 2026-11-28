@@ -1,0 +1,244 @@
+Return-Path: <>
+Delivered-To: amanuelafeworktiku@enproinc.live
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id aOSiH+jXCGvTpDcAQ1DlOA
+	(envelope-from <>)
+	for <amanuelafeworktiku@enproinc.live>; Thu, 26 Nov 2026 20:07:52 -0500
+X-Original-To: amanuelafeworktiku@enproinc.live
+Received: from mx0a-00201101.pphosted.com (mx0a-00201101.pphosted.com [67.231.148.218])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id AF1F510AD00
+	for <amanuelafeworktiku@enproinc.live>; Thu, 26 Nov 2026 20:07:51 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=anderinger.onmicrosoft.com header.s=selector1-anderinger-onmicrosoft-com header.b=PE0AcMed;
+	spf=none (mail.pony-it.com: domain of mx0a-00201101.pphosted.com has no SPF policy when checking 67.231.148.218) smtp.helo=mx0a-00201101.pphosted.com;
+	dmarc=fail reason="No valid SPF, DKIM not aligned (relaxed)" header.from=anderinger.com (policy=none);
+	arc=pass ("microsoft.com:s=arcselector10001:i=1")
+ARC-Seal: i=2; a=rsa-sha256; d=enproinc.live; s=dkim; cv=pass; t=1795741672;
+	b=OCeRcnYurSWJ4PwnMIFExzBu6as9vJed9QcoMnvNPdbiulENeUWcwTbbCNN8zEMIpUfHd5
+	H/MMh7f0t+b5cJ5m4Ui/ihgx6yCq77zl9pBn9Zk4pXItmVJ7Elhxlxuuc9lYcu6COA++O+
+	3CFQOfxMmIMjpGY2dgwDCor8jB+Den6p9BIwc31dCdc6F7Ho3mwXaTU0qz/xwpriT9Rev9
+	prGhW8hwNkcO/Qul57qAQwYJ7rAdaaprvs92Egq9uahXdQXY0Ku66ch02z1s9eJKC45Nhl
+	lxixg19l28WfLCqAxoNTXID7a/+sfagaUetTIoZ/dGRKeLBLu14l+ct008bBZQ==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=enproinc.live;
+	s=dkim; t=1795741672;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references:dkim-signature;
+	bh=GoOSAmsYbG8kglI7GWD4f1d8G8tyyrgd3Dlt/2iPh4E=;
+	b=jIQTLNVViZg5gEH7BD8Kgs6clDhLkz/QOFNTnEQ4Ee2xzBrqUuDNq4+o//kj6Qc0dShwEz
+	c38DZOXu/hDFIVGPTS7aAsk3euMPfL7lmRX0B7ef58hIi1+ZSuAwkq+GKI+94XjvENHyKn
+	a0fZiunHETo/wjRuRcDqj84SZ4akIo5ensyALnmjrohd6rDTswdS1qSprvK9ftUMhujYMn
+	C3fbCHfzzWyFows5s4imV1D28hFzGdFazPUJ27qpKyIY1VUBiclUsBvSona24KlteN7Pyy
+	YYNwOEXvwRCD+AuPCKlz/n9xQ1ByZri6o3SfvH+yWTs1TSATetKoR4tlg9JLSw==
+ARC-Authentication-Results: i=2;
+	mail.pony-it.com;
+	dkim=pass header.d=anderinger.onmicrosoft.com header.s=selector1-anderinger-onmicrosoft-com header.b=PE0AcMed;
+	spf=none (mail.pony-it.com: domain of mx0a-00201101.pphosted.com has no SPF policy when checking 67.231.148.218) smtp.helo=mx0a-00201101.pphosted.com;
+	dmarc=fail reason="No valid SPF, DKIM not aligned (relaxed)" header.from=anderinger.com (policy=none);
+	arc=pass ("microsoft.com:s=arcselector10001:i=1")
+Received: from pps.filterd (m0092017.ppops.net [127.0.0.1])
+	by mx0a-00201101.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AR0u7qE2534592
+	for <amanuelafeworktiku@enproinc.live>; Thu, 26 Nov 2026 20:07:47 -0500
+Received: from sn4pr2101cu001.outbound.protection.outlook.com (mail-southcentralusazhn15012046.outbound.protection.outlook.com [52.102.140.46])
+	by mx0a-00201101.pphosted.com (PPS) with ESMTPS id 4j3pf37jbp-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT)
+	for <amanuelafeworktiku@enproinc.live>; Thu, 26 Nov 2026 20:07:46 -0500 (EST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=i9oYw9XYXo7+TRAc6uyGULyCbImAmNYiUUpn5I0Xfjd1jdAM9RG+SAnu3laq37dy+SeXgkPGPzhQA2PRzXuaiEqeyUltWcSmejz7F10WXO2sIsdZ2Ds1G+9Cz+Dr1wi2Zw3UNlRONMhhztwpc6v1u6BCqEalt46L24Eski8zmqXlgsdrFsTHPNpJYcor+4w5cmp/1sX8G6TkqzPYMzHKzOe3wwftf8I3NGbFcXcdGGzrJXIF56zACedGRxnM3eQD6wQsKo1hwagQaJG82O3oh2G18UOCa7EgBLVhVxG5CroqwJLRdk/nfZzPyLgR6TdEt1buBTqxgTXRB0sx3wG+Ig==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GoOSAmsYbG8kglI7GWD4f1d8G8tyyrgd3Dlt/2iPh4E=;
+ b=OR4Zh+nO68w9xEkVWR7ZdaysNpS/e0eKnmWu+GF3AIyRCwHa59Sb/k3rMuiSVOryGgM8tACTU3qMXUnJ/CqIuONjem1N2Oqj3cfdk9d7eiosghy9pjp/cA5MUS4a2q+wZdGeivh1tFHAhxElOwKaigHdOqhEAYwowHOkzlKcBrCC/luDgDZ3HFz3ckNqrArVHVqkrt0KXRZDvMEyfQ4YZmxR0tG2PypB4qq9ZDEnrRFS7H2aSOjyOynSE16TgSpaNiWkEIvsgW/e35FU458C2Bii7JLLwc9ZNuOtleJC0M2tjW9jzXeIvPeHStZAK0d4D1aOPgUnw6deEHGZnD7GFQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=pass
+ action=none header.from=anderinger.com; dkim=pass header.d=anderinger.com;
+ arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=anderinger.onmicrosoft.com; s=selector1-anderinger-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GoOSAmsYbG8kglI7GWD4f1d8G8tyyrgd3Dlt/2iPh4E=;
+ b=PE0AcMedYEeuYxH0MFTt88kfEbvNOZM3jfz5AzqzWpu2jQ536l7Olmfq3IERVZBhWiihYHu6qssz9QH0rpChtdRngmSc3SRVB6BLOClKJ0GnwwxAieiEyHUeBmRWRSzraGzp9zhZcYQbTG1hqO/hZA8Y8dwfSG/VL1YKg83+Doo=
+Received: from DM6PR13MB2505.namprd13.prod.outlook.com (2603:10b6:5:ca::21) by
+ SA0PR13MB4078.namprd13.prod.outlook.com (2603:10b6:806:93::16) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.662.7; Fri, 27 Nov 2026 01:07:45 +0000
+Received: from DM6PR13MB2505.namprd13.prod.outlook.com ([::1]) by
+ DM6PR13MB2505.namprd13.prod.outlook.com ([fe80::6399:8439:d841:b595%4]) with
+ Microsoft SMTP Server id 15.21.0662.004; Fri, 27 Nov 2026 01:07:45 +0000
+From: pembina <pembina@anderinger.com>
+To: "amanuelafeworktiku@enproinc.live" <amanuelafeworktiku@enproinc.live>
+Subject: Automatic reply: [BOND-2026-0703] Inquiry - Continuous Customs Bond
+Thread-Topic: [BOND-2026-0703] Inquiry - Continuous Customs Bond
+Thread-Index: AQHdfgu01wCviiFfDUqPT0vCwWuIhLdBG1R6
+Date: Fri, 27 Nov 2026 01:07:45 +0000
+Message-ID:
+ <d67f11ecdcf049288803eba754f4a616@DM6PR13MB2505.namprd13.prod.outlook.com>
+References:
+ <010f01a21a8b2313-bd88867a-08cb-4d64-b978-dddb09dd0ba5-000000@us-east-2.amazonses.com>
+In-Reply-To:
+ <010f01a21a8b2313-bd88867a-08cb-4d64-b978-dddb09dd0ba5-000000@us-east-2.amazonses.com>
+X-MS-Has-Attach:
+X-Auto-Response-Suppress: All
+X-MS-Exchange-Inbox-Rules-Loop: pembina@anderinger.com
+X-MS-TNEF-Correlator:
+x-ms-exchange-parent-message-id:
+ <010f01a21a8b2313-bd88867a-08cb-4d64-b978-dddb09dd0ba5-000000@us-east-2.amazonses.com>
+auto-submitted: auto-generated
+x-ms-exchange-generated-message-source: Mailbox Rules Agent
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM6PR13MB2505:EE_|SA0PR13MB4078:EE_
+x-ms-office365-filtering-correlation-id: a3da8301-9242-43ae-167f-08df4c22d85e
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|50650200027|1800799024|10070799003|376014|366016|5133699003|22082099003|18002099003|12063799003|8096899003|3613699012|260925022911599003|260925021911599003|10067099003|260925021311599003|5023799004|56012099006|261028144727099003|261026140227099003|261021121427099003|261022105027099003|261102123227099003|261022075727099003|80100003;
+x-microsoft-antispam-message-info:
+ T+E/7+xanFnDr9A0F37QDUnuAqInJc/VnC5xT3Dk4r7I9m/5bAKVX0QkmfNwwxTLa/rMvQlpPW8X0Vybv7DOKK+JlUjp1inmDUwPQpxAfNEkjmg/yV8KB5JKaB9tkCJ52Xaqhn7lc5VTuK2TfAnwa7nD4rGDZBu+y+lWTGTL1LyQs0Uj7MGVrY8AMk19Tj23ZBW+w9EIrgqNFx5GVciTkQFfSIczF0Gi6NMs4ANXHy9VfCp/Qk5sGfy02U2f8Sif8PCKLTJuERizyFCzL0trrdbpsGzwJYef7KNLcbrU68+3GWItlXBq3bo7I2v5d7575FD+lmhCKFLSyY/d8PgVogRrPbc7OTOiGSVrSOq9+u0vViKTG3bGtryQD6LrtPyo1McOf1i/7zuJ3/NrQ5YLfgmYNYHuxhe3ZuggMvGdup+Tx7YuciqEIdMOK7Stdv838TfQtE0uc0tlh0aHQjW4sQ3EUZgjJTD60dJJxU18smlWrYR9bY5hAqX4X5/rFljp5G4VVaSXs0bg664VIiWtkaMSBQliPRgSK/fvPO/oXTZrDRNqLzDVo5I6sjPnaAYxBwhzs9b5xYM80C5muS1/BAL6U+Vz/LvmaszgHe+ARhQrn+YwoDQhy49FCc5V8M5N5SgzvL11eNsLJ1j7N1jggEHJviVK4cwylnRItGMqbVh5D9375fXOarEYX/wMyZCGAJLdwVR1/m3h/tEwdUCAq0+B5JjXKBIeKXI11LcK99s=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR13MB2505.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(50650200027)(1800799024)(10070799003)(376014)(366016)(5133699003)(22082099003)(18002099003)(12063799003)(8096899003)(3613699012)(260925022911599003)(260925021911599003)(10067099003)(260925021311599003)(5023799004)(56012099006)(261028144727099003)(261026140227099003)(261021121427099003)(261022105027099003)(261102123227099003)(261022075727099003)(80100003);DIR:OUT;SFP:1501;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ dEIcyvjoTJkr4OvewOGgGf7bVolwBiG4jg8tPmabqNnPUPeeMecn/X3aSHEvS315da+jEJZkp6SBSd9Dma2PQNEQmfL44ALbp+BCz292Wa1QWQA+XiNam3nY1TD75hQ1RVmt+PjtI/ePiUCvoBV8TeH5Ey+nj7yQ/V0YVEYOb5vYzSOvQAM5o4/xYxIux+7PyzGZfrTqmJsQeTbSS7mNxXDec3C5pu2ukStlhfWgX8OWwGR4eMgnjASzVZz4q8+jmF70QrbUgQOekVPnYVDTlH9KzAYIzR4yOQCHWQbNSsD0ojtAVJ9wDnF7t1C5ExZ+nq2yrrk4Q1CPOeHJ4yeZpn2EAEWt7KUt0UDknVBg3NJ7kSJy9nMyds2fv1TqKahpSwFK6EJQG3Wo+ogngGDVJBjk2reSl+4TnStX2Im0+slmnLxJgrtqWRkE5VDp1E20
+Content-Type: multipart/alternative;
+	boundary="_000_d67f11ecdcf049288803eba754f4a616DM6PR13MB2505namprd13pr_"
+MIME-Version: 1.0
+X-Exchange-RoutingPolicyChecked:
+	akEZITL67U5/7Ultz7VBMEB2xxAgUotDllKCMAPIgx2emP1LUou2jem3b58pdc3rSJaSG5BhVGkNhMG+B9pFxj72lmy5dg/s2Sn0vMBbZ+0/r3WlYdLhGnTOsShkeEeN9+XiieOctRzK45Ii/sfXT+UqNO3WclEMDySEWmwf7/JXjQ9rNXHUY3o9jJhhsJ7xDWcdGbpNk1f3xWTVTocJok7lVKiVKUYLv6+O0bJSBHisWXmpL+RLsAPjDUDvKDKgLjoRe7UEWsTlgdgx28naZ1wcpEsSpqQCzTyohehPoFqxOsJ2df1X91pNkAQqI4MAeCeXl3qw5ZSEIJK2FHey4A==
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	eoDisbQqYYbS8gKC4BLfUyEZGWPZJpHH40RKbnwe4fXyv6q3ALwni+oCuCBvTH5RlzAI6LBFBZp4UjkKqPNTF9yH91i549/ku/PzCOkhx2GlVcNHNlcuuxGiofoX1CTTD2mDnE+zMrt+1Wa7XsOD80aKm0FuccC9REkEK73RQtqEO81OhGUvc+O4Cqdy1ZmEDo4ZKCTrvBxlTHXJzosdIMeDgxhRd38r/FnbB/2YOBa1nCg3iKPeyQ6Sq/2NG90QtYQJFwl4nCXFpXRwYSqMycpAJd24G9X4UQeMsopoOI2NaLRg53gvZ7FNVTYYOa0Qf9x7UOcqf1bT0f0DixT5ctelcXwJKRhlNFdkG2mPWSORO3nslWZQWtk77hPjH26HioRqB72dRIO1V7UNF72zVuKZfts5X+5JyLvTfaWw1VGOxPG0ZATuE92KP9erlBZ8ecxGDzncsd+oZZn5h4vWSgoR6QfZmAi3CdzqncQcGo3Fie4ooCq0gl4WPdBLvP3X7aROsqz7ZBuGg39jnnNnQ12Sg53cmk5Kgf9yACix7ZnbcGDVPZ/zeeoFbRqOPwuTL5tjpSZpLTGaSqHpgfiCNC/H2qvjq3otMQsVSBHi+wL5JHJBwnl3ut9LCulJwYiQ7AMmHvmaIZfaBavYaPSgQ0UJrg6xrYq52lCDq/7XjrM=
+X-OriginatorOrg: anderinger.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR13MB2505.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a3da8301-9242-43ae-167f-08df4c22d85e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Nov 2026 01:07:45.2256
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 7924ac6f-5686-48f4-885b-168ee292edd3
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR13MB4078
+X-Proofpoint-GUID: jYxHml1ypR6On0L4xOcO1dLC3-6Z4RCk
+X-Proofpoint-ORIG-GUID: jYxHml1ypR6On0L4xOcO1dLC3-6Z4RCk
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTI3MDAwNCBTYWx0ZWRfX/dvFP82t6NI4
+ hC0OkLkV+vKdHy5/JKBuHbJt3ELf63Rwh2wPO6SUB16LpJ9rxP9Qav85F74vRBo8m2pnwJ0jARV
+ k2DlG6SgxRGpCC8+x8p+dcYkCv5wK6HFHY8I3stTB2GnQohc2HwY
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTI3MDAwNCBTYWx0ZWRfX1l7FKxxLSCgA
+ ORbUh5HLWegpimQJlK/TaKA9N2Te/9TYOae+e+GN4dHfxaBY83+l96/7TYp+M12FKhp1LzHUhfw
+ g6aueuwg9R1uWvi29+qFWupD9XHNYPc7CbNLyXDdDx4gLU5JZjskLqCftjB+PY8efdhCQmqswZO
+ hrB7ctPmIwMOBPyTcQ4L7pvd3sV1UeHbKzedjX1xdWHV3MiqUs68qKdc5MOCtrWQWrXNemZuPE4
+ +/flTIK5ZVTZA5f9rpfgcrpYvL9SCHxpxAsgo3R1dGNbixzg5sYAB24G3CLxozr6Q9XLHheLXW3
+ ss6fa67jv2oXWXBQ1D4XwtQb9nVMCMHzbvnsNk7CJBj+nfQI47Dos0os9RoQimwOwobyczoO9Mk
+ kDKJbii2BkR216K44IwPiVyqvWx1M+HpVVqh63lZiaV0XejMTmN0Yt2cQDQaIhwX36MW5zVd7ZJ
+ lKhYlZ1VzGCrwZpFAZcMybBxx170MZSJo+2nw++Q=
+X-Authority-Analysis: v=2.4 cv=ZsB4uN7G c=1 sm=1 tr=0 ts=6b08d7e3 cx=c_pps
+ a=3iagFZTQCKYhj3yG4lJCAQ==:117 a=KWvOQs04uFl5JYH95pWQHK6vTCQ=:19
+ a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19
+ a=xqWC_Br6kY4A:10 a=zJRp6_cAMcgA:10 a=C9BYt4aJK1YA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=c8yh9ZhHurO8YqzzHMMl:22 a=c9_TxwALZc3L0WC5e9CB:22
+ a=rtKVJSFHAAAA:8 a=eIbTAFLL8ckTXAGrbHkA:9 a=lqcHg5cX4UMA:10 a=CjuIK1q_8ugA:10
+ a=w6Kr-CVnSD5ScU19io0A:9 a=_W_S_7VecoQA:10 a=Zes0wLHjNSyzBYkg1X0p:22
+ a=Lcw6dl7kLhG240Z2xKZo:22 a=Ph_HeB5_bh9_LF7pyTvj:22 cc=bnc
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
+ definitions=2026-11-26_05,2026-11-26_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 priorityscore=1501 clxscore=1031 malwarescore=0 bulkscore=0
+ lowpriorityscore=0 impostorscore=0 adultscore=0 spamscore=0 suspectscore=0
+ classifier=typeunknown authscore=0 authtc= authcc=bounce route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.22.0-2611040001
+ definitions=main-2611270004
+X-Last-TLS-Session-Version: TLSv1.3
+X-Rspamd-Queue-Id: AF1F510AD00
+X-Spamd-Result: default: False [-4.83 / 15.00];
+	BAYES_HAM(-3.06)[92.93%];
+	ARC_ALLOW(-1.00)[microsoft.com:s=arcselector10001:i=1];
+	IP_REPUTATION_HAM(-0.37)[asn: 26211(-0.36), country: US(-0.01), ip: 67.231.148.218(0.00)];
+	R_DKIM_ALLOW(-0.20)[anderinger.onmicrosoft.com:s=selector1-anderinger-onmicrosoft-com];
+	MIME_FROM_MX_GOOD(-0.10)[mxa-00201101.gslb.pphosted.com];
+	RCVD_IN_DNSWL_LOW(-0.10)[67.231.148.218:from];
+	MIME_GOOD(-0.10)[multipart/alternative,text/plain];
+	DMARC_POLICY_SOFTFAIL(0.10)[anderinger.com : No valid SPF, DKIM not aligned (relaxed),none];
+	MISSING_XM_UA(0.00)[];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	ARC_SIGNED(0.00)[enproinc.live:s=dkim:i=2];
+	ASN(0.00)[asn:26211, ipnet:67.231.148.0/24, country:US];
+	RCPT_COUNT_ONE(0.00)[1];
+	R_SPF_NA(0.00)[no SPF record];
+	RCVD_IN_DNSWL_NONE(0.00)[52.102.140.46:received];
+	TO_DN_EQ_ADDR_ALL(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_MAILCOW_DOMAIN(0.00)[enproinc.live];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	PREVIOUSLY_DELIVERED(0.00)[amanuelafeworktiku@enproinc.live];
+	RCVD_COUNT_THREE(0.00)[4];
+	DKIM_TRACE(0.00)[anderinger.onmicrosoft.com:+]
+
+--_000_d67f11ecdcf049288803eba754f4a616DM6PR13MB2505namprd13pr_
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+Hello,
+
+
+
+Please note that this email address will not be monitored on weekends/Holid=
+ays or after 9:00 PM CST on weekdays.
+
+
+
+If you are sending paperwork for clearance after hours or during the weeken=
+d, please send to pembina-paps@anderinger.com<mailto:pembina-paps@anderinge=
+r.com> . Please note that we only receive the information in the attachment=
+ of the email and only one attachment can be sent per email (pdf or tiff). =
+You may also fax your request to 701-825-6212.
+
+
+
+If you need immediate attention, please phone our office at 701-825-6457.
+
+
+
+Thank you and have a great day.
+
+
+
+The Pembina Team
+
+--_000_d67f11ecdcf049288803eba754f4a616DM6PR13MB2505namprd13pr_
+Content-Type: text/html; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+<html>
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
+>
+</head>
+<body>
+<div style=3D"font-size:13px; font-family:Tahoma">
+<p>Hello,</p>
+<p>&nbsp;</p>
+<p>Please note that this email address will not be monitored on weekends/Ho=
+lidays or after 9:00 PM CST on weekdays.</p>
+<p>&nbsp;</p>
+<p>If you are sending paperwork for clearance after hours or during the wee=
+kend, please send to
+<a href=3D"mailto:pembina-paps@anderinger.com">pembina-paps@anderinger.com<=
+/a> . Please note that we only receive the information in the attachment of=
+ the email and only one attachment can be sent per email (pdf or tiff). You=
+ may also fax your request to 701-825-6212.</p>
+<p>&nbsp;</p>
+<p>If you need immediate attention, please phone our office at 701-825-6457=
+.</p>
+<p>&nbsp;</p>
+<p>Thank you and have a great day.</p>
+<p>&nbsp;</p>
+<p>The Pembina Team</p>
+</div>
+</body>
+</html>
+
+--_000_d67f11ecdcf049288803eba754f4a616DM6PR13MB2505namprd13pr_--

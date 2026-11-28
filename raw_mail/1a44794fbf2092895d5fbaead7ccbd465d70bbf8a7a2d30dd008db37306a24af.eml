@@ -1,0 +1,159 @@
+Return-Path: <>
+Delivered-To: chanrathanachouk@ordinaryusa.online
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id eN9vBo3bCGvTpDcAQ1DlOA
+	(envelope-from <>)
+	for <chanrathanachouk@ordinaryusa.online>; Thu, 26 Nov 2026 20:23:25 -0500
+X-Original-To: chanrathanachouk@ordinaryusa.online
+Received: from e226-240.smtp-out.us-east-2.amazonses.com (e226-240.smtp-out.us-east-2.amazonses.com [23.251.226.240])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id A16C111773C
+	for <chanrathanachouk@ordinaryusa.online>; Thu, 26 Nov 2026 20:23:24 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=SZpfRvIi;
+	dkim=fail ("headers rsa verify failed") header.d=walshchb-com.20260707.gappssmtp.com header.s=20260707 header.b=Zl7IRT2z;
+	spf=pass (mail.pony-it.com: domain of e226-240.smtp-out.us-east-2.amazonses.com designates 23.251.226.240 as permitted sender) smtp.helo=e226-240.smtp-out.us-east-2.amazonses.com;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	arc=reject ("signature check failed: fail, {[1] = sig:google.com:reject}")
+ARC-Seal: i=2; a=rsa-sha256; d=ordinaryusa.online; s=dkim; cv=fail;
+	t=1795742604;
+	b=RtazN21oaOzH6EvBypronJlAogcU3EEErkmMK52U5I2HHMOZtOwBzJCzFsLtOlfWzrhmn7
+	AETPzh6aUn7QYyAlQAWS1g19EEMNb4WDaw8BZ73kehL3sXdni4/CqLiI31TBePUt+7Py3E
+	Q3reAaKoiO8OjWZHKCfpBsxp8rEdThBf6/NqShwL8AvL9u4b9FicJsGH+8r1hVQqHn7NDU
+	q+UK4BrUHBbu5GufDhdT8kGp0mpcVfJf/IQqo5EGMV+soDRN8T8tt3iMxDurNGb7EkPpNR
+	8kXBpKbi0P9wbeis0Y134GF59gDEj3p3BWc2yT5HonZ0wzkjv2Lt4FH5+55NPg==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed;
+	d=ordinaryusa.online; s=dkim; t=1795742604;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:dkim-signature;
+	bh=vjU/TnqI8O8D4S+LjTVfftFLTiAKeRCecAlCkU2ii3A=;
+	b=sjMvMvoHVvWOlMoe/NjTwIVh0KlH2ohg4Fpl12z5qO1yBpFwzCspI6XPZFomt/mFwRN1DQ
+	XET3PW6oC/Yi4DEnnuZG4p2GqxJnWGE4WQqWCSp6SsFeUSxbrcBmjjxXKC8MayQYTg5aSS
+	AOGYyvMFVnRKcfEmVanxJC4FgEpZ3EbBNrEqSNL9w3AhB0ROraWaohtS5dOzRi4gSFMXNP
+	TnW5C/mmrA+dHQj/QS1QDYfJJnU+U7VsS0RdXrcoGeCXzr3JHDeg+9zw1tkuh2rdacVn+o
+	Qr7Fly2IBPHDrFZygBumGM/r82NYeqlRb93p42ExfpD5vwlHVXeUkmmiaA2wYQ==
+ARC-Authentication-Results: i=2;
+	mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=SZpfRvIi;
+	dkim=fail ("headers rsa verify failed") header.d=walshchb-com.20260707.gappssmtp.com header.s=20260707 header.b=Zl7IRT2z;
+	spf=pass (mail.pony-it.com: domain of e226-240.smtp-out.us-east-2.amazonses.com designates 23.251.226.240 as permitted sender) smtp.helo=e226-240.smtp-out.us-east-2.amazonses.com;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	arc=reject ("signature check failed: fail, {[1] = sig:google.com:reject}")
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=kra23psoka5qyyh6gdejiiuof3nluwuz; d=amazonses.com; t=1795742604;
+	h=To:From:Date:Message-ID:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Feedback-ID;
+	bh=vjU/TnqI8O8D4S+LjTVfftFLTiAKeRCecAlCkU2ii3A=;
+	b=SZpfRvIietzI8xpau2yWf1mAEi6WzLYo1+bO6z4OOUIFiCnshiDgY4cOX18xs8eC
+	s1JEtmYCyREAhO7mriZCSsnjWl/mHJPubOphGHnw05QXnDH3/aUFhs+r5v6C7gsuaf5
+	YLB9Nf+paAKYtN4GY39vBjPOYo1ynAvHzylMIQDA=
+ARC-Seal: i=1; a=rsa-sha256; t=1795742603; cv=none;
+        d=google.com; s=arc-20260327;
+        b=snZ1bzL0CeH7Ip341GrZnNtGI1VuUyvMZEawQy7vERy9YaTim79b+znlAgv6+muRcY
+         MaAYmkodERUraVqQ0sAC/qBYExWp3J+EJBdwAZY6JPJEPd/Cjtn0RSg8lWwHxJVB3ei0
+         35IGGbnnIqqheeJO1NGI/Xq4u1E2SKK7TJijp11ZGSYYB+puvjsX6WVZzDphYvur8s+E
+         JR4Qf0SYzHLF4yY35r28+3j3xULQa1lDRmPXyE6q8H9PoFMKaf+8fQN+qdCnfP3Qnyxu
+         mltqb3qajQLwqptHKRUHuGQyreonB3rGV/KlvvpsU+gQoVjD+zIVbCfv1G4s5UUF3n0n
+         cf4w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=auto-submitted:precedence:content-disposition
+         :content-transfer-encoding:mime-version:subject:message-id:date:from
+         :to:dkim-signature;
+        bh=vjU/TnqI8O8D4S+LjTVfftFLTiAKeRCecAlCkU2ii3A=;
+        fh=3HEa+0RqZ3Oo2ScAThoYsXJu4t4JD9gk9gcj79xpZaM=;
+        b=NJa7HQFolfGMDsYV3xFrbwC9pOFFvoS4zzLADCWIB1zaKmuhNRbsGKyRUV8D4rMfpA
+         Xpq296D5VComRC7rRyy131kTJSSl2Kn2H126QCN21Ue6V/Fu3Spz4Pb3SoNK+4GNElIu
+         SoXy3pqhPv4NsT9IkryajuF4bUr/fCEfO0KOjIVfeD1gIKosaoTWDqAgi75IcsMq2EOS
+         g2Y9EZMIeqb5tpK2oUpzPbtIBOkVKE0rJRRD5uy+qVICKJtwAFI280o79TakWaaJZc58
+         6t/9LPve/7K7z2eSSGG3kS8+mMBfU16guLmPWn3tQloZyt9VmHXjvnSPXCZkpUtklMEO
+         pIkQ==;
+        darn=ses.ordinaryusa.online
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=walshchb-com.20260707.gappssmtp.com; s=20260707; t=1795742603; x=1796347403; darn=ses.ordinaryusa.online;
+        h=auto-submitted:precedence:content-disposition
+         :content-transfer-encoding:content-type:mime-version:subject
+         :message-id:date:from:to:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=vjU/TnqI8O8D4S+LjTVfftFLTiAKeRCecAlCkU2ii3A=;
+        b=Zl7IRT2zijcjCx8F3Ku2Bp/HY7LVsND1I8Z6A9kUtzsn5plAQs9pXQe2SHuYwIYBaj
+         /+XA/HxPPL9Hf2+8ZI2NoGE77Ehh6w/nW8UzwwRCodEzTM3mxdcYKSAh+f/f8xbnG4sW
+         lIhCHdhgQaAhF+ykdhhA3Tg6C+dQxekaR4zuNdSjRfxdE3XGjFHFXGbSWc6CO8O7mP6b
+         c4kLZHG1rXID/ZMC87HJXjv2lrUdPaUijosdObXhIxbrECarr/cl1/KLy3zfGFUm7G/m
+         xfwV4kVPWxLS6k+86dSyGhx2LKEmzNEscP0KvKjYbuDyvHTtPB4vjJwxDJogzFP0z9dw
+         yLuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795742603; x=1796347403;
+        h=auto-submitted:precedence:content-disposition
+         :content-transfer-encoding:content-type:mime-version:subject
+         :message-id:date:from:to:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=vjU/TnqI8O8D4S+LjTVfftFLTiAKeRCecAlCkU2ii3A=;
+        b=yf7POD8M/sxh39dJiWixN9fDLGx5hAvjuKbHTpVlgw7uKQqQ/kds/zIBG4la7Avm+/
+         nM28s5ougnBz+aHkp2Kvk5HsuxF7zowPWU4nwgybgPsv76wH93FSZLDt4ZWpWbS+Q5vu
+         CbzxKKfbZaJYIY4r705UJLcibEmQzrhyBrCSGES+IyZYZ6BLYeBm825EG32OFpF5fia4
+         a3m4kGHgdjtajPWr2i+MguOPSUAsoc/BsArSTW3sGaMIsIpgJZ8ZBWPpnoFzqy/ZwFZ2
+         P0a8C8hLTmo+lIlEQK7B/clBD/5lx6zGTA99GuGgM1OhN5Fe3R6WLvs0bv+t6BzfWKGS
+         SZ9g==
+X-Gm-Message-State: APuU4Z+/C3xKNkqarwFaHs95f1bNEbIVg//1oHR4IQmy/YskYAqLjR1N
+	E0Olo1//g2FKIp1oPnl+VfuNtvnZymObWu7JTWwRQaQ6LlXzN/KHT6cnVqaYlR6ox6XJ63UVg6Z
+	9yoxGCpsB75SwNMgc7C8N+oObnMkPKXaQG25ETLa7nTWuea+8h0zjgVeRV3/k38G1DlNBmhe5y0
+	gnWh5sxGyFbYxChg8LxWGn4p02E7n6
+X-Gm-Gg: AZFdTZdXqQcM5gCZbZ5ZACtODiQRpKoYC9YvYobte2ruVcP2IOs65Kri0WmS8RFlgD/
+	PTInjWYZ+zWYIDhtnLKkI51FOMz7TR6/hsnvqE4BRColt/RMmR+QddslM3wqtYYZSIkYfADu4m3
+	JE9k+oilcQmeerr4jS9oKmyCAQb/JzXDtcQgoKEiRIe0/txQHRNzYLwSQUstDObVP8M6tAkCGqO
+	nR27YAvDEPCo4qY7Qxh6vcuMGhXjJNpjf4txXwEyEVxnnL5mCUDh0qr/eaY/vh+iR9z2uxlxioJ
+	XgH+MSd9orxTmmaF6g6GotBfi49J+8CRtXZbtDY9XHByk5sREYFUkZuvjTQW6EWicr4GPjKCsQl
+	FtzldRStUD9+T4BMI+zC6k+59agfmP5ODxFnFYxCt
+X-Received: by 2002:a05:6123:110:b0:5ea:c3bc:c567 with SMTP id 71dfb90a1353d-5ee8aefbd39mr14232533e0c.9.1795742603459;
+        Thu, 26 Nov 2026 17:23:23 -0800 (PST)
+To: chanrathanachouk@ordinaryusa.online
+From: MAILER-DAEMON@us-east-2.amazonses.com
+Date: Fri, 27 Nov 2026 01:23:24 +0000
+Message-ID: <010f01a21a999b28-fc41d016-bfec-4300-9026-bcff7679a76d-000000@us-east-2.amazonses.com>
+Subject: Email address update Re: [BOND-2026-0821] Inquiry - Continuous Customs Bond
+MIME-Version: 1.0
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+Precedence: bulk
+X-Autoreply: yes
+Auto-Submitted: auto-replied
+Feedback-ID: ::1.us-east-2.c0QCJwTJKDSb6mlKpIo5IpGwsngRMRBjZtJ48k4WYjY=:AmazonSES
+X-SES-Outgoing: 2026.11.27-23.251.226.240
+X-Last-TLS-Session-Version: TLSv1.3
+X-Rspamd-Queue-Id: A16C111773C
+X-Spamd-Result: default: False [0.93 / 15.00];
+	BAD_REP_POLICIES(2.00)[];
+	IP_REPUTATION_HAM(-1.17)[asn: 16509(-0.31), country: US(-0.01), ip: 23.251.226.240(-0.85)];
+	R_DKIM_ALLOW(-0.20)[amazonses.com:s=kra23psoka5qyyh6gdejiiuof3nluwuz];
+	MIME_HTML_ONLY(0.20)[];
+	MIME_FROM_MX_GOOD(-0.10)[feedback-smtp.us-east-2.amazonses.com];
+	ARC_REJECT(0.10)[signature check failed: fail, {[1] = sig:google.com:reject}];
+	ONCE_RECEIVED(0.10)[];
+	BAYES_SPAM(0.00)[41.85%];
+	RCPT_MAILCOW_DOMAIN(0.00)[ordinaryusa.online];
+	DWL_DNSWL_NONE(0.00)[amazonses.com:dkim];
+	R_DKIM_REJECT(0.00)[walshchb-com.20260707.gappssmtp.com:s=20260707];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	MIME_TRACE(0.00)[0:~];
+	ARC_SIGNED(0.00)[ordinaryusa.online:s=dkim:i=2];
+	RCPT_COUNT_ONE(0.00)[1];
+	DMARC_POLICY_ALLOW(0.00)[amazonses.com,quarantine];
+	DKIM_TRACE(0.00)[amazonses.com:+,walshchb-com.20260707.gappssmtp.com:-];
+	RCVD_COUNT_ZERO(0.00)[0];
+	R_SPF_ALLOW(0.00)[+ip4:23.251.226.240:c];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_NONE(0.00)[];
+	RCVD_IN_DNSWL_NONE(0.00)[23.251.226.240:from];
+	ASN(0.00)[asn:16509, ipnet:23.251.226.0/24, country:US];
+	MISSING_XM_UA(0.00)[];
+	FROM_NO_DN(0.00)[];
+	DKIM_MIXED(0.00)[];
+	DMARC_POLICY_ALLOW_WITH_FAILURES(0.00)[];
+	PRECEDENCE_BULK(0.00)[]
+
+<div dir="ltr">Beginning October 15th please note you can reach me at <a href="mailto:WW@wfscustomsus.com" target="_blank">WW@wfscustomsus.com</a><br><div><br></div></div>

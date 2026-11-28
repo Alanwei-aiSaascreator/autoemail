@@ -1,0 +1,187 @@
+Return-Path: <>
+Delivered-To: cynthiabulleck@jatendofoods.online
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id iJMfGuwsCmuepBIAQ1DlOA
+	(envelope-from <>)
+	for <cynthiabulleck@jatendofoods.online>; Fri, 27 Nov 2026 20:22:52 -0500
+X-Original-To: cynthiabulleck@jatendofoods.online
+Received: from e226-241.smtp-out.us-east-2.amazonses.com (e226-241.smtp-out.us-east-2.amazonses.com [23.251.226.241])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id DB030116472
+	for <cynthiabulleck@jatendofoods.online>; Fri, 27 Nov 2026 20:22:51 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b="RP/fGLD4";
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	spf=pass (mail.pony-it.com: domain of e226-241.smtp-out.us-east-2.amazonses.com designates 23.251.226.241 as permitted sender) smtp.helo=e226-241.smtp-out.us-east-2.amazonses.com
+ARC-Seal: i=1; a=rsa-sha256; d=jatendofoods.online; s=dkim; cv=none;
+	t=1795828971;
+	b=QNHICoGIpftoDgyo3kJZFR2wpzx/qbYw93lzvM3MYRVsda7ZJk5HVllRHNNew47xDvnzr1
+	RS29Dnp3BNWn9mtapkh5yIAhoIiF3cJlf0kdV1zfmKyHgE28qiGVM0VKcQZ7tjOVGBkgxB
+	ka/uFh1bFfHgdR+gBBm9YkynhK7xP5Nk3zBJL3Rrvb1eFCpj3DuEoam3PRQO6trMa/k5yM
+	dobUnaz6XEP+C3cZzJcwtK1SmgDFoaHAbVylsgTvNhdVO5qPo/RWwv5jXmygfFbG0WFvzj
+	CnKdH0AgU1YByhWUgQjE1VMwuuBC6lNQAIOq8Pyl6D1AFq/MgCdvM2PuVQwpAw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=jatendofoods.online; s=dkim; t=1795828971;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 dkim-signature; bh=HCacnR7E3XIsN6Nv266PdqcHCGOBcDPODtVD/jwwQDM=;
+	b=L71d0kZLjqqoBDYhMCpUZfmTJ6yQ2UP82wAaVtJEyAepWr5olQpHP2HdsN1KbLV1fV5Gzs
+	4t74GRVRKaST0mOPgVX37uLZb97Y6GIwmGWnQztETDCtWjYncZp/4MjP7F1qVATvad3oqI
+	mZzWJAdFukg4gm+5NPwkRDwKdtqPKjUAYzmZUi1zHZJZGDLpPwWUySgiGjlSXA6fIdTUy1
+	hi+u5LQjW3MlbV4IPXGT1rgTIEBZ/dJi7fdcjygGPAD9MSkTqRvR8DVQlincZ+s2VxVLNX
+	6ncWMVuiHt9G3/9/TvhKXT0I8AURzhZw3weSR++xLbc0nDLbRbmrTX3A2SfncA==
+ARC-Authentication-Results: i=1;
+	mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b="RP/fGLD4";
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	spf=pass (mail.pony-it.com: domain of e226-241.smtp-out.us-east-2.amazonses.com designates 23.251.226.241 as permitted sender) smtp.helo=e226-241.smtp-out.us-east-2.amazonses.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=kra23psoka5qyyh6gdejiiuof3nluwuz; d=amazonses.com; t=1795828971;
+	h=Date:From:To:Message-ID:Subject:MIME-Version:Content-Type:Feedback-ID;
+	bh=UqZi1fwLyU8R60Yh6PfewTBQKovMhvWEQG2iddTq+F0=;
+	b=RP/fGLD4OYfJGbbT+8il+iDsjTUvnmaZ6JYu4mr7/DXwOLlzwgI9Zsjh2RbaYljO
+	2hDOxsoaRNsalCId+hQ8S6w0cZT5hO0xko273dLuQLTxFVCJue6eYCtmdkn9UskX0gX
+	0+emKfJ+E169IyLZLjD90Xg467Qtxrb6yapIo2f8=
+Date: Sat, 28 Nov 2026 01:22:51 +0000
+From: MAILER-DAEMON@us-east-2.amazonses.com
+To: cynthiabulleck@jatendofoods.online
+Message-ID: <010f01a21fbf771c-d0fdf168-d5d0-42df-bf30-a5c02e5026da-000000@us-east-2.amazonses.com>
+Subject: Delivery Status Notification (Failure)
+MIME-Version: 1.0
+Content-Type: multipart/report; 
+	boundary="----=_Part_2372854_1837532618.1795828971314"; 
+	report-type=delivery-status
+Feedback-ID: ::1.us-east-2.c0QCJwTJKDSb6mlKpIo5IpGwsngRMRBjZtJ48k4WYjY=:AmazonSES
+X-SES-Outgoing: 2026.11.28-23.251.226.241
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Result: default: False [-1.87 / 15.00];
+	BAYES_HAM(-5.50)[100.00%];
+	SEM_URIBL_FRESH15(3.00)[jatendofoods.online:email];
+	BAD_REP_POLICIES(2.00)[];
+	IP_REPUTATION_HAM(-1.17)[asn: 16509(-0.31), country: US(-0.01), ip: 23.251.226.241(-0.85)];
+	BOUNCE(-0.10)[DSN];
+	ONCE_RECEIVED(0.10)[];
+	MIME_GOOD(-0.10)[text/plain];
+	MIME_FROM_MX_GOOD(-0.10)[feedback-smtp.us-east-2.amazonses.com];
+	R_DKIM_ALLOW(0.00)[amazonses.com:s=kra23psoka5qyyh6gdejiiuof3nluwuz];
+	URIBL_BLOCKED(0.00)[us-east-2.amazonses.com:from_mime,us-east-2.amazonses.com:mid,jatendofoods.online:email,amazonses.com:dkim,amazonses.com:url,e226-241.smtp-out.us-east-2.amazonses.com:rdns,e226-241.smtp-out.us-east-2.amazonses.com:helo,lufran-intl.com:email];
+	ARC_SIGNED(0.00)[jatendofoods.online:s=dkim:i=1];
+	RCPT_COUNT_ONE(0.00)[1];
+	RCPT_MAILCOW_DOMAIN(0.00)[jatendofoods.online];
+	MIME_TRACE(0.00)[0:~,1:+,2:~,3:~,4:+];
+	ARC_NA(0.00)[];
+	SUBJ_BOUNCE_WORDS(0.00)[];
+	DMARC_POLICY_ALLOW(0.00)[amazonses.com,quarantine];
+	DWL_DNSWL_NONE(0.00)[amazonses.com:dkim];
+	RCVD_COUNT_ZERO(0.00)[0];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_NONE(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	R_SPF_ALLOW(0.00)[+ip4:23.251.226.241:c];
+	FROM_NO_DN(0.00)[];
+	ASN(0.00)[asn:16509, ipnet:23.251.226.0/24, country:US];
+	DKIM_TRACE(0.00)[amazonses.com:+];
+	MISSING_XM_UA(0.00)[];
+	RCVD_IN_DNSWL_NONE(0.00)[23.251.226.241:from]
+X-Rspamd-Queue-Id: DB030116472
+
+------=_Part_2372854_1837532618.1795828971314
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Content-Description: Notification
+
+An error occurred while trying to deliver the mail to the following recipients:
+info@lufran-intl.com
+------=_Part_2372854_1837532618.1795828971314
+Content-Type: message/delivery-status
+Content-Transfer-Encoding: 7bit
+Content-Description: Delivery Status Notification
+
+Reporting-MTA: dns; e226-4.smtp-out.us-east-2.amazonses.com
+
+Action: failed
+Final-Recipient: rfc822; info@lufran-intl.com
+Diagnostic-Code: smtp; 553 sorry, your envelope sender has been denied (#5.7.1)
+Status: 5.3.0
+
+
+------=_Part_2372854_1837532618.1795828971314
+Content-Type: message/rfc822
+Content-Description: Undelivered Message
+
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jatendofoods.online;
+	s=dkim; t=1795828959; h=from:subject:message-id:to:mime-version:content-type:
+	 content-transfer-encoding; bh=8xFfhgYfWcAMxnPy+FSKAaQsp1QpWX8sg18bbllrO6M=;
+	b=TUl+6gnNZyTAUmKU7GgQRdt5ZaoK5MFbORzh36dlU3ApWcvQ9yTL1Jwd+V1BHVlw8zp9U3
+	knWT6zfQj/LJX8ti5+fKi6NnSMBkBXF+gHhkY5sPxJUymjtYrUuLl+bcGppYxSHMrh6jqp
+	Xf0HRBTa89MY1m2J8QYg8dZ1rCQU8AVskUOpDa4gWxc472U1YcoOKMg4jwaTa+LAYbTkh7
+	KirKiby5cwSAHk5eXLxgQZgWodNFkgIG5xc8mPxjB9JCx/6M9j/p/14wCMYN2yTfU79upx
+	S4J6Vsza6AeP9JNCR1uLaGdwszxZ8fxae0nTLIS7G3xlARSw7bCPhjzCpul/IA==
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=kra23psoka5qyyh6gdejiiuof3nluwuz; d=amazonses.com; t=1795828960;
+	h=From:To:Subject:Message-ID:Content-Type:Content-Transfer-Encoding:MIME-Version:Date:Feedback-ID;
+	bh=8xFfhgYfWcAMxnPy+FSKAaQsp1QpWX8sg18bbllrO6M=;
+	b=TZaSBn70cioXm7ewbONifTMj3wK8TrUbJ0mvksl3w/SxD5wfO58bYogyGzxJRT7x
+	lRCOL83x+9aChlfSNxDjmeyMr9SLXSucrghDFBLmS5JRa5xrCqVyIq1xJ2rze05hA0Z
+	ua+h4mLkHFJopqu4M3TjbsjVzIyT2pF52kVKxSOc=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=lwgkclnxmrgirntuinb2y4w7snr76liw; d=jatendofoods.online;
+	t=1795828960;
+	h=From:To:Subject:Message-ID:Content-Type:Content-Transfer-Encoding:MIME-Version:Date;
+	bh=8xFfhgYfWcAMxnPy+FSKAaQsp1QpWX8sg18bbllrO6M=;
+	b=U0Tp8PorKEBI162JOM+N656O9tR+R630Y8ahbX8xOBtdHp1Kk6iwQQV7HLhbZodn
+	f52wvs4V4E1CAwRW/j8iQ9W/tT/f4DHVmvKswZJvpCelCHIYos26HH+pbP0NSPz56po
+	AR44HkKnWEvRwXSMSEhQ/qF5FwkYsZ6iYzAsPKQgV7JmSJkaaewvXlIhykyUg3VJX/Y
+	/c+vyK2MOOnW1754LX7zfrmhZOsnYIXwkI3m7jhLkywv8AnsARKQz7JDK/SnSqaLl8+
+	a8PMCXcey23NUcpi9UzY7/B/AMqXNfGiJXp41gmydg3Mkw3acASXmSr7hHEEJCMarSh
+	vRVyO/Yw4A==
+From: cynthiabulleck@jatendofoods.online
+To: info@lufran-intl.com
+Subject: [BOND-2026-1054] Inquiry - Continuous Customs Bond
+Message-ID: <010f01a21fbf4a80-52248443-8f94-4781-8b04-f40df46992b5-000000@us-east-2.amazonses.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
+Date: Sat, 28 Nov 2026 01:22:39 +0000
+Feedback-ID: ::1.us-east-2.dnBLFQvZ7DBnA5nHg3QcqhG4UiG8AnTuix0bXTff/SU=:AmazonSES
+
+Hello,
+
+JA Tendo Foods LLC is looking to purchase a customs bond and would like to re=
+quest a quote from your agency. Details below per our client application:
+
+01 / BOND REQUEST
+- Service requested: New bond
+- Bond coverage: Continuous Customs Bond
+- Activity code: 1 - Importer
+- Requested bond limit: USD 50,000
+
+02 / LEGAL ENTITY & IMPORTER ID
+- Exact legal entity: JA Tendo Foods LLC
+- Entity type: LLC
+- State of formation: CA
+- EIN: 43-2417637
+- Principal address: 7273 MURRAY DR STE 3, STOCKTON, CA, 95210
+
+03 / CONTACTS & AUTHORIZED SIGNER
+- Authorized signer: CYNTHIA MARIE BULLECK (Organizer)
+- Contact email: cynthiabulleck@jatendofoods.online
+- Phone: 16505378868
+
+Please reply with:
+1. Your price for this bond and the estimated processing time
+2. Your application requirements / intake checklist (entity & importer ID, co=
+ntacts & owners, merchandise & trade profile, customs operations, bond histor=
+y & compliance, and AD/CVD schedule if applicable)
+3. Documents you need from us - we have Articles of Formation, IRS EIN letter=
+ (CP575), W-9 and principal ID available
+
+Best regards,
+CYNTHIA MARIE BULLECK
+JA Tendo Foods LLC
+
+------=_Part_2372854_1837532618.1795828971314--

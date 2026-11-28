@@ -1,0 +1,300 @@
+Return-Path: <sally@capitoenterprises.com>
+Delivered-To: amanuelafeworktiku@enproinc.live
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id 8J5EBKW+CWtoGTsAQ1DlOA
+	(envelope-from <sally@capitoenterprises.com>)
+	for <amanuelafeworktiku@enproinc.live>; Fri, 27 Nov 2026 12:32:21 -0500
+X-Original-To: amanuelafeworktiku@enproinc.live
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id C83331175C6
+	for <amanuelafeworktiku@enproinc.live>; Fri, 27 Nov 2026 12:32:19 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=capitoenterprises-com.20260707.gappssmtp.com header.s=20260707 header.b=qMDiQm1X;
+	dmarc=pass (policy=none) header.from=capitoenterprises.com;
+	spf=pass (mail.pony-it.com: domain of sally@capitoenterprises.com designates 209.85.218.43 as permitted sender) smtp.mailfrom=sally@capitoenterprises.com;
+	arc=pass ("google.com:s=arc-20260327:i=1")
+ARC-Seal: i=2; a=rsa-sha256; d=enproinc.live; s=dkim; cv=pass; t=1795800740;
+	b=BTiW5lcp7hsYvBg+nvST14myxJzryUEYeekyHwqvkUPwXmKB2nuHKzL1JbGbG35iidzD4G
+	V6oSed6LaGoUVB5JyMTcfAz3vHTVYJ4RcZKvNkBHd/HuaYKrLoEfBKyTdP4XuOz/lTr7xv
+	bTN2/T/GHORXVDHPSbf8lCAX8zLSplK6PUXT+N1a3pAQafT8qyoVt6hQvqWL2d0lmNqQlo
+	c/4QI+mdiyMN6+oyDPM+83WibvOL2SAOFXmskBmGwgRgPeNekJdEKfZCw6491rrq24sXNn
+	DXF6Ri3lbjzrqtwU7TVIbkPEubaWs4mtbrq+DoThzG2PGZTItBLOYBiaPLtrXA==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=enproinc.live;
+	s=dkim; t=1795800740;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references:dkim-signature;
+	bh=6LHPZZz6Au+oiyeOBAexorA7X9AKKw9B+V4+4d2Wu1s=;
+	b=EZE6f/Jy3EEAl8bmKvi08c1xuI63ZHjzRQGvIOATc8yzX1gheAS2yEj7O2+5FUTbGTJtss
+	0zRYhnTjgHQ7QJ7lI2JScIJsu6E38c+rXDXSYXSZVbOBHgWG0EnXQR50PqzZJtTy2ggCFF
+	Vi47JoQOj3SRgEGQWX+/Ha3Z4l5FbCYMxBQBNLUAhwKv/yEPYnKiujdsnqZBP7UCbUcT1/
+	lYGJUPv7dER4nBQoaUt0/wnYdYnsjYc7p8rrSqxg4TjzXs422ATCeBy0cncPL9DeWuQ9b+
+	ij7UIkHEuBJcRf19NRMutVY6CPMy7YD/8q83PYCx8K3bIpeKL2lEX93I+znGzg==
+ARC-Authentication-Results: i=2;
+	mail.pony-it.com;
+	dkim=pass header.d=capitoenterprises-com.20260707.gappssmtp.com header.s=20260707 header.b=qMDiQm1X;
+	dmarc=pass (policy=none) header.from=capitoenterprises.com;
+	spf=pass (mail.pony-it.com: domain of sally@capitoenterprises.com designates 209.85.218.43 as permitted sender) smtp.mailfrom=sally@capitoenterprises.com;
+	arc=pass ("google.com:s=arc-20260327:i=1")
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-c50933bdf4bso1573428266b.1
+        for <amanuelafeworktiku@enproinc.live>; Fri, 27 Nov 2026 09:32:19 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795800738; cv=none;
+        d=google.com; s=arc-20260327;
+        b=rxcOk6q9SxwI9YxEltn0r15NfVcAhIrXXxRqJI7nvXwMn36SW0U5eb0nZnaS7pIbWX
+         jmGk7z7KLjreDMM3m7oUCfPKK6bsYi9P7pxKVFrX9VeR+W91MSXns19hBNPijOePoac3
+         W3Um53iSRsah1gfjTSg7PtTFJB2mRTfzl++vwBu80nKE/0TfzhE6Cokm35tKim4GtL5O
+         FqGM7S8xDlTxOODB5rQqtH1IBy47YxVlUrRiXNboNHODf19jyj6e0Ed5QNMS5IuqkQTo
+         jlC5rCSM/xYDNeDVL9TJjX/Ztd6HqLKaeV1UGW/uRL6BHzjtAbdKRHaD9ncNopJfIzy/
+         4akw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=6LHPZZz6Au+oiyeOBAexorA7X9AKKw9B+V4+4d2Wu1s=;
+        fh=ttUooL8fmesowD0bXwuZSpnHu6fBXyjBOsAxn9Bx6r0=;
+        b=g/ME5H3vCzDocm0wVXhzIHJkCSGbPI1+wwwTK5rDFMsmi++jNLNUxyhTBoRbLevHSE
+         /ANc1jdlBP2SlUEC0Wfbn+bNMfSXSzVhNdYoNVdg/sZb0yv/2jVz7cmb2tGEXAQsplgN
+         Micaw/KSABVBR1zdBTEHofGXitspVbHDbYvPSV+jgl+r99pi4csIlEKMs5/k/X+Y6K29
+         O/xaaAkZKMXn5zekr2fBzz2KJhEdVp9L0jxsgTXtJEXaFaG8e9BYIyp6C88wLmftXEgX
+         q3o6YNLcW7akjoZ1z8OdTWRVYrtARyqftrtGL5x39x29Wn7PaBJRgtlAnUGBO6vlHLZs
+         iWPQ==;
+        darn=enproinc.live
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=capitoenterprises-com.20260707.gappssmtp.com; s=20260707; t=1795800738; x=1796405538; darn=enproinc.live;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=6LHPZZz6Au+oiyeOBAexorA7X9AKKw9B+V4+4d2Wu1s=;
+        b=qMDiQm1Xr/iXUuybvOuY720fCfa/b00KX3fqHIYT6wYxcCV2tH8pUSDtVPtFYLq/4W
+         H4aSFhfaV0puk0cDyzBzvdxdcAPARO9TUsS5QlLpTGx6+tHKKefqGY8prZNtQE6R9Jex
+         Uy9XCAgW1qBlyMLIl/DL0MRFLhBLDKt4g15i5l6SnwN9a4HZyM3ijuTzeCjwspLUbvA7
+         UI69mPaJ1kBSmKClZrXpujj8bgNix5FCi9nHBIbyrE8xZ4/0cZ89mWwVxm4FTV46ACH4
+         k9XacAHQglvbeu7WzUm9coAnkrBmzPs/hv1gHlyFJkL2LY5pE4Un9uRjX3oCEaVZrq4O
+         7CBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795800738; x=1796405538;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=6LHPZZz6Au+oiyeOBAexorA7X9AKKw9B+V4+4d2Wu1s=;
+        b=kBAx/welHYISmSMRDMX/WQVpqhay7PcWF0SHqqXoNN54wLOdBB0USSJjM4WvxDo8up
+         EqX6Qy9/FqNZ1JEu+zm8g996WEJRBqdQhj7A7dLcARy6uMyxkZJfhIQ8ualRGCsLMzZR
+         fw2QPRQn/atGrRziMVfmyMST7cgUiTRnmVDIXSVGxP3ij820DWT8oywsQIRMzpVafVyJ
+         N2mvPrPQ0yjytYh12eDneeKuJafePw1R+HZs6CSPSBpzbo/K9abMTre3CWjtXHFxKLNp
+         PE7ZMv/gGQ55r0n/RuunL3ZlQvGtRVyYFsOw+d5o5lGcA3yzdEfjRhULmFJzZlBTGgHq
+         boCQ==
+X-Gm-Message-State: APuU4Z+vd2fc9yZh3QhH26PVaIKWN31nGhfLXyDSkIvK0xdaGTM/MXV1
+	mmswsaV7Mhz6YmegOT++uznTdbRcE3lVhS8U80MgvkboQhoNeIEnYaO6Mg09oaGgAa5mufLjGYA
+	FYhGWHbJUvWU6cBqPi76xf8NTEbz9bW21vpQ/aSeKLB6awa6on/kb+q/pPA==
+X-Gm-Gg: AZFdTZcM/z62UvVFjnoKA5TyN6T1Zbq4uFnnoRwyxh+a8QLPPrLEsZ3kBKKui+txyAs
+	chhnZvACcXi5ZSLf1eRAw4K1TzdoIcWrYz4y2miCcIc1Zevhqrdqy4xwVDX5KbxcYQLMwbW+DzA
+	j/94JvT9VcWSyjCgpPEd8WozFssbUcMPVL1kQQ6tQiZwqa36aZUauOwqmQkSBMyf5n7RbPK8Nr9
+	+mu08TYpbSOeBN1SJNucPCoJzMOu9UkUwmPSy4Z6x4S9z/WUkheqC8wzO9GW2NbH4W3hwQ3igkj
+	cglbh8nK/7bb9IrQtl9F9fJGtgFqnfa6Ris8U9AgbyPVVr8mML/hElAClyuM1S6yXSKoOALFCnK
+	Ee81YXmQBXlaII/R2thtAfWjc7AuvDqFOUFD5Qu7f4xPor6Mx57iI61GWSqF0pKMNzuO6J0efnZ
+	/sQdGjblcBz/VCZs6loqzY8CXZ2hNQKLsQ6xIhvLDZvZ8YQ+gz1WGc5FcjR/i2MNC6gKhN9w==
+X-Received: by 2002:a17:907:ec09:b0:c2d:c6e7:9e9a with SMTP id
+ a640c23a62f3a-c513a816ce5mr2085708066b.11.1795800737223; Fri, 27 Nov 2026
+ 09:32:17 -0800 (PST)
+MIME-Version: 1.0
+References: <010f01a21a9320de-5ad05502-af49-419f-a7be-962dea6adb6f-000000@us-east-2.amazonses.com>
+In-Reply-To: <010f01a21a9320de-5ad05502-af49-419f-a7be-962dea6adb6f-000000@us-east-2.amazonses.com>
+From: Sally Capito <sally@capitoenterprises.com>
+Date: Fri, 27 Nov 2026 11:32:05 -0600
+X-Gm-Features: Aa3M54qwAkhVBwrk97xGlkhJxBq2NOv4ySw_dTwcDfUsXudvXCBgsxfHRNKboVs
+Message-ID: <CABPYMZaBzYZLm-_+qXyYBgzVKrqXHwaA6vW_oebzjCKsL0PDRQ@mail.gmail.com>
+Subject: Re: [BOND-2026-0713] Inquiry - Continuous Customs Bond
+To: amanuelafeworktiku@enproinc.live
+Cc: sales@capitoenterprises.com
+Content-Type: multipart/alternative; boundary="00000000000007aa0f0661457118"
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Result: default: False [-7.86 / 15.00];
+	BAYES_HAM(-5.50)[100.00%];
+	ARC_ALLOW(-1.00)[google.com:s=arc-20260327:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[capitoenterprises.com,none];
+	IP_REPUTATION_HAM(-0.26)[asn: 15169(-0.25), country: US(-0.01), ip: 209.85.218.43(0.00)];
+	R_DKIM_ALLOW(-0.20)[capitoenterprises-com.20260707.gappssmtp.com:s=20260707];
+	R_SPF_ALLOW(-0.20)[+ip4:209.85.128.0/17];
+	MX_GOOD(-0.10)[aspmx.l.google.com];
+	MIME_GOOD(-0.10)[multipart/alternative,text/plain];
+	MISSING_XM_UA(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	ASN(0.00)[asn:15169, ipnet:209.85.128.0/17, country:US];
+	ARC_SIGNED(0.00)[enproinc.live:s=dkim:i=2];
+	RCVD_COUNT_ONE(0.00)[1];
+	RWL_MAILSPIKE_POSSIBLE(0.00)[209.85.218.43:from];
+	TO_DN_NONE(0.00)[];
+	RCPT_MAILCOW_DOMAIN(0.00)[enproinc.live];
+	PREVIOUSLY_DELIVERED(0.00)[amanuelafeworktiku@enproinc.live];
+	TO_MATCH_ENVRCPT_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	RCVD_IN_DNSWL_NONE(0.00)[209.85.218.43:from];
+	RCPT_COUNT_TWO(0.00)[2];
+	DKIM_TRACE(0.00)[capitoenterprises-com.20260707.gappssmtp.com:+]
+X-Rspamd-Queue-Id: C83331175C6
+
+--00000000000007aa0f0661457118
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Good Morning,
+
+Thank you for your interest in our company.  Just to be clear, we are a
+Customs Broker & a Freight Forwarding Company but  we can assist you in
+obtaining your continuous bond.  Before we can proceed,
+Can you please send us the following information for verification
+purposes: Articles
+of Formation, IRS EIN letter (CP575), W-9, principal ID, and the list of
+officers in your organization.  To provide this service, we require a Power
+of Attorney authorizing us to file for your bond. The person signing this
+authorization must be an officer of the company.  The premium for a
+$50,000.00 bond is $500.00, plus a $75.00 filing fee and a $250.00 new
+customer setup fee. Approval from the Surety Company will probably take
+7-10 days once we submit the application.  Once approved, we will file the
+bond with USCBP, usually within 24 hrs.  We expect payment before filing
+with USCBP.  Let us know if you have any questions.
+For more information about our company services, you can visit our website
+at www.capitoenterprises.com
+
+Kind regards,
+*SALLY CAPITO*
+C - 847-220-1137
+www.capitoenterprises.com
+E-MAIL:  sally@capitoenterprises.com
+(FMC OTI# 023069NF)
+*Please note Capito Enterprises, Inc. will be closed Thursday, November 26,
+2026 for Thanksgiving. We will resume normal office hours Friday, November
+27, 2027. Have a wonderful holiday!*
+
+
+On Thu, Nov 26, 2026 at 7:16=E2=80=AFPM <amanuelafeworktiku@enproinc.live> =
+wrote:
+
+> Hello,
+>
+> Enpro LLC is looking to purchase a customs bond and would like to request
+> a quote from your agency. Details below per our client application:
+>
+> 01 / BOND REQUEST
+> - Service requested: New bond
+> - Bond coverage: Continuous Customs Bond
+> - Activity code: 1 - Importer
+> - Requested bond limit: USD 50,000
+>
+> 02 / LEGAL ENTITY & IMPORTER ID
+> - Exact legal entity: Enpro LLC
+> - Entity type: LLC
+> - State of formation: CA
+> - EIN: 43-2207391
+> - Principal address: 833 S SPRING ST STE 200, LOS ANGELES, CA, 90014
+> <https://www.google.com/maps/search/833+S+SPRING+ST+STE+200,+LOS+ANGELES,=
++CA,+90014?entry=3Dgmail&source=3Dg>
+>
+> 03 / CONTACTS & AUTHORIZED SIGNER
+> - Authorized signer: AMANUEL AFEWORK TIKU (Organizer)
+> - Contact email: amanuelafeworktiku@enproinc.live
+> - Phone: 2097764668 <(209)%20776-4668>
+>
+> Please reply with:
+> 1. Your price for this bond and the estimated processing time
+> 2. Your application requirements / intake checklist (entity & importer ID=
+,
+> contacts & owners, merchandise & trade profile, customs operations, bond
+> history & compliance, and AD/CVD schedule if applicable)
+> 3. Documents you need from us - we have Articles of Formation, IRS EIN
+> letter (CP575), W-9 and principal ID available
+>
+> Best regards,
+> AMANUEL AFEWORK TIKU
+> Enpro LLC
+>
+>
+>
+
+--00000000000007aa0f0661457118
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div>Good Morning,</div><div><br></div><div>Thank you for =
+your interest in our=C2=A0company.=C2=A0 Just to be clear, we are a Customs=
+ Broker &amp; a Freight Forwarding Company but=C2=A0 we can assist you in o=
+btaining your continuous bond.=C2=A0 Before we can proceed,</div><div>Can y=
+ou please send us the=C2=A0following information for verification purposes:=
+=C2=A0<span style=3D"font-family:Arial,Helvetica,sans-serif;background-colo=
+r:transparent">Articles of Formation, IRS EIN letter (CP575), W-9, principa=
+l ID, and the list of officers in your organization.=C2=A0 To provide this =
+service, we require a Power of Attorney authorizing us to file for your bon=
+d. The person signing this authorization must be an officer of the company.=
+=C2=A0 The premium for a $50,000.00 bond is $500.00, plus a $75.00 filing f=
+ee and a $250.00 new customer setup fee. Approval from the Surety Company w=
+ill probably take 7-10 days once we submit the application.=C2=A0 Once appr=
+oved, we will file the bond with USCBP, usually within 24 hrs.=C2=A0 We exp=
+ect payment before filing with USCBP.=C2=A0 Let us know if you have any que=
+stions.=C2=A0=C2=A0</span></div><div><span style=3D"font-family:Arial,Helve=
+tica,sans-serif;background-color:transparent">For more information about ou=
+r company=C2=A0services, you can visit our website at <a href=3D"http://www=
+.capitoenterprises.com">www.capitoenterprises.com</a></span></div><div><spa=
+n style=3D"font-family:Arial,Helvetica,sans-serif;background-color:transpar=
+ent"><br></span></div><div><div dir=3D"ltr" class=3D"gmail_signature" data-=
+smartmail=3D"gmail_signature"><div dir=3D"ltr"><div>Kind regards,</div><div=
+><i><b>SALLY CAPITO</b></i></div>C - 847-220-1137<div><span style=3D"backgr=
+ound-color:transparent"><a href=3D"http://www.capitoenterprises.com">www.ca=
+pitoenterprises.com</a></span></div><div><span style=3D"background-color:tr=
+ansparent">E-MAIL:=C2=A0 </span><a href=3D"mailto:sally@capitoenterprises.c=
+om" target=3D"_blank">sally@capitoenterprises.com</a></div><div>(FMC OTI# 0=
+23069NF)</div><div><i style=3D"color:rgb(34,34,34)"><b><font color=3D"#ff99=
+00">Please note Capito Enterprises, Inc. will be closed Thursday, November =
+26, 2026 for Thanksgiving. We will resume normal office hours Friday, Novem=
+ber 27, 2027. Have a wonderful holiday!</font></b></i></div></div></div></d=
+iv><br></div><br><div class=3D"gmail_quote gmail_quote_container"><div dir=
+=3D"ltr" class=3D"gmail_attr">On Thu, Nov 26, 2026 at 7:16=E2=80=AFPM &lt;a=
+manuelafeworktiku@enproinc.live&gt; wrote:<br></div><blockquote class=3D"gm=
+ail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,=
+204,204);padding-left:1ex">Hello,<br>
+<br>
+Enpro LLC is looking to purchase a customs bond and would like to request a=
+ quote from your agency. Details below per our client application:<br>
+<br>
+01 / BOND REQUEST<br>
+- Service requested: New bond<br>
+- Bond coverage: Continuous Customs Bond<br>
+- Activity code: 1 - Importer<br>
+- Requested bond limit: USD 50,000<br>
+<br>
+02 / LEGAL ENTITY &amp; IMPORTER ID<br>
+- Exact legal entity: Enpro LLC<br>
+- Entity type: LLC<br>
+- State of formation: CA<br>
+- EIN: 43-2207391<br>
+- Principal address: <a href=3D"https://www.google.com/maps/search/833+S+SP=
+RING+ST+STE+200,+LOS+ANGELES,+CA,+90014?entry=3Dgmail&amp;source=3Dg">833 S=
+ SPRING ST STE 200, LOS ANGELES, CA, 90014</a><br>
+<br>
+03 / CONTACTS &amp; AUTHORIZED SIGNER<br>
+- Authorized signer: AMANUEL AFEWORK TIKU (Organizer)<br>
+- Contact email: amanuelafeworktiku@enproinc.live<br>
+- Phone: <a href=3D"tel:(209)%20776-4668" value=3D"+12097764668" target=3D"=
+_blank">2097764668</a><br>
+<br>
+Please reply with:<br>
+1. Your price for this bond and the estimated processing time<br>
+2. Your application requirements / intake checklist (entity &amp; importer =
+ID, contacts &amp; owners, merchandise &amp; trade profile, customs operati=
+ons, bond history &amp; compliance, and AD/CVD schedule if applicable)<br>
+3. Documents you need from us - we have Articles of Formation, IRS EIN lett=
+er (CP575), W-9 and principal ID available<br>
+<br>
+Best regards,<br>
+AMANUEL AFEWORK TIKU<br>
+Enpro LLC<br>
+<br>
+<br>
+</blockquote></div>
+
+--00000000000007aa0f0661457118--

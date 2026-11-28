@@ -46,7 +46,7 @@ from .outbound import send_draft as send_draft_outbound
 from .quotes import quote_eval_for_case
 from .rag import InMemoryRetriever
 
-SUPPORTED_INTENTS = frozenset({"quote_reply", "form_request", "bond_delivered"})
+SUPPORTED_INTENTS = frozenset({"quote_reply", "form_request", "bond_delivered", "link_form_manual"})
 
 # 邮件正文提取的材料类型 key → 回复中的人类可读文字
 _MATERIAL_LABELS = {
@@ -264,6 +264,22 @@ def _template(
             + f"{commission.signer_name or 'Bond Operations'}\n"
         )
         return "bond_delivered", subject, body, fields
+
+    if intent.label == "link_form_manual":
+        # 对方要求通过在线链接/门户填表（DocuSign/portal/在线表单等）：
+        # 系统绝不代填外链表单。生成一条内部待办说明草稿，供人工处理参考；
+        # 该草稿不允许自动发送（auto_send 白名单不含此意图），必须人工跟进。
+        url = str(intent.slots.get("url") or "（正文中的链接）")
+        subject = f"[人工处理] {case.case_no} 对方要求通过在线链接填表"
+        body = (
+            "该邮件要求通过在线链接/门户完成填表（系统禁止代填外链表单），"
+            "请人工处理以下事项：\n\n"
+            f"1. 打开对方提供的链接并人工完成填写：{url}\n"
+            "2. 填写内容以本系统客户档案与需求表为准，提交前自行核对。\n"
+            "3. 如需以公司邮箱回复确认，请人工撰写回复。\n\n"
+            "（本条为内部待办提示，不是可直接发出的回信。）\n"
+        )
+        return "link_form_manual", subject, body, fields
 
     raise ValueError(f"不支持生成草稿的意图：{intent.label}")
 

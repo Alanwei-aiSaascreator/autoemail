@@ -1,0 +1,172 @@
+Return-Path: <>
+Delivered-To: taylorjackson@pegasystems.online
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id 0MUDFng6CWtyngcAQ1DlOA
+	(envelope-from <>)
+	for <taylorjackson@pegasystems.online>; Fri, 27 Nov 2026 03:08:24 -0500
+X-Original-To: taylorjackson@pegasystems.online
+Received: from e226-242.smtp-out.us-east-2.amazonses.com (e226-242.smtp-out.us-east-2.amazonses.com [23.251.226.242])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id E7824116CF3
+	for <taylorjackson@pegasystems.online>; Fri, 27 Nov 2026 03:08:23 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=NwlvvVGq;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	spf=pass (mail.pony-it.com: domain of e226-242.smtp-out.us-east-2.amazonses.com designates 23.251.226.242 as permitted sender) smtp.helo=e226-242.smtp-out.us-east-2.amazonses.com
+ARC-Seal: i=1; a=rsa-sha256; d=pegasystems.online; s=dkim; cv=none;
+	t=1795766904;
+	b=m8fbOg4qr07iL9XXA0oZfMMWWnfiFJZrr56xEKRF47LbyJY+yULPH0dpL6Y5nNqQBM+E55
+	92A9/SPV8TipqO++avm9w47nbTXYuJC4lSP5NnucJiHR/dLz89pL2PfBSeVs5KFQUA8WPi
+	qIOw4q8H4/SwVcL39jHST7qlPBg9YWqDr17CBd6ebrwSn8OeI9ZoMawDNMjvwhpogrxlNL
+	cfBH5ed5BJAgl3jZm4jUgLAjv2+AW/Kr3K4bAd2+sp8mPX2QTxjK98UCOu8iA9yI81NNQU
+	v65iztLCOkMMmmOYUHev2I/pY/avBuRjvP5DkwrahhKGzkBvTGyIRUrHNdU3pA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=pegasystems.online; s=dkim; t=1795766904;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 dkim-signature; bh=HbLY7omON0xzzALlp+K1SWhV+IP9SQauLG29BL6xIAs=;
+	b=kdG26/c4r53vWK8sj8+OQwQsuLUMtxnNztaZz4wPkQ9xl5QsNY792YvWMjNYJe7iNHTgs1
+	/pMpLoNATH1Ydgpct33ZldA4P9ueObvNaQwIb4sSxkXoggIPtJ7d3n0ftcMlxHmMkW69JC
+	B2D8pu+i2znvOsAAJNcj7x3rG9XaEj29Z97xWvAncWQ7YlVnCbRgVmdsV7nvLY32rmKdO/
+	cp5eSemoDfFoMzhsxpicdUYoCJ518hlUyZrZZmbCGphlQotG/ioAziHum2Gpg3VbMjo8y9
+	yZ5/hUTv1rag9+OAj6tiBjXHmZyONysWw8jv6KbD2+7TV5G1hDCCyw0x+gbLWg==
+ARC-Authentication-Results: i=1;
+	mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=NwlvvVGq;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	spf=pass (mail.pony-it.com: domain of e226-242.smtp-out.us-east-2.amazonses.com designates 23.251.226.242 as permitted sender) smtp.helo=e226-242.smtp-out.us-east-2.amazonses.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=kra23psoka5qyyh6gdejiiuof3nluwuz; d=amazonses.com; t=1795766903;
+	h=Date:From:To:Message-ID:Subject:MIME-Version:Content-Type:Feedback-ID;
+	bh=A9C7XRKm5rHSJyUgxCr7RjIpc0p9wM6WZyg2/wm5vgg=;
+	b=NwlvvVGqMtCNR2K+5dqGSDZn1vdO/KiLXp9adZsVIC8TA8bcGXhUeTCoO423IXvS
+	tjanjBkFgh+lHH/EIoLeEibUW9fq+THHbvrvFmc+Hv8UY65tLk/9Q3l1qEOJLtwckno
+	fWLsHM/Vlw43aR4oIuLTxRhqnRsQkCGjELTX0UvY=
+Date: Fri, 27 Nov 2026 08:08:23 +0000
+From: MAILER-DAEMON@us-east-2.amazonses.com
+To: taylorjackson@pegasystems.online
+Message-ID: <010f01a21c0c624e-0c403b32-6708-4379-9fd5-78a1e73914a8-000000@us-east-2.amazonses.com>
+Subject: Delivery Status Notification (Failure)
+MIME-Version: 1.0
+Content-Type: multipart/report; 
+	boundary="----=_Part_4389204_1102630435.1795766903401"; 
+	report-type=delivery-status
+Feedback-ID: ::1.us-east-2.c0QCJwTJKDSb6mlKpIo5IpGwsngRMRBjZtJ48k4WYjY=:AmazonSES
+X-SES-Outgoing: 2026.11.27-23.251.226.242
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Result: default: False [-7.78 / 15.00];
+	BAYES_HAM(-5.50)[100.00%];
+	IP_REPUTATION_HAM(-1.18)[asn: 16509(-0.31), country: US(-0.01), ip: 23.251.226.242(-0.85)];
+	DMARC_POLICY_ALLOW(-0.50)[amazonses.com,quarantine];
+	R_DKIM_ALLOW(-0.20)[amazonses.com:s=kra23psoka5qyyh6gdejiiuof3nluwuz];
+	R_SPF_ALLOW(-0.20)[+ip4:23.251.226.242:c];
+	MIME_GOOD(-0.10)[text/plain];
+	ONCE_RECEIVED(0.10)[];
+	BOUNCE(-0.10)[DSN];
+	MIME_FROM_MX_GOOD(-0.10)[feedback-smtp.us-east-2.amazonses.com];
+	ASN(0.00)[asn:16509, ipnet:23.251.226.0/24, country:US];
+	DWL_DNSWL_NONE(0.00)[amazonses.com:dkim];
+	MISSING_XM_UA(0.00)[];
+	FROM_NO_DN(0.00)[];
+	MIME_TRACE(0.00)[0:~,1:+,2:~,3:~,4:+];
+	RCPT_COUNT_ONE(0.00)[1];
+	ARC_NA(0.00)[];
+	RCVD_COUNT_ZERO(0.00)[0];
+	RCPT_MAILCOW_DOMAIN(0.00)[pegasystems.online];
+	TO_DN_NONE(0.00)[];
+	ARC_SIGNED(0.00)[pegasystems.online:s=dkim:i=1];
+	RCVD_IN_DNSWL_NONE(0.00)[23.251.226.242:from];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	SUBJ_BOUNCE_WORDS(0.00)[];
+	DKIM_TRACE(0.00)[amazonses.com:+]
+X-Rspamd-Queue-Id: E7824116CF3
+
+------=_Part_4389204_1102630435.1795766903401
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Content-Description: Notification
+
+An error occurred while trying to deliver the mail to the following recipients:
+info@maccbi.com
+------=_Part_4389204_1102630435.1795766903401
+Content-Type: message/delivery-status
+Content-Transfer-Encoding: 7bit
+Content-Description: Delivery Status Notification
+
+Reporting-MTA: dns; amazonses.com
+
+Action: failed
+Remote-MTA: dns; amazonses.com
+Final-Recipient: rfc822; info@maccbi.com
+Diagnostic-Code: Amazon SES did not send the message to this address because it is on the suppression list for your account. For more information about removing addresses from the suppression list, see the Amazon SES Developer Guide at https://docs.aws.amazon.com/ses/latest/dg/sending-email-suppression-list.html
+Status: 5.1.1
+
+
+------=_Part_4389204_1102630435.1795766903401
+Content-Type: message/rfc822
+Content-Description: Undelivered Message
+
+Received: from mail.pony-it.com (mail.pony-it.com [15.204.205.80])
+        by email-smtp.amazonaws.com
+        with SMTP (SimpleEmailService-d-GVIQF0IRL) id f7BbieVJlnMm6x2rtG1c
+        for info@maccbi.com;
+        Fri, 27 Nov 2026 08:08:23 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id EA6D5116CF3
+	for <info@maccbi.com>; Fri, 27 Nov 2026 03:08:21 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pegasystems.online;
+	s=dkim; t=1795766902; h=from:subject:message-id:to:mime-version:content-type:
+	 content-transfer-encoding; bh=bgbAaIX3Lyszbsgsxf4w9imQhy2pVSL5nJJ0GXBVqt0=;
+	b=qy4S7+XJsiFH8row5uuITGBCICgRKFmVPEzKQR5oSJBDDv8ZotnnoAucjrWe3jptTEdEZp
+	tbwMzCz8mb/xbCvbD+ReYg1FXo20lGAV0dZ1hxMoI/hBtzWUHy/X/U4OTTFWBEhZvdLrwa
+	FxCwPRrfl4bmh4gVdQmis3orceZKkHbnFIHSMFnN7eiV3IYDFPZQI7RWegJ6kLtin0Sa8U
+	aIKjLxQvkrEa7ESwwufr6U3R085k5iba0Aypf7YGx/BssWKluRwGxhb7pUhbzOAv6s4Bng
+	uUeo4l4+2jhkXfezInSqUT48Z+ARycH8z7HmA0pK5r2DZtrXL/F29rwatmS5vQ==
+From: taylorjackson@pegasystems.online
+To: info@maccbi.com
+Subject: [BOND-2026-1365] Inquiry - Continuous Customs Bond
+Message-ID: <010f01a21c0c6120-7a34bc93-2503-465e-9089-91c8d285863b-000000@us-east-2.amazonses.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
+
+Hello,
+
+Pegasystems LLC is looking to purchase a customs bond and would like to reque=
+st a quote from your agency. Details below per our client application:
+
+01 / BOND REQUEST
+- Service requested: New bond
+- Bond coverage: Continuous Customs Bond
+- Activity code: 1 - Importer
+- Requested bond limit: USD 50,000
+
+02 / LEGAL ENTITY & IMPORTER ID
+- Exact legal entity: Pegasystems LLC
+- Entity type: LLC
+- State of formation: CA
+- EIN: 43-2272344
+- Principal address: 9281 OFFICE PARK CIR STE 158, ELK GROVE, CA, 95758
+
+03 / CONTACTS & AUTHORIZED SIGNER
+- Authorized signer: TAYLOR SIMMONE JACKSON (Organizer)
+- Contact email: taylorjackson@pegasystems.online
+- Phone: 17472187530
+
+Please reply with:
+1. Your price for this bond and the estimated processing time
+2. Your application requirements / intake checklist (entity & importer ID, co=
+ntacts & owners, merchandise & trade profile, customs operations, bond histor=
+y & compliance, and AD/CVD schedule if applicable)
+3. Documents you need from us - we have Articles of Formation, IRS EIN letter=
+ (CP575), W-9 and principal ID available
+
+Best regards,
+TAYLOR SIMMONE JACKSON
+Pegasystems LLC
+
+------=_Part_4389204_1102630435.1795766903401--

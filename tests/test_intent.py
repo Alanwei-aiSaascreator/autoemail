@@ -390,3 +390,67 @@ def test_total_due_with_amount_is_invoice():
     result = extract_payment_info(message("Total due: $600.00", subject="Invoice"))
     assert result is not None
     assert result.amount == Decimal("600.00")
+
+
+def test_link_form_requirement_goes_to_manual_review():
+    """链接式填表需求（DocuSign/在线门户）：系统绝不代填，整单报请人工处理。
+
+    铁律：对方不给可填附件、而是要求"点击链接在线填表"时，任何意图分支都不得
+    自动处理——必须产出 link_form_manual 意图，生成人工处理草稿并推群提醒。
+    """
+    body = (
+        "Thank you for your interest. To proceed, please complete the bond "
+        "application online via the secure portal below:\n"
+        "https://forms.example.com/bond-application/12345\n"
+        "Once submitted, we will review within 1-2 business days."
+    )
+    result = classify_message(message(body, subject="Re: [BOND-2026-2001] Inquiry"))
+    assert result.label == "link_form_manual"
+    assert result.confidence >= 0.85
+    assert "https://forms.example.com/bond-application/12345" in str(result.slots.get("url"))
+
+
+def test_link_form_docusign_envelope_is_manual():
+    """DocuSign 签署链接同样必须转人工。"""
+    body = (
+        "Please sign and complete the application electronically via DocuSign: "
+        "https://na.docusign.net/Signing/EmailSign.aspx?t=abc123"
+    )
+    result = classify_message(message(body, subject="Application for signature"))
+    assert result.label == "link_form_manual"
+
+
+def test_attachment_based_form_request_not_flagged_as_link_form():
+    """正常"填好附件表格寄回"路径不受影响：无在线填表动作语句时不误伤。"""
+    body = (
+        "In order to proceed, the forms and other information we would need are:\n"
+        "- Customs Bond application thoroughly completed and signed.\n"
+        "Please complete and return the attached application."
+    )
+    result = classify_message(
+        message(
+            body,
+            subject="Re: [BOND-2026-0192] Inquiry",
+            attachments=[_a("Customs Bond Application.pdf", "application")],
+        )
+    )
+    assert result.label == "form_request"
+
+
+def test_link_form_detection_requires_action_phrase():
+    """只有 URL 出现在签名/付款说明里（无"在线填表"动作语句）不触发转人工。"""
+    from autoemail.intent import detect_link_form_requirement
+
+    body = "Our annual bond fee is $650.\nWe accept payment via PayCargo at https://app.paycargo.com/x"
+    assert detect_link_form_requirement(body, "Re: Inquiry") is False
+
+
+def test_link_form_manual_not_auto_sent():
+    """link_form_manual 草稿绝不自动发送：auto_send 白名单必须排除该意图。"""
+    from autoemail.state import AUTO_REPLY_INTENTS
+
+    assert "link_form_manual" not in AUTO_REPLY_INTENTS
+    # 生成草稿的意图集合包含它（会产出人工待办草稿供审核）
+    from autoemail.drafts import SUPPORTED_INTENTS
+
+    assert "link_form_manual" in SUPPORTED_INTENTS

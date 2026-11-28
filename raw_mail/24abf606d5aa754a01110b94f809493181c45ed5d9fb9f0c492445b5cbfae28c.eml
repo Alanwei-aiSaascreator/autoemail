@@ -1,0 +1,509 @@
+Return-Path: <>
+Delivered-To: amanuelafeworktiku@enproinc.live
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id qG26NEbZCGvTpDcAQ1DlOA
+	(envelope-from <>)
+	for <amanuelafeworktiku@enproinc.live>; Thu, 26 Nov 2026 20:13:42 -0500
+X-Original-To: amanuelafeworktiku@enproinc.live
+Received: from e226-244.smtp-out.us-east-2.amazonses.com (e226-244.smtp-out.us-east-2.amazonses.com [23.251.226.244])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id 4D0D911773C
+	for <amanuelafeworktiku@enproinc.live>; Thu, 26 Nov 2026 20:13:42 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=COFNLr+R;
+	dkim=fail ("headers rsa verify failed") header.d=everestglobal.com header.s=selector1 header.b=oFvBP0uR;
+	spf=pass (mail.pony-it.com: domain of e226-244.smtp-out.us-east-2.amazonses.com designates 23.251.226.244 as permitted sender) smtp.helo=e226-244.smtp-out.us-east-2.amazonses.com;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	arc=reject ("signature check failed: fail, {[1] = sig:microsoft.com:reject}")
+ARC-Seal: i=2; a=rsa-sha256; d=enproinc.live; s=dkim; cv=fail; t=1795742022;
+	b=fsIW3ICWCcKPVJe6o2Emq8tV8tzlpKs7rDhWmNomn+QZrAeY+HNlo5/6FJL9L1qRpyGbbf
+	D/JlDvrXHSAsb3NyK7t0HtmfjafRqMoHTR8B9CRMwqn6kussMc2PelUK2p/tqIBaF5C+uZ
+	8eqv1RZioCxvxRhYUl1FSzHXXvaFz4NouXTr3c1tIttscjyXV88F3Feg8tIOKWYHiCja9g
+	izzw48tN5K1a7BNMHGoEinhiCH1Q+ktu5QQH2wTe+jasoK6R3bByYZscsXK9U5jVYZkM8j
+	wO0x3kTid/DZP7q+D7qORhx9pd8hSqwCzL8XtYt5JlsE8B5Y3sFFI/FFxfLFTQ==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=enproinc.live;
+	s=dkim; t=1795742022;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references:dkim-signature;
+	bh=VRe1xCs6Ppt0CzBTADeBYAq8krX5tb3J/bzaQ7hL9Ck=;
+	b=YIUST8HhHmLOhYQCMvyIVjTrtB1bQtsPMP6nT3I1s/g7qArB84bzPIPt5EIw6LbGB8B98A
+	sETnlDs5o86UXOcpaV7oyjEsHqkr/ixqLKz1g6NNgRLgfvzZMNcrkvUE/BsY5Vpd00yvWL
+	B6q6Sfx4jxLTyJFKqiD8+ofSkicXYdGM8AZnaPnx50eV5IC8PyXfOqA8UVpxPufGf8J3Vf
+	Sk97fkpf57wDBA9rM/SQErGApN/vQiAw67jVok9Ja/HHC+Y0U48blJNX5Gi4vKgC66EkZT
+	59GrRzImbVIRQxrwakSF+09CzaLe1l9zuiIJlejOvxec1BRPxZc9HIcblg4tEQ==
+ARC-Authentication-Results: i=2;
+	mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=COFNLr+R;
+	dkim=fail ("headers rsa verify failed") header.d=everestglobal.com header.s=selector1 header.b=oFvBP0uR;
+	spf=pass (mail.pony-it.com: domain of e226-244.smtp-out.us-east-2.amazonses.com designates 23.251.226.244 as permitted sender) smtp.helo=e226-244.smtp-out.us-east-2.amazonses.com;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	arc=reject ("signature check failed: fail, {[1] = sig:microsoft.com:reject}")
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=kra23psoka5qyyh6gdejiiuof3nluwuz; d=amazonses.com; t=1795742021;
+	h=MIME-Version:From:To:Date:Content-Type:Message-ID:In-Reply-To:References:Subject:Feedback-ID;
+	bh=hTrWOE9mzqXEuPmeXKlBuOtWgimYF8CCfcXIjeugMTE=;
+	b=COFNLr+RUZJp6z1zIbYMoYcsqsIXV5WrbQaTcKfwH7Po57gfn/dmqeZEKcLS1OJL
+	oOxKK+DgBBw+UGgE885VXSKv17U/uoN3SinlH9NlgyceQR84Y/bQRQloChqFRUvGx5l
+	vMMm3aXZ0FGsdoQeUk6E8GmHi2z3jKsPTezvmFiY=
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=bqDXVc1OkQyy4oMdzGa0WcEPTAOKm9WG9jca8zoiduNjnM2cHSW6ISZixIgmX4B3TPJKBePaA1P4AhBCddRl+gCZ0A5NAu8ahkGOckqcWg+2LxPI8mmUanXc3lQmWW6fmCRuvEP2N4VgVWYf36cH7rphcepGNoPblOGR6WEIdK5dOcJpDyKOM08ODw7zzq6aFCpaSyVlFvtR0MPg6xeUUI2Tg6dgA+dIVuifoz4bKzZlg+f3iB4RBBr0O6qS6Hkbtf0MbU2TmHEc6p8kP4LSNqHBRFaEYM0DDYT337+0Ho4ax6/QX3QcELYGumKU7Imnroj4Ud0ORixKUPIH8HUZyQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VRe1xCs6Ppt0CzBTADeBYAq8krX5tb3J/bzaQ7hL9Ck=;
+ b=yobr/VU+I0ZSYB8ZFlkXZ//eSGr5lC6aujmPJb3n9S8u3dTvbDKWfstEekb0gipjaoOLTWE6iEp4rgmizYtmfN6TYkaKUBmMghFFR8VRDfvf3F6pGxMZZKs9edJMTh6YXWwv/ciJXfkwdjZwO1AE0ifpXkmNO8Xmy5blXYQx7ZsXh/Wr4JHIG9cOQaq1RBSxVtQWWO16rS6n4SsA2Vf28OQDEQ6T+ErWLZsaNxB9JAGqCKSzHko4ZuB/29lF2Yn6qKUqH421tDgE0H5C0IEYdYBJZDbqzPpRZ2hiHv2dy42HYFoX5epwrT7MyQwDrlHjHjpIfiK2LmD70eBNh/TWIg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=pass
+ action=none header.from=everestglobal.com; dkim=pass
+ header.d=everestglobal.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=everestglobal.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VRe1xCs6Ppt0CzBTADeBYAq8krX5tb3J/bzaQ7hL9Ck=;
+ b=oFvBP0uRjElccNKtwSuoGoq8oL2LLzqcPCQKMKSDV2FlBUA3BVHVzxzVonpmOJeVfHC33a+mq9Po5Q0/OZahRr2RW+SVoCIb4HnzhxT5EE6onOPD54f9kXK5pR8KjuPdkSP3SJOtiyVZjbO32lpGcRCn5Ngzpt3WuAcMNe//APYOYeo2wV9liFoBr+7GvSmDoYt7qs+2TJo6jIEr8MquvscUXcGY+2GXpMYeL7dOazZ90oSrvYR/bjdm87XFmJeN35BG68pEKU0E+u4BtYxDAp4hzsna1xkXeFQ4B/lXPYuGit7eRQ5dRcldvjVymYIhYBAf4WtR3kih5upU8xtOaw==
+MIME-Version: 1.0
+From: MAILER-DAEMON@us-east-2.amazonses.com
+To: amanuelafeworktiku@enproinc.live
+Date: Fri, 27 Nov 2026 01:13:41 +0000
+Content-Type: multipart/report; report-type=delivery-status;
+	boundary="4f9e82a2-c2b1-4f41-ac91-c4c261ca1880"
+X-MS-Exchange-Message-Is-Ndr:
+Content-Language: en-US
+Message-ID: <010f01a21a90b840-6565dcb0-c92f-4000-9a7a-e324f746e4ff-000000@us-east-2.amazonses.com>
+In-Reply-To:
+ <010f01a21a90a260-76789024-826e-46a8-9d44-2731901b9b3a-000000@us-east-2.amazonses.com>
+References:
+ <010f01a21a90a260-76789024-826e-46a8-9d44-2731901b9b3a-000000@us-east-2.amazonses.com>
+Subject: Undeliverable: [BOND-2026-0696] Inquiry - Continuous Customs Bond
+Auto-Submitted: auto-replied
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: IA2PR22MB5473:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|50650200027|1930700014|6049299003|1800799024|376014|366016|9143799003|6133799003|22082099003|18002099003|4133799003|12063799003|4053099003|13003099007|8096899003|32400700002|3613699012|260925022911599003|56012099006|260925021311599003|260925021911599003|11063799006|261026140227099003|261022105027099003|261028144727099003|261009221227099003|261021121427099003|261009223027099003|261009223327099003|261009221727099003|261102123227099003|261021123027099003|261009220027099003|10067099003|261026121527099003;
+X-Microsoft-Antispam-Message-Info:
+	F2RH0/9WZ/svpYBu1Cc8zppWSneh34TZSwGckTYBwR1c/wO8ADu2Sjnm2VzO8shWfqMl0Z0+GuDQScOkGobAOJnFkMNrZfll72D85u/RyJ6btOwLZn85GIHvWik0Y6BT1dhC73xk4vuTj7DP6hliC5wl4XT16vZMyAm5N8oynUu/bQZccDbjzaWLzT1IWrQS3wH1NWmsfmHtN+nImV2V52Tl6G+pvRh5p/Z9nA3OKuu/J5vWC/EDT9/DG2NpXyVJBcoyjptf7FE8GfpuiA1ryEvP2a1FsZ1Vo5RQu1WEnpts246KmhZ0ZQVSRUdmE1TpA8vd7S2rwfWVMRUqanRvc02Z0KhXmRp3WYI2pHctZmC78216m066m4qADJnrML0nrUXEU9dv0qqdL+qbFJX7ImzVw0giyMkmzKLP6jkvc2H3R9teoaPpEjCSpubazi3c/vyt16ggikoQOll+RZ+WV9YkR/ydGwAGCD/19EltLN8QT35DyvxtMYfY50gYMzwh+1ef7psgnqVPUdzjz76UyhrnGaTl32FcyYp8eNTXNvKP7pv3jjmzd3pTzijYPa13O5Mskq3iTmJGQAHxGhcFVHYRwepsU0eh6yQHe5ep+DCYipzooUve34HFkeKsZHT2KOV4nmnDF+0nQjCr8Qlu6ekHZNG2H56ESYbe7MV5xV6bBmbfacE1UCS/qtV0KbVxAHPQewQ7oi+yB9brSGfR8araGFkVNopBh+5D++cUMUYjuc6umR/vUJQq2LJFOWGcsuz4CDzOxwT0euYWqkVzz554SVJDhJPzpZNxpL+NBeGCQkopE9FJZb0wThJaI7jyeR4ZJ2j2M71xPCJVV2N35w==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:;PTR:;CAT:NONE;SFS:(13230040)(50650200027)(1930700014)(6049299003)(1800799024)(376014)(366016)(9143799003)(6133799003)(22082099003)(18002099003)(4133799003)(12063799003)(4053099003)(13003099007)(8096899003)(32400700002)(3613699012)(260925022911599003)(56012099006)(260925021311599003)(260925021911599003)(11063799006)(261026140227099003)(261022105027099003)(261028144727099003)(261009221227099003)(261021121427099003)(261009223027099003)(261009223327099003)(261009221727099003)(261102123227099003)(261021123027099003)(261009220027099003)(10067099003)(261026121527099003);DIR:OUT;SFP:1501;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	ADxYGoxHIZKI5pXnZvjHgNbWCnruAiCPK26Y+EHLN54DxzX/8Hc3D67BkkTmU8XpQZng8YdsOujQ5W0pBOKO2Ok51pcHMAZQDACDQpnyV62HOYE0AymE38bN3Qkv4ua/mBpJnM1k8txu4MRQmggRkIComzrz2bO4IkpSHRajcQvQvO7PU0Q+qOv9EOnRWOk/6HOlqF6yHkZHhs6/FPbWq8ulJpto2kfCp0Ym79NgPFYoqlBS6KKcz3dQIgYcvDCOM5J1OBWutBxoKU0lUHj+FWvHSt+WBNBfErAQ8iAH96iOrHehaa1ngkm6N0K4w+QURCsfOvX43Ymnigk3tKBz1Q==
+X-OriginatorOrg: everestglobal.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Nov 2026 01:13:39.6393
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-AuthSource: IA2PR22MB5473.namprd22.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-Network-Message-Id:
+	e9c88a1b-5f87-48a8-2043-08df4c23ab99
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA2PR22MB5473
+Feedback-ID: ::1.us-east-2.c0QCJwTJKDSb6mlKpIo5IpGwsngRMRBjZtJ48k4WYjY=:AmazonSES
+X-SES-Outgoing: 2026.11.27-23.251.226.244
+X-Last-TLS-Session-Version: TLSv1.3
+X-Rspamd-Queue-Id: 4D0D911773C
+X-Spamd-Result: default: False [-7.68 / 15.00];
+	BAYES_HAM(-5.50)[100.00%];
+	IP_REPUTATION_HAM(-1.18)[asn: 16509(-0.31), country: US(-0.01), ip: 23.251.226.244(-0.86)];
+	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:23.251.226.244:c];
+	R_DKIM_ALLOW(-0.20)[amazonses.com:s=kra23psoka5qyyh6gdejiiuof3nluwuz];
+	ARC_REJECT(0.10)[signature check failed: fail, {[1] = sig:microsoft.com:reject}];
+	ONCE_RECEIVED(0.10)[];
+	BOUNCE(-0.10)[DSN];
+	MIME_GOOD(-0.10)[multipart/alternative,text/plain];
+	MIME_FROM_MX_GOOD(-0.10)[feedback-smtp.us-east-2.amazonses.com];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCPT_MAILCOW_DOMAIN(0.00)[enproinc.live];
+	SUBJ_BOUNCE_WORDS(0.00)[];
+	ARC_SIGNED(0.00)[enproinc.live:s=dkim:i=2];
+	MIME_TRACE(0.00)[0:~,1:+,2:+,3:~,4:~,5:~,6:+];
+	RCPT_COUNT_ONE(0.00)[1];
+	DMARC_POLICY_ALLOW(0.00)[amazonses.com,quarantine];
+	DWL_DNSWL_NONE(0.00)[amazonses.com:dkim];
+	RCVD_COUNT_ZERO(0.00)[0];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_NONE(0.00)[];
+	R_DKIM_REJECT(0.00)[everestglobal.com:s=selector1];
+	ASN(0.00)[asn:16509, ipnet:23.251.226.0/24, country:US];
+	MISSING_XM_UA(0.00)[];
+	FROM_NO_DN(0.00)[];
+	DKIM_TRACE(0.00)[amazonses.com:+,everestglobal.com:-];
+	DKIM_MIXED(0.00)[];
+	RCVD_IN_DNSWL_NONE(0.00)[23.251.226.244:from]
+
+--4f9e82a2-c2b1-4f41-ac91-c4c261ca1880
+Content-Type: multipart/alternative; differences=Content-Type;
+	boundary="65ec9952-78b3-48f7-8839-090b953dac93"
+
+--65ec9952-78b3-48f7-8839-090b953dac93
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+Delivery has failed to these recipients or groups:
+
+robert.cristiano@everestre.com<mailto:robert.cristiano@everestre.com>
+Your message couldn't be delivered to the recipient because you don't have =
+permission to send to it.
+
+Ask the recipient's email admin to add you to the accept list for the recip=
+ient.
+
+For more information, see DSN 5.7.129 Errors in Exchange Online and Office =
+365<https://go.microsoft.com/fwlink/?LinkId=3D389365>.
+
+
+
+
+
+
+
+
+
+Diagnostic information for administrators:
+
+Generating server: IA2PR22MB5473.namprd22.prod.outlook.com
+
+robert.cristiano@everestre.com
+Remote server returned '550 5.7.129 RESOLVER.RST.RestrictedToRecipientsPerm=
+ission; not authorized to send to recipient because the sender isn't on the=
+ recipient's list of senders to accept mail from'
+
+Original message headers:
+
+Received: from CH0PR03CA0015.namprd03.prod.outlook.com (2603:10b6:610:b0::2=
+0)
+ by IA2PR22MB5473.namprd22.prod.outlook.com (2603:10b6:208:4af::21) with
+ Microsoft SMTP Server (version=3DTLS1_2,
+ cipher=3DTLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.662.7; Fri, 27 No=
+v
+ 2026 01:13:37 +0000
+Received: from DS8PEPF000000DD.namprd05.prod.outlook.com
+ (2603:10b6:610:b0:cafe::79) by CH0PR03CA0015.outlook.office365.com
+ (2603:10b6:610:b0::20) with Microsoft SMTP Server (version=3DTLS1_3,
+ cipher=3DTLS_AES_256_GCM_SHA384) id 15.21.592.11 via Frontend Transport; F=
+ri,
+ 27 Nov 2026 01:13:37 +0000
+Authentication-Results: mx.microsoft.com 1; spf=3Dpass (sender IP is
+ 23.251.226.6) smtp.mailfrom=3Dses.enproinc.live; dkim=3Dpass (signature wa=
+s
+ verified) header.d=3Denproinc.live;dkim=3Dpass (signature was verified)
+ header.d=3Damazonses.com;dkim=3Dfail (signature did not verify)
+ header.d=3Denproinc.live;dmarc=3Dpass action=3Dnone header.from=3Denproinc=
+.live;
+Received-SPF: Pass (protection.outlook.com: domain of ses.enproinc.live
+ designates 23.251.226.6 as permitted sender) receiver=3Dprotection.outlook=
+.com;
+ client-ip=3D23.251.226.6; helo=3De226-6.smtp-out.us-east-2.amazonses.com; =
+pr=3DC
+Received: from e226-6.smtp-out.us-east-2.amazonses.com (23.251.226.6) by
+ DS8PEPF000000DD.mail.protection.outlook.com (10.167.23.198) with Microsoft
+ SMTP Server (version=3DTLS1_3, cipher=3DTLS_AES_256_GCM_SHA384) id 15.21.6=
+88.5
+ via Frontend Transport; Fri, 27 Nov 2026 01:13:37 +0000
+DKIM-Signature: v=3D1; a=3Drsa-sha256; q=3Ddns/txt; c=3Drelaxed/simple;
+        s=3Dr4wjrqmvj7c7i3qqm3u5abt4binxyy4v; d=3Denproinc.live; t=3D179574=
+2016;
+        h=3DFrom:To:Subject:Message-ID:Content-Type:Content-Transfer-Encodi=
+ng:MIME-Version:Date;
+        bh=3DOViJlaYKnr/MsHQtvyDBEZMZgVLat+AJHOOH5ySQvMQ=3D;
+        b=3DGgV7tz3eQDIHNSOtHFrCyuwEnBUX2fsN5X8TPzKVZM2JrMJu4I0HNUXxSdWMelo=
+m
+        qM8jJhyrF+FNDj+tbf2oIWC4lSI0n5odNrRN4fFSuZazNYBNkAJ0kdexKRnH+xufls+
+        MBOKZxSkayZVm7W4gPHgcewBTVNOGVY26qdvA1eqw66PNaLuMrcXW6H4NY5TdhKX0fG
+        aQ04zUn8XOzp3Pz9+AgwEDXRjX0YWBarQECMO1jqwYPGpR5W84LA5zd80e6UeP4ctl8
+        O2jfEzJuYLarpW/NIh44xQzie2cJ+ludsmsg0g7daDWBVv8Gikzg040BvYjAS/M5Ll8
+        mjAfZYTDEA=3D=3D
+DKIM-Signature: v=3D1; a=3Drsa-sha256; q=3Ddns/txt; c=3Drelaxed/simple;
+        s=3Dkra23psoka5qyyh6gdejiiuof3nluwuz; d=3Damazonses.com; t=3D179574=
+2016;
+        h=3DFrom:To:Subject:Message-ID:Content-Type:Content-Transfer-Encodi=
+ng:MIME-Version:Date:Feedback-ID;
+        bh=3DOViJlaYKnr/MsHQtvyDBEZMZgVLat+AJHOOH5ySQvMQ=3D;
+        b=3DRbkh29hgKAlGHTxPDmU2tZcfkYSNWADvDIr1OCr8wI7nYdMOvXRf69iCZHdr1El=
+L
+        nUDco2WjuKsvmb5KSZAiWJy5fg+m8hITFjmUHv6UToRH/N1s6tlsH2DgVGyxFMs5HMd
+        oBYEoOeaNwyhoR+IhzvWHt3WeIP9+C1+eVNohpG0=3D
+DKIM-Signature: v=3D1; a=3Drsa-sha256; c=3Drelaxed/relaxed; d=3Denproinc.li=
+ve;
+        s=3Ddkim; t=3D1795742015; h=3Dfrom:subject:message-id:to:mime-versi=
+on:content-type:
+         content-transfer-encoding; bh=3DOViJlaYKnr/MsHQtvyDBEZMZgVLat+AJHO=
+OH5ySQvMQ=3D;
+        b=3DYncKCWiJGTfrLcXkICB7Kh3lPRJ+GYhE6xXaXFWwGwnv1dqqPMGwJmCbY16TJuq=
+al9r2c3
+        VYSxmoNOpwjRl3hBQWTymuyUiOhlRSeJP1wXrdCFm5kz1auwuNBHQ1NoXnLzrr85VKO=
+IJS
+        h4MEWlMl6ev4Amy1CG+TSC5gqTXXIN8xBIQjN1zIhdvtwqRFr86IjnkksqKtJUR4QQp=
+iqG
+        WNBhEPhHdFcQMSeSBPXdzFjEHEauJVqgbCPoWHQJ0HxBSBxfy8nb/Kx2tBJKJrr5qs6=
+C9/
+        IFjWZlhsXH3bbNK3ZfCTSlOP30AGYKY2kENy0QsT7H7VN8uaugyg881Fc4nnuw=3D=
+=3D
+From: amanuelafeworktiku@enproinc.live
+To: robert.cristiano@everestre.com
+Subject: [BOND-2026-0696] Inquiry - Continuous Customs Bond
+Message-ID: <010f01a21a90a260-76789024-826e-46a8-9d44-2731901b9b3a-000000@u=
+s-east-2.amazonses.com>
+Content-Type: text/plain; charset=3D"utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
+Date: Fri, 27 Nov 2026 01:13:36 +0000
+Feedback-ID: ::1.us-east-2.dnBLFQvZ7DBnA5nHg3QcqhG4UiG8AnTuix0bXTff/SU=3D:A=
+mazonSES
+X-SES-Outgoing: 2026.11.27-23.251.226.6
+Return-Path:
+        010f01a21a90a260-76789024-826e-46a8-9d44-2731901b9b3a-000000@ses.en=
+proinc.live
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 0002cd24-7dd6-4542-acd6-e0c7e184c80c:0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS8PEPF000000DD:EE_|IA2PR22MB5473:EE_
+X-MS-Office365-Filtering-Correlation-Id: f35b1218-bfff-44fe-664b-08df4c23aa=
+30
+
+
+--65ec9952-78b3-48f7-8839-090b953dac93
+Content-Type: text/html; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+<html>
+<Head></head><body>
+<p><b><font color=3D"#000066" size=3D"3" face=3D"Arial">Delivery has failed=
+ to these recipients or groups:</font></b></p>
+<font color=3D"#000000" size=3D"2" face=3D"Tahoma"><p><a href=3D"mailto:rob=
+ert.cristiano@everestre.com">robert.cristiano@everestre.com</a><br>
+</font>
+<font color=3D"#000000" size=3D"3" face=3D"Arial">Your message couldn't be =
+delivered to the recipient because you don't have permission to send to it.=
+<p>Ask the recipient's email admin to add you to the accept list for the re=
+cipient.</p><p>For more information, see <a href=3D"https://go.microsoft.co=
+m/fwlink/?LinkId=3D389365">DSN 5.7.129 Errors in Exchange Online and Office=
+ 365</a>.</p><br>
+</font>
+<font color=3D"#000000" size=3D"2" face=3D"Tahoma"><br>
+</p>
+</font>
+<br><br><br><br><br><br>
+<font color=3D"#808080" size=3D"2" face=3D"Tahoma"><p><b>Diagnostic informa=
+tion for administrators:</b></p>
+<p>Generating server: IA2PR22MB5473.namprd22.prod.outlook.com<br>
+</p>
+<p>robert.cristiano@everestre.com<br>
+Remote server  returned '550 5.7.129 RESOLVER.RST.RestrictedToRecipientsPer=
+mission; not authorized to send to recipient because the sender isn't on th=
+e recipient's list of senders to accept mail from'<br>
+</p>
+<p>Original message headers:</p>
+<pre>Received: from CH0PR03CA0015.namprd03.prod.outlook.com (2603:10b6:610:=
+b0::20)
+ by IA2PR22MB5473.namprd22.prod.outlook.com (2603:10b6:208:4af::21) with
+ Microsoft SMTP Server (version=3DTLS1_2,
+ cipher=3DTLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.662.7; Fri, 27 No=
+v
+ 2026 01:13:37 +0000
+Received: from DS8PEPF000000DD.namprd05.prod.outlook.com
+ (2603:10b6:610:b0:cafe::79) by CH0PR03CA0015.outlook.office365.com
+ (2603:10b6:610:b0::20) with Microsoft SMTP Server (version=3DTLS1_3,
+ cipher=3DTLS_AES_256_GCM_SHA384) id 15.21.592.11 via Frontend Transport; F=
+ri,
+ 27 Nov 2026 01:13:37 +0000
+Authentication-Results: mx.microsoft.com 1; spf=3Dpass (sender IP is
+ 23.251.226.6) smtp.mailfrom=3Dses.enproinc.live; dkim=3Dpass (signature wa=
+s
+ verified) header.d=3Denproinc.live;dkim=3Dpass (signature was verified)
+ header.d=3Damazonses.com;dkim=3Dfail (signature did not verify)
+ header.d=3Denproinc.live;dmarc=3Dpass action=3Dnone header.from=3Denproinc=
+.live;
+Received-SPF: Pass (protection.outlook.com: domain of ses.enproinc.live
+ designates 23.251.226.6 as permitted sender) receiver=3Dprotection.outlook=
+.com;
+ client-ip=3D23.251.226.6; helo=3De226-6.smtp-out.us-east-2.amazonses.com; =
+pr=3DC
+Received: from e226-6.smtp-out.us-east-2.amazonses.com (23.251.226.6) by
+ DS8PEPF000000DD.mail.protection.outlook.com (10.167.23.198) with Microsoft
+ SMTP Server (version=3DTLS1_3, cipher=3DTLS_AES_256_GCM_SHA384) id 15.21.6=
+88.5
+ via Frontend Transport; Fri, 27 Nov 2026 01:13:37 +0000
+DKIM-Signature: v=3D1; a=3Drsa-sha256; q=3Ddns/txt; c=3Drelaxed/simple;
+	s=3Dr4wjrqmvj7c7i3qqm3u5abt4binxyy4v; d=3Denproinc.live; t=3D1795742016;
+	h=3DFrom:To:Subject:Message-ID:Content-Type:Content-Transfer-Encoding:MIME=
+-Version:Date;
+	bh=3DOViJlaYKnr/MsHQtvyDBEZMZgVLat+AJHOOH5ySQvMQ=3D;
+	b=3DGgV7tz3eQDIHNSOtHFrCyuwEnBUX2fsN5X8TPzKVZM2JrMJu4I0HNUXxSdWMelom
+	qM8jJhyrF+FNDj+tbf2oIWC4lSI0n5odNrRN4fFSuZazNYBNkAJ0kdexKRnH+xufls+
+	MBOKZxSkayZVm7W4gPHgcewBTVNOGVY26qdvA1eqw66PNaLuMrcXW6H4NY5TdhKX0fG
+	aQ04zUn8XOzp3Pz9+AgwEDXRjX0YWBarQECMO1jqwYPGpR5W84LA5zd80e6UeP4ctl8
+	O2jfEzJuYLarpW/NIh44xQzie2cJ+ludsmsg0g7daDWBVv8Gikzg040BvYjAS/M5Ll8
+	mjAfZYTDEA=3D=3D
+DKIM-Signature: v=3D1; a=3Drsa-sha256; q=3Ddns/txt; c=3Drelaxed/simple;
+	s=3Dkra23psoka5qyyh6gdejiiuof3nluwuz; d=3Damazonses.com; t=3D1795742016;
+	h=3DFrom:To:Subject:Message-ID:Content-Type:Content-Transfer-Encoding:MIME=
+-Version:Date:Feedback-ID;
+	bh=3DOViJlaYKnr/MsHQtvyDBEZMZgVLat+AJHOOH5ySQvMQ=3D;
+	b=3DRbkh29hgKAlGHTxPDmU2tZcfkYSNWADvDIr1OCr8wI7nYdMOvXRf69iCZHdr1ElL
+	nUDco2WjuKsvmb5KSZAiWJy5fg+m8hITFjmUHv6UToRH/N1s6tlsH2DgVGyxFMs5HMd
+	oBYEoOeaNwyhoR+IhzvWHt3WeIP9+C1+eVNohpG0=3D
+DKIM-Signature: v=3D1; a=3Drsa-sha256; c=3Drelaxed/relaxed; d=3Denproinc.li=
+ve;
+	s=3Ddkim; t=3D1795742015; h=3Dfrom:subject:message-id:to:mime-version:cont=
+ent-type:
+	 content-transfer-encoding; bh=3DOViJlaYKnr/MsHQtvyDBEZMZgVLat+AJHOOH5ySQv=
+MQ=3D;
+	b=3DYncKCWiJGTfrLcXkICB7Kh3lPRJ+GYhE6xXaXFWwGwnv1dqqPMGwJmCbY16TJuqal9r2c3
+	VYSxmoNOpwjRl3hBQWTymuyUiOhlRSeJP1wXrdCFm5kz1auwuNBHQ1NoXnLzrr85VKOIJS
+	h4MEWlMl6ev4Amy1CG+TSC5gqTXXIN8xBIQjN1zIhdvtwqRFr86IjnkksqKtJUR4QQpiqG
+	WNBhEPhHdFcQMSeSBPXdzFjEHEauJVqgbCPoWHQJ0HxBSBxfy8nb/Kx2tBJKJrr5qs6C9/
+	IFjWZlhsXH3bbNK3ZfCTSlOP30AGYKY2kENy0QsT7H7VN8uaugyg881Fc4nnuw=3D=3D
+From: amanuelafeworktiku@enproinc.live
+To: robert.cristiano@everestre.com
+Subject: [BOND-2026-0696] Inquiry - Continuous Customs Bond
+Message-ID: &lt;010f01a21a90a260-76789024-826e-46a8-9d44-2731901b9b3a-00000=
+0@us-east-2.amazonses.com&gt;
+Content-Type: text/plain; charset=3D&quot;utf-8&quot;
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
+Date: Fri, 27 Nov 2026 01:13:36 +0000
+Feedback-ID: ::1.us-east-2.dnBLFQvZ7DBnA5nHg3QcqhG4UiG8AnTuix0bXTff/SU=3D:A=
+mazonSES
+X-SES-Outgoing: 2026.11.27-23.251.226.6
+Return-Path:
+	010f01a21a90a260-76789024-826e-46a8-9d44-2731901b9b3a-000000@ses.enproinc.=
+live
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 0002cd24-7dd6-4542-acd6-e0c7e184c80c:0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS8PEPF000000DD:EE_|IA2PR22MB5473:EE_
+X-MS-Office365-Filtering-Correlation-Id: f35b1218-bfff-44fe-664b-08df4c23aa=
+30
+</pre>
+</font>
+</body>
+</html>=
+
+--65ec9952-78b3-48f7-8839-090b953dac93--
+
+--4f9e82a2-c2b1-4f41-ac91-c4c261ca1880
+Content-Type: message/delivery-status
+
+Reporting-MTA: dns;IA2PR22MB5473.namprd22.prod.outlook.com
+Received-From-MTA: dns;e226-6.smtp-out.us-east-2.amazonses.com
+Arrival-Date: Fri, 27 Nov 2026 01:13:37 +0000
+
+Original-Recipient: rfc822;robert.cristiano@everestre.com
+Final-Recipient: rfc822;robert.cristiano@everestre.com
+Action: failed
+Status: 5.7.129
+Diagnostic-Code: smtp;550 5.7.129 RESOLVER.RST.RestrictedToRecipientsPermission; not authorized to send to recipient because the sender isn't on the recipient's list of senders to accept mail from
+
+
+--4f9e82a2-c2b1-4f41-ac91-c4c261ca1880
+Content-Type: message/rfc822
+
+Received: from CH0PR03CA0015.namprd03.prod.outlook.com (2603:10b6:610:b0::20)
+ by IA2PR22MB5473.namprd22.prod.outlook.com (2603:10b6:208:4af::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.662.7; Fri, 27 Nov
+ 2026 01:13:37 +0000
+Received: from DS8PEPF000000DD.namprd05.prod.outlook.com
+ (2603:10b6:610:b0:cafe::79) by CH0PR03CA0015.outlook.office365.com
+ (2603:10b6:610:b0::20) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.592.11 via Frontend Transport; Fri,
+ 27 Nov 2026 01:13:37 +0000
+Authentication-Results: mx.microsoft.com 1; spf=pass (sender IP is
+ 23.251.226.6) smtp.mailfrom=ses.enproinc.live; dkim=pass (signature was
+ verified) header.d=enproinc.live;dkim=pass (signature was verified)
+ header.d=amazonses.com;dkim=fail (signature did not verify)
+ header.d=enproinc.live;dmarc=pass action=none header.from=enproinc.live;
+Received-SPF: Pass (protection.outlook.com: domain of ses.enproinc.live
+ designates 23.251.226.6 as permitted sender) receiver=protection.outlook.com;
+ client-ip=23.251.226.6; helo=e226-6.smtp-out.us-east-2.amazonses.com; pr=C
+Received: from e226-6.smtp-out.us-east-2.amazonses.com (23.251.226.6) by
+ DS8PEPF000000DD.mail.protection.outlook.com (10.167.23.198) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.688.5
+ via Frontend Transport; Fri, 27 Nov 2026 01:13:37 +0000
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=r4wjrqmvj7c7i3qqm3u5abt4binxyy4v; d=enproinc.live; t=1795742016;
+	h=From:To:Subject:Message-ID:Content-Type:Content-Transfer-Encoding:MIME-Version:Date;
+	bh=OViJlaYKnr/MsHQtvyDBEZMZgVLat+AJHOOH5ySQvMQ=;
+	b=GgV7tz3eQDIHNSOtHFrCyuwEnBUX2fsN5X8TPzKVZM2JrMJu4I0HNUXxSdWMelom
+	qM8jJhyrF+FNDj+tbf2oIWC4lSI0n5odNrRN4fFSuZazNYBNkAJ0kdexKRnH+xufls+
+	MBOKZxSkayZVm7W4gPHgcewBTVNOGVY26qdvA1eqw66PNaLuMrcXW6H4NY5TdhKX0fG
+	aQ04zUn8XOzp3Pz9+AgwEDXRjX0YWBarQECMO1jqwYPGpR5W84LA5zd80e6UeP4ctl8
+	O2jfEzJuYLarpW/NIh44xQzie2cJ+ludsmsg0g7daDWBVv8Gikzg040BvYjAS/M5Ll8
+	mjAfZYTDEA==
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=kra23psoka5qyyh6gdejiiuof3nluwuz; d=amazonses.com; t=1795742016;
+	h=From:To:Subject:Message-ID:Content-Type:Content-Transfer-Encoding:MIME-Version:Date:Feedback-ID;
+	bh=OViJlaYKnr/MsHQtvyDBEZMZgVLat+AJHOOH5ySQvMQ=;
+	b=Rbkh29hgKAlGHTxPDmU2tZcfkYSNWADvDIr1OCr8wI7nYdMOvXRf69iCZHdr1ElL
+	nUDco2WjuKsvmb5KSZAiWJy5fg+m8hITFjmUHv6UToRH/N1s6tlsH2DgVGyxFMs5HMd
+	oBYEoOeaNwyhoR+IhzvWHt3WeIP9+C1+eVNohpG0=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=enproinc.live;
+	s=dkim; t=1795742015; h=from:subject:message-id:to:mime-version:content-type:
+	 content-transfer-encoding; bh=OViJlaYKnr/MsHQtvyDBEZMZgVLat+AJHOOH5ySQvMQ=;
+	b=YncKCWiJGTfrLcXkICB7Kh3lPRJ+GYhE6xXaXFWwGwnv1dqqPMGwJmCbY16TJuqal9r2c3
+	VYSxmoNOpwjRl3hBQWTymuyUiOhlRSeJP1wXrdCFm5kz1auwuNBHQ1NoXnLzrr85VKOIJS
+	h4MEWlMl6ev4Amy1CG+TSC5gqTXXIN8xBIQjN1zIhdvtwqRFr86IjnkksqKtJUR4QQpiqG
+	WNBhEPhHdFcQMSeSBPXdzFjEHEauJVqgbCPoWHQJ0HxBSBxfy8nb/Kx2tBJKJrr5qs6C9/
+	IFjWZlhsXH3bbNK3ZfCTSlOP30AGYKY2kENy0QsT7H7VN8uaugyg881Fc4nnuw==
+From: amanuelafeworktiku@enproinc.live
+To: robert.cristiano@everestre.com
+Subject: [BOND-2026-0696] Inquiry - Continuous Customs Bond
+Message-ID: <010f01a21a90a260-76789024-826e-46a8-9d44-2731901b9b3a-000000@us-east-2.amazonses.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
+Date: Fri, 27 Nov 2026 01:13:36 +0000
+Feedback-ID: ::1.us-east-2.dnBLFQvZ7DBnA5nHg3QcqhG4UiG8AnTuix0bXTff/SU=:AmazonSES
+X-SES-Outgoing: 2026.11.27-23.251.226.6
+Return-Path:
+ 010f01a21a90a260-76789024-826e-46a8-9d44-2731901b9b3a-000000@ses.enproinc.live
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 0002cd24-7dd6-4542-acd6-e0c7e184c80c:0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS8PEPF000000DD:EE_|IA2PR22MB5473:EE_
+X-MS-Office365-Filtering-Correlation-Id: f35b1218-bfff-44fe-664b-08df4c23aa30
+
+Hello,
+
+Enpro LLC is looking to purchase a customs bond and would like to request a q=
+uote from your agency. Details below per our client application:
+
+01 / BOND REQUEST
+- Service requested: New bond
+- Bond coverage: Continuous Customs Bond
+- Activity code: 1 - Importer
+- Requested bond limit: USD 50,000
+
+02 / LEGAL ENTITY & IMPORTER ID
+- Exact legal entity: Enpro LLC
+- Entity type: LLC
+- State of formation: CA
+- EIN: 43-2207391
+- Principal address: 833 S SPRING ST STE 200, LOS ANGELES, CA, 90014
+
+03 / CONTACTS & AUTHORIZED SIGNER
+- Authorized signer: AMANUEL AFEWORK TIKU (Organizer)
+- Contact email: amanuelafeworktiku@enproinc.live
+- Phone: 2097764668
+
+Please reply with:
+1. Your price for this bond and the estimated processing time
+2. Your application requirements / intake checklist (entity & importer ID, co=
+ntacts & owners, merchandise & trade profile, customs operations, bond histor=
+y & compliance, and AD/CVD schedule if applicable)
+3. Documents you need from us - we have Articles of Formation, IRS EIN letter=
+ (CP575), W-9 and principal ID available
+
+Best regards,
+AMANUEL AFEWORK TIKU
+Enpro LLC
+
+--4f9e82a2-c2b1-4f41-ac91-c4c261ca1880--

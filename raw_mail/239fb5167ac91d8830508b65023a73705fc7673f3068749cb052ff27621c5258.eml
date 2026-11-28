@@ -1,0 +1,162 @@
+Return-Path: <>
+Delivered-To: taylorjackson@pegasystems.online
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id qGmeHRPdCGvTpDcAQ1DlOA
+	(envelope-from <>)
+	for <taylorjackson@pegasystems.online>; Thu, 26 Nov 2026 20:29:55 -0500
+X-Original-To: taylorjackson@pegasystems.online
+Received: from mail.lanicomcloud.net (net-ht01.lanicomcloud.net [70.60.61.144])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id E261611773C
+	for <taylorjackson@pegasystems.online>; Thu, 26 Nov 2026 20:29:53 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=none;
+	spf=none (mail.pony-it.com: domain of mail.lanicomcloud.net has no SPF policy when checking 70.60.61.144) smtp.helo=mail.lanicomcloud.net;
+	dmarc=fail reason="No valid SPF, No valid DKIM" header.from=miamivalleyworldwide.com (policy=none)
+ARC-Seal: i=1; a=rsa-sha256; d=pegasystems.online; s=dkim; cv=none;
+	t=1795742994;
+	b=Rf7x5G93pljdVkUpf+KLC/kp3oU1Cq5uWmDI3KgOibCr4U9vwWR812FT/Aecrrg2Yixlxj
+	xnVVeT8BUVQsObKZEJkDbPNNY9U7HSFHkMWGlFN7zZifLAr37H5qcy/DC/kTWDXSUDo71U
+	otg5OIqh9b6vx7N4wi/3QEoMoWw/1OJ+p6c1eLklaf5mj7GDl1jdhZ+7Lr3/qXE7yyu69x
+	x0CiScdj/8YwvrPPdoRXqf+Fi4bfo3H7vd/P5bpS8xPRiQ/Ag2mVvCjN7QQV4WW9le5S+c
+	aqhZxLkCTSgtifM3xXgDjMtAc/BiowRN+P+yy/nm2WiZSy7/1fxqTvEMf41xig==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=pegasystems.online; s=dkim; t=1795742994;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=4ZzStqtzSD4DuA8bF4m6595EDhnrWsRIBNZwJW0beoo=;
+	b=TlLdzXaPIxC8ZGmrSCqgOsUnJfJMv7HQk/HMMdMf5x/qwWifUXeGzxkY+h3sXXsbHp7QHY
+	BdlysXDc//ukj6k/425lzVLuanGi1QPAvvIpQToU6ikuG0qJE0iJQEf1yBBFPJjFPI8lcb
+	AlKMidFjhDFHEYjO4Pn+F+in7KT2ZZBucySdBN4oHeTUpWAisIkJSVD8tDoqYQ95PbPAPV
+	zcXj17EN1Jq/9q4TOT/f5UPCFVXV6NYADNdQoaV/DiT1oPzdZ95sJ5Ttab2uWXWjd6wcFK
+	X2RM6gZ8p4vLofkrF9EPPinPNTKAbBN/THhFSa4Fvk39XmON1fhJ9PICYXX6xQ==
+ARC-Authentication-Results: i=1;
+	mail.pony-it.com;
+	dkim=none;
+	spf=none (mail.pony-it.com: domain of mail.lanicomcloud.net has no SPF policy when checking 70.60.61.144) smtp.helo=mail.lanicomcloud.net;
+	dmarc=fail reason="No valid SPF, No valid DKIM" header.from=miamivalleyworldwide.com (policy=none)
+Received: from NET-HT01.lanicomcloud.net ([fe80::44cf:2c49:6696:9ead%12]) by
+ NET-HT01.lanicomcloud.net ([fe80::44cf:2c49:6696:9ead%12]) with Microsoft
+ SMTP Server id 14.03.0513.000; Thu, 26 Nov 2026 20:29:51 -0500
+From: Sandy Duncan <sduncan@miamivalleyworldwide.com>
+To: "taylorjackson@pegasystems.online" <taylorjackson@pegasystems.online>
+Subject: Automatic reply: [BOND-2026-0874] Inquiry - Continuous Customs Bond
+Thread-Topic: [BOND-2026-0874] Inquiry - Continuous Customs Bond
+Thread-Index: AQHdfg7MEC+qu1Poyk+XUtIi6+C4TA==
+Date: Fri, 27 Nov 2026 01:29:51 +0000
+Message-ID: <c1df9ce442f1462ebb10765d1ccd40d0@NET-HT01.lanicomcloud.net>
+References: <010f01a21a9f8196-918dbd10-6a60-4671-94cb-a97d4f0acec8-000000@us-east-2.amazonses.com>
+In-Reply-To: <010f01a21a9f8196-918dbd10-6a60-4671-94cb-a97d4f0acec8-000000@us-east-2.amazonses.com>
+X-MS-Has-Attach:
+X-Auto-Response-Suppress: All
+X-MS-Exchange-Inbox-Rules-Loop: sduncan@miamivalleyworldwide.com
+X-MS-TNEF-Correlator:
+Content-Type: multipart/alternative;
+	boundary="_000_c1df9ce442f1462ebb10765d1ccd40d0NETHT01lanicomcloudnet_"
+MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.2
+X-Rspamd-Queue-Id: E261611773C
+X-Spamd-Result: default: False [-4.35 / 15.00];
+	BAYES_HAM(-3.57)[94.75%];
+	IP_REPUTATION_HAM(-0.87)[asn: 63027(-0.25), country: US(-0.01), ip: 70.60.61.144(-0.62)];
+	ONCE_RECEIVED(0.20)[];
+	MIME_FROM_MX_GOOD(-0.10)[d273485a.ess.barracudanetworks.com];
+	MIME_GOOD(-0.10)[multipart/alternative,text/plain];
+	DMARC_POLICY_SOFTFAIL(0.10)[miamivalleyworldwide.com : No valid SPF, No valid DKIM,none];
+	ARC_NA(0.00)[];
+	RCVD_COUNT_ONE(0.00)[1];
+	ASN(0.00)[asn:63027, ipnet:70.60.61.0/24, country:US];
+	MISSING_XM_UA(0.00)[];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	R_SPF_NA(0.00)[no SPF record];
+	RCPT_MAILCOW_DOMAIN(0.00)[pegasystems.online];
+	RCVD_TLS_LAST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	R_DKIM_NA(0.00)[];
+	TO_DN_EQ_ADDR_ALL(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCPT_COUNT_ONE(0.00)[1];
+	ARC_SIGNED(0.00)[pegasystems.online:s=dkim:i=1]
+
+--_000_c1df9ce442f1462ebb10765d1ccd40d0NETHT01lanicomcloudnet_
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+Sandy has retired from Miami Valley Worldwide.
+
+Please send all corresponce to Denise Shirk dshirk@miamivalleyworldwide.com
+
+
+--_000_c1df9ce442f1462ebb10765d1ccd40d0NETHT01lanicomcloudnet_
+Content-Type: text/html; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+<html xmlns:o=3D"urn:schemas-microsoft-com:office:office" xmlns:w=3D"urn:sc=
+hemas-microsoft-com:office:word" xmlns:m=3D"http://schemas.microsoft.com/of=
+fice/2004/12/omml" xmlns=3D"http://www.w3.org/TR/REC-html40">
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
+>
+<meta name=3D"Generator" content=3D"Microsoft Word 15 (filtered medium)">
+<style><!--=0A=
+/* Font Definitions */=0A=
+@font-face=0A=
+	{font-family:"Cambria Math";=0A=
+	panose-1:2 4 5 3 5 4 6 3 2 4;}=0A=
+@font-face=0A=
+	{font-family:Calibri;=0A=
+	panose-1:2 15 5 2 2 2 4 3 2 4;}=0A=
+@font-face=0A=
+	{font-family:"Segoe UI";=0A=
+	panose-1:2 11 5 2 4 2 4 2 2 3;}=0A=
+/* Style Definitions */=0A=
+p.MsoNormal, li.MsoNormal, div.MsoNormal=0A=
+	{margin:0in;=0A=
+	margin-bottom:.0001pt;=0A=
+	font-size:11.0pt;=0A=
+	font-family:"Calibri",sans-serif;}=0A=
+a:link, span.MsoHyperlink=0A=
+	{mso-style-priority:99;=0A=
+	color:#0563C1;=0A=
+	text-decoration:underline;}=0A=
+a:visited, span.MsoHyperlinkFollowed=0A=
+	{mso-style-priority:99;=0A=
+	color:#954F72;=0A=
+	text-decoration:underline;}=0A=
+span.EmailStyle17=0A=
+	{mso-style-type:personal-compose;=0A=
+	font-family:"Segoe UI",sans-serif;}=0A=
+.MsoChpDefault=0A=
+	{mso-style-type:export-only;=0A=
+	font-family:"Calibri",sans-serif;}=0A=
+@page WordSection1=0A=
+	{size:8.5in 11.0in;=0A=
+	margin:1.0in 1.0in 1.0in 1.0in;}=0A=
+div.WordSection1=0A=
+	{page:WordSection1;}=0A=
+--></style>
+</head>
+<body lang=3D"EN-US" link=3D"#0563C1" vlink=3D"#954F72">
+<div class=3D"WordSection1">
+<p class=3D"MsoNormal" style=3D"text-autospace:none"><span style=3D"font-si=
+ze:8.5pt;font-family:&quot;Segoe UI&quot;,sans-serif">Sandy has retired fro=
+m Miami Valley Worldwide.&nbsp;
+<o:p></o:p></span></p>
+<p class=3D"MsoNormal" style=3D"text-autospace:none"><span style=3D"font-si=
+ze:8.5pt;font-family:&quot;Segoe UI&quot;,sans-serif"><o:p>&nbsp;</o:p></sp=
+an></p>
+<p class=3D"MsoNormal" style=3D"text-autospace:none"><span style=3D"font-si=
+ze:8.5pt;font-family:&quot;Segoe UI&quot;,sans-serif">Please send all corre=
+sponce to Denise Shirk dshirk@miamivalleyworldwide.com<o:p></o:p></span></p=
+>
+<p class=3D"MsoNormal" style=3D"text-autospace:none"><span style=3D"font-si=
+ze:8.5pt;font-family:&quot;Segoe UI&quot;,sans-serif"><o:p>&nbsp;</o:p></sp=
+an></p>
+</div>
+</body>
+</html>
+
+--_000_c1df9ce442f1462ebb10765d1ccd40d0NETHT01lanicomcloudnet_--

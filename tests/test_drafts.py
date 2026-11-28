@@ -4,7 +4,7 @@ from autoemail.channels.base import NormalizedMessage
 from autoemail.channels.eml import EmlDirectoryChannel
 from autoemail.drafts import edit_draft, generate_draft, list_drafts, reject_draft
 from autoemail.cli import main
-from autoemail.models import AdcvdAttestation, Draft, DRAFT_PENDING, DRAFT_REJECTED
+from autoemail.models import AdcvdAttestation, Draft, DRAFT_PENDING, DRAFT_REJECTED, DRAFT_BLOCKED
 from autoemail.pipeline import process_message
 from autoemail.models import Message, Thread
 from autoemail.ingest.threading import store_message
@@ -159,8 +159,8 @@ def test_form_request_falls_back_to_agent_form_profile(session, world):
 def test_docusign_request_never_reveals_automation(session, world):
     """DocuSign 场景：对方让去电子签链接完成 POA 并上传材料，邮件无附件。
 
-    回复是正常商务信函：不能出现 auto-filled / handled manually 等暴露
-    自动化流程的表述，也不能谎称已附上不存在的文件。
+    新铁律（2026-11-28）：链接式填表需求一律报请人工处理，系统绝不代填外链
+    表单。生成的草稿是内部待办提示（非对外回信），且绝不进入自动发送白名单。
     """
     message = NormalizedMessage(
         channel="eml",
@@ -176,12 +176,12 @@ def test_docusign_request_never_reveals_automation(session, world):
     )
     result = process_message(session, message)
     draft = session.get(Draft, result.draft_id)
-    assert result.intent.label == "form_request"
-    lowered = draft.body.lower()
-    for banned in ("auto-fill", "auto filled", "automated", "handled manually", "manually"):
-        assert banned not in lowered, f"正文泄露自动化表述：{banned}"
-    # 无附件时不得谎称已附上
-    assert "attached" not in lowered or "please find attached" not in lowered
+    assert result.intent.label == "link_form_manual"
+    # 草稿是内部待办说明，明确告知人工处理，不含任何对外承诺
+    assert "人工处理" in draft.subject or "人工" in draft.body
+    assert "打开对方提供的链接" in draft.body
+    # 绝不自动发送：状态保持待审（不会出现已发送）
+    assert draft.status in (DRAFT_PENDING, DRAFT_BLOCKED)
 
 
 def test_invoice_does_not_create_email_draft(session, world, monkeypatch):

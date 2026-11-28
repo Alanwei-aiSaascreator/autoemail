@@ -59,110 +59,158 @@ from .models import (
 )
 
 CSS = """
-:root{--bg:#f6f7f9;--card:#fff;--line:#e3e6ea;--text:#1f2937;--muted:#6b7280;
---accent:#2563eb;--ok:#059669;--warn:#b45309;--bad:#dc2626}
+:root{--bg:#f3f5f9;--card:#fff;--line:#e4e8ef;--text:#1e293b;--muted:#64748b;
+--accent:#2563eb;--ok:#059669;--warn:#b45309;--bad:#dc2626;
+--side:#0f172a;--radius:12px;--shadow:0 1px 2px rgba(15,23,42,.05),0 1px 3px rgba(15,23,42,.06)}
 *{box-sizing:border-box}
+html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--text);
-font:14px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif}
-header{background:#111827;color:#fff;padding:0 24px;display:flex;align-items:center;gap:18px;
-height:56px;position:sticky;top:0;z-index:2}
-header .brand{font-weight:600;font-size:15px;white-space:nowrap}
-header nav{display:flex;gap:4px}
-header a{color:#cbd5e1;text-decoration:none;font-size:14px;padding:6px 11px;border-radius:7px}
-header a.active,header a:hover{color:#fff;background:#1f2937}
-main{max-width:1180px;margin:24px auto;padding:0 20px 60px}
-.crumbs{font-size:13px;color:var(--muted);margin-bottom:8px}
-.crumbs a{color:var(--accent)}
-.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
-.tabs a{padding:6px 12px;border:1px solid var(--line);border-radius:999px;
-background:var(--card);color:var(--text);font-size:13px}
-.tabs a.active{background:var(--accent);border-color:var(--accent);color:#fff}
-.tabs a .count{color:var(--muted);margin-left:6px}
-.tabs a.active .count{color:#dbeafe}
-.jump{margin:0 0 18px;font-size:13px}
-.jump a{margin-right:14px}
-section{scroll-margin-top:72px}
-h1{font-size:20px;margin:0 0 16px}
-h2{font-size:16px;margin:24px 0 10px;scroll-margin-top:72px}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px}
-.card .num{font-size:26px;font-weight:650;margin-top:4px}
-.card .label{color:var(--muted);font-size:13px}
-table{width:100%;border-collapse:collapse;background:var(--card);
-border:1px solid var(--line);border-radius:10px;overflow:hidden}
-th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
-th{background:#f9fafb;color:var(--muted);font-weight:500;font-size:12px;white-space:nowrap}
-tr:last-child td{border-bottom:none}
+font:14px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif}
+::selection{background:#bfdbfe}
 a{color:var(--accent);text-decoration:none}
 a:hover{text-decoration:underline}
+/* ---------- 侧边导航 ---------- */
+#nav-toggle{display:none}
+.sidebar{position:fixed;top:0;left:0;bottom:0;width:232px;background:var(--side);color:#94a3b8;
+display:flex;flex-direction:column;z-index:50;transition:transform .2s ease}
+.brand{display:flex;align-items:center;gap:11px;padding:18px 16px 15px;border-bottom:1px solid #1e293b;flex:none}
+.logo{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#3b82f6,#1d4ed8);
+color:#fff;font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center;flex:none}
+.brand-text{display:flex;flex-direction:column;line-height:1.3;min-width:0}
+.brand-text b{color:#f1f5f9;font-size:14px;font-weight:650;white-space:nowrap}
+.brand-text i{color:#64748b;font-size:11px;font-style:normal}
+.sidebar nav{flex:1;overflow-y:auto;padding:6px 12px 16px;scrollbar-width:thin;scrollbar-color:#334155 transparent}
+.sidebar nav::-webkit-scrollbar{width:6px}
+.sidebar nav::-webkit-scrollbar-thumb{background:#334155;border-radius:3px}
+.nav-group{margin-top:16px}
+.nav-title{font-size:11px;color:#475569;letter-spacing:.1em;padding:0 10px 6px;font-weight:600}
+a.side-link{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;color:#94a3b8;
+text-decoration:none;font-size:13.5px;margin-bottom:2px;position:relative;transition:background .12s,color .12s}
+a.side-link svg{width:16px;height:16px;flex:none;opacity:.9}
+a.side-link:hover{background:#1e293b;color:#e2e8f0;text-decoration:none}
+a.side-link.active{background:linear-gradient(90deg,rgba(37,99,235,.32),rgba(37,99,235,.1));color:#fff;font-weight:600}
+a.side-link.active::before{content:"";position:absolute;left:-12px;top:7px;bottom:7px;width:3px;border-radius:2px;background:#3b82f6}
+.side-foot{padding:13px 16px;border-top:1px solid #1e293b;font-size:12px;color:#64748b;display:flex;align-items:center;gap:8px;flex:none}
+.gate-dot{width:8px;height:8px;border-radius:50%;background:#10b981;box-shadow:0 0 0 3px rgba(16,185,129,.18);flex:none}
+.scrim{display:none;position:fixed;inset:0;background:rgba(15,23,42,.5);z-index:45;border:none;cursor:pointer}
+.nav-btn{display:none;position:fixed;top:12px;left:12px;z-index:46;width:40px;height:40px;border-radius:10px;
+background:#0f172a;color:#e2e8f0;align-items:center;justify-content:center;box-shadow:var(--shadow);cursor:pointer}
+.nav-btn svg{width:20px;height:20px}
+main{margin-left:232px;padding:26px 32px 80px}
+@media (min-width:1500px){main{padding:26px max(32px,calc((100vw - 232px - 1240px)/2)) 80px}}
+/* ---------- 页头 ---------- */
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin:0 0 18px}
+.page-head h1{margin:0}
+.ph-desc{margin:6px 0 0;color:var(--muted);font-size:13px;max-width:780px}
+.ph-desc b{color:var(--text)}
+.ph-actions{display:flex;gap:8px;flex:none;align-items:center}
+.ph-actions a{text-decoration:none}
+.crumbs{font-size:12.5px;color:var(--muted);margin-bottom:10px}
+.crumbs a{color:var(--accent);font-weight:500}
+.tabs{display:flex;gap:4px;flex-wrap:wrap;margin:0 0 16px;background:var(--card);border:1px solid var(--line);
+border-radius:10px;padding:4px;width:max-content;max-width:100%;box-shadow:var(--shadow)}
+.tabs a{padding:6px 14px;border-radius:7px;color:var(--muted);font-size:13px;font-weight:500;text-decoration:none;white-space:nowrap}
+.tabs a:hover{color:var(--text);background:#f1f5f9;text-decoration:none}
+.tabs a.active{background:var(--accent);color:#fff}
+.tabs a .count{margin-left:6px;font-size:11px;background:rgba(100,116,139,.16);padding:1px 7px;border-radius:999px;font-variant-numeric:tabular-nums}
+.tabs a.active .count{background:rgba(255,255,255,.24);color:#fff}
+.jump{margin:0 0 18px;font-size:13px}
+.jump a{margin-right:14px}
+section{scroll-margin-top:16px}
+h1{font-size:22px;font-weight:700;letter-spacing:-.01em;margin:0 0 16px}
+h2{font-size:15.5px;font-weight:650;margin:26px 0 10px;scroll-margin-top:16px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow)}
+.card .num{font-size:26px;font-weight:700;margin-top:4px;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.card .label{color:var(--muted);font-size:12.5px;font-weight:500}
+table{width:100%;border-collapse:separate;border-spacing:0;background:var(--card);border:1px solid var(--line);
+border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+th,td{text-align:left;padding:10px 13px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#f8fafc;color:var(--muted);font-weight:600;font-size:12px;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:#f8fafc}
 .muted{color:var(--muted)}
-pre{background:#0f172a;color:#e2e8f0;padding:14px;border-radius:10px;overflow:auto;
-white-space:pre-wrap;word-break:break-word;font-size:13px}
-.tag{display:inline-block;padding:1px 8px;border-radius:999px;font-size:12px;
-background:#eef2ff;color:#3730a3}
-.tag.pending{background:#fef3c7;color:var(--warn)}
-.tag.blocked,.tag.failed{background:#fee2e2;color:var(--bad)}
-.tag.sent{background:#d1fae5;color:var(--ok)}
-.kv{display:grid;grid-template-columns:140px 1fr;gap:6px 16px;background:var(--card);
-border:1px solid var(--line);border-radius:10px;padding:16px}
-.kv dt{color:var(--muted)}
-.kv dd{margin:0}
+pre{background:#0f172a;color:#e2e8f0;padding:15px 16px;border-radius:10px;overflow:auto;white-space:pre-wrap;
+word-break:break-word;font:12.5px/1.6 ui-monospace,Consolas,monospace}
+.tag{display:inline-block;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:500;background:#eef2ff;color:#3730a3;white-space:nowrap}
+.tag.pending,.tag.unpaid{background:#fef3c7;color:#92400e}
+.tag.blocked,.tag.failed,.tag.lost{background:#fee2e2;color:#b91c1c}
+.tag.sent,.tag.paid{background:#d1fae5;color:#047857}
+.tag.rejected,.tag.closed{background:#f1f5f9;color:#475569}
+.tag.init{background:#e0f2fe;color:#0369a1}
+.tag.quoted,.tag.quoted_out{background:#e0e7ff;color:#4338ca}
+.tag.materials_requested,.tag.bond_received{background:#dbeafe;color:#1d4ed8}
+.tag.invoiced{background:#fae8ff;color:#86198f}
+.tag.filled{background:#fef9c3;color:#854d0e;border:1px solid #fde047}
+.kv{display:grid;grid-template-columns:150px 1fr;gap:7px 18px;background:var(--card);border:1px solid var(--line);
+border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow)}
+.kv dt{color:var(--muted);font-size:12.5px}
+.kv dd{margin:0;min-width:0;word-break:break-word}
 ul.reasons{margin:0;padding-left:18px}
-.alert{padding:10px 14px;border-radius:8px;background:#fef3c7;color:#92400e;
-border:1px solid #fcd34d;margin:12px 0}
-.alert.ok{background:#d1fae5;color:#065f46;border-color:#6ee7b7}
-.alert.error{background:#fee2e2;color:#991b1b;border-color:#fca5a5}
+.alert{padding:11px 15px;border-radius:10px;background:#fffbeb;color:#92400e;border:1px solid #fcd34d;margin:12px 0;font-size:13.5px}
+.alert.ok{background:#ecfdf5;color:#065f46;border-color:#6ee7b7}
+.alert.error{background:#fef2f2;color:#991b1b;border-color:#fca5a5}
 form{margin:0 0 18px}
-label{display:block;margin:10px 0 4px;color:var(--muted);font-size:13px}
-input[type=text],input[type=email],input[type=password],textarea,select{width:100%;padding:8px 10px;border:1px solid var(--line);
-border-radius:8px;font:inherit;background:#fff;color:var(--text)}
-.panel h3{margin:16px 0 8px;font-size:14px}
-textarea{min-height:260px;resize:vertical;font-family:ui-monospace,Consolas,monospace;font-size:13px}
-button{padding:8px 16px;border:none;border-radius:8px;background:var(--accent);color:#fff;
-font:inherit;cursor:pointer}
+label{display:block;margin:10px 0 5px;color:var(--muted);font-size:12.5px;font-weight:500}
+input[type=text],input[type=email],input[type=password],textarea,select{width:100%;padding:8px 11px;
+border:1px solid var(--line);border-radius:8px;font:inherit;background:#fff;color:var(--text);
+transition:border-color .12s,box-shadow .12s}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.13)}
+button{padding:8px 16px;border:1px solid transparent;border-radius:8px;background:var(--accent);color:#fff;
+font:inherit;font-weight:500;cursor:pointer;transition:background .12s}
+button:hover{background:#1d4ed8}
 button.danger{background:#dc2626}
-.row{display:flex;gap:18px;flex-wrap:wrap}
-.row>div{flex:1 1 220px}
-.panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px;margin-bottom:18px}
+button.danger:hover{background:#b91c1c}
+button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+a.btn-mini{display:inline-block;text-decoration:none;border:1px solid var(--line);background:var(--card);color:var(--text);cursor:pointer}
+a.btn-mini:hover{text-decoration:none;border-color:var(--accent);color:var(--accent)}
+.btn-mini{padding:5px 12px;font-size:12px;border-radius:7px;font-weight:500}
+.btn-mini.ghost{background:#fff;color:var(--text);border-color:var(--line)}
+.btn-mini.ghost:hover{background:#fff;border-color:var(--accent);color:var(--accent)}
+.row{display:flex;gap:16px;flex-wrap:wrap}
+.row>div{flex:1 1 220px;min-width:0}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px;margin-bottom:18px;box-shadow:var(--shadow)}
+.panel h3{margin:16px 0 8px;font-size:14px}
+textarea{min-height:260px;resize:vertical;font:12.5px/1.6 ui-monospace,Consolas,monospace}
 .hero{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
-background:linear-gradient(135deg,#1d4ed8,#2563eb);border-radius:12px;padding:18px 22px;
-color:#fff;margin-bottom:20px}
-.hero h1{color:#fff;margin:0;font-size:19px}
-.hero p{margin:4px 0 0;color:#bfdbfe;font-size:13px}
+background:linear-gradient(120deg,#1e3a8a,#2563eb 55%,#3b82f6);border-radius:14px;padding:22px 26px;
+color:#fff;margin-bottom:22px;box-shadow:0 6px 20px rgba(37,99,235,.25)}
+.hero h1{color:#fff;margin:0;font-size:20px}
+.hero p{margin:5px 0 0;color:#bfdbfe;font-size:13px}
 .hero button{background:#fff;color:#1d4ed8;font-weight:600;font-size:15px;padding:11px 26px;
-border-radius:9px;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,.25)}
 .hero button:hover{background:#eff6ff}
-a.card{display:block;color:inherit;text-decoration:none;transition:box-shadow .15s}
-a.card:hover{text-decoration:none;box-shadow:0 2px 10px rgba(37,99,235,.12);border-color:var(--accent)}
+a.card{display:block;color:inherit;text-decoration:none;transition:box-shadow .15s,border-color .15s}
+a.card:hover{text-decoration:none;box-shadow:0 4px 14px rgba(37,99,235,.14);border-color:var(--accent)}
 /* 合规预警页 */
-.cmp-card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-bottom:14px}
+.cmp-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;margin-bottom:14px;box-shadow:var(--shadow)}
 .cmp-card.reject{border-left:4px solid #dc2626}
 .cmp-card.review{border-left:4px solid #d97706}
 .cmp-card.pass{border-left:4px solid #10b981}
 .cmp-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
 .cmp-head .case-no{font-weight:650;font-size:15px}
 .cmp-meta{color:var(--muted);font-size:12px;margin-left:auto}
-.cmp-rule{display:flex;gap:10px;padding:9px 12px;border-radius:8px;background:#f9fafb;
+.cmp-rule{display:flex;gap:10px;padding:9px 12px;border-radius:8px;background:#f8fafc;
 border:1px solid var(--line);margin-top:8px;font-size:13px;align-items:flex-start}
 .cmp-rule .rid{font-family:ui-monospace,Consolas,monospace;font-weight:600;white-space:nowrap}
 .cmp-rule .fix{color:var(--muted);margin-top:2px}
 .cmp-rule .basis{color:var(--muted);font-size:12px;margin-top:2px}
-.sev{display:inline-block;padding:1px 8px;border-radius:999px;font-size:12px;white-space:nowrap}
+.sev{display:inline-block;padding:1px 8px;border-radius:999px;font-size:12px;white-space:nowrap;font-weight:500}
 .sev.blocker{background:#fee2e2;color:#991b1b}
 .sev.warning{background:#fef3c7;color:#92400e}
 .sev.info{background:#e5e7eb;color:#374151}
 .origin-chip{display:inline-block;padding:1px 8px;border-radius:999px;font-size:12px;
 background:#eef2ff;color:#3730a3}
 .top-rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-bottom:18px}
-.top-rule{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 16px;font-size:13px}
-.top-rule .n{font-size:20px;font-weight:650}
+.top-rule{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:12px 16px;font-size:13px;box-shadow:var(--shadow)}
+.top-rule .n{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums}
 .subtabs{margin:10px 0 16px}
 .subtabs a{display:inline-block;padding:4px 12px;border:1px solid var(--line);border-radius:999px;
-margin-right:8px;font-size:13px;color:var(--muted);background:var(--card)}
+margin-right:8px;font-size:13px;color:var(--muted);background:var(--card);text-decoration:none}
 .subtabs a.active{background:#1d4ed8;color:#fff;border-color:#1d4ed8}
 .subtabs a:hover{text-decoration:none;border-color:var(--accent)}
-.steps{display:flex;gap:0;background:var(--card);border:1px solid var(--line);border-radius:10px;
-padding:16px 12px;margin-bottom:18px;overflow-x:auto}
+.steps{display:flex;gap:0;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+padding:16px 12px;margin-bottom:18px;overflow-x:auto;box-shadow:var(--shadow)}
 .step{flex:1;min-width:90px;text-align:center;position:relative;color:var(--muted);font-size:12px}
 .step .dot{width:26px;height:26px;border-radius:50%;background:#e5e7eb;color:#6b7280;
 display:inline-flex;align-items:center;justify-content:center;font-size:13px;margin-bottom:6px;position:relative;z-index:1}
@@ -175,7 +223,8 @@ width:calc(100% - 30px);height:2px;background:#e5e7eb}
 .step.now .dot{background:var(--accent);color:#fff}
 .wait{display:inline-block;padding:2px 9px;border-radius:999px;font-size:12px;background:#f0f9ff;color:#0369a1}
 .flow{display:flex;gap:12px;margin:0 0 20px;flex-wrap:wrap}
-.flow .fstep{flex:1;min-width:210px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.flow .fstep{flex:1;min-width:210px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+padding:14px 16px;box-shadow:var(--shadow)}
 .flow .fstep b{display:inline-flex;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;
 align-items:center;justify-content:center;margin-right:8px;font-size:13px;vertical-align:middle}
 .flow .fstep h4{display:inline;font-size:14px;margin:0;vertical-align:middle}
@@ -191,20 +240,16 @@ align-items:center;justify-content:center;font-size:14px;margin-right:9px;vertic
 .picker{position:relative}
 .picker input[type=text]{width:100%}
 .picker-list{display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;max-height:280px;overflow-y:auto;
-background:#fff;border:1px solid var(--line);border-radius:8px;z-index:60;box-shadow:0 8px 24px rgba(15,23,42,.12)}
+background:#fff;border:1px solid var(--line);border-radius:8px;z-index:60;box-shadow:0 8px 24px rgba(15,23,42,.14)}
 .picker-list.open{display:block}
 .picker-item{padding:9px 14px;font-size:13px;cursor:pointer;display:flex;justify-content:space-between;gap:12px}
 .picker-item:hover{background:#eff6ff}
 .picker-item .pmuted{color:var(--muted);font-size:12px}
 .picker-empty{padding:12px 14px;font-size:13px;color:var(--muted)}
 .picker input.selected{border-color:var(--ok);background:#f0fdf4}
-table tbody tr:hover td{background:#f8fafc}
-.btn-mini{padding:5px 12px;font-size:12px;border-radius:7px}
-.btn-mini.ghost{background:#fff;color:var(--text);border:1px solid var(--line)}
-.btn-mini.ghost:hover{border-color:var(--accent);color:var(--accent)}
-.comm-group{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:16px;overflow:hidden;
-transition:box-shadow .15s}
-.comm-group:hover{box-shadow:0 2px 12px rgba(15,23,42,.07)}
+.comm-group{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);margin-bottom:16px;
+overflow:hidden;transition:box-shadow .15s;box-shadow:var(--shadow)}
+.comm-group:hover{box-shadow:0 3px 14px rgba(15,23,42,.09)}
 .comm-head{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line);
 background:linear-gradient(180deg,#fbfcfe,#f6f8fb)}
 .comm-avatar{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;
@@ -214,24 +259,26 @@ color:#fff;font-weight:700;font-size:14px;flex:none;letter-spacing:.5px}
 .comm-meta{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .comm-count{flex:none;font-size:12px;color:var(--accent);background:#eff6ff;border:1px solid #dbeafe;
 padding:2px 10px;border-radius:999px;font-weight:600}
-.comm-group table{margin:0;border:none}
+.comm-group table{margin:0;border:none;border-radius:0;box-shadow:none}
 .comm-group table thead th{background:#fafbfc;border-top:none}
 .comm-empty{padding:14px 16px;color:var(--muted);font-size:13px}
-details.section{background:var(--card);border:1px solid var(--line);border-radius:10px;margin-bottom:10px;overflow:hidden}
+details.section{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);margin-bottom:10px;
+overflow:hidden;box-shadow:var(--shadow)}
 details.section>summary{cursor:pointer;padding:12px 16px;font-weight:600;font-size:14px;list-style:none;display:flex;align-items:center;gap:8px;user-select:none;color:var(--text)}
 details.section>summary:hover{background:#f8fafc}
 details.section>summary::before{content:"▸";transition:transform .15s;color:var(--muted);font-size:12px}
 details.section[open]>summary::before{transform:rotate(90deg)}
 details.section>summary .cnt{margin-left:auto;font-size:12px;color:var(--muted);font-weight:500;background:#f1f5f9;padding:1px 9px;border-radius:999px}
 details.section .body{padding:0 16px 14px}
-details.section .body table{margin:0;border:none}
+details.section .body table{margin:0;border:none;box-shadow:none}
 details.section .body table th{background:#fafbfc}
 details.section>summary .comm-avatar{width:28px;height:28px;font-size:12px;border-radius:7px;flex:none}
 details.section>summary .comm-meta{display:flex;flex-direction:column;min-width:0;flex:1}
 details.section>summary .comm-name{font-size:14px;font-weight:650;line-height:1.3}
 details.section>summary .comm-mail{font-size:11px;color:var(--muted);font-weight:400}
 .comm-list{display:flex;flex-direction:column;gap:10px}
-a.comm-card{display:flex;align-items:center;gap:14px;padding:18px 20px;background:var(--card);border:1px solid var(--line);border-radius:12px;color:inherit;text-decoration:none;transition:box-shadow .15s,border-color .15s}
+a.comm-card{display:flex;align-items:center;gap:14px;padding:18px 20px;background:var(--card);border:1px solid var(--line);
+border-radius:var(--radius);color:inherit;text-decoration:none;transition:box-shadow .15s,border-color .15s;box-shadow:var(--shadow)}
 a.comm-card:hover{box-shadow:0 4px 18px rgba(15,23,42,.1);border-color:var(--accent);text-decoration:none}
 a.comm-card .comm-avatar{width:46px;height:46px;font-size:16px;flex:none;border-radius:10px}
 a.comm-card .comm-meta{display:flex;flex-direction:column;min-width:0;flex:1}
@@ -241,14 +288,17 @@ a.comm-card .comm-count{flex:none;font-size:12px;color:var(--accent);background:
 a.comm-card .arrow{flex:none;color:var(--muted);font-size:18px}
 tr.has-filled{background:#fefce8}
 tr.has-filled:hover td{background:#fef9c3}
-.tag.filled{background:#fef9c3;color:#92400e;border:1px solid #fcd34d}
 .searchbar{display:flex;gap:10px;margin:14px 0;max-width:520px}
 .searchbar input{flex:1}
-@media (max-width:720px){
-header{height:auto;flex-wrap:wrap;padding:10px 14px;gap:8px}
-header nav{flex-wrap:wrap}
-main{margin:14px auto;padding:0 12px 40px}
+/* ---------- 响应式 ---------- */
+@media (max-width:960px){
+.sidebar{transform:translateX(-100%);box-shadow:0 0 40px rgba(0,0,0,.35)}
+#nav-toggle:checked ~ .sidebar{transform:translateX(0)}
+#nav-toggle:checked ~ .scrim{display:block}
+.nav-btn{display:inline-flex}
+main{margin-left:0;padding:70px 16px 60px}
 .steps .step{min-width:76px}
+.page-head{align-items:flex-start}
 }
 """
 
@@ -313,30 +363,65 @@ def _human_size(size: int) -> str:
     return f"{size / 1024 / 1024:.1f} MB"
 
 
-def _layout(title: str, active: str, content: str) -> str:
-    def nav(key: str, href: str, label: str) -> str:
-        cls = ' class="active"' if key == active else ""
-        return f'<a href="{href}"{cls}>{label}</a>'
+_ICONS = {
+    "dashboard": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5"/></svg>',
+    "stats": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 20v-8M12 20V4M19 20v-5"/></svg>',
+    "commissions": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"/><path d="M3 21h18"/><path d="M9 7h1.5M13.5 7H15M9 11h1.5M13.5 11H15M9 15h1.5M13.5 15H15"/></svg>',
+    "inquiry": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4Z"/></svg>',
+    "cases": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg>',
+    "drafts": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>',
+    "invoices": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2Z"/><path d="M10 8h4M10 12h4"/></svg>',
+    "compliance": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.6-3 8.4-7 10-4-1.6-7-5.4-7-10V6Z"/><path d="m9 12 2 2 4-4"/></svg>',
+    "llm": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-7 4 14 2-7h6"/></svg>',
+    "settings": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h8M18 8h2M4 16h2M12 16h8"/><circle cx="15" cy="8" r="2.2"/><circle cx="9" cy="16" r="2.2"/></svg>',
+}
 
+NAV_GROUPS = [
+    ("工作台", [
+        ("dashboard", "/", "看板"),
+        ("stats", "/stats", "检测中台"),
+    ]),
+    ("业务流程", [
+        ("commissions", "/commissions", "委托公司"),
+        ("inquiry", "/inquiry", "发起询价"),
+        ("cases", "/cases", "Case 案件"),
+        ("drafts", "/drafts", "草稿审核"),
+        ("invoices", "/invoices", "发票"),
+    ]),
+    ("质量与系统", [
+        ("compliance", "/compliance", "合规预警"),
+        ("llm", "/llm", "LLM 观察"),
+        ("settings", "/settings", "设置"),
+    ]),
+]
+
+
+def _layout(title: str, active: str, content: str) -> str:
+    groups = []
+    for group_name, items in NAV_GROUPS:
+        links = "".join(
+            f'<a href="{href}" class="side-link{" active" if key == active else ""}">'
+            f"{_ICONS[key]}<span>{label}</span></a>"
+            for key, href, label in items
+        )
+        groups.append(
+            f'<div class="nav-group"><div class="nav-title">{group_name}</div>{links}</div>'
+        )
+    nav_html = "".join(groups)
     return f"""<!doctype html>
 <html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{_e(title)} · Bond Agent</title><style>{CSS}</style></head>
-<body><header>
-<span class="brand">Bond 邮件 Agent · 审核台</span>
-<nav>
-{nav("dashboard", "/", "看板")}
-{nav("stats", "/stats", "中台")}
-{nav("commissions", "/commissions", "委托")}
-{nav("inquiry", "/inquiry", "发起询价")}
-{nav("cases", "/cases", "Case")}
-{nav("drafts", "/drafts", "草稿")}
-{nav("invoices", "/invoices", "发票")}
-{nav("compliance", "/compliance", "合规")}
-{nav("llm", "/llm", "LLM")}
-{nav("settings", "/settings", "设置")}
-</nav>
-</header><main>{content}</main>
+<body>
+<input type="checkbox" id="nav-toggle">
+<aside class="sidebar">
+<div class="brand"><span class="logo">B</span><span class="brand-text"><b>Bond 邮件 Agent</b><i>人工审核台</i></span></div>
+<nav>{nav_html}</nav>
+<div class="side-foot"><span class="gate-dot"></span><span>发送前需人工批准</span></div>
+</aside>
+<label class="scrim" for="nav-toggle" aria-hidden="true"></label>
+<main>{content}</main>
+<label class="nav-btn" for="nav-toggle" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></label>
 <script>
 // 操作人只需填一次，之后所有表单自动带上
 (function() {{
@@ -354,6 +439,22 @@ def _layout(title: str, active: str, content: str) -> str:
 }})();
 </script>
 </body></html>"""
+
+
+def _page_header(title: str, desc: str = "", actions: str = "") -> str:
+    """统一页头：标题 + 一句话说明 + 右侧动作按钮（title/desc 可含已转义 HTML）。"""
+    desc_html = f'<p class="ph-desc">{desc}</p>' if desc else ""
+    actions_html = f'<div class="ph-actions">{actions}</div>' if actions else ""
+    return (
+        '<div class="page-head">'
+        f'<div class="ph-main"><h1>{title}</h1>{desc_html}</div>'
+        f"{actions_html}</div>"
+    )
+
+
+def _jump_links(items: list[tuple[str, str]]) -> str:
+    """页内锚点快速跳转链接组（label, #anchor）。"""
+    return "".join(f'<a class="btn-mini ghost" href="#{anchor}">{_e(label)}</a>' for label, anchor in items)
 
 
 def _table(headers: list[str], rows: list[list[str]]) -> str:
@@ -641,11 +742,11 @@ def render_stats(session: Session) -> str:
     )
 
     content = f"""
-<p class="crumbs"><a href="/">看板</a> / 检测中台</p>
-<h1>检测中台</h1>
-<p class="muted">全库实时统计：每个状态有多少 case、今天实际发生了什么、哪些事卡住了。数字直接来自数据库聚合，无缓存。</p>
-
-<h2>Case 状态总览 <span class="muted" style="font-size:13px">共 {total_cases} 个 · 进行中 {active_cases} 个</span></h2>
+{_page_header(
+    "检测中台",
+    desc="全库实时统计：每个状态有多少 case、今天实际发生了什么、哪些事卡住了。数字直接来自数据库聚合，无缓存。",
+)}
+<h2 id="sec-dashboard-state">Case 状态总览 <span class="muted" style="font-size:13px">共 {total_cases} 个 · 进行中 {active_cases} 个</span></h2>
 <div class="cards">{"".join(state_cards_html)}</div>
 
 <h2>进行中分布（漏斗）</h2>
@@ -779,13 +880,13 @@ def render_dashboard(session: Session) -> str:
   <a href="/inquiry"><button type="button">＋ 发起询价</button></a>
 </div>
 <div class="cards">{cards_html}</div>
-<h2>待办 · 草稿 <span class="muted">({pending_total})</span></h2>
+<h2 id="drafts-todo">待办 · 草稿 <span class="muted">({pending_total})</span></h2>
 {draft_todo_html}
-<h2>待办 · 发票 <span class="muted">({unpaid_total})</span></h2>
+<h2 id="invoices-todo">待办 · 发票 <span class="muted">({unpaid_total})</span></h2>
 {unpaid_html}
-<h2>进行中 Case</h2>
+<h2 id="active-cases">进行中 Case</h2>
 {_table(["Case 号", "委托公司", "代理商", "状态", "当前进展", "最新回复"], case_rows)}
-<h2>最近动态</h2>
+<h2 id="recent-audit">最近动态</h2>
 {_table(["时间", "动作", "决定", "原因"], event_rows)}
 """
     return _layout("看板", "dashboard", content)
@@ -832,7 +933,9 @@ def _render_cases_by_state(session: Session, state: str) -> str:
     )
     content = f"""
 <p class="crumbs"><a href="/cases">Case 列表</a> / 按状态</p>
-<h1>{_e(STATE_LABELS.get(state, state))} <span class="muted" style="font-size:14px">{counts.get(state, 0)} 个</span></h1>
+{_page_header(
+    f"{_e(STATE_LABELS.get(state, state))} <span class=&quot;muted&quot; style=&quot;font-size:14px&quot;>{counts.get(state, 0)} 个</span>",
+)}
 {tabs}
 {table}
 """
@@ -882,9 +985,12 @@ def render_cases(session: Session, group: str = "active", commission_id: int | N
         )
         content = f"""
 <p class="crumbs"><a href="/cases">Case 列表</a> / {_e(commission.legal_name)}</p>
-<h1>{_e(commission.legal_name)}</h1>
+{_page_header(
+    _e(commission.legal_name),
+    desc=f"共 {len(cases)} 个 Case，其中 {filled_count} 个已有填表产物；可按 Case 号 / 代理商搜索。",
+)}
 <div class="searchbar">
-  <input type="text" id="case-search" placeholder="搜索 Case 号 / 代理商…（已填表 {filled_count} 个）" oninput="filterCases(this.value)">
+  <input type="text" id="case-search" placeholder="搜索 Case 号 / 代理商…" oninput="filterCases(this.value)">
 </div>
 {table}
 <script>
@@ -966,7 +1072,11 @@ function filterCases(q) {{
     empty = '<div class="comm-group"><div class="comm-empty">当前筛选下没有 Case</div></div>'
     list_html = f'<div class="comm-list">{"".join(cards)}</div>' if cards else empty
     content = f"""
-<h1>Case 列表</h1>
+{_page_header(
+    "Case 列表",
+    desc="按委托公司分组。点进任一委托查看其全部 Case；也可按 <b>进行中 / 已关闭 / 全部</b> 筛选。",
+    actions='<a class="btn-mini ghost" href="/commissions">管理委托公司</a>',
+)}
 {tabs}
 {list_html}
 """
@@ -1152,12 +1262,14 @@ def render_settings(*, flash_kind: str | None = None, flash_message: str | None 
 
     content = f"""
 <p class="crumbs"><a href="/">看板</a> / 设置</p>
-<h1>邮箱与通知设置</h1>
+{_page_header(
+    "邮箱与通知设置",
+    desc="保存后立即生效，同时写入本地 .env（不会进入 Git）。密钥只显示是否已配置，不回显内容。",
+)}
 {flash}
-<p class="muted">保存后立即生效，同时写入本地 .env（不会进入 Git）。密钥只显示是否已配置，不回显内容。</p>
 <div class="panel">
 <form method="post" action="/settings">
-  <h3>IMAP 收件 {imap_state}</h3>
+  <h3 id="sec-account">IMAP 收件 {imap_state}</h3>
   <div class="row">
     <div><label>服务器</label><input type="text" name="imap_host" value="{_e(settings.imap_host)}" placeholder="imap.qq.com"></div>
     <div><label>账号</label><input type="text" name="imap_user" value="{_e(settings.imap_user)}" placeholder="your@qq.com"></div>
@@ -1179,7 +1291,7 @@ def render_settings(*, flash_kind: str | None = None, flash_message: str | None 
   <input type="password" name="smtp_password" autocomplete="new-password" placeholder="{_e(smtp_hint)}">
   <label><input type="checkbox" name="clear_smtp_password" value="yes"> 清除已保存的 SMTP 授权码</label>
 
-  <h3>企业微信群机器人</h3>
+  <h3 id="sec-notify">企业微信群机器人</h3>
   <label>Webhook</label>
   <input type="password" name="wecom_webhook" autocomplete="new-password" value="{_e(settings.wecom_webhook)}" placeholder="留空表示不启用">
 
@@ -1192,7 +1304,7 @@ def render_settings(*, flash_kind: str | None = None, flash_message: str | None 
   </div>
   <label><input type="checkbox" name="clear_feishu_app_secret" value="yes"> 清除已保存的 App Secret</label>
 
-  <h3>自动询价</h3>
+  <h3 id="sec-auto">自动询价</h3>
   <label><input type="checkbox" name="daily_inquiry_enabled" value="on"{' checked' if settings.daily_inquiry_enabled else ''}>
     开启每日自动询价（文件齐全的委托每天自动分配代理商发起询价；关闭后只能手动发起）</label>
   <label>每家委托每日询价代理商数量</label>
@@ -1203,7 +1315,7 @@ def render_settings(*, flash_kind: str | None = None, flash_message: str | None 
   <p><button type="submit">保存设置</button></p>
 </form>
 </div>
-<div class="panel">
+<div class="panel" id="sec-test">
 <h3>连接测试</h3>
 <p class="muted">只登录，不收取也不发送。会使用已保存的配置。</p>
 <form method="post" action="/settings/test">
@@ -1328,10 +1440,13 @@ def render_commission_signature(
             "再次上传会覆盖旧图样。</p>"
         )
     else:
-        current = '<p class="muted">尚未上传客户签名图样。</p>'
+        current = '<div class="alert">尚未上传客户签名图样——可先发起询价，签名可随时回来补传。</div>'
     content = f"""
 <div class="crumbs"><a href="/commissions">委托列表</a> / 上传签名</div>
-<h1>上传客户手写签名 — {_e(commission.legal_name)}</h1>
+{_page_header(
+    f"上传客户手写签名 — {_e(commission.legal_name)}",
+    desc="签名由客户本人提供，系统不代造；上传后用于该委托后续自动填表产物的署名处（POA / CBP 5106 / 申请表）。",
+)}
 {flash}
 {current}
 <div class="panel">
@@ -1522,7 +1637,7 @@ def render_inquiry(
     ) + "</ul>" if readiness else '<p class="muted">还没有委托公司，先完成第 1 步。</p>'
     new_commission_form = f"""
 <div class="panel">
-<h3 class="stitle"><b>1</b>委托公司</h3>
+<h3 class="stitle" id="step-1"><b>1</b>委托公司</h3>
 {_table(["ID", "公司", "EIN", "资料", "必要文件", "签名", "状态"], commission_rows)}
 <details{' open' if not commissions else ''}>
 <summary>{'＋ 新建委托公司' if commissions else '点此填写委托公司信息（第 1 步）'}</summary>
@@ -1557,8 +1672,13 @@ def render_inquiry(
 </div>
 """
     content = f"""
+<p class="crumbs"><a href="/commissions">委托公司</a> / 发起询价</p>
+{_page_header(
+    "发起询价",
+    desc="三步走：<b>① 委托公司资料</b> → <b>② 上传三份必要文件</b> → <b>③ 选代理商一键发起</b>。"
+         "资料不齐全不会发信，列表里的「可发起询价」徽标即为准入状态。",
+)}
 {flash}
-<h1>发起询价</h1>
 <div class="flow">
   <div class="fstep"><b>1</b><h4>委托公司</h4><p>公司信息齐全（名称 / EIN / 地址 / 签署人）</p></div>
   <div class="fstep"><b>2</b><h4>上传文件</h4><p>公司章程、税号文件、法人证件，三份缺一不可</p></div>
@@ -1566,8 +1686,8 @@ def render_inquiry(
 </div>
 {new_commission_form}
 <div class="panel">
-<h3 class="stitle"><b>2</b>上传必要文件</h3>
-<p class="muted">每种文件传一次即可，重复上传自动覆盖旧文件。</p>
+<h3 class="stitle" id="step-2"><b>2</b>上传必要文件</h3>
+<p class="muted">每种文件传一次即可，重复上传自动覆盖旧文件。齐备情况见第 1 步表格的 ✓ / ✗ 标记。</p>
 <form method="post" action="/inquiry/document" enctype="multipart/form-data">
   <div class="row">
     <div><label>委托公司</label><select name="commission_id">{commission_options}</select></div>
@@ -1577,7 +1697,6 @@ def render_inquiry(
   </div>
   <p><button type="submit">上传文件</button></p>
 </form>
-<p class="muted">当前文件齐备情况见上表 ✓ / ✗ 标记。</p>
 </div>
 <div class="panel">
 <h3 class="stitle"><b>2.5</b>上传客户手写签名</h3>
@@ -1592,8 +1711,9 @@ def render_inquiry(
 </form>
 </div>
 <div class="panel">
-<h3 class="stitle"><b>3</b>发起询价</h3>
+<h3 class="stitle" id="step-3"><b>3</b>发起询价</h3>
 {readiness_html}
+<p class="muted">在下方列表点选代理商（可输入关键词筛选）；「直接发送」不勾选时只生成草稿、先审后发。</p>
 <form method="post" action="/inquiry" id="inquiry-form">
   <div class="row">
     <div><label>委托公司</label><select name="commission_id">{commission_options}</select></div>
@@ -1785,8 +1905,13 @@ def render_commissions(
         else '<span class="tag blocked">已关闭</span>'
     )
     content = f"""
+<p class="crumbs"><a href="/inquiry">发起询价</a> / 委托公司</p>
+{_page_header(
+    "委托列表",
+    desc="所有委托公司的资料、文件与询价状态一目了然。新客户用下面的<b>飞书链接导入</b>，"
+         "老客户点公司名直达其 Case 列表；签名上传在 <a href='/inquiry'>发起询价</a> 页第 2.5 步。",
+)}
 {flash}
-<h1>委托列表</h1>
 <div class="cards">
   <div class="card"><div class="num">{stats['total']}</div><div class="label">委托总数</div></div>
   <div class="card"><div class="num">{stats['fields_ok']}</div><div class="label">资料字段齐全</div></div>
@@ -1795,7 +1920,7 @@ def render_commissions(
   <div class="card"><div class="num">{stats['paid']}</div><div class="label">已付款（停止询价）</div></div>
 </div>
 <div class="panel">
-<h3>粘贴飞书链接，导入新客户资料</h3>
+<h3 id="feishu-import">粘贴飞书链接，导入新客户资料</h3>
 <p class="muted">两种链接都支持：<b>资料文件夹</b>（推荐，整套材料自动下载入库，公司章程 / EIN /
 法人证件会直接补齐询价硬性文件，其余按语义分类存档）或<b>飞书文档</b>（纯资料表单，只导入文字字段）。
 文件命名建议「公司名——材料名」（如 JA Tendo Foods——公司章程.pdf）。导入只补空缺字段，不会覆盖已有人工数据；
@@ -1810,6 +1935,7 @@ def render_commissions(
   <p><button type="submit">导入委托</button></p>
 </form>
 </div>
+<h3>委托大表</h3>
 {_table(["ID", "公司", "EIN", "注册州", "Case", "活跃", "必要文件", "资料字段", "询价状态", "签名", "飞书来源"], rows)}
 <div class="panel">
 <h3>自动询价 {auto_state}</h3>
@@ -2230,7 +2356,10 @@ def render_case(
 
     content = f"""
 <p class="crumbs"><a href="/cases">Case 列表</a> / {_e(case.case_no)}</p>
-<h1>{_e(case.case_no)}</h1>
+{_page_header(
+    _e(case.case_no),
+    desc="下方按业务分区展示全部信息；分区可点击折叠/展开，重点关注区已自动展开。",
+)}
 {flash}
 {next_action}
 {new_type_alert}
@@ -2286,8 +2415,10 @@ def render_drafts(session: Session, status: str = "all") -> str:
         status,
     )
     content = f"""
-<p class="crumbs"><a href="/">看板</a> / 草稿</p>
-<h1>草稿</h1>
+{_page_header(
+    "草稿审核",
+    desc="所有系统生成的回信都在这里先审后发。<b>待审</b>里逐封批准；点「查看 / 编辑」可先改正文再批。",
+)}
 {tabs}
 {_table(["ID", "Case", "意图", "状态", "主题", "创建时间", "操作"], rows)}
 """
@@ -2340,8 +2471,10 @@ def render_invoices(session: Session, status: str = "unpaid") -> str:
     )
     empty = '<p class="muted">没有符合条件的发票</p>' if not rows else ""
     content = f"""
-<p class="crumbs"><a href="/">看板</a> / 发票</p>
-<h1>发票</h1>
+{_page_header(
+    "发票",
+    desc="付款由人工确认后回填；<b>未付</b>页签里每行都有「去回填付款」直达按钮。",
+)}
 {tabs}
 {_table(["Case", "发票号", "金额", "付款方式", "到期日", "状态", "付款流水号", "创建时间", "操作"], rows)}
 {empty}
@@ -2493,9 +2626,11 @@ def render_compliance(session: Session, status: str = "all", origin: str = "all"
         top_html = f'<h3 style="margin:18px 0 10px;font-size:14px">高频问题</h3><div class="top-rules">{"".join(cells)}</div>'
 
     content = f"""
-<p class="crumbs"><a href="/">看板</a> / 合规预警</p>
-<h1>合规预警</h1>
-<p class="muted">合规审查在两个时机自动进行：<b>① 入站审查</b>——委托文件传入时；<b>② 填表佐证</b>——我方自动填表后、发送前。结论由规则引擎按 CBP 规则表逐条判定，REJECT 表示存在阻断项，禁止提交担保商/CBP。</p>
+{_page_header(
+    "合规预警",
+    desc="合规审查在两个时机自动进行：<b>① 入站审查</b>——委托文件传入时；<b>② 填表佐证</b>——我方自动填表后、发送前。"
+         "REJECT 表示存在阻断项，禁止提交担保商 / CBP。",
+)}
 {stat_cards}
 {top_html}
 {tabs}
@@ -2628,9 +2763,10 @@ def render_draft(
             else '<div class="alert">SMTP 未配置：可以编辑或拒绝，但批准发送会被拦截。</div>'
         )
         actions = f"""
-<h2>审核操作</h2>
+<h2 id="review">审核操作</h2>
 {smtp_hint}
-<div class="panel">
+<div class="panel" id="action-edit">
+<h3>✏️ 编辑正文</h3>
 <form method="post" action="/drafts/{draft.id}/edit">
   <div class="row">
     <div><label>审核人</label><input type="text" name="reviewer" required></div>
@@ -2642,14 +2778,16 @@ def render_draft(
   <p><button type="submit">保存修改</button></p>
 </form>
 </div>
-<div class="panel">
+<div class="panel" id="action-approve">
+<h3>✅ 批准并发送</h3>
 <form method="post" action="/drafts/{draft.id}/approve">
   <label>审核人</label><input type="text" name="reviewer" required>
   <label><input type="checkbox" name="confirm" value="yes"> 我已核对收件人、金额和正文，确认发送</label>
   <p><button type="submit">批准并发送</button></p>
 </form>
 </div>
-<div class="panel">
+<div class="panel" id="action-reject">
+<h3>❌ 拒绝草稿</h3>
 <form method="post" action="/drafts/{draft.id}/reject">
   <label>审核人</label><input type="text" name="reviewer" required>
   <label>拒绝原因</label><input type="text" name="reason" required>
@@ -2659,14 +2797,19 @@ def render_draft(
 """
 
     content = f"""
-<h1><a href="/drafts">草稿</a> / #{draft.id}</h1>
+<div class="crumbs"><a href="/drafts">草稿审核</a> / #{draft.id}</div>
+{_page_header(
+    f"草稿 #{draft.id}",
+    desc="确认正文无误后批准发送；小改动直接在编辑框里改，大改动先用「拒绝」退回。",
+    actions=_jump_links([("提示", "notices"), ("受控字段", "fields"), ("审核", "review")]),
+)}
 {flash}
 {facts}
 <h2>主题</h2><p>{_e(draft.subject)}</p>
 <h2>正文</h2><pre>{body}</pre>
 {attachments_html}
-<h2>提示</h2>{notices}
-<h2>受控字段</h2><pre>{fields}</pre>
+<h2 id="notices">提示</h2>{notices}
+<h2 id="fields">受控字段</h2><pre>{fields}</pre>
 {edited}
 {error}
 {actions}
@@ -2724,8 +2867,11 @@ def render_llm(session: Session) -> str:
     draft_rows = [[_e(label), _e(count)] for label, count in stats["draft"]["decisions"].items()]
 
     content = f"""
-<h1>LLM 统计</h1>
-<div class="cards">{cards_html}</div>
+{_page_header(
+    "LLM 观察",
+    desc="模型只做影子对比，不改判意图、不直接发信。一致率偏低说明规则需要补强——看下方「不一致」分布找原因。",
+)}
+{cards_html}
 <h2>影子对比分布</h2>
 {_table(["确定性判断", "模型判断", "次数", "结果"], pair_rows)}
 <h2>意图兜底</h2>

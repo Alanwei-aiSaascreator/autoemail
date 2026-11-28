@@ -1,0 +1,280 @@
+Return-Path: <prvs=3792806f8b=hosur@libertymutual.com>
+Delivered-To: amanuelafeworktiku@enproinc.live
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id qPOlGMQuCmuepBIAQ1DlOA
+	(envelope-from <prvs=3792806f8b=hosur@libertymutual.com>)
+	for <amanuelafeworktiku@enproinc.live>; Fri, 27 Nov 2026 20:30:44 -0500
+X-Original-To: amanuelafeworktiku@enproinc.live
+Received: from mx0a-0037d204.pphosted.com (mx0a-0037d204.pphosted.com [148.163.157.192])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id 3683B114AD0
+	for <amanuelafeworktiku@enproinc.live>; Fri, 27 Nov 2026 20:30:43 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=libertymutual.com header.s=pp1 header.b=jdCI+w2q;
+	dkim=pass header.d=LibertyMutual.onmicrosoft.com header.s=selector1-LibertyMutual-onmicrosoft-com header.b=xSMUeZfd;
+	dmarc=pass (policy=reject) header.from=libertymutual.com;
+	spf=pass (mail.pony-it.com: domain of "prvs=3792806f8b=hosur@libertymutual.com" designates 148.163.157.192 as permitted sender) smtp.mailfrom="prvs=3792806f8b=hosur@libertymutual.com";
+	arc=pass ("microsoft.com:s=arcselector10001:i=1")
+ARC-Seal: i=2; a=rsa-sha256; d=enproinc.live; s=dkim; cv=pass; t=1795829443;
+	b=XYKEoqHoEQSktjz4oNL8filvMRVKZ30+D/jpzSUq1wtUFu3CYLSCeyOYE4o01qPJ/nWPuB
+	wLQkGpRAlbdybnifLTooqeW81r++OklkS4l6HkiLk6V5r7xsv8KZze031K0kLWgtSFIN29
+	eMng9xBEMeF2FU6ikDa4PhAkAiVvxQJsTLY0hE9rMPNK2A25d71eevrWrkgBYyBAn7oWYM
+	72cvn2fIEozigYQT3crwvUuV3C3WZg13TVI4t1epJdFu09DLoje7pCUi1kvahm92jnMaEl
+	hqnvzhTDQ5yq+ZqU7q5xOIRQbFlBA9chU3oNnZGdjRQB15js+xZoW41PyMDkSw==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=enproinc.live;
+	s=dkim; t=1795829443;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 dkim-signature; bh=33z8MrEUA6Z+HpoZ8WxWbnH9wAOi+nhVRVACZFIqJj8=;
+	b=BPdSZQ3lm/Ii7zAwFsuEd0mzM7EhK1UzqbVUzaUycoxBSL2IGZ46KmvgAWKvu6PC4aMxvQ
+	JHb91jRFdnygVyobtkUbhHIAPaeRixKqeKyq4C9h2s06tw2JfDaDV4wIJigsJaEtOin74r
+	N8wtDfWwEx5iO5t//E4UAt5J7tSNXuwOzb/pi+C8VPNIP3SPp38Y5ORxiEbn+/KowqjtxJ
+	eIUjc2pOL6cX1EQPbJRZfxalaMuXE/eANddk1rUQ3BVgYgZsmRrkF0ek8p9kAs7OrZZ/2r
+	Qj/z3+5wn9C97bZFkF+42zpGv/dDYGtoTaS9mWvUU6aTyfTEB6Vli5u0Kydbww==
+ARC-Authentication-Results: i=2;
+	mail.pony-it.com;
+	dkim=pass header.d=libertymutual.com header.s=pp1 header.b=jdCI+w2q;
+	dkim=pass header.d=LibertyMutual.onmicrosoft.com header.s=selector1-LibertyMutual-onmicrosoft-com header.b=xSMUeZfd;
+	dmarc=pass (policy=reject) header.from=libertymutual.com;
+	spf=pass (mail.pony-it.com: domain of "prvs=3792806f8b=hosur@libertymutual.com" designates 148.163.157.192 as permitted sender) smtp.mailfrom="prvs=3792806f8b=hosur@libertymutual.com";
+	arc=pass ("microsoft.com:s=arcselector10001:i=1")
+Received: from pps.filterd (m0353447.ppops.net [127.0.0.1])
+	by mx0a-0037d204.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6AS0oL3u3757718
+	for <amanuelafeworktiku@enproinc.live>; Sat, 28 Nov 2026 01:30:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	libertymutual.com; h=content-type:date:from:message-id
+	:mime-version:subject:to; s=pp1; bh=33z8MrEUA6Z+HpoZ8WxWbnH9wAOi
+	+nhVRVACZFIqJj8=; b=jdCI+w2qXV6T10wgrYSMjOT79kDj7XrVYgwWIY0j7K+7
+	UKsdMoygwUYUZp7/o/lHn3JFnTVkeYhOTM6zEZu45vPNmTIFtv6ZA0/7Dg9D5Tip
+	QSjdFBd98JTOSHnx7S2ZFQF7J5twhiN8z0ptPtU5ZwmMflHeZnY4EjlZ+nj4Hga0
+	BYySRLRxjFlou5BTs9cEORFwzioe/PN3LlcNvKELpxxmiX3EpbzaBTVCUxEuc30d
+	rsM5XV/3P6XqR51RgeSWvco3inEcWehk5asp9Q+FRq8yphBms8HMVLpHw37aNdR7
+	YmSpBiLHeHKGI0nXgZ4bIUgTUzp8HdyZiKHIP+c4QA==
+Received: from ph0pr06cu001.outbound.protection.outlook.com (mail-westus3azon11011055.outbound.protection.outlook.com [40.107.208.55])
+	by mx0a-0037d204.pphosted.com (PPS) with ESMTPS id 4j7c30jgdp-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT)
+	for <amanuelafeworktiku@enproinc.live>; Sat, 28 Nov 2026 01:30:38 +0000 (GMT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=o0Jg2gWEzh4ykZRDRuYFSb3/jEeMlfmCM5u5k9XryCTW9d9leYseuQ7gKhT8jlOFsi1Y4H9c0XfoYPzWad+4kuGmWqN8TsgM6DW6Ha1IvcLLbRAbJj+g39rkOp0u/PSivy7DgLZLEjjKCiDd1RK62Bp48SFPwEPIm13sCAHE20jSrLl0DDf/CTrbH2XCSu95GdzOpGswjeKpzNhQRl30Cnei0R+ZWFVaQZhPx9JtaYyLsBhHpLH+hcmcgdTo0uyjax/jXDDKUYdI/+wex7VleRWUCJxfhT6ztWh9HbehvvzWXDtjyCGzFZlvF1CZH10Wocv48gLBi4KejzzYN20xqg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=33z8MrEUA6Z+HpoZ8WxWbnH9wAOi+nhVRVACZFIqJj8=;
+ b=Znoumq5+CsIYD1Dbh+7aEtkYmJeCWDmBqJ5BdgzO9elKlMPXCdvl2dUvNWwMTRGUiqyrapgyzIzI1vnqkgLj7QRwvbRaM+FPLx+aBa+jdvFQGlPSmhaUCpOHFjKaL97Yyq4e03lGWK6GQBrPfgu2ytTRPUNXLxj9PzGTfRwKvnKIdoYI1XCzHLcIrl5iPImuXZ63p67+lgu150864B1GKYeqBXI+zDQy2ge7dV/m0k/xmRztCJPmaH3H8X4hA5RTuZXxz3rGz/iEJ7TL3TAAFycHiGA9Nm0wPsHhHRqlujDQjDPnhbUrdAXJ59+sEiNRnB1gXx70XvA0skxJwPvM3A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=libertymutual.com; dmarc=pass action=none
+ header.from=libertymutual.com; dkim=pass header.d=libertymutual.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=LibertyMutual.onmicrosoft.com; s=selector1-LibertyMutual-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=33z8MrEUA6Z+HpoZ8WxWbnH9wAOi+nhVRVACZFIqJj8=;
+ b=xSMUeZfdi+FmcCxVC3rEpxgyAeA5tnUWQ5b7j3rNi6C6tmZ7UcJKg+3i0qqTTQcChZOpnmJzl+YGO3NAqrf6ug5z8ik4AIdtfhU4rGNUpt0/roneuYInBxVGW5iyvEOwN6IlY2AqVxI55V8RdAaCnRNkv85VijQUl9SeC2QWHgY=
+Received: from BN6PR06MB3378.namprd06.prod.outlook.com (2603:10b6:405:46::14)
+ by PH0PR06MB7622.namprd06.prod.outlook.com (2603:10b6:510:5e::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.662.6; Sat, 28 Nov
+ 2026 01:30:36 +0000
+Received: from BN6PR06MB3378.namprd06.prod.outlook.com ([::1]) by
+ BN6PR06MB3378.namprd06.prod.outlook.com ([fe80::47b1:2d7f:60ff:26e9%3]) with
+ Microsoft SMTP Server id 15.21.0662.007; Sat, 28 Nov 2026 01:30:35 +0000
+From: HOSUR <hosur@libertymutual.com>
+To: "amanuelafeworktiku@enproinc.live" <amanuelafeworktiku@enproinc.live>
+Subject: Your Recent Request Submitted to HOSUR@libertymutual.com
+Thread-Topic: Your Recent Request Submitted to HOSUR@libertymutual.com
+Thread-Index: AQHdftgRT/RyuDB4L0yuTATnzsz3+Q==
+Date: Sat, 28 Nov 2026 01:30:35 +0000
+Message-ID:
+ <41941e48fcb74e248ca6e700e3d72214@BN6PR06MB3378.namprd06.prod.outlook.com>
+X-MS-Has-Attach:
+X-Auto-Response-Suppress: All
+X-MS-Exchange-Inbox-Rules-Loop: hosur@libertymutual.com
+X-MS-TNEF-Correlator:
+x-ms-exchange-parent-message-id:
+ <010f01a21fc67137-220fc587-27a2-4fed-ba6d-3a691653e5ea-000000@us-east-2.amazonses.com>
+auto-submitted: auto-generated
+x-ms-exchange-generated-message-source: Mailbox Rules Agent
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN6PR06MB3378:EE_|PH0PR06MB7622:EE_
+x-ms-office365-filtering-correlation-id: 03a39e3e-cc0c-44f9-b59c-08df4cef33a2
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|366016|376014|1800799024|10070799003|23010399003|260925022911599003|56012099006|10067099003|260925021311599003|260925021911599003|261026140227099003|261022105027099003|261028144727099003|18002099003|11063799006|5133699003|13003099007|8096899003|12063799003;
+x-microsoft-antispam-message-info:
+ ZY00P9zuYjqUFmLCZzEFWdL+hM8NTDo3vIEX8OO+Su43IvrMj8DyeolZhs852DKQosZMWC6nz+mDxPtf3ia0QeWIFpkac7fTV5yWxcX9Pl8pNgipW/muFZ9cFl0wwfwHurkniBoGDr/HgeJeANZemNKjEhL8yA8BPTLz297tOP/O9QVlW7FUuMN0w8aZBdhpn+nD9bnB5isbUfSPNLinopVbwhMLA57uolLCuvq+OMjUhwC+NFoRXl7qHcjj3QkHv2sTgCSyTk1+b9kv0WY+Ajmy+kBF2ZxGlSGfi+1ugm1SPwxtLvqA0g4vjkcUDnc9oP3Tq5u701V5mmXZAO/Ya1JKB6n/xjCNKu4nAcSVhiTJV9mSsMaO5wFjH8/xUBo33sTCXqdEN/s6mbkKrnyLEyCtul9RKpidI92ft7q8Owx43lqq6ryxYN4HnCsJDONBdlNH5KPHeTk+ZlTZ1MkfCugXR/Nf76Xqfxbj88j0BUKXeE8IjkJcZYu0JG8ctwitjhpSUaJ3q0SLgRZhbiGaUpLYkdoML4hO6FJL/MWG80+F2xZRTY5cLzjh9RQOiNQKtZZjseQoVWkhMi5FXj4S0eHKxfgWZic77Z0S6oSLljk=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR06MB3378.namprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(10070799003)(23010399003)(260925022911599003)(56012099006)(10067099003)(260925021311599003)(260925021911599003)(261026140227099003)(261022105027099003)(261028144727099003)(18002099003)(11063799006)(5133699003)(13003099007)(8096899003)(12063799003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ qgFNyi32XXS0RPAlICo5+PhQH1cDqRhvfrSnw65M2w444kX1PNX2TJWLnb9vDHDkpfVPD8NwsJMKekzjvLM51diFASRKcWrpdGwttYl/kp1DMtbwDv7Yii0I4nXf1LYqOHKm7QGYWB1d8hOm00SGKA7i9WBnzWAa0Vh9Z9Yil5xQynkuocNeihB2Wy69pOAC95Zik7bSTg3gJ6WYxw7GKdnisNC7g8cPrO8dENQc/Xr+WwOH5WbNaoO40ih5UZhzN2eXHwiwNZMhgVKACV5sEAzAv3YQxpzsiZknuM1Z33wDx9X58A6Eovs4az7qg4NN80kouH91Jjk+/aOkHAzYJWETlV5ANhK6ChyGZ2USS5uYZ4/0nmQpI3AgOSMjlyqieF4DE487BHkJ9C5AclgjV9sYi2gR4wKaE60bb9NhCq9U8RcuJikc/EMlM8+gdKU4
+Content-Type: multipart/alternative;
+	boundary="_000_41941e48fcb74e248ca6e700e3d72214BN6PR06MB3378namprd06pr_"
+MIME-Version: 1.0
+X-Exchange-RoutingPolicyChecked:
+	pWUG5hCFfOZmVJ9fNGO2YBqu+KNtMLEEXPb4KjHv1HAjFA+3M2GQsoBAsgZoowbXlVzWwi1qwzy21QgepEhF2HWgbej7f4Dp72GfXZ81cmDAODmRPwMgIxv7ZVxSWV1NQkb1VWgYBqdkUt60y5nWmJzxDYn9SH5xaFR0M2N4z9WbpfeiN71MDxvO5WngQlvmPiJb8Mr6mPGMm30jRH2HmMCTPeI9hRXE1mJTq+2I/G8A6wiz8uj6TpH7dDvMa02a5e7HXwIgJpOt5K/kvmm2VHaaN8+1ZfD2d9itp9Rbkf/obQNOnbI32qSTiKWH+fyf8315SvbjW+2+BMi8HTlifg==
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	tqtQ+dnjp9/YBX0xp6sK0WfBwu+LoYaiF+KSI3g3xxTN8an3yvqnyFrBnBr4K7jVVubcmQCfhvLHMPNN7OlQeOJ2g1JbqtifVhFagUw7sl4GF3kchBNdk3GyJB5RHz1FUDd5yq4lrOL45bvntLeFD7EmOQNZiaemT5FTNjup+3fMEUvRQPJOZygdmNGHW7RgGPg5JTQxzvJuDvUEFYt9WtpZvyUIcYZ6T9LO+qksJHeIiFJOcYHc+ja9FgBOZlt5BB+zU5pyBYfx381ZvOT7btjrx8uebwTIpNLCCWAk14T4o5nXpdqeM/U6c1VVGhAmnFHmkbWKn1LhWVg2mWRvSD1qlN1hvR+1uh2hvxCX37q9U0ir0ftmIQIFnhxnqiDxqSy/ZCWirGEhqmIe5YVfwIdKpHfRHixky60Wzycc8Eu2QEeAyp9QeR22AX3RauFbr8m6/uPoBgMdJ+LOrJogi3OybVNyd63WGjmtdzd1nOFJHsqMywkngZfiZqwnZv6dmgc21A4SipfHn9Dx8EkH0ZyNyeCPtxGvw9nabm26E20ZCs9nres7jjsQpOXgyJp4ZbEW6omRbeZdEZC4hBnQ742ozR0qR6U6scKXNuG7NJPV0G4Xu/9a5z/uAQiR54Nu5KzBN1cJ3gP51WYuZGc22g==
+X-OriginatorOrg: libertymutual.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN6PR06MB3378.namprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 03a39e3e-cc0c-44f9-b59c-08df4cef33a2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Nov 2026 01:30:35.6940
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 08a83339-90e7-49bf-9075-957ccd561bf1
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR06MB7622
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTI4MDAwNSBTYWx0ZWRfXyO1ey8WDGciu
+ 8BE3/6+3xlOPAEqfXHRvXsQL5UOizf+u7j3EUhoHK+WYFBm7cW3vJyDrIsDHqvQ6RbxBNRAP0Kf
+ H+PS9Vq/bhpb+OGHIQygysvDQsjTQ/d5235ReZ733cYLb7LwLlU6AUoH1oaW0mHNPfVeYOk43h3
+ T0+2iel70ykv0V+xeBlKMA/TjpHhNDB/F3H4XIUOkB7D2rdsQV4PUdYSnSM8MTInMCyuhH+imMZ
+ 8/OlA8KRnHEDT4sEOdp5HFNewQxNWBmXrwnkWGL5XVSQL0lV11VHQYlVSXHtKUSHk519bccK0vp
+ YhzRRjIl6sDV1loMCBEg4LLvmSTU59QTH7AXY2KidmpkOrROGWy+mnzOO6Z9h1giJLBSGBsumLJ
+ g8SihHADb/ZnztYD4wUFJ7kRZ+bxkQT3HlqHWpv8OdL400DOuFg0nLmyzOjN3ftHyeRMrMPm3Wf
+ MYE0stX8pGzHE8usXFw==
+X-Proofpoint-ORIG-GUID: Ms9e89dXUrCgUtxfC_c1RJ_Jk57OUgDu
+X-Authority-Analysis: v=2.4 cv=HORWhYtv c=1 sm=1 tr=0 ts=6b0a2ebe cx=c_pps
+ a=MB7q27p+LIGhC+3RxemCqA==:117 a=7iFupm1UAAAA:8
+ a=KWvOQs04uFl5JYH95pWQHK6vTCQ=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=nJ3SWzaruaMA:10
+ a=zJRp6_cAMcgA:10 a=EgoG0BDCLrYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=ikNrtXLmknU1cSVOEkqG:22 a=Bg8whL-BG149z6xlS_LL:22 a=lanQL5CTAAAA:8
+ a=KPJiaiu7yBbPP9lXF_sA:9 a=lqcHg5cX4UMA:10 a=CjuIK1q_8ugA:10
+ a=zZCYzV9kfG8A:10 a=yMhMjlubAAAA:8 a=SSmOFEACAAAA:8 a=Z9bxuGDz2eqy0l34pj8A:9
+ a=gKO2Hq4RSVkA:10 a=UiCQ7L4-1S4A:10 a=hTZeC7Yk6K0A:10 a=frz4AuCg-hUA:10
+ a=JbvEVWwuz5cbggGiVDFE:22 a=c51uwtqQjgtMH94jGSBX:22
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTI4MDAwNSBTYWx0ZWRfXyN5qUK0wnrez
+ TiETmdGemUvxd7drfHfD2UVpO+zdCwrlERtWzbF48654iFXqTBGiSHs4SzwUd1PxocJPqAWFzZM
+ SEQhPFGAP+dHMu86qfH2drN5bqzfSnOMzV4FmB3Ww1bGwd/ocl6e
+X-Proofpoint-GUID: Ms9e89dXUrCgUtxfC_c1RJ_Jk57OUgDu
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
+ definitions=2026-11-28_01,2026-11-27_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 suspectscore=0 lowpriorityscore=0 priorityscore=1501
+ adultscore=0 clxscore=1031 impostorscore=0 spamscore=0 bulkscore=0
+ phishscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2611040001
+ definitions=main-2611280005
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Result: default: False [-6.52 / 15.00];
+	BAYES_HAM(-2.95)[92.51%];
+	DWL_DNSWL_MED(-2.00)[libertymutual.com:dkim];
+	ARC_ALLOW(-1.00)[microsoft.com:s=arcselector10001:i=1];
+	URI_COUNT_ODD(1.00)[5];
+	DMARC_POLICY_ALLOW(-0.50)[libertymutual.com,reject];
+	IP_REPUTATION_HAM(-0.37)[asn: 26211(-0.36), country: US(-0.01), ip: 148.163.157.192(0.00)];
+	R_DKIM_ALLOW(-0.20)[libertymutual.com:s=pp1,LibertyMutual.onmicrosoft.com:s=selector1-LibertyMutual-onmicrosoft-com];
+	R_SPF_ALLOW(-0.20)[+ip4:148.163.157.192];
+	MX_GOOD(-0.10)[mxb-0037d204.gslb.pphosted.com];
+	MIME_GOOD(-0.10)[multipart/alternative,text/plain];
+	RCVD_IN_DNSWL_LOW(-0.10)[148.163.157.192:from];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCPT_COUNT_ONE(0.00)[1];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	RCPT_MAILCOW_DOMAIN(0.00)[enproinc.live];
+	URIBL_BLOCKED(0.00)[theworknumber.com:url,LibertyMutual.onmicrosoft.com:dkim,mx0a-0037d204.pphosted.com:rdns,mx0a-0037d204.pphosted.com:helo,libertymutual.com:dkim,libertymutual.com:email,libertymutual.com:from_mime,libertymutual.com:from_smtp,BN6PR06MB3378.namprd06.prod.outlook.com:mid];
+	FROM_HAS_DN(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FORGED_SENDER_VERP_SRS(0.00)[];
+	PREVIOUSLY_DELIVERED(0.00)[amanuelafeworktiku@enproinc.live];
+	FROM_NEQ_ENVFROM(0.00)[hosur@libertymutual.com,prvs=3792806f8b=hosur@libertymutual.com];
+	RCVD_TLS_LAST(0.00)[];
+	ASN(0.00)[asn:26211, ipnet:148.163.156.0/23, country:US];
+	DKIM_TRACE(0.00)[libertymutual.com:+,LibertyMutual.onmicrosoft.com:+];
+	MISSING_XM_UA(0.00)[];
+	RCVD_IN_DNSWL_NONE(0.00)[40.107.208.55:received];
+	TO_DN_EQ_ADDR_ALL(0.00)[];
+	ARC_SIGNED(0.00)[enproinc.live:s=dkim:i=2]
+X-Rspamd-Queue-Id: 3683B114AD0
+
+--_000_41941e48fcb74e248ca6e700e3d72214BN6PR06MB3378namprd06pr_
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+This is an automated email message.  HOSUR@libertymutual.com email address =
+is for Surety Bond Verification only.
+
+If your matter is related to auto or homeowner policies, please redirect yo=
+ur request to: IRISAT sa-AM_IRI01-prd@LibertyMutual.com<mailto:sa-AM_IRI01-=
+prd@LibertyMutual.com>
+
+If employment verification is needed, please connect with The Work Number; =
+www.theworknumber.com<http://www.theworknumber.com> | phone number 800-367-=
+2884.
+
+
+--_000_41941e48fcb74e248ca6e700e3d72214BN6PR06MB3378namprd06pr_
+Content-Type: text/html; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
+osoft-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
+xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
+//www.w3.org/TR/REC-html40">
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
+>
+<meta name=3D"Generator" content=3D"Microsoft Word 15 (filtered medium)">
+<style><!--
+/* Font Definitions */
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Aptos;}
+/* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0in;
+	font-size:11.0pt;
+	font-family:"Aptos",sans-serif;
+	mso-ligatures:standardcontextual;}
+a:link, span.MsoHyperlink
+	{mso-style-priority:99;
+	color:#467886;
+	text-decoration:underline;}
+span.EmailStyle18
+	{mso-style-type:personal-compose;
+	font-family:"Aptos",sans-serif;
+	color:windowtext;}
+.MsoChpDefault
+	{mso-style-type:export-only;
+	font-size:10.0pt;
+	mso-ligatures:none;}
+@page WordSection1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.0in 1.0in 1.0in;}
+div.WordSection1
+	{page:WordSection1;}
+--></style><!--[if gte mso 9]><xml>
+<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
+</xml><![endif]--><!--[if gte mso 9]><xml>
+<o:shapelayout v:ext=3D"edit">
+<o:idmap v:ext=3D"edit" data=3D"1" />
+</o:shapelayout></xml><![endif]-->
+</head>
+<body lang=3D"EN-US" link=3D"#467886" vlink=3D"#96607D" style=3D"word-wrap:=
+break-word">
+<div class=3D"WordSection1">
+<p class=3D"MsoNormal">This is an automated email message.&nbsp; HOSUR@libe=
+rtymutual.com email address is for
+<b>Surety Bond Verification</b> only. <o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">If your matter is related to auto or homeowner polic=
+ies, please redirect your request to: IRISAT
+<a href=3D"mailto:sa-AM_IRI01-prd@LibertyMutual.com">sa-AM_IRI01-prd@Libert=
+yMutual.com</a><o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+<p class=3D"MsoNormal">If employment verification is needed, please connect=
+ with The Work Number;
+<a href=3D"http://www.theworknumber.com">www.theworknumber.com</a> | phone =
+number 800-367-2884.<o:p></o:p></p>
+<p class=3D"MsoNormal"><o:p>&nbsp;</o:p></p>
+</div>
+</body>
+</html>
+
+--_000_41941e48fcb74e248ca6e700e3d72214BN6PR06MB3378namprd06pr_--

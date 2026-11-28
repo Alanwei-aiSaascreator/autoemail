@@ -277,10 +277,18 @@ def _process_stored(
     if case is None:
         raise RuntimeError(f"case id {assignment.case_id} 不存在")
 
+    # 链接式填表需求（确定性规则命中）：整单报请人工，LLM 不得改判、规划器不得接管。
+    if deterministic_intent.label == "link_form_manual":
+        intent = deterministic_intent
+
     # 回复全量规划：LLM 读全文+附件文本，在框架枚举内决策意图/材料/正文回答/
     # 附件处置/状态迁移；低置信或不可用时为 None，走确定性链路。
     reply_plan = None
-    if active_provider is not None and llm_allowed and provider_ready and deterministic_intent.payment is None:
+    if (
+        active_provider is not None and llm_allowed and provider_ready
+        and deterministic_intent.payment is None
+        and deterministic_intent.label != "link_form_manual"
+    ):
         from .ingest.pdf import extract_pdf_text
         from .planner import plan_reply
 
@@ -352,6 +360,18 @@ def _process_stored(
         transition_case(session, case, target_state, reason=f"收到代理商 {intent.label} 回复", message_id=stored.id)
         cancel_followups_for_case(session, case.id, reason="收到代理商新回复")
     session.commit()
+
+    # 链接式填表需求：推群报请人工处理（不自动填、不自动回），群消息直达值班人员
+    if intent.label == "link_form_manual" and notify:
+        commission, agent = _case_context(session, case)
+        manual_text = (
+            f"【报请人工】{commission.legal_name}（{case.case_no}）\n"
+            f"代理商 {agent.name} 要求通过在线链接/门户填表，系统按规则不代填。\n"
+            f"链接：{intent.slots.get('url') or '见邮件正文'}\n"
+            f"请人工打开链接完成填写并以公司邮箱回复。"
+        )
+        notify_wecom(settings.wecom_webhook, manual_text)
+        notify_feishu(settings.feishu_webhook, manual_text)
 
     # 文件合规审查（CBP Bond 规则表）：收到代理表格/委托资料附件即自动审查，
     # 结论由规则引擎逐条判定；REJECT（BLOCKER）推群告警。付款类不审。

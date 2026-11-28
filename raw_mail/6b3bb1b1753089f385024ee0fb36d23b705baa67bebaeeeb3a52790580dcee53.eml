@@ -1,0 +1,180 @@
+Return-Path: <>
+Delivered-To: cynthiabulleck@jatendofoods.online
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id mBZGH602CWt91wUAQ1DlOA
+	(envelope-from <>)
+	for <cynthiabulleck@jatendofoods.online>; Fri, 27 Nov 2026 02:52:13 -0500
+X-Original-To: cynthiabulleck@jatendofoods.online
+Received: from outbound-ip138b.ess.barracuda.com (outbound-ip138b.ess.barracuda.com [209.222.82.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id AEA04116CF3
+	for <cynthiabulleck@jatendofoods.online>; Fri, 27 Nov 2026 02:52:12 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=dubinassociates.com header.s=selector1 header.b=IFt5kt2d;
+	dmarc=pass (policy=reject) header.from=dubinassociates.com;
+	spf=none (mail.pony-it.com: domain of outbound-ip138b.ess.barracuda.com has no SPF policy when checking 209.222.82.74) smtp.helo=outbound-ip138b.ess.barracuda.com;
+	arc=pass ("microsoft.com:s=arcselector10001:i=1")
+ARC-Seal: i=2; a=rsa-sha256; d=jatendofoods.online; s=dkim; cv=pass;
+	t=1795765933;
+	b=LsJCzS3dmEMwuEcsu/PKRTRXHN40i5FhbwGtXinyW6miNeD3XcSKr4w1CiO7zSo3Flf3bW
+	4VUbbCnPl6NaoMWErVgto20w4GYxlN2mwcRLsgj/1fbKR+oFZvsQP7jtrg2a3NVzK1X4bn
+	rT4VFLmTGryvnDHZAgF/JHcmEjChAL41t7BDawAwsgB85V67yxlONvg+HbRFXBszXBVuD5
+	isk0Wg4cf0KYConEovs9zqMiPSkTj+OO/XVPBfzfrEBBdy7Y1hu4GfwLDPxvKRqu8xV2Gl
+	P9s3OMFV8NzXdmWcYm+nsMpjVC3mKam12lg5tuTA2nLVwOdtXDAxR+9GOvm7DQ==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed;
+	d=jatendofoods.online; s=dkim; t=1795765933;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references:dkim-signature;
+	bh=i6ORjgdQVCFx+ZbLYhGKdP4iawLbguepTwuXMAlcgZQ=;
+	b=KUpldb5hOdgk4BsT+umB1ZnUjRl6/ku4nM8jbmoc8ZnfVYq8ov/G+JBY120D0Yp/e/+ntS
+	zuu7cxnI4xxDQ8ma1/UnQLwgDcflo2TN5TQPkbtvRyphYfrWFz5D/DlGSXbwKHOye5Huw8
+	9Y6cI4MH2YLXLit06seefv+M6iD/ug4liQ/r0yWNnzQa3+lrdubcVYcZsmfB6Jeknwf3AB
+	HPLtBso2ukJ9wE8MjBsCOun2XtvoIxahYVhjSekNurxAuGe7nrXZlLQesArOqIbluH0xvb
+	yYrafS9k+zdFovVfvnlVfqXN/uMrSYyZqC7WM4QMlhkD1MoR83CZjVO2nIIyUQ==
+ARC-Authentication-Results: i=2;
+	mail.pony-it.com;
+	dkim=pass header.d=dubinassociates.com header.s=selector1 header.b=IFt5kt2d;
+	dmarc=pass (policy=reject) header.from=dubinassociates.com;
+	spf=none (mail.pony-it.com: domain of outbound-ip138b.ess.barracuda.com has no SPF policy when checking 209.222.82.74) smtp.helo=outbound-ip138b.ess.barracuda.com;
+	arc=pass ("microsoft.com:s=arcselector10001:i=1")
+Received: from BN8PR05CU002.outbound.protection.outlook.com (mail-eastus2azhn15011023.outbound.protection.outlook.com [52.102.138.23]) by mx-outbound20-162.us-east-2b.ess.aws.cudaops.com (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO); Fri, 27 Nov 2026 07:52:10 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=cvdio54rvOBxhvvCJplH5WjRy/biCsobjZX4JWsN7RFH21AhyC4swtBb8hI0AG3LONPHabh88sY7x4GxvxBbr822ssJyDt67pjoE39N94jiJFff7j75csGNCamTMfUxuMTe/hne/9P2ZFz73aTBTuu+gzkiYUy1HAlLcsMICJgbC4jyTWV9Xd+9NtMMg7FMCcaY/1hkkDgLSc1GAmaBb0VOejM6nsbq4kBIBWG7NT04z+nFOOL5B4FFg7kBdjnOb5zjo8dwQVJ8tq5jqC/Ogqz3zhosRtRQVXuS01opyxoJKjpzfGiodsD06zLX8yS6tx2VKIAfZVYv1ITb15ULR7A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=i6ORjgdQVCFx+ZbLYhGKdP4iawLbguepTwuXMAlcgZQ=;
+ b=CLo6m//QXas8CLVtAIo3LYZdE7AcpQkJTsGE3wjQlkwDn+tn2Ue+lTWCNrGc8N/qWSIqtZ4IfPI1HL1cX/haXhf356+5JbUdSGR5W4NJfVoHam6KYqIPRIPkvKSkGTots6db/S09xTf+2Uc+i3hFzBD/U0R02UxVoP1g0CVV0rS9Pc3eE1vcI4XQFJ2VjpVTSHnyY+xBDqBsizJr0DRQnLKZ74DW6O+v7hxxtVISLUV3tW4HXVECfER35yv4FdWo5RrNze2/v6XCsdvM3+Z7s+zSnpK/DiPdbrVkac01eppqh/3znE2TvJAWb2MDZ+vmc2e7RuIKwuVyB0yFSdVXkg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=pass
+ action=none header.from=dubinassociates.com; dkim=pass
+ header.d=dubinassociates.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dubinassociates.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=i6ORjgdQVCFx+ZbLYhGKdP4iawLbguepTwuXMAlcgZQ=;
+ b=IFt5kt2d/VrhllWGoD/vt7mtOmS/jExNeSSn50Fiq+fnZW/gK01M1vIpEHKkREZjFexS95Yjf/qT0tp0/2jYY1aggjAwGmozsmNoEknsl2ouCSSa58egwAdQPQlEPb++yDN87goSugehJ0lxrA7+J+bcCZcbO+qpc/5v+Lnl5KcnnAxoSJx4q5z6paDDqsFb/GTtnWWzrTzmeo8GFNZgFiRJsE0l9eLpO02STRaWtbwrF7I/h2ylExYkyuc9qBI6iEi6wdhOJ6zBV1QrKDQGLTx7j2faPgukVaiMZTeDD25PQYHEJ6WxX7S+jh9LbF3bvW2PYEFCHc+E56bfCHKz9w==
+Received: from PH3PPF48E09AAF9.NAMP221.PROD.OUTLOOK.COM (2603:10b6:518:1::5a1)
+ by DM3PPF0DEC79674.NAMP221.PROD.OUTLOOK.COM (2603:10b6:f:fc00::c8b) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.662.10; Fri, 27 Nov
+ 2026 07:52:08 +0000
+Received: from PH3PPF48E09AAF9.NAMP221.PROD.OUTLOOK.COM ([::1]) by
+ PH3PPF48E09AAF9.NAMP221.PROD.OUTLOOK.COM ([fe80::7d75:e307:cb8:694f%4]) with
+ Microsoft SMTP Server id 15.21.0662.004; Fri, 27 Nov 2026 07:52:08 +0000
+From: Michael Dubin <Michael@dubinassociates.com>
+To: "cynthiabulleck@jatendofoods.online" <cynthiabulleck@jatendofoods.online>
+Subject: Automatic reply: [BOND-2026-1286] Inquiry - Continuous Customs Bond
+Thread-Topic: [BOND-2026-1286] Inquiry - Continuous Customs Bond
+Thread-Index: AQHdfkQysG2iA60P1UGVJjggLSHKxrdBi9+i
+Date: Fri, 27 Nov 2026 07:52:08 +0000
+Message-ID:
+ <57cbc7a452974d9e97e4c8a5ce1baa59@PH3PPF48E09AAF9.NAMP221.PROD.OUTLOOK.COM>
+References:
+ <010f01a21bfd372d-675d6842-1342-4894-aa03-8e1d6809b260-000000@us-east-2.amazonses.com>
+In-Reply-To:
+ <010f01a21bfd372d-675d6842-1342-4894-aa03-8e1d6809b260-000000@us-east-2.amazonses.com>
+X-MS-Has-Attach:
+X-Auto-Response-Suppress: All
+X-MS-Exchange-Inbox-Rules-Loop: michael@dubinassociates.com
+X-MS-TNEF-Correlator:
+x-ms-exchange-parent-message-id:
+ <010f01a21bfd372d-675d6842-1342-4894-aa03-8e1d6809b260-000000@us-east-2.amazonses.com>
+auto-submitted: auto-generated
+x-ms-exchange-generated-message-source: Mailbox Rules Agent
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH3PPF48E09AAF9:EE_|DM3PPF0DEC79674:EE_
+x-ms-office365-filtering-correlation-id: c544648c-ae78-49a3-5411-08df4c5b56a7
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|50650200027|366016|1800799024|376014|10070799003|3613699012|10067099003|56012099006|261026140227099003|261028144727099003|261022105027099003|261022075727099003|22082099003|18002099003|5133699003|8096899003|12063799003|80100003;
+x-microsoft-antispam-message-info:
+ zpfq0kdOu2DyKQhvSidzaNYXH5xX/K/8l0lScQxhII1i0WM5yrKrPBVYkQFEWhggjUM+ye9rEeMF8WpFflcJ1r16R1vf0TI0q+s028pRLZ7GZojSVU+/OMOY/YF1nUQHc46UKIbhyDT9bbHSS5kwPgCv2OYDCSNSINjhVO57xuOwURTK2i75meiTw4gKUz1BbT9jAZKdapxCQyf7+G0S3dWTnF2X6YASt8l7JADR+k8h+wUzl1ubPG1aBLwVyasBAFkj2jZ7BQLxy40PkwT/j0LEElFepl3MsxkvzPWIAoODu8ju+Z727VpW1VpxBHPxsg4rZblvLglGv5IMe0IVp+AVEUiIJGNGPocLZZ9T61D/4YGp+/lKfCAu5/XU3yx76YMMBvw+PAapdVq4CBowxaNVJlvfiqQ9N55WPt87rTcDxNQNpB5lrLnnK+SpVcYPBK2qtUdNRhONyXrOCmbynaZUcNilyBTqlHmAfjizUMM60Naaqj8wefCh+IXZbtMpDCzL78uP13vHmaSS+D2WCfnmRCudZq/dqPmsvQP/coAqoU/dCgTYOBtLQNY46WzQ9bvcxVc09K6IWdO28WzltRO6ow/tJoadskigzZWtO1nb9pwE0IwT6r2a3n7pnc6Ca8MA2Q1Z9F0YdYFMZlP74qKjm/Wm7RnFIlzycaMNnUDvfP129cBIg9XPaKuFjdUIGjJ9UpqRrhseLlHyYGqdTk8wrj2mGU7G3kYBgiNsd/c=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH3PPF48E09AAF9.NAMP221.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(50650200027)(366016)(1800799024)(376014)(10070799003)(3613699012)(10067099003)(56012099006)(261026140227099003)(261028144727099003)(261022105027099003)(261022075727099003)(22082099003)(18002099003)(5133699003)(8096899003)(12063799003)(80100003);DIR:OUT;SFP:1501;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ /yRZnDX+t0ZQWscLKF5wFRwo5wo2XCy9CGLFNE6uQ57Ydyph/SYg7E6PRfH93oyiXEbcYc6GKhasHG/MCO5fpfm21g1lMvN9I4dzRKpkKD4jroEWkSfwGmjpZWq8R4Vfh/bE35oSUz7axuKx6kWAMbpc4SNIXpPB+8zv8/5O9FlF+OoNVDNcIMeKZi0Ybo6az3yupyBkvrPKZUryX3wLgunnYpIXPSCmxqXBocIiK/CqKCVLOGGqGJnNtXVOnzwXI3hrlHtS8+uMijjLSMSoNWlJOdPpAA1Dkq3y2eDL2c6GPq7XWOUu/Kc8akrZ6nt3NjDXmTwLK5ge0TLRDHcdOF15j3fAhc0Soe7hoRVtuYRytgfY6iKVFV7BgVDMX8UDclD2TRqwkCIRJ81Ei3g6ND2cQGVgrTa3pK5TEphGaCM4nf8GeUypVElbJ89TO1HN
+Content-Type: multipart/alternative;
+	boundary="_000_57cbc7a452974d9e97e4c8a5ce1baa59PH3PPF48E09AAF9NAMP221P_"
+MIME-Version: 1.0
+X-Exchange-RoutingPolicyChecked:
+	KhqfELMF/g0k6XsXYGZ5/m0xqTc2wRqpGeRWTIDBOEUU4HE+GrZMNDbZmFeSEt30fhrLfewhc/jMY7bb7OioqlEnoGwIhIxryFY5zYV74h8LZ/Ks5/BMmnSEJizolw+V86T9IsK5OQjsV9c0IuP7JeEqXhVjFByYytjOE7rXELOZT27PMy/6Fmp6BV0NwJpQtGW5VnX90wv3yLqCICiDXMVh7aF0+q46UE5sRYHXfc+bkzB5Tb7TPREGiyeUxpKyTNnmK0ANVPjKL/p4imCTJv/L8G1MpstdfUDT+2ZIdIVAnGekIAZnXzdLm7xxMRysHJjxcm65pyu7owiMEPuQvQ==
+X-OriginatorOrg: dubinassociates.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH3PPF48E09AAF9.NAMP221.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: c544648c-ae78-49a3-5411-08df4c5b56a7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Nov 2026 07:52:08.9192
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: bc3dca29-be04-4c63-9f94-6b522614237c
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM3PPF0DEC79674
+X-BESS-ID: 1795765930-105282-9786-61906-1
+X-BESS-VER: 2019.1_20261116.1548
+X-BESS-Apparent-Source-IP: 52.102.138.23
+X-BESS-Parts: H4sIAAAAAAACAzXLMQ6EMAxE0bu4pogdx3a4CtrCCUQ0iGJTrIS4+6aAZvQ10l
+	su2H4dZuhjJzi/MCOlEfv4iAlTS+queXXJLZJLYkNTqdZWuKeX7/14ODE+XEr2wMbVm2
+	BFFSOrJUYKxUy3APfnD0Zmn0l/AAAA
+X-BESS-Outbound-Spam-Score: 0.00
+X-BESS-Outbound-Spam-Report: Code version 3.2, rules version 3.2.2.277878 [from 
+	cloudscan14-18.us-east-2a.ess.aws.cudaops.com]
+	Rule breakdown below
+	 pts rule name              description
+	---- ---------------------- --------------------------------
+	0.00 EMPTY_ENV_FROM         HEADER: Empty Envelope From Address 
+	0.00 HTML_MESSAGE           BODY: HTML included in message 
+	0.00 BSF_BESS_OUTBOUND      META: BESS Outbound 
+X-BESS-Outbound-Spam-Status: SCORE=0.00 using account:ESS17642 scores of KILL_LEVEL=7.0 tests=EMPTY_ENV_FROM, HTML_MESSAGE, BSF_BESS_OUTBOUND
+X-BESS-BRTS-Status:1
+X-Last-TLS-Session-Version: TLSv1.2
+X-Spamd-Result: default: False [-2.51 / 15.00];
+	ARC_ALLOW(-1.00)[microsoft.com:s=arcselector10001:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[dubinassociates.com,reject];
+	IP_REPUTATION_HAM(-0.32)[asn: 16509(-0.31), country: US(-0.01), ip: 209.222.82.74(0.00)];
+	R_DKIM_ALLOW(-0.20)[dubinassociates.com:s=selector1];
+	BAYES_HAM(-0.19)[65.82%];
+	MIME_GOOD(-0.10)[multipart/alternative,text/plain];
+	MIME_FROM_MX_GOOD(-0.10)[d297439b.ess.barracudanetworks.com];
+	RCVD_IN_DNSWL_LOW(-0.10)[209.222.82.74:from];
+	MISSING_XM_UA(0.00)[];
+	ASN(0.00)[asn:16509, ipnet:209.222.82.0/24, country:US];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	ARC_SIGNED(0.00)[jatendofoods.online:s=dkim:i=2];
+	RCPT_COUNT_ONE(0.00)[1];
+	R_SPF_NA(0.00)[no SPF record];
+	RCVD_IN_DNSWL_NONE(0.00)[52.102.138.23:received];
+	TO_DN_EQ_ADDR_ALL(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_MAILCOW_DOMAIN(0.00)[jatendofoods.online];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_THREE(0.00)[3];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[dubinassociates.com:+]
+X-Rspamd-Queue-Id: AEA04116CF3
+
+--_000_57cbc7a452974d9e97e4c8a5ce1baa59PH3PPF48E09AAF9NAMP221P_
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+Thank you for your Email. Please note that I am on a temporary leave of abs=
+ence. Please email Operations@dubinassociates.com
+
+--_000_57cbc7a452974d9e97e4c8a5ce1baa59PH3PPF48E09AAF9NAMP221P_
+Content-Type: text/html; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+<html>
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
+>
+</head>
+<body>
+Thank you for your Email. Please note that I am on a temporary leave of abs=
+ence. Please email Operations@dubinassociates.com
+</body>
+</html>
+
+--_000_57cbc7a452974d9e97e4c8a5ce1baa59PH3PPF48E09AAF9NAMP221P_--

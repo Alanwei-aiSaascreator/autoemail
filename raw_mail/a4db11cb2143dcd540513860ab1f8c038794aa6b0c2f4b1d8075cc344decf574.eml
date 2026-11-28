@@ -1,0 +1,169 @@
+Return-Path: <ryan@crcustomsbrokers.com>
+Delivered-To: amanuelafeworktiku@enproinc.live
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id EAC6K2llCGtVvwkAQ1DlOA
+	(envelope-from <ryan@crcustomsbrokers.com>)
+	for <amanuelafeworktiku@enproinc.live>; Thu, 26 Nov 2026 11:59:21 -0500
+X-Original-To: amanuelafeworktiku@enproinc.live
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id E02B810E0D5
+	for <amanuelafeworktiku@enproinc.live>; Thu, 26 Nov 2026 11:59:20 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=crcustomsbrokers.com header.s=google header.b=fYCOcHNU;
+	spf=pass (mail.pony-it.com: domain of ryan@crcustomsbrokers.com designates 209.85.219.50 as permitted sender) smtp.mailfrom=ryan@crcustomsbrokers.com;
+	dmarc=none;
+	arc=pass ("google.com:s=arc-20260327:i=1")
+ARC-Seal: i=2; a=rsa-sha256; d=enproinc.live; s=dkim; cv=pass; t=1795712361;
+	b=lTupcsudeHb/Eiwm6iGzE16jfQ2bpXORVGE9rQZfVY52JfbXybLjZRDuQYcsGpZPsXWv+/
+	BvHMKqIYQEl7rj/UWQr+RbsNASoYDjTHcTYzUX/YpKhn+xsQvsZuQ3rNfRBdc66jSYXB+2
+	KPleTaNiKjYBcVn5Qy3b0s7eZXchvjcFgnLEL5DDu50xmk3poCoAppPUhhzHUVPAovIs3H
+	IvKOJ4oQ9ReeGvFxesaKjK9A4SV+wp0lM3eGhfsDjk4qEX3BAUGH0jCb66N72PJOexPqN2
+	PRV4NljsLdMBw1rajAsmXm+oIAkm/IdyyMKFLMWCYP/urpdBEgSceWI9OusbiA==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=enproinc.live;
+	s=dkim; t=1795712361;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:dkim-signature;
+	bh=BjxhPzuRLrjbJodwXkxha2Bh2ryDCTZf7zI/+er9KVA=;
+	b=KPSoaJR8lPYGKvxWYsObib6dqmdOcSGTHOjmRzKeezY3dqUYcK7T+1VA5tvY5ArnvvfRnp
+	yJZM2hQAxoNHAKQVra0/UqABcl4jyKlIWDd8sVad5WvMLIYaxAsnzZ9QZNFlmx9f6bsosp
+	y9AvMJqNVOs4qlnPCayyyjVVU0xjk9r8ZvMWCAXgOyztwjC6XMX9Q5TeNZ3GAgslY6FCKb
+	uKZ7CJtX64CNNz9OpcbIbyXJDqL6VtUKTMp/KeIU0GdF57EDNNujrBmZcGIH7s7cj1Q7bB
+	jtmszqP5O4q42cqhIwaRRjpyCOxeXGuPo5wVZ7FVNMplNHZ9dQc1ynDgp8xYWg==
+ARC-Authentication-Results: i=2;
+	mail.pony-it.com;
+	dkim=pass header.d=crcustomsbrokers.com header.s=google header.b=fYCOcHNU;
+	spf=pass (mail.pony-it.com: domain of ryan@crcustomsbrokers.com designates 209.85.219.50 as permitted sender) smtp.mailfrom=ryan@crcustomsbrokers.com;
+	dmarc=none;
+	arc=pass ("google.com:s=arc-20260327:i=1")
+Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-9210f2622ccso78714736d6.3
+        for <amanuelafeworktiku@enproinc.live>; Thu, 26 Nov 2026 08:59:20 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1795712360; cv=none;
+        d=google.com; s=arc-20260327;
+        b=jpSIGx4juy+5Ahr3vLN/Lvf0/9sUAH6Q4E/4BI2kXHFC7a4jKq5UapVKAWsRn+U2Bf
+         q4lBwCeLmtAQZijiyROA3McB3pBY3h/LJ6jI0nRHiefXYl7Mk6jVsvbIwfa4/TYU9a8K
+         aGJC6ECsCra3OdcMh2gECsAKEgc79vN/xM9wuIN5a9Gay6gn4S9hJ+vSyRkTzFOwQ0EE
+         zSxjMFgfHJoAY5jw2DR+zhiDqXl1lnj5DVTkVuTifS3rqnEP8AYvr7UKRbpq3/scQj43
+         thaFJGqYv8axi5h/5tmj56pRgAsljvIf9dsuQLBK1kUXJYmZWfCby7VDpeHEpyLFGahB
+         ustw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:references
+         :in-reply-to:from:mime-version:dkim-signature;
+        bh=BjxhPzuRLrjbJodwXkxha2Bh2ryDCTZf7zI/+er9KVA=;
+        fh=guv5z6gEUqLZBtOV5rDDVIdgaNjZoP2M3By4eixlInA=;
+        b=Clk7jSc2INtBnmq32CFKXFHKmk8PzhqxUQ+QO8mAhU+D9xKqUw+9gxwwoj/6uZSEG/
+         yH7+7cfcGp14iGDQn3O1YA2iUrYpfCGJt4u5W42CikmYTptt3i5w3El8dXnu49dNTZW6
+         ugEHjGrmAisV/SDW6vG3ajTMQppL3YHnqrZhhbyK4noVWPJIRh3+npv9m3TrnZhATvlU
+         yH//2s1KG0EwW2mmaOlxl85Qm4GFNMdQPFi84EsvTHtAQfQmmLkXKX4cDhzPr418MfAf
+         uBfgFvwBlqSVZjdFHs3GO4ij/SYZMpnB0HKXDIBP1RMqyQIZRRED0Q2R89kFjIGuuuh5
+         t+3g==;
+        darn=enproinc.live
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=crcustomsbrokers.com; s=google; t=1795712360; x=1796317160; darn=enproinc.live;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:references:in-reply-to:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=BjxhPzuRLrjbJodwXkxha2Bh2ryDCTZf7zI/+er9KVA=;
+        b=fYCOcHNU5o0kHeEJEiiHQ/wK4TEXHE3fBOUX0XXwyCsCQZQyXLjBasqh3wZaW3nHgC
+         idmF7dTqpYGKIBwntAVpdGGgxf73JtlSakwz+XNboyBzVjhcq2RzSO5afX1j96OakZCo
+         b+uxq6lrFlUeBFhm/8XOnX5MwdgzJLpKWnmf6xgoqrVOF7ETRIMhe1CHkR5K636dlSCI
+         Cwx0oRtTSzbSo/FteGT7m7FogN8FOoiE/bkbkr5biWSWUqMrhX0uFpp46cR+/jg24aZh
+         ew7vOLa2jEPBLJSll/bVD89TcxXKwCkJEEctamFHsQwPLvhIw6btV2S+2uJRnDqF2Mu/
+         +G+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1795712360; x=1796317160;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:references:in-reply-to:from:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=BjxhPzuRLrjbJodwXkxha2Bh2ryDCTZf7zI/+er9KVA=;
+        b=XEROMgOjpvJR4htWOyiXdmW7MciZ81+uxp95YD+0+X1pH0YmaDzLImIi7yasTSH5Oo
+         KwzMAJEyrTYUL6Zz4vhFQcgkPFW/o2LL8zwb5M6IWuJfvjp+dDXCyS0NZPVDgfRrdlBm
+         TnchooKLg+IuTBmoHOhrJSgR5S3bcX7zI0A1YWaRphY1aWo0RMg18C0RWeiZZ863Ao1Z
+         knBqEQrUUyR386LHzBTqefpcgmXYHfQfYaxFIEl6tAFvKXn3kkRg+7G8+O5aRcUx2twE
+         gLYHrjkoQuev/ZnAv2cSYgDc8jWiubyjHFo8wyR7FRzgbr1dnsAXg+8wptp41VEfZoeI
+         Oq1g==
+X-Gm-Message-State: APuU4Z8/gcR9j8YgjWcS5TV4lwVnZi5s6cnRYyF6148JZY0a4GTi3N3q
+	UbA9FXB+xsh3tGkeaLd5ngnsjwEIEaikCKURIa/yfdc7ay9kXrYnRcffZ7kmc0/rfILJxJ6uAzq
+	try0IU6acFec+Ijw6ZvZtBR50qIRRh73okP2BYI3ApLVInZDW4KJk
+X-Gm-Gg: AZFdTZf7X2btaaru7/odDO1NeWGIFqYZdtVJzBjco2olkU5W+mTld3dpBKMDa3wib2A
+	FTch+bijcjlu38R0vVPkLrB46Z9eAow7LzErLqbkBjN0Y/YSQgJWpXDV15oWN38blZHs8032FzM
+	XOFdmFPzYuYFa7x2Ede96SmyWB4tpml9xlx8oHrB5XlX+qfU5i31cFfeOsEYGm4PT3GQPIthgLj
+	3gFZwFkSafXCbZoZeqnfOg6s52r/BNYLxjvIOOe7jXAeTwwyaM+9ebGYhy7l+CUCwmC8OFFvhm0
+	cDF50n44oQDgJQCOseMIGoV1U58UfxtPqiRuLhzpC6iNuZ+xl8IQcYoqIU73W1bix2f0IrQ1pt+
+	cKyRbLgpRmLVlCClBtkm4sb6AaRKTQ1lT0w==
+X-Received: by 2002:a05:622a:5918:b0:533:2c5b:d668 with SMTP id
+ d75a77b69052e-55d76a518famr386191221cf.30.1795712359642; Thu, 26 Nov 2026
+ 08:59:19 -0800 (PST)
+Received: from 77377267392 named unknown by gmailapi.google.com with HTTPREST;
+ Thu, 26 Nov 2026 08:59:18 -0800
+MIME-Version: 1.0
+From: assistant@crcustomsbrokers.com
+In-Reply-To: <010f01a21562464a-3ec49490-c23d-4cdc-b78a-5da195c0b5b4-000000@us-east-2.amazonses.com>
+References: <010f01a2130526d1-3fe3e583-853f-4162-8594-72fbdaf29245-000000@us-east-2.amazonses.com>
+ <nh-3413a3ea-5d73-469c-b8b8-49ffa2ee0a56@google.com> <010f01a21562464a-3ec49490-c23d-4cdc-b78a-5da195c0b5b4-000000@us-east-2.amazonses.com>
+Date: Thu, 26 Nov 2026 08:59:18 -0800
+X-Gm-Features: Aa3M54rW7iQ_AWfC49sv4ybqjVncmdBxCWyUv5sWezj_Qb41kL6C07rJ1A0attA
+Message-ID: <CAAXE1E1b02sEe5-qwMr2VfQbMdej1rpYcDqah2S+j0rV3kVckA@mail.gmail.com>
+Subject: Re: [BOND-2026-0504] Bond quote confirmation
+To: amanuelafeworktiku@enproinc.live
+Cc: office@crcustomsbrokers.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Last-TLS-Session-Version: TLSv1.3
+X-Rspamd-Queue-Id: E02B810E0D5
+X-Spamd-Result: default: False [-7.06 / 15.00];
+	BAYES_HAM(-5.50)[100.00%];
+	ARC_ALLOW(-1.00)[google.com:s=arc-20260327:i=1];
+	FORGED_SENDER(0.30)[assistant@crcustomsbrokers.com,ryan@crcustomsbrokers.com];
+	IP_REPUTATION_HAM(-0.26)[asn: 15169(-0.25), country: US(-0.01), ip: 209.85.219.50(0.00)];
+	R_DKIM_ALLOW(-0.20)[crcustomsbrokers.com:s=google];
+	R_SPF_ALLOW(-0.20)[+ip4:209.85.128.0/17];
+	MX_GOOD(-0.10)[aspmx.l.google.com];
+	MIME_GOOD(-0.10)[text/plain];
+	RCVD_TLS_LAST(0.00)[];
+	URIBL_BLOCKED(0.00)[crcustomsbrokers.com:from_smtp,crcustomsbrokers.com:from_mime,crcustomsbrokers.com:dkim,mail-qv1-f50.google.com:rdns,mail-qv1-f50.google.com:helo];
+	RCPT_COUNT_TWO(0.00)[2];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_MAILCOW_DOMAIN(0.00)[enproinc.live];
+	DMARC_NA(0.00)[crcustomsbrokers.com];
+	FROM_NEQ_ENVFROM(0.00)[assistant@crcustomsbrokers.com,ryan@crcustomsbrokers.com];
+	DKIM_TRACE(0.00)[crcustomsbrokers.com:+];
+	MISSING_XM_UA(0.00)[];
+	TO_MATCH_ENVRCPT_SOME(0.00)[];
+	TO_DN_NONE(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	ARC_SIGNED(0.00)[enproinc.live:s=dkim:i=2];
+	PREVIOUSLY_DELIVERED(0.00)[amanuelafeworktiku@enproinc.live];
+	ASN(0.00)[asn:15169, ipnet:209.85.128.0/17, country:US];
+	RWL_MAILSPIKE_POSSIBLE(0.00)[209.85.219.50:from];
+	FROM_NO_DN(0.00)[];
+	RCVD_IN_DNSWL_NONE(0.00)[209.85.219.50:from]
+
+Hi Amanuel,
+
+For the surety=E2=80=99s review, please let us know what goods Enpro LLC pl=
+ans
+to import, the countries of origin, and the estimated total annual
+import value in U.S. dollars.
+
+Thank you,
+C & R Customs Brokerage Inc.
+
+On Thu, 26 Nov 2026 01:04:51 +0000, amanuelafeworktiku@enproinc.live wrote:
+> Hi C and R Customs Brokers Inc.,
+>
+> Thank you for the quote for Enpro LLC. We have received the quoted amount=
+ of the quoted amount USD.
+>
+> Please confirm the next required documents and processing steps for the C=
+ontinuous Customs Bond.
+>
+> Best regards,
+> AMANUEL AFEWORK TIKU

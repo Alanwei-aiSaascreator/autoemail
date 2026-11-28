@@ -1,0 +1,3009 @@
+Return-Path: <>
+Delivered-To: alexandradouglas@progynygroup.online
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id KLOsCcgpCWtQ5QAAQ1DlOA
+	(envelope-from <>)
+	for <alexandradouglas@progynygroup.online>; Fri, 27 Nov 2026 01:57:12 -0500
+X-Original-To: alexandradouglas@progynygroup.online
+Received: from e226-244.smtp-out.us-east-2.amazonses.com (e226-244.smtp-out.us-east-2.amazonses.com [23.251.226.244])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id 7CB20115BD8
+	for <alexandradouglas@progynygroup.online>; Fri, 27 Nov 2026 01:57:11 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=kpciS3CL;
+	dkim=fail ("headers rsa verify failed") header.d=SMITHLOGISTICS.onmicrosoft.com header.s=selector2-SMITHLOGISTICS-onmicrosoft-com header.b=A94VDj28;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	spf=pass (mail.pony-it.com: domain of e226-244.smtp-out.us-east-2.amazonses.com designates 23.251.226.244 as permitted sender) smtp.helo=e226-244.smtp-out.us-east-2.amazonses.com;
+	arc=reject ("signature check failed: fail, {[1] = sig:microsoft.com:reject}")
+ARC-Seal: i=2; a=rsa-sha256; d=progynygroup.online; s=dkim; cv=fail;
+	t=1795762631;
+	b=JPaWqTcom086dMWdmZVV7sEm/8gDFbp9A+Jew7AYn9WUlph7SDU0AjUXoDq1DnvR+nQ3Bh
+	9Vi4f43vVrUwa9HWkPrF6P3HWkXlwfLr+Pggm1DETi6D5s7AzVUXyK2hC/93d92QNQDy8/
+	FR2O72mxOC4qzXd9Xo8obpJ+MSJF3ZPpS6Waw/2wXHHwQIBQ0YJKwDi2JHSViswH4uD5rW
+	4COTx+5dZ5TXnCx+3kAJm/9uCdhIq1lIGoqrfm/ngYEt72lPca02l6VwCuBHW0JE2U8sIg
+	8B3GzQYNgFraRl1bCRRTsyBEnZYatPYDtAtcg+LWhP56VLppYYN+8Q7P09iQnA==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed;
+	d=progynygroup.online; s=dkim; t=1795762631;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references:dkim-signature;
+	bh=xRrO4yoHDKEuld0DjMFR/+9CHfZ8J8+l9hl4K5SGSqg=;
+	b=kbD3k5j+TOQrPujVhX3cfW3C6N2X/+lJegbIq47dDE5sjxKmOJrfhuplz8oSON0hmp4vl/
+	8exAxNnc5swE1/zCsptosbxLi4ir1p8BLua+DRgokJHc4b6hmBGHJE3f/Mo74xfSGWpjjl
+	3Bb4D21FN2GlQ4zj5NqbCTvO5QFq5ZjS3ZW96X2VY5knSakcKFzBnSqqBYqrz7Zxo8R1hx
+	LDIqhSYp0VgmJJjdPoUM1MyFGEZ55fSUC4LOum5A0kcUJ40LZ9XrpRsFpZ0earulBz4u7k
+	Ko3MxdRLE0Te1ULVdEnd8hMwl67/Q4qoOKZHauAsEl7qSCVhsitmiJmQvz72aA==
+ARC-Authentication-Results: i=2;
+	mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=kpciS3CL;
+	dkim=fail ("headers rsa verify failed") header.d=SMITHLOGISTICS.onmicrosoft.com header.s=selector2-SMITHLOGISTICS-onmicrosoft-com header.b=A94VDj28;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	spf=pass (mail.pony-it.com: domain of e226-244.smtp-out.us-east-2.amazonses.com designates 23.251.226.244 as permitted sender) smtp.helo=e226-244.smtp-out.us-east-2.amazonses.com;
+	arc=reject ("signature check failed: fail, {[1] = sig:microsoft.com:reject}")
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=kra23psoka5qyyh6gdejiiuof3nluwuz; d=amazonses.com; t=1795762631;
+	h=MIME-Version:From:To:Date:Content-Type:Message-ID:In-Reply-To:References:Subject:Feedback-ID;
+	bh=Er4KYIC4+YHmQ08o+UdY1FFNRs8GXjGhdbLpOq5pS/E=;
+	b=kpciS3CLf499wDW1PWt0r89Folw7hdRsgavkPAoahMLiZ/2zd2R6li0XoG0EdMWy
+	HbrfQaN+3WkBjmAzPnqUpd5ZUWQtg3ubaxfQgIK4+NJUtNiIXdASUgr9oH1X9uAF2i1
+	sfXU4US0XCW7w21oOweMOkhJE2yt3oDqb5seICaA=
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=UPyFDiDM8nNkMKm+bz4KhLOawTcoMMno7Rls8uZoXkCy0bcY/9WMZjmi9nfcN2lgOiedX5+1aLEObtmPbsqjOqN72ZCCvoL3C8CH2WWM5gKKu3iBwtfSPN/0STL1+yxHqvYQ9JRqW6CK+94wN7qW0cqYx0xRWntpNRV9PKP8scKPaSM5K4Es0UhNfs1gtjWHeEF9gWJR5ixyJ/OwQ8XSFvOgOTINCGMFtZHz2tCUQm3tCKkSBRQ5bx8u2JVcryX1vdgseJJjryoXDEx5H1hy9TY/90BCwrpsjIeAIkfDjtb1Nua+OKbiaJeFoamSgpJPUrGBGOPMugoIeRgigXkuiw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xRrO4yoHDKEuld0DjMFR/+9CHfZ8J8+l9hl4K5SGSqg=;
+ b=Gf4kWwL7yNdi3ZEqgCWpi2A7bV2xL3NrZH2YET/NyfQA9Q0uPAbLOEj8pS2Xwtqc1Te5b2vzTv0QpNAGTIiNmnMZeomBqERpzbZFcUzegR6c4grh6piLfjFzrNuCXJ5AVKZyaazmedY0RTmlxn3j23Zp3YtJsg/BlMwxj1j1LUdVHUf3UOzLHmiPkwE75HM4XcVpsQGzSuhX6BsNeWQ7iWNewn0pWMyujRCrir/4Dy7DA5a9kYqjsPRydhdoDm7UyRNPb5ABuFKE7lb6LjpwE+WFhJ/GTi3I2+HC5RGgbcU9XeXeXAeoNPqQAish7OGZ7k1NGHgDbGIxoNuS1h2cuQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=pass
+ action=none header.from=smithlogistics.net; dkim=pass
+ header.d=smithlogistics.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=SMITHLOGISTICS.onmicrosoft.com; s=selector2-SMITHLOGISTICS-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xRrO4yoHDKEuld0DjMFR/+9CHfZ8J8+l9hl4K5SGSqg=;
+ b=A94VDj282alCjWFIALs/oYep5HBuWjCtuep96foUcbgjXCkg0XDcGB/Spyl3YF9MAV7YeJpoTMZ5b1lHHSErY1YXy6HqcoCxAl3mCTcCfpZQeOIb9HQ4jCtsN2C0d3Uk1REYeSp1FmcCjJWKjKK938LlygM1Uv95gU5THnN+dmQ=
+MIME-Version: 1.0
+From: MAILER-DAEMON@us-east-2.amazonses.com
+To: alexandradouglas@progynygroup.online
+Date: Fri, 27 Nov 2026 06:57:10 +0000
+Content-Type: multipart/report; report-type=delivery-status;
+	boundary="46b6904d-bf0b-4749-a262-e8db0636afae"
+X-MS-Exchange-Message-Is-Ndr:
+Content-Language: en-US
+Message-ID: <010f01a21bcb3110-d52f7be4-f92a-493a-bb3c-e4414c4d14cc-000000@us-east-2.amazonses.com>
+In-Reply-To:
+ <010f01a21bc915fd-734edf65-239c-4acb-8e4e-faa41e09e819-000000@us-east-2.amazonses.com>
+References:
+ <010f01a21bc915fd-734edf65-239c-4acb-8e4e-faa41e09e819-000000@us-east-2.amazonses.com>
+Subject: Undeliverable: INFO-FWD: [BOND-2026-1013] Inquiry - Continuous
+ Customs Bond
+Auto-Submitted: auto-replied
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR16MB4712:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|50650200027|7149299003|61400799027|3109299003|7049299003|6049299003|69100299015|366016|1930700014|376014|3613699012|32400700002|10067099003|56012099006|260925022911599003|260925021911599003|260925021311599003|261026135527099003|261026121527099003|261026140227099003|261022115727099003|261028144727099003|261022105027099003|261022075727099003|261021123027099003|261021121427099003|261102123227099003|261009223027099003|261009221727099003|261009221227099003|5023799004|16102099003|22082099003|18002099003|9143799003|6133799003|13003099007|4053099003|8096899003|4076899003|4133799003|12063799003;
+X-Microsoft-Antispam-Message-Info:
+	/iYWVxt0JsD6HiC+dl00/6PlxaqzJZTRFlyT9vVnY5aSZzWNSQe2xk6vBfw3EXdwXxbbZxvORubc/qXz8YvRC01yM/ID9Pu2cKDo+2PTjuYAAYFDftuGgo+GW9bXY9aVIz8NdR1PKA2VVIe6WjNhDUEokXUnIs4/FLTlGBBZEOCzw1Rj/JDJQe8v/mJteeIukkNVIhXBw9w6B0XNeWj+Xu+7T+yTIf0c4asgZskwov07N6WVuzBrBU2qPIJlOJYz7r7KQUy4FSyCD3luR5sbZ5yN2xojdxLWgCAD1OI3RBsmr5lskhAF9yvS11eUtGznF9ieXYewtDNdbaHl1syPuS8ihT4fevJQIsBxNeDiEw1x9IgMDIZ9m0YSLmyI8pzY5rVCV7aNU9ElwD37TTdiqP4aegYuJrdS0eeoA727dPJwSMStzDda39HX1RtJlI41I14uP+jCkaTcrbyIHYfCCrTbbKPSvLzK35EfZgVefJc+ZCCtVl1TicYOPwt9n1c5lSRrrvHF8c9bifJ/r5zVcdsZJk8nGqTIpQtG0ds6rlS84H3ZdMYgQNHY/7nvayjeH2GQzBZ0yjCQZCSZQvotWSwkU6T26d3YKUhJYx81Ez/Eo/XVUd19dFK6FuYqzv2Nz841HVXFoGdN/d9M+x6/LaN8YmlseSBSqf6vfPXsvMD8AMiTDxqdfH20YExNpu99xiI9Cy1QpzT6OJuqEMmDsZJ5/DP17XiADTLoOteB/nv5rQW535y0m1iJmq8jaPtXQta8cpI3/ZTRdKJFo9sLFI59I/5DwF6m3MTWRWftRQBPBeTNcQvQoRf7Ch82q08MzAq6V/Od4r5UX0dAI1c4yA==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:;PTR:;CAT:NONE;SFS:(13230040)(50650200027)(7149299003)(61400799027)(3109299003)(7049299003)(6049299003)(69100299015)(366016)(1930700014)(376014)(3613699012)(32400700002)(10067099003)(56012099006)(260925022911599003)(260925021911599003)(260925021311599003)(261026135527099003)(261026121527099003)(261026140227099003)(261022115727099003)(261028144727099003)(261022105027099003)(261022075727099003)(261021123027099003)(261021121427099003)(261102123227099003)(261009223027099003)(261009221727099003)(261009221227099003)(5023799004)(16102099003)(22082099003)(18002099003)(9143799003)(6133799003)(13003099007)(4053099003)(8096899003)(4076899003)(4133799003)(12063799003);DIR:OUT;SFP:1501;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	gWWSfrXuxxXllUVFabyRVrPdgHd9hCPvl53j7KuKniI+DnB97yMYxyC6Cw2+SSjhz+/rflTWZCaP2VwojYgo5gPxlNTsQx6eaIxnQQX7gCikmXKEND3JWQ3uV8GO3cpPaTwRVhtL0p++M8FKC3pcYvcEfw29wNHaKviSld4xt4lSFPppB1hndB6uSEgHKujzj7RxY1SpC3oFeLzJcPAYjSdgPc8YZ97kYSeTDC2GY0QKbodMU4W9V76WXK9ZUYI5IaCNndDoPkfKJI1jSFSpfvDfkgoLBoKyex/8FiumnscTL6a0CZwrrgfH/Flh6xp0MIJFLzErg8f3OoUlwrf9Fg==
+X-OriginatorOrg: smithlogistics.net
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Nov 2026 06:57:02.7823
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR16MB4712.namprd16.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-Network-Message-Id:
+	aca96113-ceee-4006-8dce-08df4c53a407
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR16MB4712
+Feedback-ID: ::1.us-east-2.c0QCJwTJKDSb6mlKpIo5IpGwsngRMRBjZtJ48k4WYjY=:AmazonSES
+X-SES-Outgoing: 2026.11.27-23.251.226.244
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Result: default: False [-1.98 / 15.00];
+	BAYES_HAM(-5.50)[100.00%];
+	SEM_URIBL_FRESH15(3.00)[progynygroup.online:email];
+	BAD_REP_POLICIES(2.00)[];
+	IP_REPUTATION_HAM(-1.18)[asn: 16509(-0.31), country: US(-0.01), ip: 23.251.226.244(-0.86)];
+	R_DKIM_ALLOW(-0.20)[amazonses.com:s=kra23psoka5qyyh6gdejiiuof3nluwuz];
+	BOUNCE(-0.10)[DSN];
+	ONCE_RECEIVED(0.10)[];
+	ARC_REJECT(0.10)[signature check failed: fail, {[1] = sig:microsoft.com:reject}];
+	MIME_FROM_MX_GOOD(-0.10)[feedback-smtp.us-east-2.amazonses.com];
+	MIME_GOOD(-0.10)[multipart/alternative,text/plain];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	SUBJ_BOUNCE_WORDS(0.00)[];
+	RCPT_MAILCOW_DOMAIN(0.00)[progynygroup.online];
+	MIME_TRACE(0.00)[0:~,1:+,2:+,3:~,4:~,5:~,6:+];
+	RCPT_COUNT_ONE(0.00)[1];
+	ARC_SIGNED(0.00)[progynygroup.online:s=dkim:i=2];
+	R_DKIM_REJECT(0.00)[SMITHLOGISTICS.onmicrosoft.com:s=selector2-SMITHLOGISTICS-onmicrosoft-com];
+	DMARC_POLICY_ALLOW(0.00)[amazonses.com,quarantine];
+	DKIM_TRACE(0.00)[amazonses.com:+,SMITHLOGISTICS.onmicrosoft.com:-];
+	RCVD_COUNT_ZERO(0.00)[0];
+	R_SPF_ALLOW(0.00)[+ip4:23.251.226.244:c];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_NONE(0.00)[];
+	DWL_DNSWL_NONE(0.00)[amazonses.com:dkim];
+	ASN(0.00)[asn:16509, ipnet:23.251.226.0/24, country:US];
+	MISSING_XM_UA(0.00)[];
+	FROM_NO_DN(0.00)[];
+	DKIM_MIXED(0.00)[];
+	DMARC_POLICY_ALLOW_WITH_FAILURES(0.00)[];
+	RCVD_IN_DNSWL_NONE(0.00)[23.251.226.244:from]
+X-Rspamd-Queue-Id: 7CB20115BD8
+
+--46b6904d-bf0b-4749-a262-e8db0636afae
+Content-Type: multipart/alternative; differences=Content-Type;
+	boundary="ffaeb9a2-fdb6-4aea-9cf8-8e57176c7770"
+
+--ffaeb9a2-fdb6-4aea-9cf8-8e57176c7770
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+[https://products.office.com/en-us/CMSImages/Office365Logo_Orange.png?versi=
+on=3Db8d100a9-0a8b-8e6a-88e1-ef488fee0470]
+Your message to info@smithlogistics.net couldn't be delivered.
+info wasn't found at smithlogistics.net.
+010f01a21bc915fd-734. . .       Office 365      info
+Action Required                 Recipient
+Unknown To address
+
+How to Fix It
+The address may be misspelled or may not exist. Try one or more of the foll=
+owing:
+
+  *   Send the message again following these steps: In Outlook, open this n=
+on-delivery report (NDR) and choose Send Again from the Report ribbon. In O=
+utlook on the web, select this NDR, then select the link "To send this mess=
+age again, click here." Then delete and retype the entire recipient address=
+. If prompted with an Auto-Complete List suggestion don't select it. After =
+typing the complete address, click Send.
+  *   Contact the recipient (by phone, for example) to check that the addre=
+ss is correct.
+  *   The recipient may have set up email forwarding to an incorrect addres=
+s. Ask them to check that any forwarding they've set up is working correctl=
+y.
+  *   Clear the recipient Auto-Complete List in Outlook or Outlook on the w=
+eb by following the steps in this article: Fix email delivery issues for er=
+ror code 5.1.1 in Office 365<https://go.microsoft.com/fwlink/?LinkId=3D3893=
+63>, and then send the message again. Retype the entire recipient address b=
+efore selecting Send.
+
+Was this helpful? Send feedback to Microsoft<https://go.microsoft.com/fwlin=
+k/?LinkId=3D618497>.
+________________________________
+
+More Info for Email Admins
+Status code 554 5.4.14
+
+Typically this error occurs because the recipient email address is incorrec=
+t or doesn't exist at the destination domain. This can usually be fixed by =
+the sender. However, sometimes the issue needs to be fixed by the recipient=
+ or the recipient's email admin. If the steps in the How to Fix It section =
+above don't fix the problem, and you're the email admin for the recipient, =
+try one or more of the following:
+
+The email address exists and is correct - Confirm that the recipient addres=
+s exists, is correct, and is accepting messages.
+
+Synchronize your directories - If you have a hybrid environment and are usi=
+ng directory synchronization make sure the recipient's email address is syn=
+ced correctly in both Office 365 and in your on-premises directory.
+
+Errant forwarding rule - Check for forwarding rules that aren't behaving as=
+ expected. A forwarding rule can be configured by an admin via mail flow ru=
+les or mailbox forwarding address settings, or by the recipient via the Inb=
+ox Rules feature.
+
+Mail flow settings and MX records are not correct - Misconfigured mail flow=
+ settings or MX records can cause this error. Check your Office 365 mail fl=
+ow settings to make sure your domain and any mail flow connectors are set u=
+p correctly. Also, work with your domain registrar to make sure the MX reco=
+rds for your domain are configured correctly.
+
+Mail loop detected - This error also indicates that the receiving organizat=
+ion's email settings are misconfigured, creating a mail loop when a message=
+ is sent to an address that isn't found in their directory. This usually wo=
+n't disrupt mail flow for recipients that actually exist, but the recipient=
+'s email admin should fix the misconfiguration to reduce the chance of any =
+other mail flow issues. A common cause for this loop is that the recipient'=
+s domain is configured as "Internal Relay" when it should be "Authoritative=
+." Another common cause for the loop is that both the sender and recipient =
+are part of the same organization, but the sender's mailbox is hosted by Of=
+fice 365, while the recipient's mailbox is hosted on-premises, and an outbo=
+und connector from Office 365 to the on-premises email servers is missing o=
+r misconfigured. To fix this, the recipient's email admin should create a c=
+orrectly configured outbound connector in Office 365 to route the message t=
+o the on-premises mailbox.
+
+For more information and tips to fix this problem, see Fix email delivery i=
+ssues for error code 5.4.14 in Office 365<https://go.microsoft.com/fwlink/?=
+LinkId=3D397497>.
+
+Original Message Details
+Created Date:   11/27/2026 6:54:52 AM
+Sender Address: 010f01a21bc915fd-734edf65-239c-4acb-8e4e-faa41e09e819-00000=
+0@ses.progynygroup.online
+Recipient Address:      info@smithlogistics.net
+Subject:        INFO-FWD: [BOND-2026-1013] Inquiry - Continuous Customs Bon=
+d
+
+Error Details
+Error:  554 5.4.14 Hop count exceeded - possible mail loop ATTR34 [BN5PEPF0=
+0046989.namprd02.prod.outlook.com 2026-11-27T06:57:02.373Z 08DF4B7822815653=
+]
+Retry count:    1
+Message rejected by:    BN5PEPF00046989.mail.protection.outlook.com
+
+Notification Details
+Sent by:        PH0PR16MB4712.namprd16.prod.outlook.com
+
+Message Hops
+HOP     TIME (UTC)      FROM    TO      WITH    RELAY TIME
+1       11/27/2026
+6:54:53 AM      e226-6.smtp-out.us-east-2.amazonses.com DS8PEPF000000E0.mai=
+l.protection.outlook.com     Microsoft SMTP Server (version=3DTLS1_3, ciphe=
+r=3DTLS_AES_256_GCM_SHA384)   1 sec
+2       11/27/2026
+6:54:54 AM      DS8PEPF000000E0.namprd05.prod.outlook.com       CY5PR22CA01=
+02.outlook.office365.com     Microsoft SMTP Server (version=3DTLS1_3, ciphe=
+r=3DTLS_AES_256_GCM_SHA384)   1 sec
+3       11/27/2026
+6:54:54 AM      CY5PR22CA0102.namprd22.prod.outlook.com MN6PR16MB5452.nampr=
+d16.prod.outlook.com Microsoft SMTP Server (version=3DTLS1_2, cipher=3DTLS_=
+ECDHE_RSA_WITH_AES_256_GCM_SHA384)    *
+4       11/27/2026
+6:56:57 AM      SN4PR2101CU001.outbound.protection.outlook.com  DS4PEPF0000=
+01BF.mail.protection.outlook.com     Microsoft SMTP Server (version=3DTLS1_=
+3, cipher=3DTLS_AES_256_GCM_SHA384)   2 min, 3 sec
+5       11/27/2026
+6:56:57 AM      DS4PEPF000001BF.namprd21.prod.outlook.com       DS7P220CA00=
+93.outlook.office365.com     Microsoft SMTP Server (version=3DTLS1_3, ciphe=
+r=3DTLS_AES_256_GCM_SHA384)   *
+6       11/27/2026
+6:56:57 AM      DS7P220CA0093.NAMP220.PROD.OUTLOOK.COM  DS6PR16MB600182.nam=
+prd16.prod.outlook.com       Microsoft SMTP Server (version=3DTLS1_2, ciphe=
+r=3DTLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384)    *
+7       11/27/2026
+6:56:59 AM      SJ2PR03CU001.outbound.protection.outlook.com    CH2PEPF0001=
+66BE.mail.protection.outlook.com     Microsoft SMTP Server (version=3DTLS1_=
+3, cipher=3DTLS_AES_256_GCM_SHA384)   2 sec
+8       11/27/2026
+6:56:59 AM      CH2PEPF000166BE.namprd04.prod.outlook.com       CH0P220CA00=
+20.outlook.office365.com     Microsoft SMTP Server (version=3DTLS1_3, ciphe=
+r=3DTLS_AES_256_GCM_SHA384)   *
+9       11/27/2026
+6:57:00 AM      CH0P220CA0020.NAMP220.PROD.OUTLOOK.COM  PH0PR16MB4712.nampr=
+d16.prod.outlook.com Microsoft SMTP Server (version=3DTLS1_2, cipher=3DTLS_=
+ECDHE_RSA_WITH_AES_256_GCM_SHA384)    1 sec
+
+Original Message Headers
+
+ARC-Seal: i=3D5; a=3Drsa-sha256; s=3Darcselector10001; d=3Dmicrosoft.com; c=
+v=3Dpass;
+ b=3DWmUc5WjwwSoQxEPIKJXADFZo/koGRwwXoXKuY7Xmawa1hJZCzcaWJSHI1+hz2vCCzk4Ns4=
+sfBeJ7jUbwmWzz4Fnm7RH86yu9z1nzYl73D6Ls0S2tgxObMtpGzA6KkF+WOqrw8kErv7uDlV7Wa=
+p5DwgrP1pqAPsihKNRbTAUJvi0QXDCO2n1QmPCRdKm2nJ1d54p/xpLY0PsNAscbs+uefyQjDwY9=
+xiHTSsa+ITBZrbIMtXnQXCJnoAj9lIfOpHoyuUQvD2VqFb1Q2z8uohEY9eTbeudT9mDjxQecqfY=
+dgmjc1PVKBXwD1mqhBoqsgNXNhbvUVRUZSTxVLejBfFQoLQ=3D=3D
+ARC-Message-Signature: i=3D5; a=3Drsa-sha256; c=3Drelaxed/relaxed; d=3Dmicr=
+osoft.com;
+ s=3Darcselector10001;
+ h=3DFrom:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-A=
+ntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Ex=
+change-AntiSpam-MessageData-1;
+ bh=3Dwps7JvJzLlfKohD18VXy7D0ERjEj+/qmMhAtbsdG7BU=3D;
+ b=3DHn/IwLGeJrWARx4nCsfW7jOzxOaGNFauo0r8h8kzpq8uJR6X2QPdELGfT8s8aNj5LNhquv=
+ClPBrpoDvYm4xluJUmi6AfhHPdkQN0bQbqEr/pWiFtT83m99/Sq7+vXrK4YJ14LSNahHmXIf9Em=
+QPNWECXk5CjHA1aV/M95IhOupgek44r4dOrLPzUAsmxC5MCNdjrMwIj1VQqeLdBtPFboSvVrSAY=
+mhS50afDVvue39pxmqLJ7BqVYdQ3sCnMlvmaW+8UySyGdVrAubBDYkFDLTB3FUAOJDFDca2ckGO=
+9pKd5qFiJBuESUM9sS9f3wHGtOz7xVq9+pxMtDEXLGq+oBA=3D=3D
+ARC-Authentication-Results: i=3D5; mx.microsoft.com 1; spf=3Dsoftfail (send=
+er ip
+ is 2a01:111:f403:c001::2) smtp.rcpttodomain=3Dsmithlogistics.net
+ smtp.mailfrom=3Dses.progynygroup.online; dmarc=3Dfail (p=3Dnone sp=3Dnone =
+pct=3D100)
+ action=3Dnone header.from=3Dprogynygroup.online; dkim=3Dfail (signature di=
+d not
+ verify) header.d=3Dprogynygroup.online; dkim=3Dfail (signature did not ver=
+ify)
+ header.d=3Damazonses.com; dkim=3Dfail (signature did not verify)
+ header.d=3Dprogynygroup.online; arc=3Dpass (0 oda=3D1 ltdi=3D1
+ spf=3D[1,1,smtp.mailfrom=3Dses.progynygroup.online]
+ dkim=3D[1,1,header.d=3Dprogynygroup.online]
+ dmarc=3D[1,1,header.from=3Dprogynygroup.online])
+ARC-Seal: i=3D4; a=3Drsa-sha256; s=3Darcselector10001; d=3Dmicrosoft.com; c=
+v=3Dpass;
+ b=3DuDo3+RQR/xCEdB88EsKcbbN4SKzM5NnRXuNanWJGc3eBWf/JBOioS4c9W0qVKkKLl1JjBf=
+M9oVwSyIAigITb0Z1OUJO4WRLRxJ4kMWDkQd17wnQoNnkPauzc+nkLtDQK/4S6HXO+mYy3ObZcl=
+lByeVzVoXDHSwRFKCADhtnVL1Bwwo2CNlUxb1zKNCDuB8Q5VsLyn8X4ctkovE3jFzP/YkiUzabU=
+k7JO2ZA1p14Nx/ZUOXVhumtTQ1NJVi880GEuSFUBynez5XTaXqWOeT8PPW0ItQQAV73fKk5Id5J=
+LVnJD3jPxVR6Gy4zzKE85FEhJoZjtGjB4WBF5bKJsgbvcIQ=3D=3D
+ARC-Message-Signature: i=3D4; a=3Drsa-sha256; c=3Drelaxed/relaxed; d=3Dmicr=
+osoft.com;
+ s=3Darcselector10001;
+ h=3DFrom:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-A=
+ntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Ex=
+change-AntiSpam-MessageData-1;
+ bh=3Dwps7JvJzLlfKohD18VXy7D0ERjEj+/qmMhAtbsdG7BU=3D;
+ b=3DlzPx3/4NQW5N/0prHJMqXBwlvfnpav6PCX2aZrrCMU/FZ+sYLjkHBaDAJjzNCHkS4cZsDK=
+RT1jsTg4njcJ5MS0wmHYMpSsGLahaNYg1QgTQoBbxm0Kipe6YDwlhaZXn6J6RFkqH5dpa2/DV1Y=
+pV7e6AAmzOfwHGv/R223Dy2Ml85YsSGnrXD2PKv4lGDDJ0zk1qIsZpz73ikfKBc64r/U7yanUqt=
+fgmuZgr7O12hJU3SAKeEV/C+LNH2sV2RmCu+5YWGbWjQL1eFc24Aov9jFssxRTnrMxCH/BtKK+8=
+OgfPDmafhOtWFZpjy7MMN4EBp/uOawR+V1Xw5gLs+YIa++Q=3D=3D
+ARC-Authentication-Results: i=3D4; mx.microsoft.com 1; spf=3Dsoftfail (send=
+er ip
+ is 2a01:111:f403:c001::2) smtp.rcpttodomain=3Dsmithlogistics.net
+ smtp.mailfrom=3Dses.progynygroup.online; dmarc=3Dfail (p=3Dnone sp=3Dnone =
+pct=3D100)
+ action=3Dnone header.from=3Dprogynygroup.online; dkim=3Dfail (signature di=
+d not
+ verify) header.d=3Dprogynygroup.online; dkim=3Dfail (signature did not ver=
+ify)
+ header.d=3Damazonses.com; dkim=3Dfail (signature did not verify)
+ header.d=3Dprogynygroup.online; arc=3Dpass (0 oda=3D1 ltdi=3D1
+ spf=3D[1,1,smtp.mailfrom=3Dses.progynygroup.online]
+ dkim=3D[1,1,header.d=3Dprogynygroup.online]
+ dmarc=3D[1,1,header.from=3Dprogynygroup.online])
+Received: from CH0P220CA0020.NAMP220.PROD.OUTLOOK.COM (2603:10b6:610:ef::33=
+)
+ by PH0PR16MB4712.namprd16.prod.outlook.com (2603:10b6:510:143::8) with
+ Microsoft SMTP Server (version=3DTLS1_2,
+ cipher=3DTLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.662.11; Fri, 27 N=
+ov
+ 2026 06:57:00 +0000
+Received: from CH2PEPF000166BE.namprd04.prod.outlook.com
+ (2603:10b6:610:ef:cafe::1e) by CH0P220CA0020.outlook.office365.com
+ (2603:10b6:610:ef::33) with Microsoft SMTP Server (version=3DTLS1_3,
+ cipher=3DTLS_AES_256_GCM_SHA384) id 15.21.615.9 via Frontend Transport; Fr=
+i, 27
+ Nov 2026 06:56:59 +0000
+Authentication-Results: mx.microsoft.com 1; spf=3Dsoftfail (sender IP is
+ 2a01:111:f403:c001::2) smtp.mailfrom=3Dses.progynygroup.online; dkim=3Dfai=
+l
+ (signature did not verify) header.d=3Dprogynygroup.online;dkim=3Dfail (sig=
+nature
+ did not verify) header.d=3Damazonses.com;dkim=3Dfail (signature did not ve=
+rify)
+ header.d=3Dprogynygroup.online;dmarc=3Dfail action=3Dnone
+ header.from=3Dprogynygroup.online;compauth=3Dpass reason=3D130
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ ses.progynygroup.online discourages use of 2a01:111:f403:c001::2 as permit=
+ted
+ sender)
+Received: from SJ2PR03CU001.outbound.protection.outlook.com
+ (2a01:111:f403:c001::2) by CH2PEPF000166BE.mail.protection.outlook.com
+ (2603:10b6:61f:fc00::d28) with Microsoft SMTP Server (version=3DTLS1_3,
+ cipher=3DTLS_AES_256_GCM_SHA384) id 15.21.688.5 via Frontend Transport; Fr=
+i, 27
+ Nov 2026 06:56:59 +0000
+ARC-Seal: i=3D3; a=3Drsa-sha256; s=3Darcselector10001; d=3Dmicrosoft.com; c=
+v=3Dpass;
+ b=3DMeaa2v6dBdLLAfR+pa2L4vnOTu7AjuPhLRjTEDYFo04K5nPP7/xhG2Z7ofZxleGj3NKnW/=
+plEl+DG8oZgPiYPMT48q5vqwzA2liyn9TPpFrhHGnyrGtL+jE9f3VV+e9sxdw2beQ/jYI7z8PSN=
+ysfrYMquSxWRCpKeaZPQjydMTiTfS61db0Baukr7GxLPSFfk8cDrSgU2oNA349YwfjFEhmtDvJH=
+mhGfqUfKhUCws/OJn1fHyYpkiy9OFXuo2MbyGncgBl3JbQFl+fgU/IljW3aLATO2sk5DDXToKja=
+99myqEa0BWWykazrBD2GfLXuxFA7z6NweVLO3SiHZQWn0OQ=3D=3D
+ARC-Message-Signature: i=3D3; a=3Drsa-sha256; c=3Drelaxed/relaxed; d=3Dmicr=
+osoft.com;
+ s=3Darcselector10001;
+ h=3DFrom:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-A=
+ntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Ex=
+change-AntiSpam-MessageData-1;
+ bh=3Dwps7JvJzLlfKohD18VXy7D0ERjEj+/qmMhAtbsdG7BU=3D;
+ b=3DCL/GAM74O0lXt8awbwEWFhFfpO1iZ/cZtSiZniozZ+gvT7hbBuluX142g0A8qbdt0EZe/+=
+Ryq1p3qx+Z0XTnhAHWdgqRXknMhbnWg5rdvgU/V+jBQuCtbwLtg+KUMCQtRhBAut4XWL0jVSzBq=
+ttz5i3rIVHfo3KyPqeO26PQ54kOF+Eubv0I6ekrJ78eTN8ackd2G/D8SA+NOxUTrsiK+VUEdGKX=
+Zv4Yru8jPlWgozlYpZRoGde4ZUr3vXRZMrrvNWngeeSq/UZHQQNbyWDlDXZTISv2exlp8C1j7A0=
+VSM2os30M1/OjmilvazWVHjTUbZlbj5RoJma/ItXjMCFBrw=3D=3D
+ARC-Authentication-Results: i=3D3; mx.microsoft.com 1; spf=3Dsoftfail (send=
+er ip
+ is 2a01:111:f403:c10d::1) smtp.rcpttodomain=3Dsmithlogistics.net
+ smtp.mailfrom=3Dses.progynygroup.online; dmarc=3Dfail (p=3Dnone sp=3Dnone =
+pct=3D100)
+ action=3Dnone header.from=3Dprogynygroup.online; dkim=3Dfail (signature di=
+d not
+ verify) header.d=3Dprogynygroup.online; dkim=3Dfail (signature did not ver=
+ify)
+ header.d=3Damazonses.com; dkim=3Dfail (signature did not verify)
+ header.d=3Dprogynygroup.online; arc=3Dpass (0 oda=3D1 ltdi=3D1
+ spf=3D[1,1,smtp.mailfrom=3Dses.progynygroup.online]
+ dkim=3D[1,1,header.d=3Dprogynygroup.online]
+ dmarc=3D[1,1,header.from=3Dprogynygroup.online])
+ARC-Seal: i=3D2; a=3Drsa-sha256; s=3Darcselector10001; d=3Dmicrosoft.com; c=
+v=3Dpass;
+ b=3DZVV3mbVqjWxas2AHH4nQ62rqMzKYqzslRD7Ixnx9QrFm/3D52pwcTxoiLFj5UK4nkJyMC4=
+FxT/b40hjmQrqKdJecNDEi7cMbGHAxtzV8sB5gdqRo0j6x5bj5RSJBTZ6xMP5e9u2/u5KxPoNrS=
+oTy9d0oZJp/PVifkGYRLLTbGAeB65dXqAzu9u9lCXBdycGiZmkPJb9/Zjl7LVe2CNvcV8jGbiFd=
+F2qXhNrBgDIauwNPJ+FVP/9VOvfh3BeZRJtCAAiX4ZjDHphp20P0g5bzmYsquD2LwAGptqNvqbs=
+miJjYhey+9R8f07BIGVNA0mvlGTgBiEPlJTYtFIKBaeLIPw=3D=3D
+ARC-Message-Signature: i=3D2; a=3Drsa-sha256; c=3Drelaxed/relaxed; d=3Dmicr=
+osoft.com;
+ s=3Darcselector10001;
+ h=3DFrom:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-A=
+ntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Ex=
+change-AntiSpam-MessageData-1;
+ bh=3Dwps7JvJzLlfKohD18VXy7D0ERjEj+/qmMhAtbsdG7BU=3D;
+ b=3DgoUIIAVpiTWay30/hdNeVu8dZuUlL/LO4IUca7GShoy3E1wVf/Rc37IhkovewZjW4OjY3K=
+/EUtO3QTfcw6IcrSUrI5+UbN9vRMQlAVaNNTWY5B/P2eNz3Y+aUKAGaNEy7zE3oQBMvagzfKdoy=
+JLO50U3/wBa8opw1iLrN52HRISTUn3Q6isvk4Jof2DwQPZo36VSnwckl3H89XRLAwg0zs/e5jg3=
+w13wCuT0JxuqnXED72JoE72Lzh6BLZQA9N0z+lNM9jiFtD1FwL39VafPPyBdxxvUKWMKj9Ad/i+=
+dbFuP9CojjFfLM4fsN29pEi4u9epi0SueM9MT2JGnV0v5XQ=3D=3D
+ARC-Authentication-Results: i=3D2; mx.microsoft.com 1; spf=3Dsoftfail (send=
+er ip
+ is 2a01:111:f403:c10d::1) smtp.rcpttodomain=3Dsmithlogistics.net
+ smtp.mailfrom=3Dses.progynygroup.online; dmarc=3Dfail (p=3Dnone sp=3Dnone =
+pct=3D100)
+ action=3Dnone header.from=3Dprogynygroup.online; dkim=3Dfail (signature di=
+d not
+ verify) header.d=3Dprogynygroup.online; dkim=3Dfail (signature did not ver=
+ify)
+ header.d=3Damazonses.com; dkim=3Dfail (signature did not verify)
+ header.d=3Dprogynygroup.online; arc=3Dpass (0 oda=3D1 ltdi=3D1
+ spf=3D[1,1,smtp.mailfrom=3Dses.progynygroup.online]
+ dkim=3D[1,1,header.d=3Dprogynygroup.online]
+ dmarc=3D[1,1,header.from=3Dprogynygroup.online])
+Received: from DS7P220CA0093.NAMP220.PROD.OUTLOOK.COM (2603:10b6:8:25a::17)=
+ by
+ DS6PR16MB600182.namprd16.prod.outlook.com (2603:10b6:8:530::13) with
+ Microsoft SMTP Server (version=3DTLS1_2,
+ cipher=3DTLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.662.9; Fri, 27 No=
+v
+ 2026 06:56:57 +0000
+Received: from DS4PEPF000001BF.namprd21.prod.outlook.com
+ (2603:10b6:8:25a:cafe::9b) by DS7P220CA0093.outlook.office365.com
+ (2603:10b6:8:25a::17) with Microsoft SMTP Server (version=3DTLS1_3,
+ cipher=3DTLS_AES_256_GCM_SHA384) id 15.21.662.10 via Frontend Transport; F=
+ri,
+ 27 Nov 2026 06:56:57 +0000
+Authentication-Results-Original: mx.microsoft.com 1; spf=3Dsoftfail (sender=
+ IP
+ is 2a01:111:f403:c10d::1) smtp.mailfrom=3Dses.progynygroup.online; dkim=3D=
+fail
+ (signature did not verify) header.d=3Dprogynygroup.online;dkim=3Dfail (sig=
+nature
+ did not verify) header.d=3Damazonses.com;dkim=3Dfail (signature did not ve=
+rify)
+ header.d=3Dprogynygroup.online;dmarc=3Dfail action=3Dnone
+ header.from=3Dprogynygroup.online;compauth=3Dpass reason=3D130
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ ses.progynygroup.online discourages use of 2a01:111:f403:c10d::1 as permit=
+ted
+ sender)
+Received: from SN4PR2101CU001.outbound.protection.outlook.com
+ (2a01:111:f403:c10d::1) by DS4PEPF000001BF.mail.protection.outlook.com
+ (2603:10b6:f:fc00::245) with Microsoft SMTP Server (version=3DTLS1_3,
+ cipher=3DTLS_AES_256_GCM_SHA384) id 15.21.688.0 via Frontend Transport; Fr=
+i, 27
+ Nov 2026 06:56:57 +0000
+ARC-Seal: i=3D1; a=3Drsa-sha256; s=3Darcselector10001; d=3Dmicrosoft.com; c=
+v=3Dnone;
+ b=3DA3uixLzDCtICa+Se3Rw9Tduic0mO0FNVDgCtPK2Re/1DkgEhlebh8iFtSEQmdhKSBgTE3Z=
+eKNMr6DW+13ifSne4jMFF4TVu1CdRLMX8wjKG29YTinrXWRc+s0tRlsFEMrvugb/9xy5r9zgRTb=
+C2EmpqBiLk5+Uh6uOcJmcY6rHwfh+y/LQq8Kn11Xy0BcaTXoYLeB2p//0OKRAh9grSI1pMLmWEi=
+cQBKrV0gYXcF6K8/Bzd+z3uZAqCvkjEeuM1s2fj6DlCjoSWFin408yQfUipMIQLEt7UPWTcP7F7=
+UYxr2jGF1hPMKJKjQhWyqAuyyX9JljEoFz82bUdKd6tm94Q=3D=3D
+ARC-Message-Signature: i=3D1; a=3Drsa-sha256; c=3Drelaxed/relaxed; d=3Dmicr=
+osoft.com;
+ s=3Darcselector10001;
+ h=3DFrom:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-A=
+ntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Ex=
+change-AntiSpam-MessageData-1;
+ bh=3Dwps7JvJzLlfKohD18VXy7D0ERjEj+/qmMhAtbsdG7BU=3D;
+ b=3DgDVJj1YxhpVXssAjDi91ThV/A/Jt9t/wGlvdjy6uKj3WECSn0i6OJLhZIJt4Hr7Q6lXiQr=
+x1Yz2H6xNYZl48E23DSSRF6aoLMCnVimRC0tYt5MAINWTYoCzslbXG5zbmcDYhdCUKpq+Kr+JOO=
+RuX2QJeOtD9g6DjzYqklcsWsIAhV82WnG6PagPp0CvA3VgLiZp6Lf5AvMhDqYR5OWCRz/Au+EwJ=
+Kk+Y1fb3RIp7+4nBvy+jFfkIJrBWMRpJrBw0tyKOgcj7xx6xvX1w7d5zTTCTppb3kR/CzzSzu63=
+Q3ch9Aluv3kL0ABJSIN45kfeR4p7kKC7c3kbxM6u1PtdCZQ=3D=3D
+ARC-Authentication-Results: i=3D1; mx.microsoft.com 1; spf=3Dpass (sender i=
+p is
+ 23.251.226.6) smtp.rcpttodomain=3Dsmithlogistics.net
+ smtp.mailfrom=3Dses.progynygroup.online; dmarc=3Dpass (p=3Dnone sp=3Dnone =
+pct=3D100)
+ action=3Dnone header.from=3Dprogynygroup.online; dkim=3Dpass (signature wa=
+s
+ verified) header.d=3Dprogynygroup.online; dkim=3Dpass (signature was verif=
+ied)
+ header.d=3Damazonses.com; dkim=3Dfail (signature did not verify)
+ header.d=3Dprogynygroup.online; arc=3Dnone (0)
+Received: from CY5PR22CA0102.namprd22.prod.outlook.com (2603:10b6:930:65::2=
+9)
+ by MN6PR16MB5452.namprd16.prod.outlook.com (2603:10b6:208:479::20) with
+ Microsoft SMTP Server (version=3DTLS1_2,
+ cipher=3DTLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.662.11; Fri, 27 N=
+ov
+ 2026 06:54:54 +0000
+Received: from DS8PEPF000000E0.namprd05.prod.outlook.com
+ (2603:10b6:930:65:cafe::a1) by CY5PR22CA0102.outlook.office365.com
+ (2603:10b6:930:65::29) with Microsoft SMTP Server (version=3DTLS1_3,
+ cipher=3DTLS_AES_256_GCM_SHA384) id 15.21.662.9 via Frontend Transport; Fr=
+i, 27
+ Nov 2026 06:54:54 +0000
+Authentication-Results-Original: mx.microsoft.com 1; spf=3Dpass (sender IP =
+is
+ 23.251.226.6) smtp.mailfrom=3Dses.progynygroup.online; dkim=3Dpass (signat=
+ure was
+ verified) header.d=3Dprogynygroup.online;dkim=3Dpass (signature was verifi=
+ed)
+ header.d=3Damazonses.com;dkim=3Dfail (signature did not verify)
+ header.d=3Dprogynygroup.online;dmarc=3Dpass action=3Dnone
+ header.from=3Dprogynygroup.online;compauth=3Dpass reason=3D100
+Received-SPF: Pass (protection.outlook.com: domain of ses.progynygroup.onli=
+ne
+ designates 23.251.226.6 as permitted sender) receiver=3Dprotection.outlook=
+.com;
+ client-ip=3D23.251.226.6; helo=3De226-6.smtp-out.us-east-2.amazonses.com; =
+pr=3DC
+Received: from e226-6.smtp-out.us-east-2.amazonses.com (23.251.226.6) by
+ DS8PEPF000000E0.mail.protection.outlook.com (10.167.23.203) with Microsoft
+ SMTP Server (version=3DTLS1_3, cipher=3DTLS_AES_256_GCM_SHA384) id 15.21.6=
+88.5
+ via Frontend Transport; Fri, 27 Nov 2026 06:54:53 +0000
+DKIM-Signature: v=3D1; a=3Drsa-sha256; q=3Ddns/txt; c=3Drelaxed/simple;
+        s=3Dmgca6wxceznxagzyafhq72n3i2g6kicb; d=3Dprogynygroup.online;
+        t=3D1795762493;
+        h=3DFrom:To:Subject:Message-ID:Content-Type:Content-Transfer-Encodi=
+ng:MIME-Version:Date;
+        bh=3Dwps7JvJzLlfKohD18VXy7D0ERjEj+/qmMhAtbsdG7BU=3D;
+        b=3DHzIFI7B+GRRXDH07qSaGs9ZWiFzMC8cwYCRmYoSOLPCfUw+ZCBTAHdNNrvihpfC=
+1
+        Vh27XaO4PbQm8Ouv6UyHeT91itP+RYIE7HZEd8Y3Qz7vdqFkPIbHn7EAlksHm0v9vy0
+        3Ia/EfhXL1mUL1JbOwuKWNVPK4vQad/nYv1fDAoSsodiexawjj9aOHeSDW9vthjWpHq
+        iTQCreCw1s6WFdetbzggrz45GXa7xwdHT1SsGM41Ll+TRh09Ienen/xIFGj8E/Vk8vk
+        w0ZRstFNte5gCRM77PEC2eLKeB25Ze69slFz7HE0KZjbhVyQTnJisdOSJbzgEZqew/W
+        aF9vMat6hA=3D=3D
+DKIM-Signature: v=3D1; a=3Drsa-sha256; q=3Ddns/txt; c=3Drelaxed/simple;
+        s=3Dkra23psoka5qyyh6gdejiiuof3nluwuz; d=3Damazonses.com; t=3D179576=
+2493;
+        h=3DFrom:To:Subject:Message-ID:Content-Type:Content-Transfer-Encodi=
+ng:MIME-Version:Date:Feedback-ID;
+        bh=3Dwps7JvJzLlfKohD18VXy7D0ERjEj+/qmMhAtbsdG7BU=3D;
+        b=3Dd3SNA8oADBL+nFaWiDZ63/tobPS8lOouDeHdQyuQtkVY2JFzo4o8OTYmG2+lU7D=
+Q
+        M4W4dEXUPSeE+MHPlvSq1ZNnb+1o2NBKlyVWjsFM02a2seDMB+f4JML8+8PJ56lfHl8
+        0xK1PElx47g8qEavlMUWc5Xa+0fAfTOiMTjh/PJk=3D
+DKIM-Signature: v=3D1; a=3Drsa-sha256; c=3Drelaxed/relaxed; d=3Dprogynygrou=
+p.online;
+        s=3Ddkim; t=3D1795762492; h=3Dfrom:subject:message-id:to:mime-versi=
+on:content-type:
+         content-transfer-encoding; bh=3Dwps7JvJzLlfKohD18VXy7D0ERjEj+/qmMh=
+AtbsdG7BU=3D;
+        b=3DUaIFD/FNuaPoo2lDbXB18HLQbOq+nYyZTdlRtJCEs0jAdkmvILg+Dplz6bgh1n3=
+ZRB+Nxj
+        aUGDx9K048hOF4GQQPYmWOtMnHrn3AnpirFas6w9tdXzDX1AbbKRDD1YuLlP3eirUZO=
+IXW
+        IsjxoYIKDlOWnadn0TLihQOu+fOsKKfipeSBgvzb9u5EdB4WaVaIXlTn+uiyGOGvTaa=
+dpS
+        HKyt8BnH354bUK3VIhutJn8k78o404om4PuFBTjMzjLGu6Fg2+MzkCzpCGzPDPAQur5=
+OMw
+        t76ovs14wwyC/PWl0zRZqW/GwJpYR70cFm/Bi8RA5w1VT7UmRYFQIi4a4Sifpg=3D=
+=3D
+From: alexandradouglas@progynygroup.online
+To: info@smithlogistics.net
+Subject: INFO-FWD: [BOND-2026-1013] Inquiry - Continuous Customs Bond
+Message-ID: <010f01a21bc915fd-734edf65-239c-4acb-8e4e-faa41e09e819-000000@u=
+s-east-2.amazonses.com>
+Content-Type: text/plain; charset=3D"utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
+Date: Fri, 27 Nov 2026 06:54:52 +0000
+Feedback-ID: ::1.us-east-2.dnBLFQvZ7DBnA5nHg3QcqhG4UiG8AnTuix0bXTff/SU=3D:A=
+mazonSES
+X-SES-Outgoing: 2026.11.27-23.251.226.6
+Return-Path:
+        010f01a21bc915fd-734edf65-239c-4acb-8e4e-faa41e09e819-000000@ses.pr=
+ogynygroup.online
+X-EOPAttributedMessage: 2
+X-EOPTenantAttributedMessage: 7b5dd6bc-4afb-48e6-87b2-7c1e72bcd399:2
+X-MS-TrafficTypeDiagnostic:
+        DS8PEPF000000E0:EE_|MN6PR16MB5452:EE_|DS4PEPF000001BF:EE_|DS6PR16MB=
+600182:EE_|CH2PEPF000166BE:EE_|PH0PR16MB4712:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8dea6aae-86fb-44a7-bbf0-08df4c53a2=
+1f
+X-LD-Processed: 7b5dd6bc-4afb-48e6-87b2-7c1e72bcd399,ExtAddr,ExtAddr,ExtAdd=
+r
+CC: "Lester@smithlogistics.net" <Lester@smithlogistics.net>,
+        "Igort@smithlogistics.net" <Igort@smithlogistics.net>
+X-Forefront-Antispam-Report-Untrusted: CIP:23.251.226.6;CTRY:US;LANG:en;SCL=
+:5;SRV:;IPV:NLI;SFV:SPM;H:e226-6.smtp-out.us-east-2.amazonses.com;PTR:e226-=
+6.smtp-out.us-east-2.amazonses.com;CAT:SPM;SFS:(13230040)(704160611799003)(=
+32142699015)(260918215300599003)(260918224100599003)(3613699012)(1006709900=
+3)(56012099006)(5063699009)(260925022911599003)(260925021911599003)(2609250=
+21311599003)(261021121427099003)(261022105027099003)(261022075727099003)(26=
+1028144727099003)(261026121527099003)(261026140227099003)(26110212322709900=
+3)(18002099003)(16102099003)(4113699003)(6133799003)(19002099009);DIR:INB;
+X-Microsoft-Antispam-Untrusted: BCL:0;ARA:13230040|704160611799003|32142699=
+015|260918215300599003|260918224100599003|3613699012|10067099003|5601209900=
+6|5063699009|260925022911599003|260925021911599003|260925021311599003|26102=
+1121427099003|261022105027099003|261022075727099003|261028144727099003|2610=
+26121527099003|261026140227099003|261102123227099003|18002099003|1610209900=
+3|4113699003|6133799003|19002099009;
+X-Microsoft-Antispam-Message-Info-Original: =3D?utf-8?B?cFF5aERYTU00Umd6dXF=
+1MCtuUmt0SjFXYVpUUVB5cm1aNHJXZ2FTcEhpczR4?=3D
+ =3D?utf-8?B?SkV5a0loUVhGQmg0dzh3K1dvckgwMXUrWlNyZGVlL3MyQTNqZWtlWVJYNldo?=
+=3D
+ =3D?utf-8?B?L01IUmVUaWJ2R0J5MVVxS2xWdEFEb0k0eFRZdmx3NWdqRkU1cmoxeFJyLzFl?=
+=3D
+ =3D?utf-8?B?SlltWFZldzNuaTlKWXcxcEJaYjhJbXgyRXZIWFF6QVpPUHBtTGtTUUN2V1ZZ?=
+=3D
+ =3D?utf-8?B?c29VS010ZjB5d1Q2V3M0RWxvL0x5RnVLUEVBZDl3OWpHL0lPUGc0RzdDeFFq?=
+=3D
+ =3D?utf-8?B?L3gxN0MwcGQ0ZVcrbTc3dTBhWExOL1ZYUmsydWovR0pQMXluYkNoNGNRbUhu?=
+=3D
+ =3D?utf-8?B?UmhNT2lmVzlPL2ZkQW1uZmYvV0JHbklPdE5hQzNKa1F4MWRZNmVNdEtDZ1Jn?=
+=3D
+ =3D?utf-8?B?aTJSTVZxbi9SS2tocUU2d3pFejE0OERlZ1pUOWREZCt3dlc5a3J0SmlUVDZI?=
+=3D
+ =3D?utf-8?B?aFFHdmlSRzRFbkZucEV1RG91emhtUHdGcUViWThENlhvZVVDU0swelMwMFgw?=
+=3D
+ =3D?utf-8?B?dGZoN2tudUdhdUhOMStVU3gxaDZTaWVmRkdLQ0Y5SWFSY1BnVFpkUFRGUVNx?=
+=3D
+ =3D?utf-8?B?MWNNU2ZHSkJaQlJWNGdCRnZFdkRrNWI5c0VRTktNSitzQWZIdXpXbkpyMkx1?=
+=3D
+ =3D?utf-8?B?VFZ0QUZSbVpObWdJM0JvRjdVbFRPUUV6ZmwvVTFSZDc0UXRJK1NZWmYzK3lZ?=
+=3D
+ =3D?utf-8?B?VC95R28vMTBWbTZMazFyOE9PTkFKQmxsbnlkL1ZaVUJpMUtKMjhQbE9TVHlW?=
+=3D
+ =3D?utf-8?B?QnhBY2JWK2hpWlBtUFNjcFhQTW1xS1VvbGZkWmVKZ2hRM2NpZU5lS0FWRXM2?=
+=3D
+ =3D?utf-8?B?b040SklBaUs0SUVnN0NDS2ZGNlZsTkZqaW03VEdVVE5yMnpPZ2VaYjdPdnJy?=
+=3D
+ =3D?utf-8?B?TTUreVZkc2VFbzY5dWdjOEF2QkFhekRZMTZVU3BPNkd5alJUT2g4UXpLMCtF?=
+=3D
+ =3D?utf-8?B?MG5kZ2lGZEh4cHNrYi9OT1h0aW53bnVsT0JqV01RWUdldEc5VnlXLzBKUGt1?=
+=3D
+ =3D?utf-8?B?d1lqUXBlU3Z2bmQ1Wm1OdkdNOU8zUi9aa3hQRkRFeVROMTN5NWNNMU40RG5I?=
+=3D
+ =3D?utf-8?B?RCt0d3BnNWhQbVZOUHJITDMxSS9Fd1VKU1E1NnkzV1QzMncvbldBYVh3U2kw?=
+=3D
+ =3D?utf-8?B?dlFRRUJ4NTJvVWtLNGkyUUdwOHRRMDBFK08zd0hPRGJ4VkVDcTBhMnVnYVFJ?=
+=3D
+ =3D?utf-8?B?aUVDOTd2c3FsUkw0YldzeHh6Vmk1aE5aMDFQVXZJTFdRQjJiM0JvSTROSUp6?=
+=3D
+ =3D?utf-8?B?TzdSY0R1TUlaYWxHdlIwczRlc21MdjRkZUJRYzBOM1ZTYmxDZzhCZG9WSHdH?=
+=3D
+ =3D?utf-8?B?cE45VDRWSVowaVpxalRMVEFnc0JYTWZ3K3BKZTZIZmRZdVZCYkwvQUNZUEcv?=
+=3D
+ =3D?utf-8?B?R0Q4cDFqVksxQ2txT0RlQ2hsdFZyRnRhZ2FJbkdjcWZpNUhiY0FBUEZtaDZo?=
+=3D
+ =3D?utf-8?B?eXlicERxVFpZdmRVTlJZUXh1WFRaTW5jNEdoQXJvVFF6dEJmTisvaDIxcWkx?=
+=3D
+ =3D?utf-8?B?R01XL0lTZWFic0JHMmlPWmhxQkhzbG5oamIveS9vRXFVdks0MFU0Sk9MZmg2?=
+=3D
+ =3D?utf-8?B?amdXcEl4SnRYeWxvUVBaZmM0TUV5Z2NIUjkxOVBVRWRwWGZvRjhia1RWVUZr?=
+=3D
+ =3D?utf-8?B?YXZpcmE1c3pRbkNGSFgwWWJrK0VNYVFSRVlFR213L2tkLysvWnhSZU04djVU?=
+=3D
+ =3D?utf-8?B?UllKelpaS2FxS005MzM0bXpCdVdmK2VjdVVpRjc5WUhjYXpZM2NHeWhOTEh0?=
+=3D
+ =3D?utf-8?B?NERTd1E1UkNjNFQyYjBtd1l1WW45MHZwc1BqYlMrbHBlSjJ4TzhWTU9WZ25r?=
+=3D
+ =3D?utf-8?B?T2ZOSE9YN3pYUzl3dC9pYmR0dUM4ZmcwSW9sZlRBY0Ixdmx1OFp1dU1odnpF?=
+=3D
+ =3D?utf-8?B?N2JTeEUvTDh5WGxtUkxlWWt3cGEwQ0hsUUR1MnZtOFJhbzJldU9tLzFnMGsx?=
+=3D
+ =3D?utf-8?B?MVd4NUxELzlDSC83QmhNbUJ6NVFDQVlYaEdBc0JPTTdvYncwMjBvRjd0VWZO?=
+=3D
+ =3D?utf-8?B?N2xXeHRoWUlEemFMeUM1ZFBxN2JJYVpFWlp3SVBGamdIQU9JZ3JTNjJtdFkv?=
+=3D
+ =3D?utf-8?B?NStTVm9kU2Q5TnJTcElNVHhsMmN2QWFPd2xXeDUzYU8vRCtBQ0t6bVpWSmZi?=
+=3D
+ =3D?utf-8?B?bzM2NE9qY3pVRnFsVWNTK2hmTkxySWFadlNxcjQ2QUY2djV5Ym9xREdQeFAy?=
+=3D
+ =3D?utf-8?B?MXgyeUVsMVBXVEJwL0VuRXlsak1WVm5rZ1dmbkY5YTJTbFdXUm5OdGlEWFVM?=
+=3D
+ =3D?utf-8?B?OWRBbFBocXdNRTJpV0trVGtPeWtmdXFjT0xpbk1kRTNkeHpLNGVIMk9peFVZ?=
+=3D
+ =3D?utf-8?B?RFhhQStLQnhiR2xoUDFKN21jQnVBZVBrbkxxZSsvQjV4RnI0aWMyUHRWc0E3?=
+=3D
+ =3D?utf-8?B?Z2NCaE1JRFhGc2lBL0c1Nm9FUzA3eGNlMS9MNjFqRytVeGFwMVlweFdXM21L?=
+=3D
+ =3D?utf-8?B?T3J4YWFBa2RHbjhQeHgzV3RBYlJxK2JwUVgxcW51bFRXait4cXJucFhYWGZE?=
+=3D
+ =3D?utf-8?B?d0dROFhFby9yaCtESmQwWDBMaDV6eCtoZndKdjFmdzFHdG1YanNBNzhTRjJy?=
+=3D
+ =3D?utf-8?B?QmNuTThMbk1EN2NjeDZ6MEVkK0dhelVnVUFyb0JTT2xQUXJabEx5a2ZrWnFS?=
+=3D
+ =3D?utf-8?B?WUZ6ZHc3UmxFL1laY0NrTndPYklkdzFLZ0JFb2FKaDZFTjhUeURVVHljblZX?=
+=3D
+ =3D?utf-8?B?d3ZNUVRhRWJXcHdUL0h2eFhIMnp5blJESUF6anFKY3FpcmlubmhTZzlORTM4?=
+=3D
+ =3D?utf-8?B?encvU3RnbkNJa25QbGtIZFVMNmhTOHJMQjFvTE51MXlPczd2U0c1OEFKSWlw?=
+=3D
+ =3D?utf-8?B?eFM1QU5nd3RzMDdKdndNVVU4ejlmTzFaZWRVNHZLZXRZNWhKYW9TVFExNng4?=
+=3D
+ =3D?utf-8?B?NHI3ZWtsb3QyejBmQWpBdXhxWHBkd3g3STNKdnljVFlsYitlNTJZcTQwdGdR?=
+=3D
+ =3D?utf-8?B?RmdhdnJkdGhiYjhXNFVub1FsL3h6bFczT0VJUjduRFJSWThXd1k5TU92ZWNY?=
+=3D
+ =3D?utf-8?B?UGJhUElnSTJIVGh6UW95QjZTRkhHNm50RjF1QzVOSnRDLzY2U3FtQXF1U010?=
+=3D
+ =3D?utf-8?B?VjRCM3I4b2xUcVhpTkNhTFlmeStqck84emNyeE5CWURTdE0wV0owbXcwSUdj?=
+=3D
+ =3D?utf-8?B?VGk4S21DMHFnQXFsbEZqblZIdS9vaElVUnNLSW5Pa2NoUVd1WWVIb2VZZ0gv?=
+=3D
+ =3D?utf-8?B?UHJDVzROWUFQbTRtMUFEcjdyUGV3dWJxWWpaaEZWWmtzank1TUc4MUF2RlFP?=
+=3D
+ =3D?utf-8?B?QXk3ak5GTWVESG9MbThJVWxudFdraGF0TnIyMVVpb3RvTXA2WkNRdURFV1N1?=
+=3D
+ =3D?utf-8?B?VFMyeHc1ZDdkbzR2NnZXeldPdEx0VXNWWmJUTld4a2RnTzRNWlVrSUVCS2wv?=
+=3D
+ =3D?utf-8?B?aXlGSmNzelVjak5xRjRPOEV2ZC9MWENNb2ZoZmwxVEFyMlZuNWNkb0dYekZs?=
+=3D
+ =3D?utf-8?B?NTVtdUJaYWZ0NnJKQkdRTkduZjRZMGFLUTBhTUloeFpjbWZ2TFhkbnRUL1FH?=
+=3D
+ =3D?utf-8?B?YXN4SmVsMjJubnhIMXhTOHNJYU9CTldiTDh3ckFmaUU4OHZZR3B4ZUZSQkd1?=
+=3D
+ =3D?utf-8?B?cEtZS2pFMTlxRTFBWWI0ZmJrNFlBT0RHOE9HWG9ENlYxZEhvU3loYW1kUzQ5?=
+=3D
+ =3D?utf-8?B?MkhkMmllV3ZueVJOOEQ0bHBkbytkL3pvMGdtN2FJWFJPVGVBVlJRUnNheTQv?=
+=3D
+ =3D?utf-8?B?ZDRZUlNqSUF1azQrQ1EwZk5hTkVScC9jei9HdHJQNytuUXFiTGRHVmYyZG5F?=
+=3D
+ =3D?utf-8?B?WkhDTW9vYXJkOW4wZWw1dDRDNWQzbnJIcEVtS0diMjZyVlo1dHlEdVA0KzVq?=
+=3D
+ =3D?utf-8?B?dXJIaDkrSldVREU5Ky9iSmNFQWFWUTF2VWJlVEJQSDJNZHlhb3h1MXBuTFRO?=
+=3D
+ =3D?utf-8?B?aW52ZGQ1S3l0bTBBVW5zRE4yQUwvcTJVRW9jTWtjdkdpL1BsYkF3WTJPVzRL?=
+=3D
+ =3D?utf-8?B?djhhZ29TOWl5a3JVRzhVQXhDOVVxVTE4emVoL0VRbGRLM0UvTHJNRkdnVzlp?=
+=3D
+ =3D?utf-8?Q?FdNo00jFXF+iDtxC0dq?=3D
+X-ExternalRecipientOutboundConnectors: 7b5dd6bc-4afb-48e6-87b2-7c1e72bcd399
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN6PR16MB5452
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: DS4PEPF000001BF.namprd2=
+1.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersPromoted: DS4PEPF000001BF.namprd2=
+1.prod.outlook.com
+X-MS-Office365-Filtering-Correlation-Id-Prvs: cf15430b-ff5c-49a2-b972-08df4=
+c535739
+X-Forefront-Antispam-Report-Untrusted: CIP:2a01:111:f403:c10d::1;CTRY:;LANG=
+:en;SCL:5;SRV:;IPV:NLI;SFV:SPM;H:SN4PR2101CU001.outbound.protection.outlook=
+.com;PTR:mail-southcentralusazlp170120001.outbound.protection.outlook.com;C=
+AT:SPM;SFS:(13230040)(704160611799003)(32142699015)(260918215300599003)(260=
+918224100599003)(35042699022)(3083799003)(2040899013)(3613699012)(100670990=
+03)(56012099006)(5063699009)(260925022911599003)(260925021911599003)(260925=
+021311599003)(261026121527099003)(261026140227099003)(261028144727099003)(2=
+61022105027099003)(261022075727099003)(261021121427099003)(2611021232270990=
+03)(16102099003)(18002099003)(4113699003)(6133799003)(19002099009);DIR:INB;
+X-Microsoft-Antispam-Untrusted: BCL:0;ARA:13230040|704160611799003|32142699=
+015|260918215300599003|260918224100599003|35042699022|3083799003|2040899013=
+|3613699012|10067099003|56012099006|5063699009|260925022911599003|260925021=
+911599003|260925021311599003|261026121527099003|261026140227099003|26102814=
+4727099003|261022105027099003|261022075727099003|261021121427099003|2611021=
+23227099003|16102099003|18002099003|4113699003|6133799003|19002099009;
+X-Microsoft-Antispam-Message-Info-Original: =3D?utf-8?B?RWUyUmQ5MjNiWExrdjJ=
+UeEFobjFuUG5tOVlJdGw5VXhodS9GQlg2SWpLVU9s?=3D
+ =3D?utf-8?B?aGNuUkw1dzd4a0tBdmREZWlNMWl6b2wzVElpaXF6d2oyMmRyMDNkcWZ3eU16?=
+=3D
+ =3D?utf-8?B?TW5pcHpneXNnMjF5OFJPMnFXSGdqaFBMRFdVSDhORkVUNW1Md1JLWXdXT01O?=
+=3D
+ =3D?utf-8?B?cUdsTnpIa0hxMnJwR243a0h4VUNBMzNFVjh1OFJVUDZtN29DNElVdVFNcXlO?=
+=3D
+ =3D?utf-8?B?YmdjVWNPVDBySXUrb04wT3ZGQ1Fuam1QQW9uVlJwNG53ME5OS1lQbWhWbm1l?=
+=3D
+ =3D?utf-8?B?SUN1Ly95cC9JdWV6UGJQUGk0QXgyVzYwb05EOGd4aExWZzdFMzRaaWpScm5j?=
+=3D
+ =3D?utf-8?B?d0p6QTRQL2RKOWRaSmxBUERjYWhTUEtBR2dJc2VLa3JIV1R2d3c1b2NwQUJU?=
+=3D
+ =3D?utf-8?B?V0hqc1BkTUM5UVBGdERiRTN4RVpRRVJVRFZHc3hLc2ZoSS9TNEFjRUx6empq?=
+=3D
+ =3D?utf-8?B?bTNPU3BzR2RzNFpONjdRUm81WDRFcXd2RHFsZ1lSdU4vZVppT0ltblVPMzAv?=
+=3D
+ =3D?utf-8?B?M1lBN0FVVmZRYUIrRWlDV0VKam5UOWhBZzgzSnV3bjhqaHhnN0lJdFJIdHFR?=
+=3D
+ =3D?utf-8?B?L3BLWSsvTFp2QkFWSERqeEN1VUJOc2ZUaDhib0tJdElUdXMzczZUdXUyS21L?=
+=3D
+ =3D?utf-8?B?VTVlQzFjZGxZWktzRFhSZG44aVowSm9wdFVTT2ovYzdFZElxTm5ZZnRVOFhL?=
+=3D
+ =3D?utf-8?B?VTFpM2JXeCtBVXo4elBPeWlYdnIzQTBYWk5JQzc2VlFSQlJCVHB6Q1JIVXV2?=
+=3D
+ =3D?utf-8?B?QzlxQzcvYTNEbElGcERzMW9NR3BxREZjQ0l0V1BzSDFCelN6V29GbXhMRGJH?=
+=3D
+ =3D?utf-8?B?TVdWUXlzNEVsZEVYc1dnU000bkZta3JWUGFnd2ZMKzRJREFQcXZ4aTJ3WGxO?=
+=3D
+ =3D?utf-8?B?aXN2elJLRWlXcXFBUjdaZWdXaEZKYS9XRkwzYS9hTGNKcXphMHlneHJObFVP?=
+=3D
+ =3D?utf-8?B?TXVYTHpCanlvZExzV1lpV2lUYlBYTnVkSzk1WkdTWHdjR1oxdmpzZUx5L1dM?=
+=3D
+ =3D?utf-8?B?SEJ0S1Q1RitEakpUSXFwN0Y4T0xhc1N6cHJ5QVJET3plbno3WVhaNkhoMmRt?=
+=3D
+ =3D?utf-8?B?Q3ZveXpXOUhJR1NnaGpCVWM5QUZRbWRXdFNyaFRzSEtvQ2I0WkdDU29PNUx1?=
+=3D
+ =3D?utf-8?B?UDhJSGhwc1FFbDY2bmJER3MrYWF6L3p5Z1p6YmhqQkM1am91NkNXR2lTajNq?=
+=3D
+ =3D?utf-8?B?VXhWR3VDS2xqa3ZzYWFPcExaelc5RmcxMnJiWFlXWVgwTmhvK29VaWh6OUw0?=
+=3D
+ =3D?utf-8?B?clRZang4bytKMXAwRTB6eDh4dG05UGcwV2JGRktlMzZMMEcyOXc2dmNpMnU1?=
+=3D
+ =3D?utf-8?B?OFJWZTlsRjFiaTlmVUZ6ZW1GbG00Q0lPbzlQM1duQ2RSZHZGUFJ4czBGQ0Jy?=
+=3D
+ =3D?utf-8?B?OWRqSFRNUlZKVlNxNHF5bm5nN0xuelloTm56L01RZmQ2cEJpUE5hTTVkTEk2?=
+=3D
+ =3D?utf-8?B?dnlSYzkxQjl0SHZGcjVhWDVtcE9BODVkdVRWV2pkUllWeWtPMDYvay9ITncw?=
+=3D
+ =3D?utf-8?B?ck45VThOa0pKTWl0US9SbGdzUkFvMzYrSnM0NmVVOVluSVEyWENia0FLUjZ4?=
+=3D
+ =3D?utf-8?B?cDBaaUVMMTAzdUpHcUdCRXBob2cyVnlpSjFmRkVFTFpZY1ZKNFNzTHJnWktw?=
+=3D
+ =3D?utf-8?B?N0lxN3hWYWdSRm9lRnJ2TXd3TG1DS3p2eG1TaHI1SW5VNVlvRHovanNNU0lY?=
+=3D
+ =3D?utf-8?B?WEdJSEREL2xtTHJ5SXkzaC8ydTNRc0JPL1lPUFBjQVF4TjZNQ3lvVG9BcFBr?=
+=3D
+ =3D?utf-8?B?Z0hnU3dsckk3cThZMFVaMUJDM2IvaDJJbHVaUjVQVER0TDZxekFtM0kwTXJF?=
+=3D
+ =3D?utf-8?B?bTFXOG96TkhWOTJPNUxURG91bVNlUFc5YzZkZUUxZ1R0SDVURTFzWU1XWjRt?=
+=3D
+ =3D?utf-8?B?SERHTE15eDJaQTllRW1KNHpmbWU0NTkyWWFndjVHSjI5cU13d3NidTEwVXpj?=
+=3D
+ =3D?utf-8?B?cHJBbmJPL1BIbHAxVE5xRElDNFF3ZHJlWEFYRkZKTFV1ejhUbkNreWU1K1N5?=
+=3D
+ =3D?utf-8?B?LzBYenBxMzcyaW5wZ0ZlaUxzajk5RWlnTmU1L0ZERnNSUlN3Q2FwTExKL0pm?=
+=3D
+ =3D?utf-8?B?WTVieGZZcEdYNGZEN2JOY3BRWmp4Tkx4d0g5QU05am52TldCQW9CTkVESUNR?=
+=3D
+ =3D?utf-8?B?YTRwV3hHb1RaQnBKVWMvUGZwblY1VTJobGFqQkxJYVJ4ZkpyaW9mTTZwUEFO?=
+=3D
+ =3D?utf-8?B?NlRpbjdLeDRTQVhMSitYQnROcHB5NDhsM2wvUVBYRTQzZnVPTzJ6RzVmRmpN?=
+=3D
+ =3D?utf-8?B?VFhPZzdEaG92L0dpWFBnK3Y3eFhhMTJOTDVXeGpoODhUaUhOcFZXUG9pMzQ5?=
+=3D
+ =3D?utf-8?B?K1NnSjJhY0NoYmxsUmJwcm42V0lidVpyRmFIbFcwWURmZjF4WUZYWWU2UkIr?=
+=3D
+ =3D?utf-8?B?QTNTTHV6U0ZIZmgrelh2M0t2cWM5L2tVTlZiZVZYeVlxcVVmWDk3dzY4YTFU?=
+=3D
+ =3D?utf-8?B?R3k2aTFKQXB2N0pLMkk2NzFmclp1S1VyMVRzeGdaRDFMM2diRlduY0VtRzdL?=
+=3D
+ =3D?utf-8?B?ZEhNUnlYUFV6ZjFYcktHZVFaVWxCdFJoZVU5c2ZtSjZBaTZyNFc4Z3hxdHlS?=
+=3D
+ =3D?utf-8?B?bGZrTEs5ZWRZaFBEWkx6S1pNTExVQ01BcFJTVTJ3NzJSdUxaaFdxNVBVNm5h?=
+=3D
+ =3D?utf-8?B?VWE0MmtFY3prUW4rMks1eklXNzVTdDE5d0lsM3FnZ0lic0JZQ0R5Y0w3anZj?=
+=3D
+ =3D?utf-8?B?ekFoNkRBZGxVRGRDRWFFZE9pQ0N0OGdDb2VEMFJkUTk4UGtUVUNEam9PdjFo?=
+=3D
+ =3D?utf-8?B?RHlQL3htVGRtejV6bk44dGdGWTBwSzlBbk93OWQ4c3FOZGZodmRqcG80c1Fk?=
+=3D
+ =3D?utf-8?B?MjdRK01rK01EUWtZbVJlenkvdjNIeDRTMXhzeVppZ2NPcnR5M0ErYTVRL3hs?=
+=3D
+ =3D?utf-8?B?cjVYc2plSEhPWGhpR3g3M1JTdDFSZ1YwVVNybVBIM1lzZVdKVGlwUEIwV0Fi?=
+=3D
+ =3D?utf-8?B?MzZkNG82TEVDc1JvSmVaM1RRMzVEL0NqZnNmYkNoQ1g3SWttM2FOSzVDODdV?=
+=3D
+ =3D?utf-8?B?VXpWVk1EeXhIYjdENlM5L2o5MUpnNFBHalFIbXUxakJ0VFlPeTJMeUh4aXNN?=
+=3D
+ =3D?utf-8?B?R1Q2aXFkWEE5N2ZxZTg1bmlsKzdkRkR4L0lLakhRMzZaem1tWkhqQzNieHcx?=
+=3D
+ =3D?utf-8?B?WTdHMHN5MGFtZlA3ODVKcHlPZDBVQVY2YlFuN3pYQjA0RzBKaFlaVVV2TDRX?=
+=3D
+ =3D?utf-8?B?c3ZyaTZtTThkR1Q4SmVKYVhna29HZ0JuMmQzeENBVTVSUmR3Z3N2OUhlZ09M?=
+=3D
+ =3D?utf-8?B?YzdObWhHYVpCK3lndUtPelIxS0N4dlFYZ3ZWd0pUVWU4V3d3cDlYSjlDbWM5?=
+=3D
+ =3D?utf-8?B?NFpIRzJGbmJPSFJuSEtsWTRDNzY4OEdqM0hjMWhXWTQ4citHQXJGTVMzczk4?=
+=3D
+ =3D?utf-8?B?RG43ZFI3MHlOY2F2OWF2THowTVBUVldrZDN5Tm9JN3pFRjJTbk1lWFA5dC9H?=
+=3D
+ =3D?utf-8?B?Sm5wMDI0VmhybDdaVXY5a2NuOFVqWHgwVjBLZnBPMWdYSVpjTjl3YXE3R0Zs?=
+=3D
+ =3D?utf-8?B?SWZYd3EyU2xWMkNqaVdrL1pKSHo5OGhzbDBZd0VUOU1INnRpOTYyWWNTVEQ2?=
+=3D
+ =3D?utf-8?B?bjVJa0RscThmSkZJb3liZU1UTEIveDJaUHltdlg1aGR5aURRdndyYkpScDBi?=
+=3D
+ =3D?utf-8?B?SXViaHMxYXo5YXhicnlaa1UyNlR3dlZxNzFyYlRna0RxMGl5Q2xGb1czdnBW?=
+=3D
+ =3D?utf-8?B?KzE5ajd4ZnlWVEhWSjIvWE9xcW1GMFRlS0dCcnFOam8vSzRCbldZNVVWSTZQ?=
+=3D
+ =3D?utf-8?B?VFF4SGZzWWFKZ3NPUFBncFNGS0UyL01UM0lxMDIvMi91R0YzMUlreTFXTEJY?=
+=3D
+ =3D?utf-8?B?bEhubmRXcXJDc2ZEeXFKODJod3hBUU9RSFlPY2Q5TVRnZk43T2lLVUZDZm9G?=
+=3D
+ =3D?utf-8?B?NXhxT0lxbExoZnpKcDZYeXpqUkV5RXZmclI5ZjZoMlp1RjN3bE9sa3pzMzVm?=
+=3D
+ =3D?utf-8?Q?QJH17/SAmGupcF2phJbvZZb6fPTX3E1/dIBhiMvH0B8=3D3D?=3D
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS6PR16MB600182
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: CH2PEPF000166BE.namprd0=
+4.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersPromoted: CH2PEPF000166BE.namprd0=
+4.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+        a2b622ad-916b-4ad4-394a-08df4c53a0c6
+X-Forefront-Antispam-Report:
+        CIP:2a01:111:f403:c001::2;CTRY:;LANG:en;SCL:5;SRV:;IPV:NLI;SFV:SPM;=
+H:SJ2PR03CU001.outbound.protection.outlook.com;PTR:mail-westusazlp170120002=
+.outbound.protection.outlook.com;CAT:SPM;SFS:(13230040)(704160611799003)(35=
+042699022)(32142699015)(260918224100599003)(260918215300599003)(3083799003)=
+(2040899013)(3613699012)(10067099003)(5063699009)(56012099006)(260925022911=
+599003)(260925021911599003)(260925021311599003)(261026121527099003)(2610261=
+40227099003)(261028144727099003)(261022105027099003)(261022075727099003)(26=
+1021121427099003)(261102123227099003)(16102099003)(18002099003)(4113699003)=
+(6133799003)(19002099009);DIR:INB;
+X-Microsoft-Antispam:
+        BCL:0;ARA:13230040|704160611799003|35042699022|32142699015|26091822=
+4100599003|260918215300599003|3083799003|2040899013|3613699012|10067099003|=
+5063699009|56012099006|260925022911599003|260925021911599003|26092502131159=
+9003|261026121527099003|261026140227099003|261028144727099003|2610221050270=
+99003|261022075727099003|261021121427099003|261102123227099003|16102099003|=
+18002099003|4113699003|6133799003|19002099009;
+X-Microsoft-Antispam-Message-Info:
+        =3D?us-ascii?Q?Ww2arjotH9jbE1VhaEP487YEEoufAf3YLQHUesL27cRB2UEwM3Ew=
+WeX/q+2x?=3D
+ =3D?us-ascii?Q?ls5zLWgeZA0Kz3c833Ad6vfF8eeKfXMp4JQeT/mOQcGOV/+6dMiJq57sGhY=
+m?=3D
+ =3D?us-ascii?Q?OKZzR6Q5t72D54ZlZU1lICuVyuU1dONWKGiDahLDz33NfWJaLNuRK/BXXed=
+S?=3D
+ =3D?us-ascii?Q?C7tZ4EUiW4UEEnEZxGyT517eNnsDngKHw2IORXYuRY7af5fLixHxwbyCboJ=
+W?=3D
+ =3D?us-ascii?Q?ZoqrXIDD1pBZIW4Cs2ozg10vkCF1rm73GaEJTsyJeatpdKj+soxTpXTbz/0=
+2?=3D
+ =3D?us-ascii?Q?UsTo4YhfTSreP8CoSPIBUIkXrDimpWmIcc5lKyI269UCOe9/2DEnt5HU9MD=
+x?=3D
+ =3D?us-ascii?Q?y/DNFtkOBVdLod8IK+bzjYh0ffRMnM4/Rvxf+Yw5lLQLVohovJy4rP+fnYh=
+c?=3D
+ =3D?us-ascii?Q?QxE4I+8YQS+x94y3G3tNXnIZlMXg1ojpLFEs7yskrKZss4EYGhehfa+ibmP=
+1?=3D
+ =3D?us-ascii?Q?1b9jsNEnHCbpr6W+MHMnthI3FuImNoFoplohMi+T215OGgTWAx7swZNxixN=
+g?=3D
+ =3D?us-ascii?Q?IgqWnEV6zO2oGoeVQldt0FW3bqzEnA3gIItZP9PDCaEqDrqUaoNRQlucSDy=
+3?=3D
+ =3D?us-ascii?Q?TeTD8sw3w9hV5RRd1aKj69KkURMr3f6weEX77hG33zy894zPy6xaxBz3Hb/=
+W?=3D
+ =3D?us-ascii?Q?HLqMhXuHhVgoB81V2mgiAFJPCJFRovLylAAnG0cxIxJ+lt/ZpMTR0QNGjVO=
+0?=3D
+ =3D?us-ascii?Q?v9NRWjrkR3p1ImTptOvrdCoD0P96euFjTFk1oMMjhxpkwgxRNfHvy3nvRTt=
+Z?=3D
+ =3D?us-ascii?Q?bqXcGH6m9WYgIHIb0/ECUB7hYAThx3eAEfQYdq5d/HEWDPn6lxHAJyNil5q=
+9?=3D
+ =3D?us-ascii?Q?ahZPJmh71othv0YMePueGQMHYTOTYL1RJgqa1DHhwjx5ibv3ZgeF9fNUp7K=
+R?=3D
+ =3D?us-ascii?Q?4Qoop+7iJ3oGO3RlaJWXuj5HCznjLvWAwVdpcpK1mZ+MSCdqWPX1NtTRQgC=
+R?=3D
+ =3D?us-ascii?Q?8xfLEmuTn+y64qePGIi0Li94ng1RzmepK9kA3krf+d4iOElt5OocJg0SUvf=
+i?=3D
+ =3D?us-ascii?Q?qf7vvkyew3HHPwbiihehRQA0L8KotxT9U63gWMnzxozLYCgFdEOcPl3BmF5=
+h?=3D
+ =3D?us-ascii?Q?Y8ggrf1wQ+iaYcFTvWjuLb75taCN6JibM8xvZDMwMUbpJniw6v4DiPCTK7D=
+n?=3D
+ =3D?us-ascii?Q?RsvWTr38FpGKwUh90ELSUZgfFiJVeiMSR/2AIyWpZcBXbtN3alz1uEJpdYm=
+B?=3D
+ =3D?us-ascii?Q?LmB6dKWXTFAM86rS+Qms/3anKlok57EvSb9zUUtqZITDZ0IfctOArXDO/Nx=
+Y?=3D
+ =3D?us-ascii?Q?wRk2kVP/G6qnd/ld8BJPAX1iC/GZgTukbZfTf4CVXiQIXeVdgKD3BZw+Sxk=
+4?=3D
+ =3D?us-ascii?Q?DlLRAGOWHa68a4k570BJSDTj+10TEaG940ZweVOkjem3anIK+cT8650wAzG=
+S?=3D
+ =3D?us-ascii?Q?ywHulBlpqVhHbpNSyl0/pE2ewHhxSDn8RFIr02q1/hJozSKhkP3VVfn4uQa=
+k?=3D
+ =3D?us-ascii?Q?+uyCdd6UgzkCCeUXjjJCKg/cItrVJlQCU8KxRmI6EeZhfGcZxSHfPhoutFl=
+t?=3D
+ =3D?us-ascii?Q?C8WAbNRES9WvQi27VMyI3xTO1D08wB/I9DM+298b4zjEevC+FPoo8wQ6Kmu=
+f?=3D
+ =3D?us-ascii?Q?PHSaxmpADkXyWvfmp6+X3sj6KrTWKrptq3hOlWol4D43b9kW3I07UTufcJF=
+P?=3D
+ =3D?us-ascii?Q?/k+OCdNOtVrRKkGSOVzFIKSdol6HjnsLPe7Ul0lrSNbwgJPXc8+gK6OGTXy=
+S?=3D
+ =3D?us-ascii?Q?0/KjmBcr5pmP/2zFHBJaj5icy2kp2FR6srapCeAHP2FiqJXwB/lnxDK3VUl=
+1?=3D
+ =3D?us-ascii?Q?50e0KkKgedEd6jWi1eocwqQsoQbR7eHODzASZvxxzBOjQ0ArZ8/tMgQ1fk9=
+n?=3D
+ =3D?us-ascii?Q?ao6xNd2LGyuu2sY5+F++tFlWHzJ+rxHkR47/LyO7q7nTunEgPdfMRvw+TCM=
+S?=3D
+ =3D?us-ascii?Q?OHI1ksninOrTvAZocJigPp90+v8FsyqaXK8OfSMA6eWgj8V4kL28LNThZ7L=
+d?=3D
+ =3D?us-ascii?Q?daIZKmjDC25fXgQzEURuo345bjUYCu3EQ5nYO0Lx35oKbP+k0fmr1ryc/Dg=
+g?=3D
+ =3D?us-ascii?Q?EaU24xVmunfmhDu+4P2zJuyPGCrZ1a7+98uLysyBlMzsIncW2pXjWHGLGAt=
+X?=3D
+ =3D?us-ascii?Q?a5uRfwDpjR8n0VQhiYt3sP+k7JObYk4W0AbLmScrVUG1/RHCoj7orXYn2iM=
+9?=3D
+ =3D?us-ascii?Q?1ABqYJSXqRMb7eczeayFmvq0nYvTDX+vpHOq+9shjQKbwrZuqXb07Au/+0O=
+I?=3D
+ =3D?us-ascii?Q?lVnLhy6zXwFrwoK6nO1qLpx3TAZu0kw1Cms08k/KS+qr/NDpSPL0mjKNLDy=
+z?=3D
+ =3D?us-ascii?Q?i9DNUldG7pQdoHQgUsqRK4h6YpfFT5mNNErq0lFrLnpuHsWBgHKmsACGmWK=
+3?=3D
+ =3D?us-ascii?Q?MlvYNwhFmLmlw2Ew+8ocLaCxCsowUjpOMSfwyktDxKtmNwlDV/zc0+jcGby=
+x?=3D
+ =3D?us-ascii?Q?fanWY+I0L0+859HF/+QCEN/+Uvwp0ghfbJOwkBpnC4Slb7ETsc7VAWzmct8=
+d?=3D
+ =3D?us-ascii?Q?K3rBoPDlYSa+7t4Ik5SjYXlw69eWlDXlPsvx2MKpxEiJfoOqw9rQsRwUWep=
+0?=3D
+ =3D?us-ascii?Q?7Qh8fnL/V0fSweIpJawEZx0dobwHhq5TJ730xLEUvCBsoDvlsryYMsqrRu8=
+N?=3D
+ =3D?us-ascii?Q?ZWb7h4uJ2b/RNk3gx7dktYEgbjgjgMwUghptWvGKH0mN1IXPlO2/HBM0WnO=
+6?=3D
+ =3D?us-ascii?Q?pnp1leH0W5SaacBGfqAqgbQxV6ganx72Jbk4vasq3etHzjiByLy9q+TQlcr=
+D?=3D
+ =3D?us-ascii?Q?YgwLyiiSgO9X/CJx+jZPET7LuFHCSiYIvK1u16uWebmG82BkjNE4IDkK5SF=
+K?=3D
+ =3D?us-ascii?Q?wcZ8y7Ft4ugS+1nQfuzPWcnshgBKGe0UrkEHCPqBOxKC/xJob3rt2Mn+zZA=
+n?=3D
+ =3D?us-ascii?Q?iczwSOZF0Wu0zahRMDQSG7AlKPnxY0Xt4JVNMgXAmv6EV2gcWsxoruxd7yH=
+N?=3D
+ =3D?us-ascii?Q?sZdP9mbIzkVysitpwqX4ZVeFn5qUD86Q5yu6VnHP5vatXwTUDE+g781q8x+=
+l?=3D
+ =3D?us-ascii?Q?XabdqgBlVPTwaF8kBPhglzKSYeKxLfrTiNcTHzPDF2o=3D3D?=3D
+X-OriginatorOrg: smithlogistics.net
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Nov 2026 06:56:59.1794
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8dea6aae-86fb-44a7-bbf0-08df4=
+c53a21f
+X-MS-Exchange-CrossTenant-Id: 7b5dd6bc-4afb-48e6-87b2-7c1e72bcd399
+X-MS-Exchange-CrossTenant-AuthSource:
+        CH2PEPF000166BE.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR16MB4712
+
+
+--ffaeb9a2-fdb6-4aea-9cf8-8e57176c7770
+Content-Type: text/html; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+
+<html>
+  <meta name=3D"viewport" content=3D"width=3Ddevice-width, initial-scale=3D=
+1" />
+  <head>
+    <title>
+          DSN
+        </title>
+  </head>
+  <body style=3D"        background-color: white;      ">
+    <table style=3D"        background-color: white;         max-width: 548=
+px;         color: black;         border-spacing: 0px 0px;         padding-=
+top: 0px;         padding-bottom: 0px;        border-collapse: collapse;   =
+   " width=3D"548" cellspacing=3D"0" cellpadding=3D"0">
+      <tbody>
+        <tr>
+          <td style=3D"        text-align: left;        padding-bottom: 20p=
+x;      ">
+            <img height=3D"28" width=3D"126" style=3D"        max-width: 10=
+0%;      " src=3D"https://products.office.com/en-us/CMSImages/Office365Logo=
+_Orange.png?version=3Db8d100a9-0a8b-8e6a-88e1-ef488fee0470" />
+          </td>
+        </tr>
+        <tr>
+          <td style=3D"        font-family: 'Segoe UI', Frutiger, Arial, sa=
+ns-serif;        font-size: 16px;         padding-bottom: 10px;         -ms=
+-text-size-adjust: 100%;        text-align: left;      ">Your message to <s=
+pan style=3D"        color: #0072c6;      ">info@smithlogistics.net</span> =
+couldn't be delivered.<br /></td>
+        </tr>
+        <tr>
+          <td style=3D"        font-family: 'Segoe UI', Frutiger, Arial, sa=
+ns-serif;         font-size: 24px;         padding-top: 0px;         paddin=
+g-bottom: 20px;         text-align: center;         -ms-text-size-adjust: 1=
+00%;      ">
+            <span style=3D"        color: #0072c6;      ">info</span> wasn'=
+t found at <span style=3D"        color: #0072c6;      ">smithlogistics.net=
+</span>.<br /></td>
+        </tr>
+        <tr>
+          <td style=3D"        padding-bottom: 15px;         padding-left: =
+0px;         padding-right: 0px;         border-spacing: 0px 0px;      ">
+            <table style=3D"        max-width: 548px;         font-weight: =
+600;        border-spacing: 0px 0px;         padding-top: 0px;         padd=
+ing-bottom: 0px;        border-collapse: collapse;      ">
+              <tbody>
+                <tr>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        font-size: 15px;        font-weight: 600;        t=
+ext-align: left;        width: 181px;        -ms-text-size-adjust: 100%;   =
+     vertical-align: bottom;      ">
+                    <font color=3D"#ffffff">
+                      <span style=3D"color:#000000">010f01a21bc915fd-734. .=
+ .</span>
+                    </font>
+                  </td>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        font-size: 15px;        font-weight: 600;        t=
+ext-align: center;        width: 186px;        -ms-text-size-adjust: 100%; =
+       vertical-align: bottom;      ">
+                    <font color=3D"#ffffff">
+                      <span style=3D"color:#000000">Office 365</span>
+                    </font>
+                  </td>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;         -ms-text-size-adjust: 100%;         font-size: 15=
+px;         font-weight: 600;        text-align: right;         width: 181p=
+x;         vertical-align: bottom;      ">
+                    <font color=3D"#ffffff">
+                      <span style=3D"color:#000000">info</span>
+                    </font>
+                  </td>
+                </tr>
+                <tr>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 14px=
+;        font-weight: 400;        text-align: left;        padding-top: 0px=
+;        padding-bottom: 0px;        vertical-align: middle;        width: =
+181px;      ">
+                    <font color=3D"#ffffff">
+                      <span style=3D"        color: #c00000;      ">
+                        <b>Action Required</b>
+                      </span>
+                    </font>
+                  </td>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 14px=
+;        font-weight: 400;        text-align: center;        padding-top: 0=
+px;        padding-bottom: 0px;        vertical-align: middle;        width=
+: 186px;      " />
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 14px=
+;        font-weight: 400;        text-align: right;        padding-top: 0p=
+x;        padding-bottom: 0px;        vertical-align: middle;        width:=
+ 181px;      ">
+                    <font color=3D"#ffffff">
+                      <span style=3D"color:#000000">Recipient</span>
+                    </font>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan=3D"3" style=3D"        padding-top:0;        =
+padding-bottom:0;        padding-left:0;        padding-right:0      ">
+                    <table cellspacing=3D"0" cellpadding=3D"0" style=3D"   =
+     border-spacing: 0px 0px;        padding-top: 0px;        padding-botto=
+m: 0px;        padding-left: 0px;        padding-right: 0px;        border-=
+collapse: collapse;      ">
+                      <tbody>
+                        <tr height=3D"10">
+                          <td width=3D"180" height=3D"10" bgcolor=3D"#c0000=
+0" style=3D"        width: 180px;        line-height: 10px;        height: =
+10px;        font-size: 6px;        padding-top: 0;        padding-bottom: =
+0;        padding-left: 0;        padding-right: 0;      "><!--[if gte mso =
+15]>&nbsp;<![endif]--></td>
+                          <td width=3D"4" height=3D"10" bgcolor=3D"#ffffff"=
+ style=3D"        width: 4px;        line-height: 10px;        height: 10px=
+;        font-size: 6px;        padding-top: 0;        padding-bottom: 0;  =
+      padding-left: 0;        padding-right: 0;      "><!--[if gte mso 15]>=
+&nbsp;<![endif]--></td>
+                          <td width=3D"180" height=3D"10" bgcolor=3D"#ccccc=
+c" style=3D"        width: 180px;        line-height: 10px;        height: =
+10px;        font-size: 6px;        padding-top: 0;        padding-bottom: =
+0;        padding-left: 0;        padding-right: 0;      "><!--[if gte mso =
+15]>&nbsp;<![endif]--></td>
+                          <td width=3D"4" height=3D"10" bgcolor=3D"#ffffff"=
+ style=3D"        width: 4px;        line-height: 10px;        height: 10px=
+;        font-size: 6px;        padding-top: 0;        padding-bottom: 0;  =
+      padding-left: 0;        padding-right: 0;      "><!--[if gte mso 15]>=
+&nbsp;<![endif]--></td>
+                          <td width=3D"180" height=3D"10" bgcolor=3D"#ccccc=
+c" style=3D"        width: 180px;        line-height: 10px;        height: =
+10px;        font-size: 6px;        padding-top: 0;        padding-bottom: =
+0;        padding-left: 0;        padding-right: 0;      "><!--[if gte mso =
+15]>&nbsp;<![endif]--></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 14px=
+;        text-align: left;        width: 181px;        line-height: 20px;  =
+      font-weight: 400;        padding-top: 0px;        padding-left: 0px; =
+       padding-right: 0px;        padding-bottom: 0px;      ">
+                    <font color=3D"#ffffff">
+                      <span style=3D"        color: #c00000;      ">Unknown=
+ To address</span>
+                    </font>
+                  </td>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 14px=
+;        text-align: center;        width: 186px;        line-height: 20px;=
+        font-weight: 400;        padding-top: 0px;        padding-left: 0px=
+;        padding-right: 0px;        padding-bottom: 0px;      " />
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 14px=
+;        text-align: right;        width: 181px;        line-height: 20px; =
+       font-weight: 400;        padding-top: 0px;        padding-left: 0px;=
+        padding-right: 0px;        padding-bottom: 0px;      " />
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style=3D"        width: 100%;        padding-top: 0px;       =
+ padding-right: 10px;        padding-left: 10px;      ">
+            <br />
+            <table style=3D"        width: 100%;        padding-right: 0px;=
+        padding-left: 0px;        padding-top: 0px;        padding-bottom: =
+0px;        background-color: #f2f5fa;        margin-left: 0px;      ">
+              <tbody>
+                <tr>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 21px=
+;        font-weight: 500;        background-color: #f2f5fa;        padding=
+-top: 0px;        padding-bottom: 0px;        padding-left: 10px;        pa=
+dding-right: 10px;      ">How to Fix It</td>
+                </tr>
+                <tr>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 16px=
+;        font-weight: 400;        padding-top: 0px;        padding-bottom: =
+6px;        padding-left: 10px;        padding-right: 10px;        backgrou=
+nd-color: #f2f5fa;      ">The address may be misspelled or may not exist. T=
+ry one or more of the following:</td>
+                </tr>
+                <tr>
+                  <td style=3D"         padding-top: 0px;         padding-b=
+ottom: 0px;         padding-left: 0px;         padding-right: 0px;        b=
+order-spacing: 0px 0px;      ">
+                    <ul style=3D"        font-family: 'Segoe UI', Frutiger,=
+ Arial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 16=
+px;        font-weight: 400;        margin-left: 40px;        margin-bottom=
+: 5px;        background-color: #f2f5fa;        padding-top: 0px;        pa=
+dding-bottom: 0px;        padding-left: 6px;        padding-right: 6px;    =
+  ">
+                      <li>Send the message again following these steps: In =
+Outlook, open this non-delivery report (NDR) and choose <b>Send Again</b> f=
+rom the Report ribbon. In Outlook on the web, select this NDR, then select =
+the link "<b>To send this message again, click here.</b>" Then delete and r=
+etype the entire recipient address. If prompted with an Auto-Complete List =
+suggestion don't select it. After typing the complete address, click <b>Sen=
+d</b>.</li>
+                      <li>Contact the recipient (by phone, for example) to =
+check that the address is correct.</li>
+                      <li>The recipient may have set up email forwarding to=
+ an incorrect address. Ask them to check that any forwarding they've set up=
+ is working correctly.</li>
+                      <li>Clear the recipient Auto-Complete List in Outlook=
+ or Outlook on the web by following the steps in this article: <a href=3D"h=
+ttps://go.microsoft.com/fwlink/?LinkId=3D389363">Fix email delivery issues =
+for error code 5.1.1 in Office 365</a>, and then send the message again. Re=
+type the entire recipient address before selecting <b>Send</b>.</li>
+                    </ul>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style=3D"        font-family: 'Segoe UI', Frutiger, Arial, sa=
+ns-serif;        -ms-text-size-adjust: 100%;        font-size: 14px;       =
+ font-weight: 400;        padding-top: 10px;        padding-bottom: 0px;   =
+     padding-bottom: 4px;      ">
+            <br />
+            <em>Was this helpful? <a href=3D"https://go.microsoft.com/fwlin=
+k/?LinkId=3D618497">Send feedback to Microsoft</a>.</em>
+          </td>
+        </tr>
+        <tr>
+          <td style=3D"        -ms-text-size-adjust: 100%;        font-size=
+: 0px;        line-height: 0px;        padding-top: 0px;        padding-bot=
+tom: 0px;      ">
+            <hr />
+          </td>
+        </tr>
+        <tr>
+          <td style=3D"        font-family: 'Segoe UI', Frutiger, Arial, sa=
+ns-serif;        -ms-text-size-adjust: 100%;        font-size: 21px;       =
+ font-weight: 500;      ">
+            <br />More Info for Email Admins</td>
+        </tr>
+        <tr>
+          <td style=3D"        font-family: 'Segoe UI', Frutiger, Arial, sa=
+ns-serif;        -ms-text-size-adjust: 100%;        font-size: 14px;      "=
+>
+            <em>Status code 554 5.4.14</em>
+            <br />
+            <br />Typically this error occurs because the recipient email a=
+ddress is incorrect or doesn't exist at the destination domain. This can us=
+ually be fixed by the sender. However, sometimes the issue needs to be fixe=
+d by the recipient or the recipient's email admin. If the steps in the <b>H=
+ow to Fix It</b> section above don't fix the problem, and you're the email =
+admin for the recipient, try one or more of the following:<br /><br /><b>Th=
+e email address exists and is correct</b> - Confirm that the recipient addr=
+ess exists, is correct, and is accepting messages.<br /><br /><b>Synchroniz=
+e your directories</b> - If you have a hybrid environment and are using dir=
+ectory synchronization make sure the recipient's email address is synced co=
+rrectly in both Office 365 and in your on-premises directory.<br /><br /><b=
+>Errant forwarding rule</b> - Check for forwarding rules that aren't behavi=
+ng as expected. A forwarding rule can be configured by an admin via mail fl=
+ow rules or mailbox forwarding address settings, or by the recipient via th=
+e Inbox Rules feature.<br /><br /><b>Mail flow settings and MX records are =
+not correct</b> - Misconfigured mail flow settings or MX records can cause =
+this error. Check your Office 365 mail flow settings to make sure your doma=
+in and any mail flow connectors are set up correctly. Also, work with your =
+domain registrar to make sure the MX records for your domain are configured=
+ correctly.<br /><br /><b>Mail loop detected</b> - This error also indicate=
+s that the receiving organization's email settings are misconfigured, creat=
+ing a mail loop when a message is sent to an address that isn't found in th=
+eir directory. This usually won't disrupt mail flow for recipients that act=
+ually exist, but the recipient's email admin should fix the misconfiguratio=
+n to reduce the chance of any other mail flow issues. A common cause for th=
+is loop is that the recipient's domain is configured as "Internal Relay" wh=
+en it should be "Authoritative." Another common cause for the loop is that =
+both the sender and recipient are part of the same organization, but the se=
+nder's mailbox is hosted by Office 365, while the recipient's mailbox is ho=
+sted on-premises, and an outbound connector from Office 365 to the on-premi=
+ses email servers is missing or misconfigured. To fix this, the recipient's=
+ email admin should create a correctly configured outbound connector in Off=
+ice 365 to route the message to the on-premises mailbox.<br /><br />For mor=
+e information and tips to fix this problem, see <a href=3D"https://go.micro=
+soft.com/fwlink/?LinkId=3D397497">Fix email delivery issues for error code =
+5.4.14 in Office 365</a>.<br /><br /></td>
+        </tr>
+        <tr>
+          <td style=3D"        font-family: 'Segoe UI', Frutiger, Arial, sa=
+ns-serif;        -ms-text-size-adjust: 100%;        font-size: 17px;       =
+ font-weight: 500;      ">Original Message Details</td>
+        </tr>
+        <tr>
+          <td style=3D"        font-size: 14px;        line-height: 20px;  =
+      font-family: 'Segoe UI', Frutiger, Arial, sans-serif;        -ms-text=
+-size-adjust: 100%;        font-weight: 500;      ">
+            <table style=3D"        width: 100%;        border-collapse: co=
+llapse;        margin-left: 10px;      ">
+              <tbody>
+                <tr>
+                  <td valign=3D"top" style=3D"        font-family: 'Segoe U=
+I', Frutiger, Arial, sans-serif;        font-size: 14px;        -ms-text-si=
+ze-adjust: 100%;        white-space: nowrap;        font-weight: 500;      =
+  width: 140px;      ">Created Date:</td>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 14px=
+;        font-weight: 400;      ">11/27/2026 6:54:52 AM</td>
+                </tr>
+                <tr>
+                  <td valign=3D"top" style=3D"        font-family: 'Segoe U=
+I', Frutiger, Arial, sans-serif;        font-size: 14px;        -ms-text-si=
+ze-adjust: 100%;        white-space: nowrap;        font-weight: 500;      =
+  width: 140px;      ">Sender Address:</td>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 14px=
+;        font-weight: 400;      ">010f01a21bc915fd-734edf65-239c-4acb-8e4e-=
+faa41e09e819-000000@ses.progynygroup.online</td>
+                </tr>
+                <tr>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        font-size: 14px;        -ms-text-size-adjust: 100%=
+;        white-space: nowrap;        font-weight: 500;        width: 140px;=
+      ">Recipient Address:</td>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 14px=
+;        font-weight: 400;      ">info@smithlogistics.net</td>
+                </tr>
+                <tr>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        font-size: 14px;        -ms-text-size-adjust: 100%=
+;        white-space: nowrap;        font-weight: 500;        width: 140px;=
+      ">Subject:</td>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 14px=
+;        font-weight: 400;      ">INFO-FWD: [BOND-2026-1013] Inquiry - Cont=
+inuous Customs Bond</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style=3D"        font-family: 'Segoe UI', Frutiger, Arial, sa=
+ns-serif;        -ms-text-size-adjust: 100%;        font-size: 17px;       =
+ font-weight: 500;      ">
+            <br />Error Details</td>
+        </tr>
+        <tr>
+          <td style=3D"        font-size: 14px;        line-height: 20px;  =
+      font-family: 'Segoe UI', Frutiger, Arial, sans-serif;        -ms-text=
+-size-adjust: 100%;        font-weight: 500;      ">
+            <table style=3D"        width: 100%;        border-collapse: co=
+llapse;        margin-left: 10px;      ">
+              <tbody>
+                <tr>
+                  <td valign=3D"top" style=3D"        font-family: 'Segoe U=
+I', Frutiger, Arial, sans-serif;        font-size: 14px;        -ms-text-si=
+ze-adjust: 100%;        white-space: nowrap;        font-weight: 500;      =
+  width: 140px;      ">Error:</td>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 14px=
+;        font-weight: 400;      ">
+                    <em>554 5.4.14 Hop count exceeded - possible mail loop =
+ATTR34 [BN5PEPF00046989.namprd02.prod.outlook.com 2026-11-27T06:57:02.373Z =
+08DF4B7822815653]</em>
+                  </td>
+                </tr>
+                <tr>
+                  <td valign=3D"top" style=3D"        font-family: 'Segoe U=
+I', Frutiger, Arial, sans-serif;        font-size: 14px;        -ms-text-si=
+ze-adjust: 100%;        white-space: nowrap;        font-weight: 500;      =
+  width: 140px;      ">Retry count:</td>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 14px=
+;        font-weight: 400;      ">
+                    <em>1</em>
+                  </td>
+                </tr>
+                <tr>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        font-size: 14px;        -ms-text-size-adjust: 100%=
+;        white-space: nowrap;        font-weight: 500;        width: 140px;=
+      ">Message rejected by:</td>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 14px=
+;        font-weight: 400;      ">BN5PEPF00046989.mail.protection.outlook.c=
+om</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style=3D"        font-family: 'Segoe UI', Frutiger, Arial, sa=
+ns-serif;        -ms-text-size-adjust: 100%;        font-size: 17px;       =
+ font-weight: 500;      ">
+            <br />Notification Details</td>
+        </tr>
+        <tr>
+          <td style=3D"        font-size: 14px;        line-height: 20px;  =
+      font-family: 'Segoe UI', Frutiger, Arial, sans-serif;        -ms-text=
+-size-adjust: 100%;        font-weight: 500;      ">
+            <table style=3D"        width: 100%;        border-collapse: co=
+llapse;        margin-left: 10px;      ">
+              <tbody>
+                <tr>
+                  <td valign=3D"top" style=3D"        font-family: 'Segoe U=
+I', Frutiger, Arial, sans-serif;        font-size: 14px;        -ms-text-si=
+ze-adjust: 100%;        white-space: nowrap;        font-weight: 500;      =
+  width: 140px;      ">Sent by:</td>
+                  <td style=3D"        font-family: 'Segoe UI', Frutiger, A=
+rial, sans-serif;        -ms-text-size-adjust: 100%;        font-size: 14px=
+;        font-weight: 400;      ">
+                    <em>PH0PR16MB4712.namprd16.prod.outlook.com</em>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <br />
+    <table style=3D"width: 880px;" cellspacing=3D"0">
+      <tr>
+        <td colspan=3D"6" style=3D"        padding-top: 4px;        border-=
+bottom: 1px solid #999999;        padding-bottom: 4px;        line-height: =
+120%;        font-size: 17px;        font-family: 'Segoe UI', Frutiger, Ari=
+al, sans-serif;        -ms-text-size-adjust: 100%;        font-weight: 500;=
+      ">Message Hops</td>
+      </tr>
+      <tr>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        background-color: #f2f5fa;        border-bottom: 1p=
+x solid #999999;        white-space: nowrap;        padding: 8px;      ">HO=
+P</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        background-color: #f2f5fa;        border-bottom: 1p=
+x solid #999999;        white-space: nowrap;        padding: 8px;        wi=
+dth: 80px;      ">TIME (UTC)</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        background-color: #f2f5fa;        border-bottom: 1p=
+x solid #999999;        white-space: nowrap;        padding: 8px;      ">FR=
+OM</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        background-color: #f2f5fa;        border-bottom: 1p=
+x solid #999999;        white-space: nowrap;        padding: 8px;      ">TO=
+</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        background-color: #f2f5fa;        border-bottom: 1p=
+x solid #999999;        white-space: nowrap;        padding: 8px;      ">WI=
+TH</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        background-color: #f2f5fa;        border-bottom: 1p=
+x solid #999999;        white-space: nowrap;        padding: 8px;      ">RE=
+LAY TIME</td>
+      </tr>
+      <tr>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: center;      ">1</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;        width: 80px;      ">11/27/2026<br />6:5=
+4:53 AM</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">e226-6.smtp-out.us-east-2.amazonses.com=
+</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">DS8PEPF000000E0.mail.protection.outlook=
+.com</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">Microsoft SMTP Server (version=3DTLS1_3=
+, cipher=3DTLS_AES_256_GCM_SHA384)</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">1&nbsp;sec</td>
+      </tr>
+      <tr>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: center;      ">2</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;        width: 80px;      ">11/27/2026<br />6:5=
+4:54 AM</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">DS8PEPF000000E0.namprd05.prod.outlook.c=
+om</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">CY5PR22CA0102.outlook.office365.com</td=
+>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">Microsoft SMTP Server (version=3DTLS1_3=
+, cipher=3DTLS_AES_256_GCM_SHA384)</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">1&nbsp;sec</td>
+      </tr>
+      <tr>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: center;      ">3</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;        width: 80px;      ">11/27/2026<br />6:5=
+4:54 AM</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">CY5PR22CA0102.namprd22.prod.outlook.com=
+</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">MN6PR16MB5452.namprd16.prod.outlook.com=
+</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">Microsoft SMTP Server (version=3DTLS1_2=
+, cipher=3DTLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384)</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">*</td>
+      </tr>
+      <tr>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: center;      ">4</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;        width: 80px;      ">11/27/2026<br />6:5=
+6:57 AM</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">SN4PR2101CU001.outbound.protection.outl=
+ook.com</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">DS4PEPF000001BF.mail.protection.outlook=
+.com</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">Microsoft SMTP Server (version=3DTLS1_3=
+, cipher=3DTLS_AES_256_GCM_SHA384)</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">2&nbsp;min, 3&nbsp;sec</td>
+      </tr>
+      <tr>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: center;      ">5</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;        width: 80px;      ">11/27/2026<br />6:5=
+6:57 AM</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">DS4PEPF000001BF.namprd21.prod.outlook.c=
+om</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">DS7P220CA0093.outlook.office365.com</td=
+>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">Microsoft SMTP Server (version=3DTLS1_3=
+, cipher=3DTLS_AES_256_GCM_SHA384)</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">*</td>
+      </tr>
+      <tr>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: center;      ">6</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;        width: 80px;      ">11/27/2026<br />6:5=
+6:57 AM</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">DS7P220CA0093.NAMP220.PROD.OUTLOOK.COM<=
+/td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">DS6PR16MB600182.namprd16.prod.outlook.c=
+om</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">Microsoft SMTP Server (version=3DTLS1_2=
+, cipher=3DTLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384)</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">*</td>
+      </tr>
+      <tr>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: center;      ">7</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;        width: 80px;      ">11/27/2026<br />6:5=
+6:59 AM</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">SJ2PR03CU001.outbound.protection.outloo=
+k.com</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">CH2PEPF000166BE.mail.protection.outlook=
+.com</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">Microsoft SMTP Server (version=3DTLS1_3=
+, cipher=3DTLS_AES_256_GCM_SHA384)</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">2&nbsp;sec</td>
+      </tr>
+      <tr>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: center;      ">8</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;        width: 80px;      ">11/27/2026<br />6:5=
+6:59 AM</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">CH2PEPF000166BE.namprd04.prod.outlook.c=
+om</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">CH0P220CA0020.outlook.office365.com</td=
+>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">Microsoft SMTP Server (version=3DTLS1_3=
+, cipher=3DTLS_AES_256_GCM_SHA384)</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">*</td>
+      </tr>
+      <tr>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: center;      ">9</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;        width: 80px;      ">11/27/2026<br />6:5=
+7:00 AM</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">CH0P220CA0020.NAMP220.PROD.OUTLOOK.COM<=
+/td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">PH0PR16MB4712.namprd16.prod.outlook.com=
+</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">Microsoft SMTP Server (version=3DTLS1_2=
+, cipher=3DTLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384)</td>
+        <td style=3D"        font-size: 12px;        font-family: 'Segoe UI=
+', Frutiger, Arial, sans-serif;        -ms-text-size-adjust: 100%;        f=
+ont-weight: 500;        border-bottom: 1px solid #999999;        padding: 8=
+px;        text-align: left;      ">1&nbsp;sec</td>
+      </tr>
+    </table>
+    <p style=3D"        font-family: 'Segoe UI', Frutiger, Arial, sans-seri=
+f;        -ms-text-size-adjust: 100%;        font-size: 17px;        font-w=
+eight: 500;        padding-top: 4px;        padding-bottom: 0;        margi=
+n-top: 19px;        margin-bottom: 5px;      ">Original Message Headers</p>
+    <pre style=3D"        color: gray;        white-space: pre;        padd=
+ing-top: 0;        margin-top: 5px;      ">ARC-Seal: i=3D5; a=3Drsa-sha256;=
+ s=3Darcselector10001; d=3Dmicrosoft.com; cv=3Dpass;
+ b=3DWmUc5WjwwSoQxEPIKJXADFZo/koGRwwXoXKuY7Xmawa1hJZCzcaWJSHI1+hz2vCCzk4Ns4=
+sfBeJ7jUbwmWzz4Fnm7RH86yu9z1nzYl73D6Ls0S2tgxObMtpGzA6KkF+WOqrw8kErv7uDlV7Wa=
+p5DwgrP1pqAPsihKNRbTAUJvi0QXDCO2n1QmPCRdKm2nJ1d54p/xpLY0PsNAscbs+uefyQjDwY9=
+xiHTSsa+ITBZrbIMtXnQXCJnoAj9lIfOpHoyuUQvD2VqFb1Q2z8uohEY9eTbeudT9mDjxQecqfY=
+dgmjc1PVKBXwD1mqhBoqsgNXNhbvUVRUZSTxVLejBfFQoLQ=3D=3D
+ARC-Message-Signature: i=3D5; a=3Drsa-sha256; c=3Drelaxed/relaxed; d=3Dmicr=
+osoft.com;
+ s=3Darcselector10001;
+ h=3DFrom:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-A=
+ntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Ex=
+change-AntiSpam-MessageData-1;
+ bh=3Dwps7JvJzLlfKohD18VXy7D0ERjEj+/qmMhAtbsdG7BU=3D;
+ b=3DHn/IwLGeJrWARx4nCsfW7jOzxOaGNFauo0r8h8kzpq8uJR6X2QPdELGfT8s8aNj5LNhquv=
+ClPBrpoDvYm4xluJUmi6AfhHPdkQN0bQbqEr/pWiFtT83m99/Sq7+vXrK4YJ14LSNahHmXIf9Em=
+QPNWECXk5CjHA1aV/M95IhOupgek44r4dOrLPzUAsmxC5MCNdjrMwIj1VQqeLdBtPFboSvVrSAY=
+mhS50afDVvue39pxmqLJ7BqVYdQ3sCnMlvmaW+8UySyGdVrAubBDYkFDLTB3FUAOJDFDca2ckGO=
+9pKd5qFiJBuESUM9sS9f3wHGtOz7xVq9+pxMtDEXLGq+oBA=3D=3D
+ARC-Authentication-Results: i=3D5; mx.microsoft.com 1; spf=3Dsoftfail (send=
+er ip
+ is 2a01:111:f403:c001::2) smtp.rcpttodomain=3Dsmithlogistics.net
+ smtp.mailfrom=3Dses.progynygroup.online; dmarc=3Dfail (p=3Dnone sp=3Dnone =
+pct=3D100)
+ action=3Dnone header.from=3Dprogynygroup.online; dkim=3Dfail (signature di=
+d not
+ verify) header.d=3Dprogynygroup.online; dkim=3Dfail (signature did not ver=
+ify)
+ header.d=3Damazonses.com; dkim=3Dfail (signature did not verify)
+ header.d=3Dprogynygroup.online; arc=3Dpass (0 oda=3D1 ltdi=3D1
+ spf=3D[1,1,smtp.mailfrom=3Dses.progynygroup.online]
+ dkim=3D[1,1,header.d=3Dprogynygroup.online]
+ dmarc=3D[1,1,header.from=3Dprogynygroup.online])
+ARC-Seal: i=3D4; a=3Drsa-sha256; s=3Darcselector10001; d=3Dmicrosoft.com; c=
+v=3Dpass;
+ b=3DuDo3+RQR/xCEdB88EsKcbbN4SKzM5NnRXuNanWJGc3eBWf/JBOioS4c9W0qVKkKLl1JjBf=
+M9oVwSyIAigITb0Z1OUJO4WRLRxJ4kMWDkQd17wnQoNnkPauzc+nkLtDQK/4S6HXO+mYy3ObZcl=
+lByeVzVoXDHSwRFKCADhtnVL1Bwwo2CNlUxb1zKNCDuB8Q5VsLyn8X4ctkovE3jFzP/YkiUzabU=
+k7JO2ZA1p14Nx/ZUOXVhumtTQ1NJVi880GEuSFUBynez5XTaXqWOeT8PPW0ItQQAV73fKk5Id5J=
+LVnJD3jPxVR6Gy4zzKE85FEhJoZjtGjB4WBF5bKJsgbvcIQ=3D=3D
+ARC-Message-Signature: i=3D4; a=3Drsa-sha256; c=3Drelaxed/relaxed; d=3Dmicr=
+osoft.com;
+ s=3Darcselector10001;
+ h=3DFrom:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-A=
+ntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Ex=
+change-AntiSpam-MessageData-1;
+ bh=3Dwps7JvJzLlfKohD18VXy7D0ERjEj+/qmMhAtbsdG7BU=3D;
+ b=3DlzPx3/4NQW5N/0prHJMqXBwlvfnpav6PCX2aZrrCMU/FZ+sYLjkHBaDAJjzNCHkS4cZsDK=
+RT1jsTg4njcJ5MS0wmHYMpSsGLahaNYg1QgTQoBbxm0Kipe6YDwlhaZXn6J6RFkqH5dpa2/DV1Y=
+pV7e6AAmzOfwHGv/R223Dy2Ml85YsSGnrXD2PKv4lGDDJ0zk1qIsZpz73ikfKBc64r/U7yanUqt=
+fgmuZgr7O12hJU3SAKeEV/C+LNH2sV2RmCu+5YWGbWjQL1eFc24Aov9jFssxRTnrMxCH/BtKK+8=
+OgfPDmafhOtWFZpjy7MMN4EBp/uOawR+V1Xw5gLs+YIa++Q=3D=3D
+ARC-Authentication-Results: i=3D4; mx.microsoft.com 1; spf=3Dsoftfail (send=
+er ip
+ is 2a01:111:f403:c001::2) smtp.rcpttodomain=3Dsmithlogistics.net
+ smtp.mailfrom=3Dses.progynygroup.online; dmarc=3Dfail (p=3Dnone sp=3Dnone =
+pct=3D100)
+ action=3Dnone header.from=3Dprogynygroup.online; dkim=3Dfail (signature di=
+d not
+ verify) header.d=3Dprogynygroup.online; dkim=3Dfail (signature did not ver=
+ify)
+ header.d=3Damazonses.com; dkim=3Dfail (signature did not verify)
+ header.d=3Dprogynygroup.online; arc=3Dpass (0 oda=3D1 ltdi=3D1
+ spf=3D[1,1,smtp.mailfrom=3Dses.progynygroup.online]
+ dkim=3D[1,1,header.d=3Dprogynygroup.online]
+ dmarc=3D[1,1,header.from=3Dprogynygroup.online])
+Received: from CH0P220CA0020.NAMP220.PROD.OUTLOOK.COM (2603:10b6:610:ef::33=
+)
+ by PH0PR16MB4712.namprd16.prod.outlook.com (2603:10b6:510:143::8) with
+ Microsoft SMTP Server (version=3DTLS1_2,
+ cipher=3DTLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.662.11; Fri, 27 N=
+ov
+ 2026 06:57:00 +0000
+Received: from CH2PEPF000166BE.namprd04.prod.outlook.com
+ (2603:10b6:610:ef:cafe::1e) by CH0P220CA0020.outlook.office365.com
+ (2603:10b6:610:ef::33) with Microsoft SMTP Server (version=3DTLS1_3,
+ cipher=3DTLS_AES_256_GCM_SHA384) id 15.21.615.9 via Frontend Transport; Fr=
+i, 27
+ Nov 2026 06:56:59 +0000
+Authentication-Results: mx.microsoft.com 1; spf=3Dsoftfail (sender IP is
+ 2a01:111:f403:c001::2) smtp.mailfrom=3Dses.progynygroup.online; dkim=3Dfai=
+l
+ (signature did not verify) header.d=3Dprogynygroup.online;dkim=3Dfail (sig=
+nature
+ did not verify) header.d=3Damazonses.com;dkim=3Dfail (signature did not ve=
+rify)
+ header.d=3Dprogynygroup.online;dmarc=3Dfail action=3Dnone
+ header.from=3Dprogynygroup.online;compauth=3Dpass reason=3D130
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ ses.progynygroup.online discourages use of 2a01:111:f403:c001::2 as permit=
+ted
+ sender)
+Received: from SJ2PR03CU001.outbound.protection.outlook.com
+ (2a01:111:f403:c001::2) by CH2PEPF000166BE.mail.protection.outlook.com
+ (2603:10b6:61f:fc00::d28) with Microsoft SMTP Server (version=3DTLS1_3,
+ cipher=3DTLS_AES_256_GCM_SHA384) id 15.21.688.5 via Frontend Transport; Fr=
+i, 27
+ Nov 2026 06:56:59 +0000
+ARC-Seal: i=3D3; a=3Drsa-sha256; s=3Darcselector10001; d=3Dmicrosoft.com; c=
+v=3Dpass;
+ b=3DMeaa2v6dBdLLAfR+pa2L4vnOTu7AjuPhLRjTEDYFo04K5nPP7/xhG2Z7ofZxleGj3NKnW/=
+plEl+DG8oZgPiYPMT48q5vqwzA2liyn9TPpFrhHGnyrGtL+jE9f3VV+e9sxdw2beQ/jYI7z8PSN=
+ysfrYMquSxWRCpKeaZPQjydMTiTfS61db0Baukr7GxLPSFfk8cDrSgU2oNA349YwfjFEhmtDvJH=
+mhGfqUfKhUCws/OJn1fHyYpkiy9OFXuo2MbyGncgBl3JbQFl+fgU/IljW3aLATO2sk5DDXToKja=
+99myqEa0BWWykazrBD2GfLXuxFA7z6NweVLO3SiHZQWn0OQ=3D=3D
+ARC-Message-Signature: i=3D3; a=3Drsa-sha256; c=3Drelaxed/relaxed; d=3Dmicr=
+osoft.com;
+ s=3Darcselector10001;
+ h=3DFrom:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-A=
+ntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Ex=
+change-AntiSpam-MessageData-1;
+ bh=3Dwps7JvJzLlfKohD18VXy7D0ERjEj+/qmMhAtbsdG7BU=3D;
+ b=3DCL/GAM74O0lXt8awbwEWFhFfpO1iZ/cZtSiZniozZ+gvT7hbBuluX142g0A8qbdt0EZe/+=
+Ryq1p3qx+Z0XTnhAHWdgqRXknMhbnWg5rdvgU/V+jBQuCtbwLtg+KUMCQtRhBAut4XWL0jVSzBq=
+ttz5i3rIVHfo3KyPqeO26PQ54kOF+Eubv0I6ekrJ78eTN8ackd2G/D8SA+NOxUTrsiK+VUEdGKX=
+Zv4Yru8jPlWgozlYpZRoGde4ZUr3vXRZMrrvNWngeeSq/UZHQQNbyWDlDXZTISv2exlp8C1j7A0=
+VSM2os30M1/OjmilvazWVHjTUbZlbj5RoJma/ItXjMCFBrw=3D=3D
+ARC-Authentication-Results: i=3D3; mx.microsoft.com 1; spf=3Dsoftfail (send=
+er ip
+ is 2a01:111:f403:c10d::1) smtp.rcpttodomain=3Dsmithlogistics.net
+ smtp.mailfrom=3Dses.progynygroup.online; dmarc=3Dfail (p=3Dnone sp=3Dnone =
+pct=3D100)
+ action=3Dnone header.from=3Dprogynygroup.online; dkim=3Dfail (signature di=
+d not
+ verify) header.d=3Dprogynygroup.online; dkim=3Dfail (signature did not ver=
+ify)
+ header.d=3Damazonses.com; dkim=3Dfail (signature did not verify)
+ header.d=3Dprogynygroup.online; arc=3Dpass (0 oda=3D1 ltdi=3D1
+ spf=3D[1,1,smtp.mailfrom=3Dses.progynygroup.online]
+ dkim=3D[1,1,header.d=3Dprogynygroup.online]
+ dmarc=3D[1,1,header.from=3Dprogynygroup.online])
+ARC-Seal: i=3D2; a=3Drsa-sha256; s=3Darcselector10001; d=3Dmicrosoft.com; c=
+v=3Dpass;
+ b=3DZVV3mbVqjWxas2AHH4nQ62rqMzKYqzslRD7Ixnx9QrFm/3D52pwcTxoiLFj5UK4nkJyMC4=
+FxT/b40hjmQrqKdJecNDEi7cMbGHAxtzV8sB5gdqRo0j6x5bj5RSJBTZ6xMP5e9u2/u5KxPoNrS=
+oTy9d0oZJp/PVifkGYRLLTbGAeB65dXqAzu9u9lCXBdycGiZmkPJb9/Zjl7LVe2CNvcV8jGbiFd=
+F2qXhNrBgDIauwNPJ+FVP/9VOvfh3BeZRJtCAAiX4ZjDHphp20P0g5bzmYsquD2LwAGptqNvqbs=
+miJjYhey+9R8f07BIGVNA0mvlGTgBiEPlJTYtFIKBaeLIPw=3D=3D
+ARC-Message-Signature: i=3D2; a=3Drsa-sha256; c=3Drelaxed/relaxed; d=3Dmicr=
+osoft.com;
+ s=3Darcselector10001;
+ h=3DFrom:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-A=
+ntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Ex=
+change-AntiSpam-MessageData-1;
+ bh=3Dwps7JvJzLlfKohD18VXy7D0ERjEj+/qmMhAtbsdG7BU=3D;
+ b=3DgoUIIAVpiTWay30/hdNeVu8dZuUlL/LO4IUca7GShoy3E1wVf/Rc37IhkovewZjW4OjY3K=
+/EUtO3QTfcw6IcrSUrI5+UbN9vRMQlAVaNNTWY5B/P2eNz3Y+aUKAGaNEy7zE3oQBMvagzfKdoy=
+JLO50U3/wBa8opw1iLrN52HRISTUn3Q6isvk4Jof2DwQPZo36VSnwckl3H89XRLAwg0zs/e5jg3=
+w13wCuT0JxuqnXED72JoE72Lzh6BLZQA9N0z+lNM9jiFtD1FwL39VafPPyBdxxvUKWMKj9Ad/i+=
+dbFuP9CojjFfLM4fsN29pEi4u9epi0SueM9MT2JGnV0v5XQ=3D=3D
+ARC-Authentication-Results: i=3D2; mx.microsoft.com 1; spf=3Dsoftfail (send=
+er ip
+ is 2a01:111:f403:c10d::1) smtp.rcpttodomain=3Dsmithlogistics.net
+ smtp.mailfrom=3Dses.progynygroup.online; dmarc=3Dfail (p=3Dnone sp=3Dnone =
+pct=3D100)
+ action=3Dnone header.from=3Dprogynygroup.online; dkim=3Dfail (signature di=
+d not
+ verify) header.d=3Dprogynygroup.online; dkim=3Dfail (signature did not ver=
+ify)
+ header.d=3Damazonses.com; dkim=3Dfail (signature did not verify)
+ header.d=3Dprogynygroup.online; arc=3Dpass (0 oda=3D1 ltdi=3D1
+ spf=3D[1,1,smtp.mailfrom=3Dses.progynygroup.online]
+ dkim=3D[1,1,header.d=3Dprogynygroup.online]
+ dmarc=3D[1,1,header.from=3Dprogynygroup.online])
+Received: from DS7P220CA0093.NAMP220.PROD.OUTLOOK.COM (2603:10b6:8:25a::17)=
+ by
+ DS6PR16MB600182.namprd16.prod.outlook.com (2603:10b6:8:530::13) with
+ Microsoft SMTP Server (version=3DTLS1_2,
+ cipher=3DTLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.662.9; Fri, 27 No=
+v
+ 2026 06:56:57 +0000
+Received: from DS4PEPF000001BF.namprd21.prod.outlook.com
+ (2603:10b6:8:25a:cafe::9b) by DS7P220CA0093.outlook.office365.com
+ (2603:10b6:8:25a::17) with Microsoft SMTP Server (version=3DTLS1_3,
+ cipher=3DTLS_AES_256_GCM_SHA384) id 15.21.662.10 via Frontend Transport; F=
+ri,
+ 27 Nov 2026 06:56:57 +0000
+Authentication-Results-Original: mx.microsoft.com 1; spf=3Dsoftfail (sender=
+ IP
+ is 2a01:111:f403:c10d::1) smtp.mailfrom=3Dses.progynygroup.online; dkim=3D=
+fail
+ (signature did not verify) header.d=3Dprogynygroup.online;dkim=3Dfail (sig=
+nature
+ did not verify) header.d=3Damazonses.com;dkim=3Dfail (signature did not ve=
+rify)
+ header.d=3Dprogynygroup.online;dmarc=3Dfail action=3Dnone
+ header.from=3Dprogynygroup.online;compauth=3Dpass reason=3D130
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ ses.progynygroup.online discourages use of 2a01:111:f403:c10d::1 as permit=
+ted
+ sender)
+Received: from SN4PR2101CU001.outbound.protection.outlook.com
+ (2a01:111:f403:c10d::1) by DS4PEPF000001BF.mail.protection.outlook.com
+ (2603:10b6:f:fc00::245) with Microsoft SMTP Server (version=3DTLS1_3,
+ cipher=3DTLS_AES_256_GCM_SHA384) id 15.21.688.0 via Frontend Transport; Fr=
+i, 27
+ Nov 2026 06:56:57 +0000
+ARC-Seal: i=3D1; a=3Drsa-sha256; s=3Darcselector10001; d=3Dmicrosoft.com; c=
+v=3Dnone;
+ b=3DA3uixLzDCtICa+Se3Rw9Tduic0mO0FNVDgCtPK2Re/1DkgEhlebh8iFtSEQmdhKSBgTE3Z=
+eKNMr6DW+13ifSne4jMFF4TVu1CdRLMX8wjKG29YTinrXWRc+s0tRlsFEMrvugb/9xy5r9zgRTb=
+C2EmpqBiLk5+Uh6uOcJmcY6rHwfh+y/LQq8Kn11Xy0BcaTXoYLeB2p//0OKRAh9grSI1pMLmWEi=
+cQBKrV0gYXcF6K8/Bzd+z3uZAqCvkjEeuM1s2fj6DlCjoSWFin408yQfUipMIQLEt7UPWTcP7F7=
+UYxr2jGF1hPMKJKjQhWyqAuyyX9JljEoFz82bUdKd6tm94Q=3D=3D
+ARC-Message-Signature: i=3D1; a=3Drsa-sha256; c=3Drelaxed/relaxed; d=3Dmicr=
+osoft.com;
+ s=3Darcselector10001;
+ h=3DFrom:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-A=
+ntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Ex=
+change-AntiSpam-MessageData-1;
+ bh=3Dwps7JvJzLlfKohD18VXy7D0ERjEj+/qmMhAtbsdG7BU=3D;
+ b=3DgDVJj1YxhpVXssAjDi91ThV/A/Jt9t/wGlvdjy6uKj3WECSn0i6OJLhZIJt4Hr7Q6lXiQr=
+x1Yz2H6xNYZl48E23DSSRF6aoLMCnVimRC0tYt5MAINWTYoCzslbXG5zbmcDYhdCUKpq+Kr+JOO=
+RuX2QJeOtD9g6DjzYqklcsWsIAhV82WnG6PagPp0CvA3VgLiZp6Lf5AvMhDqYR5OWCRz/Au+EwJ=
+Kk+Y1fb3RIp7+4nBvy+jFfkIJrBWMRpJrBw0tyKOgcj7xx6xvX1w7d5zTTCTppb3kR/CzzSzu63=
+Q3ch9Aluv3kL0ABJSIN45kfeR4p7kKC7c3kbxM6u1PtdCZQ=3D=3D
+ARC-Authentication-Results: i=3D1; mx.microsoft.com 1; spf=3Dpass (sender i=
+p is
+ 23.251.226.6) smtp.rcpttodomain=3Dsmithlogistics.net
+ smtp.mailfrom=3Dses.progynygroup.online; dmarc=3Dpass (p=3Dnone sp=3Dnone =
+pct=3D100)
+ action=3Dnone header.from=3Dprogynygroup.online; dkim=3Dpass (signature wa=
+s
+ verified) header.d=3Dprogynygroup.online; dkim=3Dpass (signature was verif=
+ied)
+ header.d=3Damazonses.com; dkim=3Dfail (signature did not verify)
+ header.d=3Dprogynygroup.online; arc=3Dnone (0)
+Received: from CY5PR22CA0102.namprd22.prod.outlook.com (2603:10b6:930:65::2=
+9)
+ by MN6PR16MB5452.namprd16.prod.outlook.com (2603:10b6:208:479::20) with
+ Microsoft SMTP Server (version=3DTLS1_2,
+ cipher=3DTLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.662.11; Fri, 27 N=
+ov
+ 2026 06:54:54 +0000
+Received: from DS8PEPF000000E0.namprd05.prod.outlook.com
+ (2603:10b6:930:65:cafe::a1) by CY5PR22CA0102.outlook.office365.com
+ (2603:10b6:930:65::29) with Microsoft SMTP Server (version=3DTLS1_3,
+ cipher=3DTLS_AES_256_GCM_SHA384) id 15.21.662.9 via Frontend Transport; Fr=
+i, 27
+ Nov 2026 06:54:54 +0000
+Authentication-Results-Original: mx.microsoft.com 1; spf=3Dpass (sender IP =
+is
+ 23.251.226.6) smtp.mailfrom=3Dses.progynygroup.online; dkim=3Dpass (signat=
+ure was
+ verified) header.d=3Dprogynygroup.online;dkim=3Dpass (signature was verifi=
+ed)
+ header.d=3Damazonses.com;dkim=3Dfail (signature did not verify)
+ header.d=3Dprogynygroup.online;dmarc=3Dpass action=3Dnone
+ header.from=3Dprogynygroup.online;compauth=3Dpass reason=3D100
+Received-SPF: Pass (protection.outlook.com: domain of ses.progynygroup.onli=
+ne
+ designates 23.251.226.6 as permitted sender) receiver=3Dprotection.outlook=
+.com;
+ client-ip=3D23.251.226.6; helo=3De226-6.smtp-out.us-east-2.amazonses.com; =
+pr=3DC
+Received: from e226-6.smtp-out.us-east-2.amazonses.com (23.251.226.6) by
+ DS8PEPF000000E0.mail.protection.outlook.com (10.167.23.203) with Microsoft
+ SMTP Server (version=3DTLS1_3, cipher=3DTLS_AES_256_GCM_SHA384) id 15.21.6=
+88.5
+ via Frontend Transport; Fri, 27 Nov 2026 06:54:53 +0000
+DKIM-Signature: v=3D1; a=3Drsa-sha256; q=3Ddns/txt; c=3Drelaxed/simple;
+	s=3Dmgca6wxceznxagzyafhq72n3i2g6kicb; d=3Dprogynygroup.online;
+	t=3D1795762493;
+	h=3DFrom:To:Subject:Message-ID:Content-Type:Content-Transfer-Encoding:MIME=
+-Version:Date;
+	bh=3Dwps7JvJzLlfKohD18VXy7D0ERjEj+/qmMhAtbsdG7BU=3D;
+	b=3DHzIFI7B+GRRXDH07qSaGs9ZWiFzMC8cwYCRmYoSOLPCfUw+ZCBTAHdNNrvihpfC1
+	Vh27XaO4PbQm8Ouv6UyHeT91itP+RYIE7HZEd8Y3Qz7vdqFkPIbHn7EAlksHm0v9vy0
+	3Ia/EfhXL1mUL1JbOwuKWNVPK4vQad/nYv1fDAoSsodiexawjj9aOHeSDW9vthjWpHq
+	iTQCreCw1s6WFdetbzggrz45GXa7xwdHT1SsGM41Ll+TRh09Ienen/xIFGj8E/Vk8vk
+	w0ZRstFNte5gCRM77PEC2eLKeB25Ze69slFz7HE0KZjbhVyQTnJisdOSJbzgEZqew/W
+	aF9vMat6hA=3D=3D
+DKIM-Signature: v=3D1; a=3Drsa-sha256; q=3Ddns/txt; c=3Drelaxed/simple;
+	s=3Dkra23psoka5qyyh6gdejiiuof3nluwuz; d=3Damazonses.com; t=3D1795762493;
+	h=3DFrom:To:Subject:Message-ID:Content-Type:Content-Transfer-Encoding:MIME=
+-Version:Date:Feedback-ID;
+	bh=3Dwps7JvJzLlfKohD18VXy7D0ERjEj+/qmMhAtbsdG7BU=3D;
+	b=3Dd3SNA8oADBL+nFaWiDZ63/tobPS8lOouDeHdQyuQtkVY2JFzo4o8OTYmG2+lU7DQ
+	M4W4dEXUPSeE+MHPlvSq1ZNnb+1o2NBKlyVWjsFM02a2seDMB+f4JML8+8PJ56lfHl8
+	0xK1PElx47g8qEavlMUWc5Xa+0fAfTOiMTjh/PJk=3D
+DKIM-Signature: v=3D1; a=3Drsa-sha256; c=3Drelaxed/relaxed; d=3Dprogynygrou=
+p.online;
+	s=3Ddkim; t=3D1795762492; h=3Dfrom:subject:message-id:to:mime-version:cont=
+ent-type:
+	 content-transfer-encoding; bh=3Dwps7JvJzLlfKohD18VXy7D0ERjEj+/qmMhAtbsdG7=
+BU=3D;
+	b=3DUaIFD/FNuaPoo2lDbXB18HLQbOq+nYyZTdlRtJCEs0jAdkmvILg+Dplz6bgh1n3ZRB+Nxj
+	aUGDx9K048hOF4GQQPYmWOtMnHrn3AnpirFas6w9tdXzDX1AbbKRDD1YuLlP3eirUZOIXW
+	IsjxoYIKDlOWnadn0TLihQOu+fOsKKfipeSBgvzb9u5EdB4WaVaIXlTn+uiyGOGvTaadpS
+	HKyt8BnH354bUK3VIhutJn8k78o404om4PuFBTjMzjLGu6Fg2+MzkCzpCGzPDPAQur5OMw
+	t76ovs14wwyC/PWl0zRZqW/GwJpYR70cFm/Bi8RA5w1VT7UmRYFQIi4a4Sifpg=3D=3D
+From: alexandradouglas@progynygroup.online
+To: info@smithlogistics.net
+Subject: INFO-FWD: [BOND-2026-1013] Inquiry - Continuous Customs Bond
+Message-ID: &lt;010f01a21bc915fd-734edf65-239c-4acb-8e4e-faa41e09e819-00000=
+0@us-east-2.amazonses.com&gt;
+Content-Type: text/plain; charset=3D"utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
+Date: Fri, 27 Nov 2026 06:54:52 +0000
+Feedback-ID: ::1.us-east-2.dnBLFQvZ7DBnA5nHg3QcqhG4UiG8AnTuix0bXTff/SU=3D:A=
+mazonSES
+X-SES-Outgoing: 2026.11.27-23.251.226.6
+Return-Path:
+	010f01a21bc915fd-734edf65-239c-4acb-8e4e-faa41e09e819-000000@ses.progynygr=
+oup.online
+X-EOPAttributedMessage: 2
+X-EOPTenantAttributedMessage: 7b5dd6bc-4afb-48e6-87b2-7c1e72bcd399:2
+X-MS-TrafficTypeDiagnostic:
+	DS8PEPF000000E0:EE_|MN6PR16MB5452:EE_|DS4PEPF000001BF:EE_|DS6PR16MB600182:=
+EE_|CH2PEPF000166BE:EE_|PH0PR16MB4712:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8dea6aae-86fb-44a7-bbf0-08df4c53a2=
+1f
+X-LD-Processed: 7b5dd6bc-4afb-48e6-87b2-7c1e72bcd399,ExtAddr,ExtAddr,ExtAdd=
+r
+CC: "Lester@smithlogistics.net" &lt;Lester@smithlogistics.net&gt;,
+	"Igort@smithlogistics.net" &lt;Igort@smithlogistics.net&gt;
+X-Forefront-Antispam-Report-Untrusted: CIP:23.251.226.6;CTRY:US;LANG:en;SCL=
+:5;SRV:;IPV:NLI;SFV:SPM;H:e226-6.smtp-out.us-east-2.amazonses.com;PTR:e226-=
+6.smtp-out.us-east-2.amazonses.com;CAT:SPM;SFS:(13230040)(704160611799003)(=
+32142699015)(260918215300599003)(260918224100599003)(3613699012)(1006709900=
+3)(56012099006)(5063699009)(260925022911599003)(260925021911599003)(2609250=
+21311599003)(261021121427099003)(261022105027099003)(261022075727099003)(26=
+1028144727099003)(261026121527099003)(261026140227099003)(26110212322709900=
+3)(18002099003)(16102099003)(4113699003)(6133799003)(19002099009);DIR:INB;
+X-Microsoft-Antispam-Untrusted: BCL:0;ARA:13230040|704160611799003|32142699=
+015|260918215300599003|260918224100599003|3613699012|10067099003|5601209900=
+6|5063699009|260925022911599003|260925021911599003|260925021311599003|26102=
+1121427099003|261022105027099003|261022075727099003|261028144727099003|2610=
+26121527099003|261026140227099003|261102123227099003|18002099003|1610209900=
+3|4113699003|6133799003|19002099009;
+X-Microsoft-Antispam-Message-Info-Original: =3D?utf-8?B?cFF5aERYTU00Umd6dXF=
+1MCtuUmt0SjFXYVpUUVB5cm1aNHJXZ2FTcEhpczR4?=3D
+ =3D?utf-8?B?SkV5a0loUVhGQmg0dzh3K1dvckgwMXUrWlNyZGVlL3MyQTNqZWtlWVJYNldo?=
+=3D
+ =3D?utf-8?B?L01IUmVUaWJ2R0J5MVVxS2xWdEFEb0k0eFRZdmx3NWdqRkU1cmoxeFJyLzFl?=
+=3D
+ =3D?utf-8?B?SlltWFZldzNuaTlKWXcxcEJaYjhJbXgyRXZIWFF6QVpPUHBtTGtTUUN2V1ZZ?=
+=3D
+ =3D?utf-8?B?c29VS010ZjB5d1Q2V3M0RWxvL0x5RnVLUEVBZDl3OWpHL0lPUGc0RzdDeFFq?=
+=3D
+ =3D?utf-8?B?L3gxN0MwcGQ0ZVcrbTc3dTBhWExOL1ZYUmsydWovR0pQMXluYkNoNGNRbUhu?=
+=3D
+ =3D?utf-8?B?UmhNT2lmVzlPL2ZkQW1uZmYvV0JHbklPdE5hQzNKa1F4MWRZNmVNdEtDZ1Jn?=
+=3D
+ =3D?utf-8?B?aTJSTVZxbi9SS2tocUU2d3pFejE0OERlZ1pUOWREZCt3dlc5a3J0SmlUVDZI?=
+=3D
+ =3D?utf-8?B?aFFHdmlSRzRFbkZucEV1RG91emhtUHdGcUViWThENlhvZVVDU0swelMwMFgw?=
+=3D
+ =3D?utf-8?B?dGZoN2tudUdhdUhOMStVU3gxaDZTaWVmRkdLQ0Y5SWFSY1BnVFpkUFRGUVNx?=
+=3D
+ =3D?utf-8?B?MWNNU2ZHSkJaQlJWNGdCRnZFdkRrNWI5c0VRTktNSitzQWZIdXpXbkpyMkx1?=
+=3D
+ =3D?utf-8?B?VFZ0QUZSbVpObWdJM0JvRjdVbFRPUUV6ZmwvVTFSZDc0UXRJK1NZWmYzK3lZ?=
+=3D
+ =3D?utf-8?B?VC95R28vMTBWbTZMazFyOE9PTkFKQmxsbnlkL1ZaVUJpMUtKMjhQbE9TVHlW?=
+=3D
+ =3D?utf-8?B?QnhBY2JWK2hpWlBtUFNjcFhQTW1xS1VvbGZkWmVKZ2hRM2NpZU5lS0FWRXM2?=
+=3D
+ =3D?utf-8?B?b040SklBaUs0SUVnN0NDS2ZGNlZsTkZqaW03VEdVVE5yMnpPZ2VaYjdPdnJy?=
+=3D
+ =3D?utf-8?B?TTUreVZkc2VFbzY5dWdjOEF2QkFhekRZMTZVU3BPNkd5alJUT2g4UXpLMCtF?=
+=3D
+ =3D?utf-8?B?MG5kZ2lGZEh4cHNrYi9OT1h0aW53bnVsT0JqV01RWUdldEc5VnlXLzBKUGt1?=
+=3D
+ =3D?utf-8?B?d1lqUXBlU3Z2bmQ1Wm1OdkdNOU8zUi9aa3hQRkRFeVROMTN5NWNNMU40RG5I?=
+=3D
+ =3D?utf-8?B?RCt0d3BnNWhQbVZOUHJITDMxSS9Fd1VKU1E1NnkzV1QzMncvbldBYVh3U2kw?=
+=3D
+ =3D?utf-8?B?dlFRRUJ4NTJvVWtLNGkyUUdwOHRRMDBFK08zd0hPRGJ4VkVDcTBhMnVnYVFJ?=
+=3D
+ =3D?utf-8?B?aUVDOTd2c3FsUkw0YldzeHh6Vmk1aE5aMDFQVXZJTFdRQjJiM0JvSTROSUp6?=
+=3D
+ =3D?utf-8?B?TzdSY0R1TUlaYWxHdlIwczRlc21MdjRkZUJRYzBOM1ZTYmxDZzhCZG9WSHdH?=
+=3D
+ =3D?utf-8?B?cE45VDRWSVowaVpxalRMVEFnc0JYTWZ3K3BKZTZIZmRZdVZCYkwvQUNZUEcv?=
+=3D
+ =3D?utf-8?B?R0Q4cDFqVksxQ2txT0RlQ2hsdFZyRnRhZ2FJbkdjcWZpNUhiY0FBUEZtaDZo?=
+=3D
+ =3D?utf-8?B?eXlicERxVFpZdmRVTlJZUXh1WFRaTW5jNEdoQXJvVFF6dEJmTisvaDIxcWkx?=
+=3D
+ =3D?utf-8?B?R01XL0lTZWFic0JHMmlPWmhxQkhzbG5oamIveS9vRXFVdks0MFU0Sk9MZmg2?=
+=3D
+ =3D?utf-8?B?amdXcEl4SnRYeWxvUVBaZmM0TUV5Z2NIUjkxOVBVRWRwWGZvRjhia1RWVUZr?=
+=3D
+ =3D?utf-8?B?YXZpcmE1c3pRbkNGSFgwWWJrK0VNYVFSRVlFR213L2tkLysvWnhSZU04djVU?=
+=3D
+ =3D?utf-8?B?UllKelpaS2FxS005MzM0bXpCdVdmK2VjdVVpRjc5WUhjYXpZM2NHeWhOTEh0?=
+=3D
+ =3D?utf-8?B?NERTd1E1UkNjNFQyYjBtd1l1WW45MHZwc1BqYlMrbHBlSjJ4TzhWTU9WZ25r?=
+=3D
+ =3D?utf-8?B?T2ZOSE9YN3pYUzl3dC9pYmR0dUM4ZmcwSW9sZlRBY0Ixdmx1OFp1dU1odnpF?=
+=3D
+ =3D?utf-8?B?N2JTeEUvTDh5WGxtUkxlWWt3cGEwQ0hsUUR1MnZtOFJhbzJldU9tLzFnMGsx?=
+=3D
+ =3D?utf-8?B?MVd4NUxELzlDSC83QmhNbUJ6NVFDQVlYaEdBc0JPTTdvYncwMjBvRjd0VWZO?=
+=3D
+ =3D?utf-8?B?N2xXeHRoWUlEemFMeUM1ZFBxN2JJYVpFWlp3SVBGamdIQU9JZ3JTNjJtdFkv?=
+=3D
+ =3D?utf-8?B?NStTVm9kU2Q5TnJTcElNVHhsMmN2QWFPd2xXeDUzYU8vRCtBQ0t6bVpWSmZi?=
+=3D
+ =3D?utf-8?B?bzM2NE9qY3pVRnFsVWNTK2hmTkxySWFadlNxcjQ2QUY2djV5Ym9xREdQeFAy?=
+=3D
+ =3D?utf-8?B?MXgyeUVsMVBXVEJwL0VuRXlsak1WVm5rZ1dmbkY5YTJTbFdXUm5OdGlEWFVM?=
+=3D
+ =3D?utf-8?B?OWRBbFBocXdNRTJpV0trVGtPeWtmdXFjT0xpbk1kRTNkeHpLNGVIMk9peFVZ?=
+=3D
+ =3D?utf-8?B?RFhhQStLQnhiR2xoUDFKN21jQnVBZVBrbkxxZSsvQjV4RnI0aWMyUHRWc0E3?=
+=3D
+ =3D?utf-8?B?Z2NCaE1JRFhGc2lBL0c1Nm9FUzA3eGNlMS9MNjFqRytVeGFwMVlweFdXM21L?=
+=3D
+ =3D?utf-8?B?T3J4YWFBa2RHbjhQeHgzV3RBYlJxK2JwUVgxcW51bFRXait4cXJucFhYWGZE?=
+=3D
+ =3D?utf-8?B?d0dROFhFby9yaCtESmQwWDBMaDV6eCtoZndKdjFmdzFHdG1YanNBNzhTRjJy?=
+=3D
+ =3D?utf-8?B?QmNuTThMbk1EN2NjeDZ6MEVkK0dhelVnVUFyb0JTT2xQUXJabEx5a2ZrWnFS?=
+=3D
+ =3D?utf-8?B?WUZ6ZHc3UmxFL1laY0NrTndPYklkdzFLZ0JFb2FKaDZFTjhUeURVVHljblZX?=
+=3D
+ =3D?utf-8?B?d3ZNUVRhRWJXcHdUL0h2eFhIMnp5blJESUF6anFKY3FpcmlubmhTZzlORTM4?=
+=3D
+ =3D?utf-8?B?encvU3RnbkNJa25QbGtIZFVMNmhTOHJMQjFvTE51MXlPczd2U0c1OEFKSWlw?=
+=3D
+ =3D?utf-8?B?eFM1QU5nd3RzMDdKdndNVVU4ejlmTzFaZWRVNHZLZXRZNWhKYW9TVFExNng4?=
+=3D
+ =3D?utf-8?B?NHI3ZWtsb3QyejBmQWpBdXhxWHBkd3g3STNKdnljVFlsYitlNTJZcTQwdGdR?=
+=3D
+ =3D?utf-8?B?RmdhdnJkdGhiYjhXNFVub1FsL3h6bFczT0VJUjduRFJSWThXd1k5TU92ZWNY?=
+=3D
+ =3D?utf-8?B?UGJhUElnSTJIVGh6UW95QjZTRkhHNm50RjF1QzVOSnRDLzY2U3FtQXF1U010?=
+=3D
+ =3D?utf-8?B?VjRCM3I4b2xUcVhpTkNhTFlmeStqck84emNyeE5CWURTdE0wV0owbXcwSUdj?=
+=3D
+ =3D?utf-8?B?VGk4S21DMHFnQXFsbEZqblZIdS9vaElVUnNLSW5Pa2NoUVd1WWVIb2VZZ0gv?=
+=3D
+ =3D?utf-8?B?UHJDVzROWUFQbTRtMUFEcjdyUGV3dWJxWWpaaEZWWmtzank1TUc4MUF2RlFP?=
+=3D
+ =3D?utf-8?B?QXk3ak5GTWVESG9MbThJVWxudFdraGF0TnIyMVVpb3RvTXA2WkNRdURFV1N1?=
+=3D
+ =3D?utf-8?B?VFMyeHc1ZDdkbzR2NnZXeldPdEx0VXNWWmJUTld4a2RnTzRNWlVrSUVCS2wv?=
+=3D
+ =3D?utf-8?B?aXlGSmNzelVjak5xRjRPOEV2ZC9MWENNb2ZoZmwxVEFyMlZuNWNkb0dYekZs?=
+=3D
+ =3D?utf-8?B?NTVtdUJaYWZ0NnJKQkdRTkduZjRZMGFLUTBhTUloeFpjbWZ2TFhkbnRUL1FH?=
+=3D
+ =3D?utf-8?B?YXN4SmVsMjJubnhIMXhTOHNJYU9CTldiTDh3ckFmaUU4OHZZR3B4ZUZSQkd1?=
+=3D
+ =3D?utf-8?B?cEtZS2pFMTlxRTFBWWI0ZmJrNFlBT0RHOE9HWG9ENlYxZEhvU3loYW1kUzQ5?=
+=3D
+ =3D?utf-8?B?MkhkMmllV3ZueVJOOEQ0bHBkbytkL3pvMGdtN2FJWFJPVGVBVlJRUnNheTQv?=
+=3D
+ =3D?utf-8?B?ZDRZUlNqSUF1azQrQ1EwZk5hTkVScC9jei9HdHJQNytuUXFiTGRHVmYyZG5F?=
+=3D
+ =3D?utf-8?B?WkhDTW9vYXJkOW4wZWw1dDRDNWQzbnJIcEVtS0diMjZyVlo1dHlEdVA0KzVq?=
+=3D
+ =3D?utf-8?B?dXJIaDkrSldVREU5Ky9iSmNFQWFWUTF2VWJlVEJQSDJNZHlhb3h1MXBuTFRO?=
+=3D
+ =3D?utf-8?B?aW52ZGQ1S3l0bTBBVW5zRE4yQUwvcTJVRW9jTWtjdkdpL1BsYkF3WTJPVzRL?=
+=3D
+ =3D?utf-8?B?djhhZ29TOWl5a3JVRzhVQXhDOVVxVTE4emVoL0VRbGRLM0UvTHJNRkdnVzlp?=
+=3D
+ =3D?utf-8?Q?FdNo00jFXF+iDtxC0dq?=3D
+X-ExternalRecipientOutboundConnectors: 7b5dd6bc-4afb-48e6-87b2-7c1e72bcd399
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN6PR16MB5452
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: DS4PEPF000001BF.namprd2=
+1.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersPromoted: DS4PEPF000001BF.namprd2=
+1.prod.outlook.com
+X-MS-Office365-Filtering-Correlation-Id-Prvs: cf15430b-ff5c-49a2-b972-08df4=
+c535739
+X-Forefront-Antispam-Report-Untrusted: CIP:2a01:111:f403:c10d::1;CTRY:;LANG=
+:en;SCL:5;SRV:;IPV:NLI;SFV:SPM;H:SN4PR2101CU001.outbound.protection.outlook=
+.com;PTR:mail-southcentralusazlp170120001.outbound.protection.outlook.com;C=
+AT:SPM;SFS:(13230040)(704160611799003)(32142699015)(260918215300599003)(260=
+918224100599003)(35042699022)(3083799003)(2040899013)(3613699012)(100670990=
+03)(56012099006)(5063699009)(260925022911599003)(260925021911599003)(260925=
+021311599003)(261026121527099003)(261026140227099003)(261028144727099003)(2=
+61022105027099003)(261022075727099003)(261021121427099003)(2611021232270990=
+03)(16102099003)(18002099003)(4113699003)(6133799003)(19002099009);DIR:INB;
+X-Microsoft-Antispam-Untrusted: BCL:0;ARA:13230040|704160611799003|32142699=
+015|260918215300599003|260918224100599003|35042699022|3083799003|2040899013=
+|3613699012|10067099003|56012099006|5063699009|260925022911599003|260925021=
+911599003|260925021311599003|261026121527099003|261026140227099003|26102814=
+4727099003|261022105027099003|261022075727099003|261021121427099003|2611021=
+23227099003|16102099003|18002099003|4113699003|6133799003|19002099009;
+X-Microsoft-Antispam-Message-Info-Original: =3D?utf-8?B?RWUyUmQ5MjNiWExrdjJ=
+UeEFobjFuUG5tOVlJdGw5VXhodS9GQlg2SWpLVU9s?=3D
+ =3D?utf-8?B?aGNuUkw1dzd4a0tBdmREZWlNMWl6b2wzVElpaXF6d2oyMmRyMDNkcWZ3eU16?=
+=3D
+ =3D?utf-8?B?TW5pcHpneXNnMjF5OFJPMnFXSGdqaFBMRFdVSDhORkVUNW1Md1JLWXdXT01O?=
+=3D
+ =3D?utf-8?B?cUdsTnpIa0hxMnJwR243a0h4VUNBMzNFVjh1OFJVUDZtN29DNElVdVFNcXlO?=
+=3D
+ =3D?utf-8?B?YmdjVWNPVDBySXUrb04wT3ZGQ1Fuam1QQW9uVlJwNG53ME5OS1lQbWhWbm1l?=
+=3D
+ =3D?utf-8?B?SUN1Ly95cC9JdWV6UGJQUGk0QXgyVzYwb05EOGd4aExWZzdFMzRaaWpScm5j?=
+=3D
+ =3D?utf-8?B?d0p6QTRQL2RKOWRaSmxBUERjYWhTUEtBR2dJc2VLa3JIV1R2d3c1b2NwQUJU?=
+=3D
+ =3D?utf-8?B?V0hqc1BkTUM5UVBGdERiRTN4RVpRRVJVRFZHc3hLc2ZoSS9TNEFjRUx6empq?=
+=3D
+ =3D?utf-8?B?bTNPU3BzR2RzNFpONjdRUm81WDRFcXd2RHFsZ1lSdU4vZVppT0ltblVPMzAv?=
+=3D
+ =3D?utf-8?B?M1lBN0FVVmZRYUIrRWlDV0VKam5UOWhBZzgzSnV3bjhqaHhnN0lJdFJIdHFR?=
+=3D
+ =3D?utf-8?B?L3BLWSsvTFp2QkFWSERqeEN1VUJOc2ZUaDhib0tJdElUdXMzczZUdXUyS21L?=
+=3D
+ =3D?utf-8?B?VTVlQzFjZGxZWktzRFhSZG44aVowSm9wdFVTT2ovYzdFZElxTm5ZZnRVOFhL?=
+=3D
+ =3D?utf-8?B?VTFpM2JXeCtBVXo4elBPeWlYdnIzQTBYWk5JQzc2VlFSQlJCVHB6Q1JIVXV2?=
+=3D
+ =3D?utf-8?B?QzlxQzcvYTNEbElGcERzMW9NR3BxREZjQ0l0V1BzSDFCelN6V29GbXhMRGJH?=
+=3D
+ =3D?utf-8?B?TVdWUXlzNEVsZEVYc1dnU000bkZta3JWUGFnd2ZMKzRJREFQcXZ4aTJ3WGxO?=
+=3D
+ =3D?utf-8?B?aXN2elJLRWlXcXFBUjdaZWdXaEZKYS9XRkwzYS9hTGNKcXphMHlneHJObFVP?=
+=3D
+ =3D?utf-8?B?TXVYTHpCanlvZExzV1lpV2lUYlBYTnVkSzk1WkdTWHdjR1oxdmpzZUx5L1dM?=
+=3D
+ =3D?utf-8?B?SEJ0S1Q1RitEakpUSXFwN0Y4T0xhc1N6cHJ5QVJET3plbno3WVhaNkhoMmRt?=
+=3D
+ =3D?utf-8?B?Q3ZveXpXOUhJR1NnaGpCVWM5QUZRbWRXdFNyaFRzSEtvQ2I0WkdDU29PNUx1?=
+=3D
+ =3D?utf-8?B?UDhJSGhwc1FFbDY2bmJER3MrYWF6L3p5Z1p6YmhqQkM1am91NkNXR2lTajNq?=
+=3D
+ =3D?utf-8?B?VXhWR3VDS2xqa3ZzYWFPcExaelc5RmcxMnJiWFlXWVgwTmhvK29VaWh6OUw0?=
+=3D
+ =3D?utf-8?B?clRZang4bytKMXAwRTB6eDh4dG05UGcwV2JGRktlMzZMMEcyOXc2dmNpMnU1?=
+=3D
+ =3D?utf-8?B?OFJWZTlsRjFiaTlmVUZ6ZW1GbG00Q0lPbzlQM1duQ2RSZHZGUFJ4czBGQ0Jy?=
+=3D
+ =3D?utf-8?B?OWRqSFRNUlZKVlNxNHF5bm5nN0xuelloTm56L01RZmQ2cEJpUE5hTTVkTEk2?=
+=3D
+ =3D?utf-8?B?dnlSYzkxQjl0SHZGcjVhWDVtcE9BODVkdVRWV2pkUllWeWtPMDYvay9ITncw?=
+=3D
+ =3D?utf-8?B?ck45VThOa0pKTWl0US9SbGdzUkFvMzYrSnM0NmVVOVluSVEyWENia0FLUjZ4?=
+=3D
+ =3D?utf-8?B?cDBaaUVMMTAzdUpHcUdCRXBob2cyVnlpSjFmRkVFTFpZY1ZKNFNzTHJnWktw?=
+=3D
+ =3D?utf-8?B?N0lxN3hWYWdSRm9lRnJ2TXd3TG1DS3p2eG1TaHI1SW5VNVlvRHovanNNU0lY?=
+=3D
+ =3D?utf-8?B?WEdJSEREL2xtTHJ5SXkzaC8ydTNRc0JPL1lPUFBjQVF4TjZNQ3lvVG9BcFBr?=
+=3D
+ =3D?utf-8?B?Z0hnU3dsckk3cThZMFVaMUJDM2IvaDJJbHVaUjVQVER0TDZxekFtM0kwTXJF?=
+=3D
+ =3D?utf-8?B?bTFXOG96TkhWOTJPNUxURG91bVNlUFc5YzZkZUUxZ1R0SDVURTFzWU1XWjRt?=
+=3D
+ =3D?utf-8?B?SERHTE15eDJaQTllRW1KNHpmbWU0NTkyWWFndjVHSjI5cU13d3NidTEwVXpj?=
+=3D
+ =3D?utf-8?B?cHJBbmJPL1BIbHAxVE5xRElDNFF3ZHJlWEFYRkZKTFV1ejhUbkNreWU1K1N5?=
+=3D
+ =3D?utf-8?B?LzBYenBxMzcyaW5wZ0ZlaUxzajk5RWlnTmU1L0ZERnNSUlN3Q2FwTExKL0pm?=
+=3D
+ =3D?utf-8?B?WTVieGZZcEdYNGZEN2JOY3BRWmp4Tkx4d0g5QU05am52TldCQW9CTkVESUNR?=
+=3D
+ =3D?utf-8?B?YTRwV3hHb1RaQnBKVWMvUGZwblY1VTJobGFqQkxJYVJ4ZkpyaW9mTTZwUEFO?=
+=3D
+ =3D?utf-8?B?NlRpbjdLeDRTQVhMSitYQnROcHB5NDhsM2wvUVBYRTQzZnVPTzJ6RzVmRmpN?=
+=3D
+ =3D?utf-8?B?VFhPZzdEaG92L0dpWFBnK3Y3eFhhMTJOTDVXeGpoODhUaUhOcFZXUG9pMzQ5?=
+=3D
+ =3D?utf-8?B?K1NnSjJhY0NoYmxsUmJwcm42V0lidVpyRmFIbFcwWURmZjF4WUZYWWU2UkIr?=
+=3D
+ =3D?utf-8?B?QTNTTHV6U0ZIZmgrelh2M0t2cWM5L2tVTlZiZVZYeVlxcVVmWDk3dzY4YTFU?=
+=3D
+ =3D?utf-8?B?R3k2aTFKQXB2N0pLMkk2NzFmclp1S1VyMVRzeGdaRDFMM2diRlduY0VtRzdL?=
+=3D
+ =3D?utf-8?B?ZEhNUnlYUFV6ZjFYcktHZVFaVWxCdFJoZVU5c2ZtSjZBaTZyNFc4Z3hxdHlS?=
+=3D
+ =3D?utf-8?B?bGZrTEs5ZWRZaFBEWkx6S1pNTExVQ01BcFJTVTJ3NzJSdUxaaFdxNVBVNm5h?=
+=3D
+ =3D?utf-8?B?VWE0MmtFY3prUW4rMks1eklXNzVTdDE5d0lsM3FnZ0lic0JZQ0R5Y0w3anZj?=
+=3D
+ =3D?utf-8?B?ekFoNkRBZGxVRGRDRWFFZE9pQ0N0OGdDb2VEMFJkUTk4UGtUVUNEam9PdjFo?=
+=3D
+ =3D?utf-8?B?RHlQL3htVGRtejV6bk44dGdGWTBwSzlBbk93OWQ4c3FOZGZodmRqcG80c1Fk?=
+=3D
+ =3D?utf-8?B?MjdRK01rK01EUWtZbVJlenkvdjNIeDRTMXhzeVppZ2NPcnR5M0ErYTVRL3hs?=
+=3D
+ =3D?utf-8?B?cjVYc2plSEhPWGhpR3g3M1JTdDFSZ1YwVVNybVBIM1lzZVdKVGlwUEIwV0Fi?=
+=3D
+ =3D?utf-8?B?MzZkNG82TEVDc1JvSmVaM1RRMzVEL0NqZnNmYkNoQ1g3SWttM2FOSzVDODdV?=
+=3D
+ =3D?utf-8?B?VXpWVk1EeXhIYjdENlM5L2o5MUpnNFBHalFIbXUxakJ0VFlPeTJMeUh4aXNN?=
+=3D
+ =3D?utf-8?B?R1Q2aXFkWEE5N2ZxZTg1bmlsKzdkRkR4L0lLakhRMzZaem1tWkhqQzNieHcx?=
+=3D
+ =3D?utf-8?B?WTdHMHN5MGFtZlA3ODVKcHlPZDBVQVY2YlFuN3pYQjA0RzBKaFlaVVV2TDRX?=
+=3D
+ =3D?utf-8?B?c3ZyaTZtTThkR1Q4SmVKYVhna29HZ0JuMmQzeENBVTVSUmR3Z3N2OUhlZ09M?=
+=3D
+ =3D?utf-8?B?YzdObWhHYVpCK3lndUtPelIxS0N4dlFYZ3ZWd0pUVWU4V3d3cDlYSjlDbWM5?=
+=3D
+ =3D?utf-8?B?NFpIRzJGbmJPSFJuSEtsWTRDNzY4OEdqM0hjMWhXWTQ4citHQXJGTVMzczk4?=
+=3D
+ =3D?utf-8?B?RG43ZFI3MHlOY2F2OWF2THowTVBUVldrZDN5Tm9JN3pFRjJTbk1lWFA5dC9H?=
+=3D
+ =3D?utf-8?B?Sm5wMDI0VmhybDdaVXY5a2NuOFVqWHgwVjBLZnBPMWdYSVpjTjl3YXE3R0Zs?=
+=3D
+ =3D?utf-8?B?SWZYd3EyU2xWMkNqaVdrL1pKSHo5OGhzbDBZd0VUOU1INnRpOTYyWWNTVEQ2?=
+=3D
+ =3D?utf-8?B?bjVJa0RscThmSkZJb3liZU1UTEIveDJaUHltdlg1aGR5aURRdndyYkpScDBi?=
+=3D
+ =3D?utf-8?B?SXViaHMxYXo5YXhicnlaa1UyNlR3dlZxNzFyYlRna0RxMGl5Q2xGb1czdnBW?=
+=3D
+ =3D?utf-8?B?KzE5ajd4ZnlWVEhWSjIvWE9xcW1GMFRlS0dCcnFOam8vSzRCbldZNVVWSTZQ?=
+=3D
+ =3D?utf-8?B?VFF4SGZzWWFKZ3NPUFBncFNGS0UyL01UM0lxMDIvMi91R0YzMUlreTFXTEJY?=
+=3D
+ =3D?utf-8?B?bEhubmRXcXJDc2ZEeXFKODJod3hBUU9RSFlPY2Q5TVRnZk43T2lLVUZDZm9G?=
+=3D
+ =3D?utf-8?B?NXhxT0lxbExoZnpKcDZYeXpqUkV5RXZmclI5ZjZoMlp1RjN3bE9sa3pzMzVm?=
+=3D
+ =3D?utf-8?Q?QJH17/SAmGupcF2phJbvZZb6fPTX3E1/dIBhiMvH0B8=3D3D?=3D
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS6PR16MB600182
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: CH2PEPF000166BE.namprd0=
+4.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersPromoted: CH2PEPF000166BE.namprd0=
+4.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+	a2b622ad-916b-4ad4-394a-08df4c53a0c6
+X-Forefront-Antispam-Report:
+	CIP:2a01:111:f403:c001::2;CTRY:;LANG:en;SCL:5;SRV:;IPV:NLI;SFV:SPM;H:SJ2PR=
+03CU001.outbound.protection.outlook.com;PTR:mail-westusazlp170120002.outbou=
+nd.protection.outlook.com;CAT:SPM;SFS:(13230040)(704160611799003)(350426990=
+22)(32142699015)(260918224100599003)(260918215300599003)(3083799003)(204089=
+9013)(3613699012)(10067099003)(5063699009)(56012099006)(260925022911599003)=
+(260925021911599003)(260925021311599003)(261026121527099003)(26102614022709=
+9003)(261028144727099003)(261022105027099003)(261022075727099003)(261021121=
+427099003)(261102123227099003)(16102099003)(18002099003)(4113699003)(613379=
+9003)(19002099009);DIR:INB;
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|704160611799003|35042699022|32142699015|260918224100599=
+003|260918215300599003|3083799003|2040899013|3613699012|10067099003|5063699=
+009|56012099006|260925022911599003|260925021911599003|260925021311599003|26=
+1026121527099003|261026140227099003|261028144727099003|261022105027099003|2=
+61022075727099003|261021121427099003|261102123227099003|16102099003|1800209=
+9003|4113699003|6133799003|19002099009;
+X-Microsoft-Antispam-Message-Info:
+	=3D?us-ascii?Q?Ww2arjotH9jbE1VhaEP487YEEoufAf3YLQHUesL27cRB2UEwM3EwWeX/q+2=
+x?=3D
+ =3D?us-ascii?Q?ls5zLWgeZA0Kz3c833Ad6vfF8eeKfXMp4JQeT/mOQcGOV/+6dMiJq57sGhY=
+m?=3D
+ =3D?us-ascii?Q?OKZzR6Q5t72D54ZlZU1lICuVyuU1dONWKGiDahLDz33NfWJaLNuRK/BXXed=
+S?=3D
+ =3D?us-ascii?Q?C7tZ4EUiW4UEEnEZxGyT517eNnsDngKHw2IORXYuRY7af5fLixHxwbyCboJ=
+W?=3D
+ =3D?us-ascii?Q?ZoqrXIDD1pBZIW4Cs2ozg10vkCF1rm73GaEJTsyJeatpdKj+soxTpXTbz/0=
+2?=3D
+ =3D?us-ascii?Q?UsTo4YhfTSreP8CoSPIBUIkXrDimpWmIcc5lKyI269UCOe9/2DEnt5HU9MD=
+x?=3D
+ =3D?us-ascii?Q?y/DNFtkOBVdLod8IK+bzjYh0ffRMnM4/Rvxf+Yw5lLQLVohovJy4rP+fnYh=
+c?=3D
+ =3D?us-ascii?Q?QxE4I+8YQS+x94y3G3tNXnIZlMXg1ojpLFEs7yskrKZss4EYGhehfa+ibmP=
+1?=3D
+ =3D?us-ascii?Q?1b9jsNEnHCbpr6W+MHMnthI3FuImNoFoplohMi+T215OGgTWAx7swZNxixN=
+g?=3D
+ =3D?us-ascii?Q?IgqWnEV6zO2oGoeVQldt0FW3bqzEnA3gIItZP9PDCaEqDrqUaoNRQlucSDy=
+3?=3D
+ =3D?us-ascii?Q?TeTD8sw3w9hV5RRd1aKj69KkURMr3f6weEX77hG33zy894zPy6xaxBz3Hb/=
+W?=3D
+ =3D?us-ascii?Q?HLqMhXuHhVgoB81V2mgiAFJPCJFRovLylAAnG0cxIxJ+lt/ZpMTR0QNGjVO=
+0?=3D
+ =3D?us-ascii?Q?v9NRWjrkR3p1ImTptOvrdCoD0P96euFjTFk1oMMjhxpkwgxRNfHvy3nvRTt=
+Z?=3D
+ =3D?us-ascii?Q?bqXcGH6m9WYgIHIb0/ECUB7hYAThx3eAEfQYdq5d/HEWDPn6lxHAJyNil5q=
+9?=3D
+ =3D?us-ascii?Q?ahZPJmh71othv0YMePueGQMHYTOTYL1RJgqa1DHhwjx5ibv3ZgeF9fNUp7K=
+R?=3D
+ =3D?us-ascii?Q?4Qoop+7iJ3oGO3RlaJWXuj5HCznjLvWAwVdpcpK1mZ+MSCdqWPX1NtTRQgC=
+R?=3D
+ =3D?us-ascii?Q?8xfLEmuTn+y64qePGIi0Li94ng1RzmepK9kA3krf+d4iOElt5OocJg0SUvf=
+i?=3D
+ =3D?us-ascii?Q?qf7vvkyew3HHPwbiihehRQA0L8KotxT9U63gWMnzxozLYCgFdEOcPl3BmF5=
+h?=3D
+ =3D?us-ascii?Q?Y8ggrf1wQ+iaYcFTvWjuLb75taCN6JibM8xvZDMwMUbpJniw6v4DiPCTK7D=
+n?=3D
+ =3D?us-ascii?Q?RsvWTr38FpGKwUh90ELSUZgfFiJVeiMSR/2AIyWpZcBXbtN3alz1uEJpdYm=
+B?=3D
+ =3D?us-ascii?Q?LmB6dKWXTFAM86rS+Qms/3anKlok57EvSb9zUUtqZITDZ0IfctOArXDO/Nx=
+Y?=3D
+ =3D?us-ascii?Q?wRk2kVP/G6qnd/ld8BJPAX1iC/GZgTukbZfTf4CVXiQIXeVdgKD3BZw+Sxk=
+4?=3D
+ =3D?us-ascii?Q?DlLRAGOWHa68a4k570BJSDTj+10TEaG940ZweVOkjem3anIK+cT8650wAzG=
+S?=3D
+ =3D?us-ascii?Q?ywHulBlpqVhHbpNSyl0/pE2ewHhxSDn8RFIr02q1/hJozSKhkP3VVfn4uQa=
+k?=3D
+ =3D?us-ascii?Q?+uyCdd6UgzkCCeUXjjJCKg/cItrVJlQCU8KxRmI6EeZhfGcZxSHfPhoutFl=
+t?=3D
+ =3D?us-ascii?Q?C8WAbNRES9WvQi27VMyI3xTO1D08wB/I9DM+298b4zjEevC+FPoo8wQ6Kmu=
+f?=3D
+ =3D?us-ascii?Q?PHSaxmpADkXyWvfmp6+X3sj6KrTWKrptq3hOlWol4D43b9kW3I07UTufcJF=
+P?=3D
+ =3D?us-ascii?Q?/k+OCdNOtVrRKkGSOVzFIKSdol6HjnsLPe7Ul0lrSNbwgJPXc8+gK6OGTXy=
+S?=3D
+ =3D?us-ascii?Q?0/KjmBcr5pmP/2zFHBJaj5icy2kp2FR6srapCeAHP2FiqJXwB/lnxDK3VUl=
+1?=3D
+ =3D?us-ascii?Q?50e0KkKgedEd6jWi1eocwqQsoQbR7eHODzASZvxxzBOjQ0ArZ8/tMgQ1fk9=
+n?=3D
+ =3D?us-ascii?Q?ao6xNd2LGyuu2sY5+F++tFlWHzJ+rxHkR47/LyO7q7nTunEgPdfMRvw+TCM=
+S?=3D
+ =3D?us-ascii?Q?OHI1ksninOrTvAZocJigPp90+v8FsyqaXK8OfSMA6eWgj8V4kL28LNThZ7L=
+d?=3D
+ =3D?us-ascii?Q?daIZKmjDC25fXgQzEURuo345bjUYCu3EQ5nYO0Lx35oKbP+k0fmr1ryc/Dg=
+g?=3D
+ =3D?us-ascii?Q?EaU24xVmunfmhDu+4P2zJuyPGCrZ1a7+98uLysyBlMzsIncW2pXjWHGLGAt=
+X?=3D
+ =3D?us-ascii?Q?a5uRfwDpjR8n0VQhiYt3sP+k7JObYk4W0AbLmScrVUG1/RHCoj7orXYn2iM=
+9?=3D
+ =3D?us-ascii?Q?1ABqYJSXqRMb7eczeayFmvq0nYvTDX+vpHOq+9shjQKbwrZuqXb07Au/+0O=
+I?=3D
+ =3D?us-ascii?Q?lVnLhy6zXwFrwoK6nO1qLpx3TAZu0kw1Cms08k/KS+qr/NDpSPL0mjKNLDy=
+z?=3D
+ =3D?us-ascii?Q?i9DNUldG7pQdoHQgUsqRK4h6YpfFT5mNNErq0lFrLnpuHsWBgHKmsACGmWK=
+3?=3D
+ =3D?us-ascii?Q?MlvYNwhFmLmlw2Ew+8ocLaCxCsowUjpOMSfwyktDxKtmNwlDV/zc0+jcGby=
+x?=3D
+ =3D?us-ascii?Q?fanWY+I0L0+859HF/+QCEN/+Uvwp0ghfbJOwkBpnC4Slb7ETsc7VAWzmct8=
+d?=3D
+ =3D?us-ascii?Q?K3rBoPDlYSa+7t4Ik5SjYXlw69eWlDXlPsvx2MKpxEiJfoOqw9rQsRwUWep=
+0?=3D
+ =3D?us-ascii?Q?7Qh8fnL/V0fSweIpJawEZx0dobwHhq5TJ730xLEUvCBsoDvlsryYMsqrRu8=
+N?=3D
+ =3D?us-ascii?Q?ZWb7h4uJ2b/RNk3gx7dktYEgbjgjgMwUghptWvGKH0mN1IXPlO2/HBM0WnO=
+6?=3D
+ =3D?us-ascii?Q?pnp1leH0W5SaacBGfqAqgbQxV6ganx72Jbk4vasq3etHzjiByLy9q+TQlcr=
+D?=3D
+ =3D?us-ascii?Q?YgwLyiiSgO9X/CJx+jZPET7LuFHCSiYIvK1u16uWebmG82BkjNE4IDkK5SF=
+K?=3D
+ =3D?us-ascii?Q?wcZ8y7Ft4ugS+1nQfuzPWcnshgBKGe0UrkEHCPqBOxKC/xJob3rt2Mn+zZA=
+n?=3D
+ =3D?us-ascii?Q?iczwSOZF0Wu0zahRMDQSG7AlKPnxY0Xt4JVNMgXAmv6EV2gcWsxoruxd7yH=
+N?=3D
+ =3D?us-ascii?Q?sZdP9mbIzkVysitpwqX4ZVeFn5qUD86Q5yu6VnHP5vatXwTUDE+g781q8x+=
+l?=3D
+ =3D?us-ascii?Q?XabdqgBlVPTwaF8kBPhglzKSYeKxLfrTiNcTHzPDF2o=3D3D?=3D
+X-OriginatorOrg: smithlogistics.net
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Nov 2026 06:56:59.1794
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8dea6aae-86fb-44a7-bbf0-08df4=
+c53a21f
+X-MS-Exchange-CrossTenant-Id: 7b5dd6bc-4afb-48e6-87b2-7c1e72bcd399
+X-MS-Exchange-CrossTenant-AuthSource:
+	CH2PEPF000166BE.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR16MB4712
+</pre>
+  </body>
+</html>=
+
+--ffaeb9a2-fdb6-4aea-9cf8-8e57176c7770--
+
+--46b6904d-bf0b-4749-a262-e8db0636afae
+Content-Type: message/delivery-status
+
+Reporting-MTA: dns;PH0PR16MB4712.namprd16.prod.outlook.com
+Received-From-MTA: dns;SJ2PR03CU001.outbound.protection.outlook.com
+Arrival-Date: Fri, 27 Nov 2026 06:57:00 +0000
+
+Final-Recipient: rfc822;info@smithlogistics.net
+Action: failed
+Status: 5.4.14
+Diagnostic-Code: smtp;554 5.4.14 Hop count exceeded - possible mail loop ATTR34 [BN5PEPF00046989.namprd02.prod.outlook.com 2026-11-27T06:57:02.373Z 08DF4B7822815653]
+Remote-MTA: dns;BN5PEPF00046989.mail.protection.outlook.com
+
+
+--46b6904d-bf0b-4749-a262-e8db0636afae
+Content-Type: message/rfc822
+
+ARC-Seal: i=5; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
+ b=WmUc5WjwwSoQxEPIKJXADFZo/koGRwwXoXKuY7Xmawa1hJZCzcaWJSHI1+hz2vCCzk4Ns4sfBeJ7jUbwmWzz4Fnm7RH86yu9z1nzYl73D6Ls0S2tgxObMtpGzA6KkF+WOqrw8kErv7uDlV7Wap5DwgrP1pqAPsihKNRbTAUJvi0QXDCO2n1QmPCRdKm2nJ1d54p/xpLY0PsNAscbs+uefyQjDwY9xiHTSsa+ITBZrbIMtXnQXCJnoAj9lIfOpHoyuUQvD2VqFb1Q2z8uohEY9eTbeudT9mDjxQecqfYdgmjc1PVKBXwD1mqhBoqsgNXNhbvUVRUZSTxVLejBfFQoLQ==
+ARC-Message-Signature: i=5; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wps7JvJzLlfKohD18VXy7D0ERjEj+/qmMhAtbsdG7BU=;
+ b=Hn/IwLGeJrWARx4nCsfW7jOzxOaGNFauo0r8h8kzpq8uJR6X2QPdELGfT8s8aNj5LNhquvClPBrpoDvYm4xluJUmi6AfhHPdkQN0bQbqEr/pWiFtT83m99/Sq7+vXrK4YJ14LSNahHmXIf9EmQPNWECXk5CjHA1aV/M95IhOupgek44r4dOrLPzUAsmxC5MCNdjrMwIj1VQqeLdBtPFboSvVrSAYmhS50afDVvue39pxmqLJ7BqVYdQ3sCnMlvmaW+8UySyGdVrAubBDYkFDLTB3FUAOJDFDca2ckGO9pKd5qFiJBuESUM9sS9f3wHGtOz7xVq9+pxMtDEXLGq+oBA==
+ARC-Authentication-Results: i=5; mx.microsoft.com 1; spf=softfail (sender ip
+ is 2a01:111:f403:c001::2) smtp.rcpttodomain=smithlogistics.net
+ smtp.mailfrom=ses.progynygroup.online; dmarc=fail (p=none sp=none pct=100)
+ action=none header.from=progynygroup.online; dkim=fail (signature did not
+ verify) header.d=progynygroup.online; dkim=fail (signature did not verify)
+ header.d=amazonses.com; dkim=fail (signature did not verify)
+ header.d=progynygroup.online; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=ses.progynygroup.online]
+ dkim=[1,1,header.d=progynygroup.online]
+ dmarc=[1,1,header.from=progynygroup.online])
+ARC-Seal: i=4; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
+ b=uDo3+RQR/xCEdB88EsKcbbN4SKzM5NnRXuNanWJGc3eBWf/JBOioS4c9W0qVKkKLl1JjBfM9oVwSyIAigITb0Z1OUJO4WRLRxJ4kMWDkQd17wnQoNnkPauzc+nkLtDQK/4S6HXO+mYy3ObZcllByeVzVoXDHSwRFKCADhtnVL1Bwwo2CNlUxb1zKNCDuB8Q5VsLyn8X4ctkovE3jFzP/YkiUzabUk7JO2ZA1p14Nx/ZUOXVhumtTQ1NJVi880GEuSFUBynez5XTaXqWOeT8PPW0ItQQAV73fKk5Id5JLVnJD3jPxVR6Gy4zzKE85FEhJoZjtGjB4WBF5bKJsgbvcIQ==
+ARC-Message-Signature: i=4; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wps7JvJzLlfKohD18VXy7D0ERjEj+/qmMhAtbsdG7BU=;
+ b=lzPx3/4NQW5N/0prHJMqXBwlvfnpav6PCX2aZrrCMU/FZ+sYLjkHBaDAJjzNCHkS4cZsDKRT1jsTg4njcJ5MS0wmHYMpSsGLahaNYg1QgTQoBbxm0Kipe6YDwlhaZXn6J6RFkqH5dpa2/DV1YpV7e6AAmzOfwHGv/R223Dy2Ml85YsSGnrXD2PKv4lGDDJ0zk1qIsZpz73ikfKBc64r/U7yanUqtfgmuZgr7O12hJU3SAKeEV/C+LNH2sV2RmCu+5YWGbWjQL1eFc24Aov9jFssxRTnrMxCH/BtKK+8OgfPDmafhOtWFZpjy7MMN4EBp/uOawR+V1Xw5gLs+YIa++Q==
+ARC-Authentication-Results: i=4; mx.microsoft.com 1; spf=softfail (sender ip
+ is 2a01:111:f403:c001::2) smtp.rcpttodomain=smithlogistics.net
+ smtp.mailfrom=ses.progynygroup.online; dmarc=fail (p=none sp=none pct=100)
+ action=none header.from=progynygroup.online; dkim=fail (signature did not
+ verify) header.d=progynygroup.online; dkim=fail (signature did not verify)
+ header.d=amazonses.com; dkim=fail (signature did not verify)
+ header.d=progynygroup.online; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=ses.progynygroup.online]
+ dkim=[1,1,header.d=progynygroup.online]
+ dmarc=[1,1,header.from=progynygroup.online])
+Received: from CH0P220CA0020.NAMP220.PROD.OUTLOOK.COM (2603:10b6:610:ef::33)
+ by PH0PR16MB4712.namprd16.prod.outlook.com (2603:10b6:510:143::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.662.11; Fri, 27 Nov
+ 2026 06:57:00 +0000
+Received: from CH2PEPF000166BE.namprd04.prod.outlook.com
+ (2603:10b6:610:ef:cafe::1e) by CH0P220CA0020.outlook.office365.com
+ (2603:10b6:610:ef::33) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.615.9 via Frontend Transport; Fri, 27
+ Nov 2026 06:56:59 +0000
+Authentication-Results: mx.microsoft.com 1; spf=softfail (sender IP is
+ 2a01:111:f403:c001::2) smtp.mailfrom=ses.progynygroup.online; dkim=fail
+ (signature did not verify) header.d=progynygroup.online;dkim=fail (signature
+ did not verify) header.d=amazonses.com;dkim=fail (signature did not verify)
+ header.d=progynygroup.online;dmarc=fail action=none
+ header.from=progynygroup.online;compauth=pass reason=130
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ ses.progynygroup.online discourages use of 2a01:111:f403:c001::2 as permitted
+ sender)
+Received: from SJ2PR03CU001.outbound.protection.outlook.com
+ (2a01:111:f403:c001::2) by CH2PEPF000166BE.mail.protection.outlook.com
+ (2603:10b6:61f:fc00::d28) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.688.5 via Frontend Transport; Fri, 27
+ Nov 2026 06:56:59 +0000
+ARC-Seal: i=3; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
+ b=Meaa2v6dBdLLAfR+pa2L4vnOTu7AjuPhLRjTEDYFo04K5nPP7/xhG2Z7ofZxleGj3NKnW/plEl+DG8oZgPiYPMT48q5vqwzA2liyn9TPpFrhHGnyrGtL+jE9f3VV+e9sxdw2beQ/jYI7z8PSNysfrYMquSxWRCpKeaZPQjydMTiTfS61db0Baukr7GxLPSFfk8cDrSgU2oNA349YwfjFEhmtDvJHmhGfqUfKhUCws/OJn1fHyYpkiy9OFXuo2MbyGncgBl3JbQFl+fgU/IljW3aLATO2sk5DDXToKja99myqEa0BWWykazrBD2GfLXuxFA7z6NweVLO3SiHZQWn0OQ==
+ARC-Message-Signature: i=3; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wps7JvJzLlfKohD18VXy7D0ERjEj+/qmMhAtbsdG7BU=;
+ b=CL/GAM74O0lXt8awbwEWFhFfpO1iZ/cZtSiZniozZ+gvT7hbBuluX142g0A8qbdt0EZe/+Ryq1p3qx+Z0XTnhAHWdgqRXknMhbnWg5rdvgU/V+jBQuCtbwLtg+KUMCQtRhBAut4XWL0jVSzBqttz5i3rIVHfo3KyPqeO26PQ54kOF+Eubv0I6ekrJ78eTN8ackd2G/D8SA+NOxUTrsiK+VUEdGKXZv4Yru8jPlWgozlYpZRoGde4ZUr3vXRZMrrvNWngeeSq/UZHQQNbyWDlDXZTISv2exlp8C1j7A0VSM2os30M1/OjmilvazWVHjTUbZlbj5RoJma/ItXjMCFBrw==
+ARC-Authentication-Results: i=3; mx.microsoft.com 1; spf=softfail (sender ip
+ is 2a01:111:f403:c10d::1) smtp.rcpttodomain=smithlogistics.net
+ smtp.mailfrom=ses.progynygroup.online; dmarc=fail (p=none sp=none pct=100)
+ action=none header.from=progynygroup.online; dkim=fail (signature did not
+ verify) header.d=progynygroup.online; dkim=fail (signature did not verify)
+ header.d=amazonses.com; dkim=fail (signature did not verify)
+ header.d=progynygroup.online; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=ses.progynygroup.online]
+ dkim=[1,1,header.d=progynygroup.online]
+ dmarc=[1,1,header.from=progynygroup.online])
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
+ b=ZVV3mbVqjWxas2AHH4nQ62rqMzKYqzslRD7Ixnx9QrFm/3D52pwcTxoiLFj5UK4nkJyMC4FxT/b40hjmQrqKdJecNDEi7cMbGHAxtzV8sB5gdqRo0j6x5bj5RSJBTZ6xMP5e9u2/u5KxPoNrSoTy9d0oZJp/PVifkGYRLLTbGAeB65dXqAzu9u9lCXBdycGiZmkPJb9/Zjl7LVe2CNvcV8jGbiFdF2qXhNrBgDIauwNPJ+FVP/9VOvfh3BeZRJtCAAiX4ZjDHphp20P0g5bzmYsquD2LwAGptqNvqbsmiJjYhey+9R8f07BIGVNA0mvlGTgBiEPlJTYtFIKBaeLIPw==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wps7JvJzLlfKohD18VXy7D0ERjEj+/qmMhAtbsdG7BU=;
+ b=goUIIAVpiTWay30/hdNeVu8dZuUlL/LO4IUca7GShoy3E1wVf/Rc37IhkovewZjW4OjY3K/EUtO3QTfcw6IcrSUrI5+UbN9vRMQlAVaNNTWY5B/P2eNz3Y+aUKAGaNEy7zE3oQBMvagzfKdoyJLO50U3/wBa8opw1iLrN52HRISTUn3Q6isvk4Jof2DwQPZo36VSnwckl3H89XRLAwg0zs/e5jg3w13wCuT0JxuqnXED72JoE72Lzh6BLZQA9N0z+lNM9jiFtD1FwL39VafPPyBdxxvUKWMKj9Ad/i+dbFuP9CojjFfLM4fsN29pEi4u9epi0SueM9MT2JGnV0v5XQ==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=softfail (sender ip
+ is 2a01:111:f403:c10d::1) smtp.rcpttodomain=smithlogistics.net
+ smtp.mailfrom=ses.progynygroup.online; dmarc=fail (p=none sp=none pct=100)
+ action=none header.from=progynygroup.online; dkim=fail (signature did not
+ verify) header.d=progynygroup.online; dkim=fail (signature did not verify)
+ header.d=amazonses.com; dkim=fail (signature did not verify)
+ header.d=progynygroup.online; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=ses.progynygroup.online]
+ dkim=[1,1,header.d=progynygroup.online]
+ dmarc=[1,1,header.from=progynygroup.online])
+Received: from DS7P220CA0093.NAMP220.PROD.OUTLOOK.COM (2603:10b6:8:25a::17) by
+ DS6PR16MB600182.namprd16.prod.outlook.com (2603:10b6:8:530::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.662.9; Fri, 27 Nov
+ 2026 06:56:57 +0000
+Received: from DS4PEPF000001BF.namprd21.prod.outlook.com
+ (2603:10b6:8:25a:cafe::9b) by DS7P220CA0093.outlook.office365.com
+ (2603:10b6:8:25a::17) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.662.10 via Frontend Transport; Fri,
+ 27 Nov 2026 06:56:57 +0000
+Authentication-Results-Original: mx.microsoft.com 1; spf=softfail (sender IP
+ is 2a01:111:f403:c10d::1) smtp.mailfrom=ses.progynygroup.online; dkim=fail
+ (signature did not verify) header.d=progynygroup.online;dkim=fail (signature
+ did not verify) header.d=amazonses.com;dkim=fail (signature did not verify)
+ header.d=progynygroup.online;dmarc=fail action=none
+ header.from=progynygroup.online;compauth=pass reason=130
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ ses.progynygroup.online discourages use of 2a01:111:f403:c10d::1 as permitted
+ sender)
+Received: from SN4PR2101CU001.outbound.protection.outlook.com
+ (2a01:111:f403:c10d::1) by DS4PEPF000001BF.mail.protection.outlook.com
+ (2603:10b6:f:fc00::245) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.688.0 via Frontend Transport; Fri, 27
+ Nov 2026 06:56:57 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=A3uixLzDCtICa+Se3Rw9Tduic0mO0FNVDgCtPK2Re/1DkgEhlebh8iFtSEQmdhKSBgTE3ZeKNMr6DW+13ifSne4jMFF4TVu1CdRLMX8wjKG29YTinrXWRc+s0tRlsFEMrvugb/9xy5r9zgRTbC2EmpqBiLk5+Uh6uOcJmcY6rHwfh+y/LQq8Kn11Xy0BcaTXoYLeB2p//0OKRAh9grSI1pMLmWEicQBKrV0gYXcF6K8/Bzd+z3uZAqCvkjEeuM1s2fj6DlCjoSWFin408yQfUipMIQLEt7UPWTcP7F7UYxr2jGF1hPMKJKjQhWyqAuyyX9JljEoFz82bUdKd6tm94Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wps7JvJzLlfKohD18VXy7D0ERjEj+/qmMhAtbsdG7BU=;
+ b=gDVJj1YxhpVXssAjDi91ThV/A/Jt9t/wGlvdjy6uKj3WECSn0i6OJLhZIJt4Hr7Q6lXiQrx1Yz2H6xNYZl48E23DSSRF6aoLMCnVimRC0tYt5MAINWTYoCzslbXG5zbmcDYhdCUKpq+Kr+JOORuX2QJeOtD9g6DjzYqklcsWsIAhV82WnG6PagPp0CvA3VgLiZp6Lf5AvMhDqYR5OWCRz/Au+EwJKk+Y1fb3RIp7+4nBvy+jFfkIJrBWMRpJrBw0tyKOgcj7xx6xvX1w7d5zTTCTppb3kR/CzzSzu63Q3ch9Aluv3kL0ABJSIN45kfeR4p7kKC7c3kbxM6u1PtdCZQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 23.251.226.6) smtp.rcpttodomain=smithlogistics.net
+ smtp.mailfrom=ses.progynygroup.online; dmarc=pass (p=none sp=none pct=100)
+ action=none header.from=progynygroup.online; dkim=pass (signature was
+ verified) header.d=progynygroup.online; dkim=pass (signature was verified)
+ header.d=amazonses.com; dkim=fail (signature did not verify)
+ header.d=progynygroup.online; arc=none (0)
+Received: from CY5PR22CA0102.namprd22.prod.outlook.com (2603:10b6:930:65::29)
+ by MN6PR16MB5452.namprd16.prod.outlook.com (2603:10b6:208:479::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.662.11; Fri, 27 Nov
+ 2026 06:54:54 +0000
+Received: from DS8PEPF000000E0.namprd05.prod.outlook.com
+ (2603:10b6:930:65:cafe::a1) by CY5PR22CA0102.outlook.office365.com
+ (2603:10b6:930:65::29) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.662.9 via Frontend Transport; Fri, 27
+ Nov 2026 06:54:54 +0000
+Authentication-Results-Original: mx.microsoft.com 1; spf=pass (sender IP is
+ 23.251.226.6) smtp.mailfrom=ses.progynygroup.online; dkim=pass (signature was
+ verified) header.d=progynygroup.online;dkim=pass (signature was verified)
+ header.d=amazonses.com;dkim=fail (signature did not verify)
+ header.d=progynygroup.online;dmarc=pass action=none
+ header.from=progynygroup.online;compauth=pass reason=100
+Received-SPF: Pass (protection.outlook.com: domain of ses.progynygroup.online
+ designates 23.251.226.6 as permitted sender) receiver=protection.outlook.com;
+ client-ip=23.251.226.6; helo=e226-6.smtp-out.us-east-2.amazonses.com; pr=C
+Received: from e226-6.smtp-out.us-east-2.amazonses.com (23.251.226.6) by
+ DS8PEPF000000E0.mail.protection.outlook.com (10.167.23.203) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.688.5
+ via Frontend Transport; Fri, 27 Nov 2026 06:54:53 +0000
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=mgca6wxceznxagzyafhq72n3i2g6kicb; d=progynygroup.online;
+	t=1795762493;
+	h=From:To:Subject:Message-ID:Content-Type:Content-Transfer-Encoding:MIME-Version:Date;
+	bh=wps7JvJzLlfKohD18VXy7D0ERjEj+/qmMhAtbsdG7BU=;
+	b=HzIFI7B+GRRXDH07qSaGs9ZWiFzMC8cwYCRmYoSOLPCfUw+ZCBTAHdNNrvihpfC1
+	Vh27XaO4PbQm8Ouv6UyHeT91itP+RYIE7HZEd8Y3Qz7vdqFkPIbHn7EAlksHm0v9vy0
+	3Ia/EfhXL1mUL1JbOwuKWNVPK4vQad/nYv1fDAoSsodiexawjj9aOHeSDW9vthjWpHq
+	iTQCreCw1s6WFdetbzggrz45GXa7xwdHT1SsGM41Ll+TRh09Ienen/xIFGj8E/Vk8vk
+	w0ZRstFNte5gCRM77PEC2eLKeB25Ze69slFz7HE0KZjbhVyQTnJisdOSJbzgEZqew/W
+	aF9vMat6hA==
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=kra23psoka5qyyh6gdejiiuof3nluwuz; d=amazonses.com; t=1795762493;
+	h=From:To:Subject:Message-ID:Content-Type:Content-Transfer-Encoding:MIME-Version:Date:Feedback-ID;
+	bh=wps7JvJzLlfKohD18VXy7D0ERjEj+/qmMhAtbsdG7BU=;
+	b=d3SNA8oADBL+nFaWiDZ63/tobPS8lOouDeHdQyuQtkVY2JFzo4o8OTYmG2+lU7DQ
+	M4W4dEXUPSeE+MHPlvSq1ZNnb+1o2NBKlyVWjsFM02a2seDMB+f4JML8+8PJ56lfHl8
+	0xK1PElx47g8qEavlMUWc5Xa+0fAfTOiMTjh/PJk=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=progynygroup.online;
+	s=dkim; t=1795762492; h=from:subject:message-id:to:mime-version:content-type:
+	 content-transfer-encoding; bh=wps7JvJzLlfKohD18VXy7D0ERjEj+/qmMhAtbsdG7BU=;
+	b=UaIFD/FNuaPoo2lDbXB18HLQbOq+nYyZTdlRtJCEs0jAdkmvILg+Dplz6bgh1n3ZRB+Nxj
+	aUGDx9K048hOF4GQQPYmWOtMnHrn3AnpirFas6w9tdXzDX1AbbKRDD1YuLlP3eirUZOIXW
+	IsjxoYIKDlOWnadn0TLihQOu+fOsKKfipeSBgvzb9u5EdB4WaVaIXlTn+uiyGOGvTaadpS
+	HKyt8BnH354bUK3VIhutJn8k78o404om4PuFBTjMzjLGu6Fg2+MzkCzpCGzPDPAQur5OMw
+	t76ovs14wwyC/PWl0zRZqW/GwJpYR70cFm/Bi8RA5w1VT7UmRYFQIi4a4Sifpg==
+From: alexandradouglas@progynygroup.online
+To: info@smithlogistics.net
+Subject: INFO-FWD: [BOND-2026-1013] Inquiry - Continuous Customs Bond
+Message-ID: <010f01a21bc915fd-734edf65-239c-4acb-8e4e-faa41e09e819-000000@us-east-2.amazonses.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
+Date: Fri, 27 Nov 2026 06:54:52 +0000
+Feedback-ID: ::1.us-east-2.dnBLFQvZ7DBnA5nHg3QcqhG4UiG8AnTuix0bXTff/SU=:AmazonSES
+X-SES-Outgoing: 2026.11.27-23.251.226.6
+Return-Path:
+ 010f01a21bc915fd-734edf65-239c-4acb-8e4e-faa41e09e819-000000@ses.progynygroup.online
+X-EOPAttributedMessage: 2
+X-EOPTenantAttributedMessage: 7b5dd6bc-4afb-48e6-87b2-7c1e72bcd399:2
+X-MS-TrafficTypeDiagnostic:
+ DS8PEPF000000E0:EE_|MN6PR16MB5452:EE_|DS4PEPF000001BF:EE_|DS6PR16MB600182:EE_|CH2PEPF000166BE:EE_|PH0PR16MB4712:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8dea6aae-86fb-44a7-bbf0-08df4c53a21f
+X-LD-Processed: 7b5dd6bc-4afb-48e6-87b2-7c1e72bcd399,ExtAddr,ExtAddr,ExtAddr
+CC: "Lester@smithlogistics.net" <Lester@smithlogistics.net>,
+	"Igort@smithlogistics.net" <Igort@smithlogistics.net>
+X-Forefront-Antispam-Report-Untrusted: CIP:23.251.226.6;CTRY:US;LANG:en;SCL:5;SRV:;IPV:NLI;SFV:SPM;H:e226-6.smtp-out.us-east-2.amazonses.com;PTR:e226-6.smtp-out.us-east-2.amazonses.com;CAT:SPM;SFS:(13230040)(704160611799003)(32142699015)(260918215300599003)(260918224100599003)(3613699012)(10067099003)(56012099006)(5063699009)(260925022911599003)(260925021911599003)(260925021311599003)(261021121427099003)(261022105027099003)(261022075727099003)(261028144727099003)(261026121527099003)(261026140227099003)(261102123227099003)(18002099003)(16102099003)(4113699003)(6133799003)(19002099009);DIR:INB;
+X-Microsoft-Antispam-Untrusted: BCL:0;ARA:13230040|704160611799003|32142699015|260918215300599003|260918224100599003|3613699012|10067099003|56012099006|5063699009|260925022911599003|260925021911599003|260925021311599003|261021121427099003|261022105027099003|261022075727099003|261028144727099003|261026121527099003|261026140227099003|261102123227099003|18002099003|16102099003|4113699003|6133799003|19002099009;
+X-Microsoft-Antispam-Message-Info-Original: =?utf-8?B?cFF5aERYTU00Umd6dXF1MCtuUmt0SjFXYVpUUVB5cm1aNHJXZ2FTcEhpczR4?=
+ =?utf-8?B?SkV5a0loUVhGQmg0dzh3K1dvckgwMXUrWlNyZGVlL3MyQTNqZWtlWVJYNldo?=
+ =?utf-8?B?L01IUmVUaWJ2R0J5MVVxS2xWdEFEb0k0eFRZdmx3NWdqRkU1cmoxeFJyLzFl?=
+ =?utf-8?B?SlltWFZldzNuaTlKWXcxcEJaYjhJbXgyRXZIWFF6QVpPUHBtTGtTUUN2V1ZZ?=
+ =?utf-8?B?c29VS010ZjB5d1Q2V3M0RWxvL0x5RnVLUEVBZDl3OWpHL0lPUGc0RzdDeFFq?=
+ =?utf-8?B?L3gxN0MwcGQ0ZVcrbTc3dTBhWExOL1ZYUmsydWovR0pQMXluYkNoNGNRbUhu?=
+ =?utf-8?B?UmhNT2lmVzlPL2ZkQW1uZmYvV0JHbklPdE5hQzNKa1F4MWRZNmVNdEtDZ1Jn?=
+ =?utf-8?B?aTJSTVZxbi9SS2tocUU2d3pFejE0OERlZ1pUOWREZCt3dlc5a3J0SmlUVDZI?=
+ =?utf-8?B?aFFHdmlSRzRFbkZucEV1RG91emhtUHdGcUViWThENlhvZVVDU0swelMwMFgw?=
+ =?utf-8?B?dGZoN2tudUdhdUhOMStVU3gxaDZTaWVmRkdLQ0Y5SWFSY1BnVFpkUFRGUVNx?=
+ =?utf-8?B?MWNNU2ZHSkJaQlJWNGdCRnZFdkRrNWI5c0VRTktNSitzQWZIdXpXbkpyMkx1?=
+ =?utf-8?B?VFZ0QUZSbVpObWdJM0JvRjdVbFRPUUV6ZmwvVTFSZDc0UXRJK1NZWmYzK3lZ?=
+ =?utf-8?B?VC95R28vMTBWbTZMazFyOE9PTkFKQmxsbnlkL1ZaVUJpMUtKMjhQbE9TVHlW?=
+ =?utf-8?B?QnhBY2JWK2hpWlBtUFNjcFhQTW1xS1VvbGZkWmVKZ2hRM2NpZU5lS0FWRXM2?=
+ =?utf-8?B?b040SklBaUs0SUVnN0NDS2ZGNlZsTkZqaW03VEdVVE5yMnpPZ2VaYjdPdnJy?=
+ =?utf-8?B?TTUreVZkc2VFbzY5dWdjOEF2QkFhekRZMTZVU3BPNkd5alJUT2g4UXpLMCtF?=
+ =?utf-8?B?MG5kZ2lGZEh4cHNrYi9OT1h0aW53bnVsT0JqV01RWUdldEc5VnlXLzBKUGt1?=
+ =?utf-8?B?d1lqUXBlU3Z2bmQ1Wm1OdkdNOU8zUi9aa3hQRkRFeVROMTN5NWNNMU40RG5I?=
+ =?utf-8?B?RCt0d3BnNWhQbVZOUHJITDMxSS9Fd1VKU1E1NnkzV1QzMncvbldBYVh3U2kw?=
+ =?utf-8?B?dlFRRUJ4NTJvVWtLNGkyUUdwOHRRMDBFK08zd0hPRGJ4VkVDcTBhMnVnYVFJ?=
+ =?utf-8?B?aUVDOTd2c3FsUkw0YldzeHh6Vmk1aE5aMDFQVXZJTFdRQjJiM0JvSTROSUp6?=
+ =?utf-8?B?TzdSY0R1TUlaYWxHdlIwczRlc21MdjRkZUJRYzBOM1ZTYmxDZzhCZG9WSHdH?=
+ =?utf-8?B?cE45VDRWSVowaVpxalRMVEFnc0JYTWZ3K3BKZTZIZmRZdVZCYkwvQUNZUEcv?=
+ =?utf-8?B?R0Q4cDFqVksxQ2txT0RlQ2hsdFZyRnRhZ2FJbkdjcWZpNUhiY0FBUEZtaDZo?=
+ =?utf-8?B?eXlicERxVFpZdmRVTlJZUXh1WFRaTW5jNEdoQXJvVFF6dEJmTisvaDIxcWkx?=
+ =?utf-8?B?R01XL0lTZWFic0JHMmlPWmhxQkhzbG5oamIveS9vRXFVdks0MFU0Sk9MZmg2?=
+ =?utf-8?B?amdXcEl4SnRYeWxvUVBaZmM0TUV5Z2NIUjkxOVBVRWRwWGZvRjhia1RWVUZr?=
+ =?utf-8?B?YXZpcmE1c3pRbkNGSFgwWWJrK0VNYVFSRVlFR213L2tkLysvWnhSZU04djVU?=
+ =?utf-8?B?UllKelpaS2FxS005MzM0bXpCdVdmK2VjdVVpRjc5WUhjYXpZM2NHeWhOTEh0?=
+ =?utf-8?B?NERTd1E1UkNjNFQyYjBtd1l1WW45MHZwc1BqYlMrbHBlSjJ4TzhWTU9WZ25r?=
+ =?utf-8?B?T2ZOSE9YN3pYUzl3dC9pYmR0dUM4ZmcwSW9sZlRBY0Ixdmx1OFp1dU1odnpF?=
+ =?utf-8?B?N2JTeEUvTDh5WGxtUkxlWWt3cGEwQ0hsUUR1MnZtOFJhbzJldU9tLzFnMGsx?=
+ =?utf-8?B?MVd4NUxELzlDSC83QmhNbUJ6NVFDQVlYaEdBc0JPTTdvYncwMjBvRjd0VWZO?=
+ =?utf-8?B?N2xXeHRoWUlEemFMeUM1ZFBxN2JJYVpFWlp3SVBGamdIQU9JZ3JTNjJtdFkv?=
+ =?utf-8?B?NStTVm9kU2Q5TnJTcElNVHhsMmN2QWFPd2xXeDUzYU8vRCtBQ0t6bVpWSmZi?=
+ =?utf-8?B?bzM2NE9qY3pVRnFsVWNTK2hmTkxySWFadlNxcjQ2QUY2djV5Ym9xREdQeFAy?=
+ =?utf-8?B?MXgyeUVsMVBXVEJwL0VuRXlsak1WVm5rZ1dmbkY5YTJTbFdXUm5OdGlEWFVM?=
+ =?utf-8?B?OWRBbFBocXdNRTJpV0trVGtPeWtmdXFjT0xpbk1kRTNkeHpLNGVIMk9peFVZ?=
+ =?utf-8?B?RFhhQStLQnhiR2xoUDFKN21jQnVBZVBrbkxxZSsvQjV4RnI0aWMyUHRWc0E3?=
+ =?utf-8?B?Z2NCaE1JRFhGc2lBL0c1Nm9FUzA3eGNlMS9MNjFqRytVeGFwMVlweFdXM21L?=
+ =?utf-8?B?T3J4YWFBa2RHbjhQeHgzV3RBYlJxK2JwUVgxcW51bFRXait4cXJucFhYWGZE?=
+ =?utf-8?B?d0dROFhFby9yaCtESmQwWDBMaDV6eCtoZndKdjFmdzFHdG1YanNBNzhTRjJy?=
+ =?utf-8?B?QmNuTThMbk1EN2NjeDZ6MEVkK0dhelVnVUFyb0JTT2xQUXJabEx5a2ZrWnFS?=
+ =?utf-8?B?WUZ6ZHc3UmxFL1laY0NrTndPYklkdzFLZ0JFb2FKaDZFTjhUeURVVHljblZX?=
+ =?utf-8?B?d3ZNUVRhRWJXcHdUL0h2eFhIMnp5blJESUF6anFKY3FpcmlubmhTZzlORTM4?=
+ =?utf-8?B?encvU3RnbkNJa25QbGtIZFVMNmhTOHJMQjFvTE51MXlPczd2U0c1OEFKSWlw?=
+ =?utf-8?B?eFM1QU5nd3RzMDdKdndNVVU4ejlmTzFaZWRVNHZLZXRZNWhKYW9TVFExNng4?=
+ =?utf-8?B?NHI3ZWtsb3QyejBmQWpBdXhxWHBkd3g3STNKdnljVFlsYitlNTJZcTQwdGdR?=
+ =?utf-8?B?RmdhdnJkdGhiYjhXNFVub1FsL3h6bFczT0VJUjduRFJSWThXd1k5TU92ZWNY?=
+ =?utf-8?B?UGJhUElnSTJIVGh6UW95QjZTRkhHNm50RjF1QzVOSnRDLzY2U3FtQXF1U010?=
+ =?utf-8?B?VjRCM3I4b2xUcVhpTkNhTFlmeStqck84emNyeE5CWURTdE0wV0owbXcwSUdj?=
+ =?utf-8?B?VGk4S21DMHFnQXFsbEZqblZIdS9vaElVUnNLSW5Pa2NoUVd1WWVIb2VZZ0gv?=
+ =?utf-8?B?UHJDVzROWUFQbTRtMUFEcjdyUGV3dWJxWWpaaEZWWmtzank1TUc4MUF2RlFP?=
+ =?utf-8?B?QXk3ak5GTWVESG9MbThJVWxudFdraGF0TnIyMVVpb3RvTXA2WkNRdURFV1N1?=
+ =?utf-8?B?VFMyeHc1ZDdkbzR2NnZXeldPdEx0VXNWWmJUTld4a2RnTzRNWlVrSUVCS2wv?=
+ =?utf-8?B?aXlGSmNzelVjak5xRjRPOEV2ZC9MWENNb2ZoZmwxVEFyMlZuNWNkb0dYekZs?=
+ =?utf-8?B?NTVtdUJaYWZ0NnJKQkdRTkduZjRZMGFLUTBhTUloeFpjbWZ2TFhkbnRUL1FH?=
+ =?utf-8?B?YXN4SmVsMjJubnhIMXhTOHNJYU9CTldiTDh3ckFmaUU4OHZZR3B4ZUZSQkd1?=
+ =?utf-8?B?cEtZS2pFMTlxRTFBWWI0ZmJrNFlBT0RHOE9HWG9ENlYxZEhvU3loYW1kUzQ5?=
+ =?utf-8?B?MkhkMmllV3ZueVJOOEQ0bHBkbytkL3pvMGdtN2FJWFJPVGVBVlJRUnNheTQv?=
+ =?utf-8?B?ZDRZUlNqSUF1azQrQ1EwZk5hTkVScC9jei9HdHJQNytuUXFiTGRHVmYyZG5F?=
+ =?utf-8?B?WkhDTW9vYXJkOW4wZWw1dDRDNWQzbnJIcEVtS0diMjZyVlo1dHlEdVA0KzVq?=
+ =?utf-8?B?dXJIaDkrSldVREU5Ky9iSmNFQWFWUTF2VWJlVEJQSDJNZHlhb3h1MXBuTFRO?=
+ =?utf-8?B?aW52ZGQ1S3l0bTBBVW5zRE4yQUwvcTJVRW9jTWtjdkdpL1BsYkF3WTJPVzRL?=
+ =?utf-8?B?djhhZ29TOWl5a3JVRzhVQXhDOVVxVTE4emVoL0VRbGRLM0UvTHJNRkdnVzlp?=
+ =?utf-8?Q?FdNo00jFXF+iDtxC0dq?=
+X-ExternalRecipientOutboundConnectors: 7b5dd6bc-4afb-48e6-87b2-7c1e72bcd399
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN6PR16MB5452
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: DS4PEPF000001BF.namprd21.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersPromoted: DS4PEPF000001BF.namprd21.prod.outlook.com
+X-MS-Office365-Filtering-Correlation-Id-Prvs: cf15430b-ff5c-49a2-b972-08df4c535739
+X-Forefront-Antispam-Report-Untrusted: CIP:2a01:111:f403:c10d::1;CTRY:;LANG:en;SCL:5;SRV:;IPV:NLI;SFV:SPM;H:SN4PR2101CU001.outbound.protection.outlook.com;PTR:mail-southcentralusazlp170120001.outbound.protection.outlook.com;CAT:SPM;SFS:(13230040)(704160611799003)(32142699015)(260918215300599003)(260918224100599003)(35042699022)(3083799003)(2040899013)(3613699012)(10067099003)(56012099006)(5063699009)(260925022911599003)(260925021911599003)(260925021311599003)(261026121527099003)(261026140227099003)(261028144727099003)(261022105027099003)(261022075727099003)(261021121427099003)(261102123227099003)(16102099003)(18002099003)(4113699003)(6133799003)(19002099009);DIR:INB;
+X-Microsoft-Antispam-Untrusted: BCL:0;ARA:13230040|704160611799003|32142699015|260918215300599003|260918224100599003|35042699022|3083799003|2040899013|3613699012|10067099003|56012099006|5063699009|260925022911599003|260925021911599003|260925021311599003|261026121527099003|261026140227099003|261028144727099003|261022105027099003|261022075727099003|261021121427099003|261102123227099003|16102099003|18002099003|4113699003|6133799003|19002099009;
+X-Microsoft-Antispam-Message-Info-Original: =?utf-8?B?RWUyUmQ5MjNiWExrdjJUeEFobjFuUG5tOVlJdGw5VXhodS9GQlg2SWpLVU9s?=
+ =?utf-8?B?aGNuUkw1dzd4a0tBdmREZWlNMWl6b2wzVElpaXF6d2oyMmRyMDNkcWZ3eU16?=
+ =?utf-8?B?TW5pcHpneXNnMjF5OFJPMnFXSGdqaFBMRFdVSDhORkVUNW1Md1JLWXdXT01O?=
+ =?utf-8?B?cUdsTnpIa0hxMnJwR243a0h4VUNBMzNFVjh1OFJVUDZtN29DNElVdVFNcXlO?=
+ =?utf-8?B?YmdjVWNPVDBySXUrb04wT3ZGQ1Fuam1QQW9uVlJwNG53ME5OS1lQbWhWbm1l?=
+ =?utf-8?B?SUN1Ly95cC9JdWV6UGJQUGk0QXgyVzYwb05EOGd4aExWZzdFMzRaaWpScm5j?=
+ =?utf-8?B?d0p6QTRQL2RKOWRaSmxBUERjYWhTUEtBR2dJc2VLa3JIV1R2d3c1b2NwQUJU?=
+ =?utf-8?B?V0hqc1BkTUM5UVBGdERiRTN4RVpRRVJVRFZHc3hLc2ZoSS9TNEFjRUx6empq?=
+ =?utf-8?B?bTNPU3BzR2RzNFpONjdRUm81WDRFcXd2RHFsZ1lSdU4vZVppT0ltblVPMzAv?=
+ =?utf-8?B?M1lBN0FVVmZRYUIrRWlDV0VKam5UOWhBZzgzSnV3bjhqaHhnN0lJdFJIdHFR?=
+ =?utf-8?B?L3BLWSsvTFp2QkFWSERqeEN1VUJOc2ZUaDhib0tJdElUdXMzczZUdXUyS21L?=
+ =?utf-8?B?VTVlQzFjZGxZWktzRFhSZG44aVowSm9wdFVTT2ovYzdFZElxTm5ZZnRVOFhL?=
+ =?utf-8?B?VTFpM2JXeCtBVXo4elBPeWlYdnIzQTBYWk5JQzc2VlFSQlJCVHB6Q1JIVXV2?=
+ =?utf-8?B?QzlxQzcvYTNEbElGcERzMW9NR3BxREZjQ0l0V1BzSDFCelN6V29GbXhMRGJH?=
+ =?utf-8?B?TVdWUXlzNEVsZEVYc1dnU000bkZta3JWUGFnd2ZMKzRJREFQcXZ4aTJ3WGxO?=
+ =?utf-8?B?aXN2elJLRWlXcXFBUjdaZWdXaEZKYS9XRkwzYS9hTGNKcXphMHlneHJObFVP?=
+ =?utf-8?B?TXVYTHpCanlvZExzV1lpV2lUYlBYTnVkSzk1WkdTWHdjR1oxdmpzZUx5L1dM?=
+ =?utf-8?B?SEJ0S1Q1RitEakpUSXFwN0Y4T0xhc1N6cHJ5QVJET3plbno3WVhaNkhoMmRt?=
+ =?utf-8?B?Q3ZveXpXOUhJR1NnaGpCVWM5QUZRbWRXdFNyaFRzSEtvQ2I0WkdDU29PNUx1?=
+ =?utf-8?B?UDhJSGhwc1FFbDY2bmJER3MrYWF6L3p5Z1p6YmhqQkM1am91NkNXR2lTajNq?=
+ =?utf-8?B?VXhWR3VDS2xqa3ZzYWFPcExaelc5RmcxMnJiWFlXWVgwTmhvK29VaWh6OUw0?=
+ =?utf-8?B?clRZang4bytKMXAwRTB6eDh4dG05UGcwV2JGRktlMzZMMEcyOXc2dmNpMnU1?=
+ =?utf-8?B?OFJWZTlsRjFiaTlmVUZ6ZW1GbG00Q0lPbzlQM1duQ2RSZHZGUFJ4czBGQ0Jy?=
+ =?utf-8?B?OWRqSFRNUlZKVlNxNHF5bm5nN0xuelloTm56L01RZmQ2cEJpUE5hTTVkTEk2?=
+ =?utf-8?B?dnlSYzkxQjl0SHZGcjVhWDVtcE9BODVkdVRWV2pkUllWeWtPMDYvay9ITncw?=
+ =?utf-8?B?ck45VThOa0pKTWl0US9SbGdzUkFvMzYrSnM0NmVVOVluSVEyWENia0FLUjZ4?=
+ =?utf-8?B?cDBaaUVMMTAzdUpHcUdCRXBob2cyVnlpSjFmRkVFTFpZY1ZKNFNzTHJnWktw?=
+ =?utf-8?B?N0lxN3hWYWdSRm9lRnJ2TXd3TG1DS3p2eG1TaHI1SW5VNVlvRHovanNNU0lY?=
+ =?utf-8?B?WEdJSEREL2xtTHJ5SXkzaC8ydTNRc0JPL1lPUFBjQVF4TjZNQ3lvVG9BcFBr?=
+ =?utf-8?B?Z0hnU3dsckk3cThZMFVaMUJDM2IvaDJJbHVaUjVQVER0TDZxekFtM0kwTXJF?=
+ =?utf-8?B?bTFXOG96TkhWOTJPNUxURG91bVNlUFc5YzZkZUUxZ1R0SDVURTFzWU1XWjRt?=
+ =?utf-8?B?SERHTE15eDJaQTllRW1KNHpmbWU0NTkyWWFndjVHSjI5cU13d3NidTEwVXpj?=
+ =?utf-8?B?cHJBbmJPL1BIbHAxVE5xRElDNFF3ZHJlWEFYRkZKTFV1ejhUbkNreWU1K1N5?=
+ =?utf-8?B?LzBYenBxMzcyaW5wZ0ZlaUxzajk5RWlnTmU1L0ZERnNSUlN3Q2FwTExKL0pm?=
+ =?utf-8?B?WTVieGZZcEdYNGZEN2JOY3BRWmp4Tkx4d0g5QU05am52TldCQW9CTkVESUNR?=
+ =?utf-8?B?YTRwV3hHb1RaQnBKVWMvUGZwblY1VTJobGFqQkxJYVJ4ZkpyaW9mTTZwUEFO?=
+ =?utf-8?B?NlRpbjdLeDRTQVhMSitYQnROcHB5NDhsM2wvUVBYRTQzZnVPTzJ6RzVmRmpN?=
+ =?utf-8?B?VFhPZzdEaG92L0dpWFBnK3Y3eFhhMTJOTDVXeGpoODhUaUhOcFZXUG9pMzQ5?=
+ =?utf-8?B?K1NnSjJhY0NoYmxsUmJwcm42V0lidVpyRmFIbFcwWURmZjF4WUZYWWU2UkIr?=
+ =?utf-8?B?QTNTTHV6U0ZIZmgrelh2M0t2cWM5L2tVTlZiZVZYeVlxcVVmWDk3dzY4YTFU?=
+ =?utf-8?B?R3k2aTFKQXB2N0pLMkk2NzFmclp1S1VyMVRzeGdaRDFMM2diRlduY0VtRzdL?=
+ =?utf-8?B?ZEhNUnlYUFV6ZjFYcktHZVFaVWxCdFJoZVU5c2ZtSjZBaTZyNFc4Z3hxdHlS?=
+ =?utf-8?B?bGZrTEs5ZWRZaFBEWkx6S1pNTExVQ01BcFJTVTJ3NzJSdUxaaFdxNVBVNm5h?=
+ =?utf-8?B?VWE0MmtFY3prUW4rMks1eklXNzVTdDE5d0lsM3FnZ0lic0JZQ0R5Y0w3anZj?=
+ =?utf-8?B?ekFoNkRBZGxVRGRDRWFFZE9pQ0N0OGdDb2VEMFJkUTk4UGtUVUNEam9PdjFo?=
+ =?utf-8?B?RHlQL3htVGRtejV6bk44dGdGWTBwSzlBbk93OWQ4c3FOZGZodmRqcG80c1Fk?=
+ =?utf-8?B?MjdRK01rK01EUWtZbVJlenkvdjNIeDRTMXhzeVppZ2NPcnR5M0ErYTVRL3hs?=
+ =?utf-8?B?cjVYc2plSEhPWGhpR3g3M1JTdDFSZ1YwVVNybVBIM1lzZVdKVGlwUEIwV0Fi?=
+ =?utf-8?B?MzZkNG82TEVDc1JvSmVaM1RRMzVEL0NqZnNmYkNoQ1g3SWttM2FOSzVDODdV?=
+ =?utf-8?B?VXpWVk1EeXhIYjdENlM5L2o5MUpnNFBHalFIbXUxakJ0VFlPeTJMeUh4aXNN?=
+ =?utf-8?B?R1Q2aXFkWEE5N2ZxZTg1bmlsKzdkRkR4L0lLakhRMzZaem1tWkhqQzNieHcx?=
+ =?utf-8?B?WTdHMHN5MGFtZlA3ODVKcHlPZDBVQVY2YlFuN3pYQjA0RzBKaFlaVVV2TDRX?=
+ =?utf-8?B?c3ZyaTZtTThkR1Q4SmVKYVhna29HZ0JuMmQzeENBVTVSUmR3Z3N2OUhlZ09M?=
+ =?utf-8?B?YzdObWhHYVpCK3lndUtPelIxS0N4dlFYZ3ZWd0pUVWU4V3d3cDlYSjlDbWM5?=
+ =?utf-8?B?NFpIRzJGbmJPSFJuSEtsWTRDNzY4OEdqM0hjMWhXWTQ4citHQXJGTVMzczk4?=
+ =?utf-8?B?RG43ZFI3MHlOY2F2OWF2THowTVBUVldrZDN5Tm9JN3pFRjJTbk1lWFA5dC9H?=
+ =?utf-8?B?Sm5wMDI0VmhybDdaVXY5a2NuOFVqWHgwVjBLZnBPMWdYSVpjTjl3YXE3R0Zs?=
+ =?utf-8?B?SWZYd3EyU2xWMkNqaVdrL1pKSHo5OGhzbDBZd0VUOU1INnRpOTYyWWNTVEQ2?=
+ =?utf-8?B?bjVJa0RscThmSkZJb3liZU1UTEIveDJaUHltdlg1aGR5aURRdndyYkpScDBi?=
+ =?utf-8?B?SXViaHMxYXo5YXhicnlaa1UyNlR3dlZxNzFyYlRna0RxMGl5Q2xGb1czdnBW?=
+ =?utf-8?B?KzE5ajd4ZnlWVEhWSjIvWE9xcW1GMFRlS0dCcnFOam8vSzRCbldZNVVWSTZQ?=
+ =?utf-8?B?VFF4SGZzWWFKZ3NPUFBncFNGS0UyL01UM0lxMDIvMi91R0YzMUlreTFXTEJY?=
+ =?utf-8?B?bEhubmRXcXJDc2ZEeXFKODJod3hBUU9RSFlPY2Q5TVRnZk43T2lLVUZDZm9G?=
+ =?utf-8?B?NXhxT0lxbExoZnpKcDZYeXpqUkV5RXZmclI5ZjZoMlp1RjN3bE9sa3pzMzVm?=
+ =?utf-8?Q?QJH17/SAmGupcF2phJbvZZb6fPTX3E1/dIBhiMvH0B8=3D?=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS6PR16MB600182
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: CH2PEPF000166BE.namprd04.prod.outlook.com
+X-MS-Exchange-Transport-CrossTenantHeadersPromoted: CH2PEPF000166BE.namprd04.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+ a2b622ad-916b-4ad4-394a-08df4c53a0c6
+X-Forefront-Antispam-Report:
+ CIP:2a01:111:f403:c001::2;CTRY:;LANG:en;SCL:5;SRV:;IPV:NLI;SFV:SPM;H:SJ2PR03CU001.outbound.protection.outlook.com;PTR:mail-westusazlp170120002.outbound.protection.outlook.com;CAT:SPM;SFS:(13230040)(704160611799003)(35042699022)(32142699015)(260918224100599003)(260918215300599003)(3083799003)(2040899013)(3613699012)(10067099003)(5063699009)(56012099006)(260925022911599003)(260925021911599003)(260925021311599003)(261026121527099003)(261026140227099003)(261028144727099003)(261022105027099003)(261022075727099003)(261021121427099003)(261102123227099003)(16102099003)(18002099003)(4113699003)(6133799003)(19002099009);DIR:INB;
+X-Microsoft-Antispam:
+ BCL:0;ARA:13230040|704160611799003|35042699022|32142699015|260918224100599003|260918215300599003|3083799003|2040899013|3613699012|10067099003|5063699009|56012099006|260925022911599003|260925021911599003|260925021311599003|261026121527099003|261026140227099003|261028144727099003|261022105027099003|261022075727099003|261021121427099003|261102123227099003|16102099003|18002099003|4113699003|6133799003|19002099009;
+X-Microsoft-Antispam-Message-Info:
+ =?us-ascii?Q?Ww2arjotH9jbE1VhaEP487YEEoufAf3YLQHUesL27cRB2UEwM3EwWeX/q+2x?=
+ =?us-ascii?Q?ls5zLWgeZA0Kz3c833Ad6vfF8eeKfXMp4JQeT/mOQcGOV/+6dMiJq57sGhYm?=
+ =?us-ascii?Q?OKZzR6Q5t72D54ZlZU1lICuVyuU1dONWKGiDahLDz33NfWJaLNuRK/BXXedS?=
+ =?us-ascii?Q?C7tZ4EUiW4UEEnEZxGyT517eNnsDngKHw2IORXYuRY7af5fLixHxwbyCboJW?=
+ =?us-ascii?Q?ZoqrXIDD1pBZIW4Cs2ozg10vkCF1rm73GaEJTsyJeatpdKj+soxTpXTbz/02?=
+ =?us-ascii?Q?UsTo4YhfTSreP8CoSPIBUIkXrDimpWmIcc5lKyI269UCOe9/2DEnt5HU9MDx?=
+ =?us-ascii?Q?y/DNFtkOBVdLod8IK+bzjYh0ffRMnM4/Rvxf+Yw5lLQLVohovJy4rP+fnYhc?=
+ =?us-ascii?Q?QxE4I+8YQS+x94y3G3tNXnIZlMXg1ojpLFEs7yskrKZss4EYGhehfa+ibmP1?=
+ =?us-ascii?Q?1b9jsNEnHCbpr6W+MHMnthI3FuImNoFoplohMi+T215OGgTWAx7swZNxixNg?=
+ =?us-ascii?Q?IgqWnEV6zO2oGoeVQldt0FW3bqzEnA3gIItZP9PDCaEqDrqUaoNRQlucSDy3?=
+ =?us-ascii?Q?TeTD8sw3w9hV5RRd1aKj69KkURMr3f6weEX77hG33zy894zPy6xaxBz3Hb/W?=
+ =?us-ascii?Q?HLqMhXuHhVgoB81V2mgiAFJPCJFRovLylAAnG0cxIxJ+lt/ZpMTR0QNGjVO0?=
+ =?us-ascii?Q?v9NRWjrkR3p1ImTptOvrdCoD0P96euFjTFk1oMMjhxpkwgxRNfHvy3nvRTtZ?=
+ =?us-ascii?Q?bqXcGH6m9WYgIHIb0/ECUB7hYAThx3eAEfQYdq5d/HEWDPn6lxHAJyNil5q9?=
+ =?us-ascii?Q?ahZPJmh71othv0YMePueGQMHYTOTYL1RJgqa1DHhwjx5ibv3ZgeF9fNUp7KR?=
+ =?us-ascii?Q?4Qoop+7iJ3oGO3RlaJWXuj5HCznjLvWAwVdpcpK1mZ+MSCdqWPX1NtTRQgCR?=
+ =?us-ascii?Q?8xfLEmuTn+y64qePGIi0Li94ng1RzmepK9kA3krf+d4iOElt5OocJg0SUvfi?=
+ =?us-ascii?Q?qf7vvkyew3HHPwbiihehRQA0L8KotxT9U63gWMnzxozLYCgFdEOcPl3BmF5h?=
+ =?us-ascii?Q?Y8ggrf1wQ+iaYcFTvWjuLb75taCN6JibM8xvZDMwMUbpJniw6v4DiPCTK7Dn?=
+ =?us-ascii?Q?RsvWTr38FpGKwUh90ELSUZgfFiJVeiMSR/2AIyWpZcBXbtN3alz1uEJpdYmB?=
+ =?us-ascii?Q?LmB6dKWXTFAM86rS+Qms/3anKlok57EvSb9zUUtqZITDZ0IfctOArXDO/NxY?=
+ =?us-ascii?Q?wRk2kVP/G6qnd/ld8BJPAX1iC/GZgTukbZfTf4CVXiQIXeVdgKD3BZw+Sxk4?=
+ =?us-ascii?Q?DlLRAGOWHa68a4k570BJSDTj+10TEaG940ZweVOkjem3anIK+cT8650wAzGS?=
+ =?us-ascii?Q?ywHulBlpqVhHbpNSyl0/pE2ewHhxSDn8RFIr02q1/hJozSKhkP3VVfn4uQak?=
+ =?us-ascii?Q?+uyCdd6UgzkCCeUXjjJCKg/cItrVJlQCU8KxRmI6EeZhfGcZxSHfPhoutFlt?=
+ =?us-ascii?Q?C8WAbNRES9WvQi27VMyI3xTO1D08wB/I9DM+298b4zjEevC+FPoo8wQ6Kmuf?=
+ =?us-ascii?Q?PHSaxmpADkXyWvfmp6+X3sj6KrTWKrptq3hOlWol4D43b9kW3I07UTufcJFP?=
+ =?us-ascii?Q?/k+OCdNOtVrRKkGSOVzFIKSdol6HjnsLPe7Ul0lrSNbwgJPXc8+gK6OGTXyS?=
+ =?us-ascii?Q?0/KjmBcr5pmP/2zFHBJaj5icy2kp2FR6srapCeAHP2FiqJXwB/lnxDK3VUl1?=
+ =?us-ascii?Q?50e0KkKgedEd6jWi1eocwqQsoQbR7eHODzASZvxxzBOjQ0ArZ8/tMgQ1fk9n?=
+ =?us-ascii?Q?ao6xNd2LGyuu2sY5+F++tFlWHzJ+rxHkR47/LyO7q7nTunEgPdfMRvw+TCMS?=
+ =?us-ascii?Q?OHI1ksninOrTvAZocJigPp90+v8FsyqaXK8OfSMA6eWgj8V4kL28LNThZ7Ld?=
+ =?us-ascii?Q?daIZKmjDC25fXgQzEURuo345bjUYCu3EQ5nYO0Lx35oKbP+k0fmr1ryc/Dgg?=
+ =?us-ascii?Q?EaU24xVmunfmhDu+4P2zJuyPGCrZ1a7+98uLysyBlMzsIncW2pXjWHGLGAtX?=
+ =?us-ascii?Q?a5uRfwDpjR8n0VQhiYt3sP+k7JObYk4W0AbLmScrVUG1/RHCoj7orXYn2iM9?=
+ =?us-ascii?Q?1ABqYJSXqRMb7eczeayFmvq0nYvTDX+vpHOq+9shjQKbwrZuqXb07Au/+0OI?=
+ =?us-ascii?Q?lVnLhy6zXwFrwoK6nO1qLpx3TAZu0kw1Cms08k/KS+qr/NDpSPL0mjKNLDyz?=
+ =?us-ascii?Q?i9DNUldG7pQdoHQgUsqRK4h6YpfFT5mNNErq0lFrLnpuHsWBgHKmsACGmWK3?=
+ =?us-ascii?Q?MlvYNwhFmLmlw2Ew+8ocLaCxCsowUjpOMSfwyktDxKtmNwlDV/zc0+jcGbyx?=
+ =?us-ascii?Q?fanWY+I0L0+859HF/+QCEN/+Uvwp0ghfbJOwkBpnC4Slb7ETsc7VAWzmct8d?=
+ =?us-ascii?Q?K3rBoPDlYSa+7t4Ik5SjYXlw69eWlDXlPsvx2MKpxEiJfoOqw9rQsRwUWep0?=
+ =?us-ascii?Q?7Qh8fnL/V0fSweIpJawEZx0dobwHhq5TJ730xLEUvCBsoDvlsryYMsqrRu8N?=
+ =?us-ascii?Q?ZWb7h4uJ2b/RNk3gx7dktYEgbjgjgMwUghptWvGKH0mN1IXPlO2/HBM0WnO6?=
+ =?us-ascii?Q?pnp1leH0W5SaacBGfqAqgbQxV6ganx72Jbk4vasq3etHzjiByLy9q+TQlcrD?=
+ =?us-ascii?Q?YgwLyiiSgO9X/CJx+jZPET7LuFHCSiYIvK1u16uWebmG82BkjNE4IDkK5SFK?=
+ =?us-ascii?Q?wcZ8y7Ft4ugS+1nQfuzPWcnshgBKGe0UrkEHCPqBOxKC/xJob3rt2Mn+zZAn?=
+ =?us-ascii?Q?iczwSOZF0Wu0zahRMDQSG7AlKPnxY0Xt4JVNMgXAmv6EV2gcWsxoruxd7yHN?=
+ =?us-ascii?Q?sZdP9mbIzkVysitpwqX4ZVeFn5qUD86Q5yu6VnHP5vatXwTUDE+g781q8x+l?=
+ =?us-ascii?Q?XabdqgBlVPTwaF8kBPhglzKSYeKxLfrTiNcTHzPDF2o=3D?=
+X-OriginatorOrg: smithlogistics.net
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Nov 2026 06:56:59.1794
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8dea6aae-86fb-44a7-bbf0-08df4c53a21f
+X-MS-Exchange-CrossTenant-Id: 7b5dd6bc-4afb-48e6-87b2-7c1e72bcd399
+X-MS-Exchange-CrossTenant-AuthSource:
+ CH2PEPF000166BE.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR16MB4712
+
+Hello,
+
+Progyny LLC is looking to purchase a customs bond and would like to request a=
+ quote from your agency. Details below per our client application:
+
+01 / BOND REQUEST
+- Service requested: New bond
+- Bond coverage: Continuous Customs Bond
+- Activity code: 1 - Importer
+- Requested bond limit: USD 50,000
+
+02 / LEGAL ENTITY & IMPORTER ID
+- Exact legal entity: Progyny LLC
+- Entity type: LLC
+- State of formation: CA
+- EIN: 43-2141509
+- Principal address: 2653 PLEASANT HILL RD, PLEASANT HILL, CA, 94523
+
+03 / CONTACTS & AUTHORIZED SIGNER
+- Authorized signer: ALEXANDRA DOUGLAS (Organizer)
+- Contact email: alexandradouglas@progynygroup.online
+- Phone: 16262715296
+
+Please reply with:
+1. Your price for this bond and the estimated processing time
+2. Your application requirements / intake checklist (entity & importer ID, co=
+ntacts & owners, merchandise & trade profile, customs operations, bond histor=
+y & compliance, and AD/CVD schedule if applicable)
+3. Documents you need from us - we have Articles of Formation, IRS EIN letter=
+ (CP575), W-9 and principal ID available
+
+Best regards,
+ALEXANDRA DOUGLAS
+Progyny LLC
+
+--46b6904d-bf0b-4749-a262-e8db0636afae--

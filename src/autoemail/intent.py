@@ -94,6 +94,47 @@ _BOND_DELIVERED_BODY_RE = re.compile(
     re.IGNORECASE,
 )
 
+# 链接式填表平台：对方不给可填的 PDF/Word 附件，而是甩一个在线表单/门户链接
+# （DocuSign、Typeform、portal、Google 表单等），要求我们去链接里填。这类需求
+# 系统绝不能碰——点击外链、代填线上账号存在不可控风险，必须整体报请人工处理。
+_LINK_FORM_HOST_RE = re.compile(
+    r"docusign|droppdf|pdfescape|typeform|jotform|formsite|cognito\s+forms|"
+    r"google\.com/forms|docs\.google\.com/forms|forms\.gle|airtable|wubsite|"
+    r"wpsnap|formstack|123formbuilder|zoho\s+forms|survey Monkey|surveymonkey|"
+    r"fillable|smartsheet|gravity\s+forms|wpforms|hubspot",
+    re.IGNORECASE,
+)
+# 要求"在线填表"的动作语句（配合链接/门户语境出现才算，避免误伤普通附件提交）
+_LINK_FORM_ACTION_RE = re.compile(
+    r"(?:complete|fill(?:\s+(?:out|in))?|submit|sign|e-?sign)\s+(?:the\s+|this\s+|our\s+|your\s+)?"
+    r"(?:application|form|forms|bond\s+application|documents?|paperwork)\s+"
+    r"(?:online|via\s+(?:the\s+|our\s+|this\s+)?(?:link|portal|website|platform)|at\s+(?:the\s+)?(?:following|below)?\s*link|"
+    r"through\s+(?:the\s+|our\s+|this\s+)?(?:link|portal|secure\s+(?:link|portal|website))|electronically)|"
+    r"(?:use|visit|click|access)\s+(?:the\s+|this\s+)?(?:following\s+|secure\s+|below\s+)?(?:link|portal|url)|"
+    r"online\s+(?:application|form|portal|intake)|"
+    r"web\s+portal|client\s+portal|secure\s+portal|e-?signature\s+(?:platform|link)|"
+    r"docusign\s+(?:envelope|link|document|request)|"
+    r"在线填写|在线表单|链接填写|请点击链接",
+    re.IGNORECASE,
+)
+_URL_RE = re.compile(r"https?://[^\s<>\"')]+", re.IGNORECASE)
+
+
+def detect_link_form_requirement(body_text: str, subject: str = "") -> bool:
+    """检测"通过链接/在线门户填表"的需求：命中即应转人工，绝不自动填。
+
+    判定条件（同时满足）：
+    - 正文/主题命中在线填表动作语句（complete the application online 等）；
+    - 且正文含 URL，或明确点名在线填表平台（DocuSign 等）。
+    纯粹"请填好附件里的表格寄回"（邮件附件路径）不命中，不影响自动填 PDF。
+    """
+    text = f"{subject}\n{body_text or ''}"
+    if not _LINK_FORM_ACTION_RE.search(text):
+        return False
+    if _URL_RE.search(text) or _LINK_FORM_HOST_RE.search(text):
+        return True
+    return False
+
 
 @dataclass
 class PaymentInfo:
@@ -386,6 +427,17 @@ def classify_message(message: NormalizedMessage) -> IntentResult:
     # 只看本次新增正文：引用旧邮件里的 invoice/报价不应决定本次意图
     body = clean_body(message.body_text, limit=20000)
     message = replace(message, body_text=body)
+
+    # 链接式填表需求（DocuSign/portal/在线表单链接）：系统绝不代填，整单报请人工。
+    # 该检测放在一切意图分支之前，确保这类邮件永远进人工队列。
+    if detect_link_form_requirement(message.body_text, message.subject):
+        return IntentResult(
+            "link_form_manual",
+            0.9,
+            {"url": _URL_RE.search(f"{message.subject}\n{message.body_text}").group(0) if _URL_RE.search(f"{message.subject}\n{message.body_text}") else None},
+            evidence=["对方要求通过在线链接/门户填表，报请人工处理"],
+        )
+
     payment = extract_payment_info(message)
     if payment is not None:
         evidence = ["正文或附件命中付款信号"]
@@ -419,7 +471,7 @@ def classify_message(message: NormalizedMessage) -> IntentResult:
         r"申请表|请填写",
         re.IGNORECASE,
     )
-    if _FORM_REQUEST_BODY_RE.search(message.body_text):
+    if _FORM_REQUEST_BODY_RE.search(message.body_text) and not detect_link_form_requirement(message.body_text, message.subject):
         return IntentResult(
             "form_request", 0.85, {
                 "attachments": sorted(attachment_types),

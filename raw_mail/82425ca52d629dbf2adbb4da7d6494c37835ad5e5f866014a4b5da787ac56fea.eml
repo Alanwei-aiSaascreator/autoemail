@@ -1,0 +1,191 @@
+Return-Path: <>
+Delivered-To: amberfinster@syndaxpharmaceuticalsglobal.online
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id UJ8tOBdBCmv2siwAQ1DlOA
+	(envelope-from <>)
+	for <amberfinster@syndaxpharmaceuticalsglobal.online>; Fri, 27 Nov 2026 21:48:55 -0500
+X-Original-To: amberfinster@syndaxpharmaceuticalsglobal.online
+Received: from e226-244.smtp-out.us-east-2.amazonses.com (e226-244.smtp-out.us-east-2.amazonses.com [23.251.226.244])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id 779AE10EF09
+	for <amberfinster@syndaxpharmaceuticalsglobal.online>; Fri, 27 Nov 2026 21:48:55 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=c63aTVCL;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	spf=pass (mail.pony-it.com: domain of e226-244.smtp-out.us-east-2.amazonses.com designates 23.251.226.244 as permitted sender) smtp.helo=e226-244.smtp-out.us-east-2.amazonses.com
+ARC-Seal: i=1; a=rsa-sha256; d=syndaxpharmaceuticalsglobal.online;
+	s=dkim; cv=none; t=1795834135;
+	b=WZmXPdI5k2a2SRp7a9sRtnS70gcL+2Xj/oz3CkpA4tG7tRkkD2s9cEp9uG2c3jm2bipGf9
+	YS83b0s4qr73GhpIcab/WThm1IqHVayxxq1mm6ogUNVVbE830zBdgVxmCddT+DzMqEhbv1
+	bsjLt9d6OZ/mjCo2OcXQ1hHNZytUAy2Godso69vBbDgwmmubtvCfa+pNaWHs/f6SC5XgxG
+	StbD04Ui3p+J7MmsSLeV9bhWmmS1qv9OLPyz2oeWCTH9JDypsSET7XDXDGckmwYsDA2uGh
+	YX3Lz8Ru8PX+XZnWNWudGdKUpwOBTCZY14Vv9kC+S/LQ7EYrxpYEQv8Ri78JWA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=syndaxpharmaceuticalsglobal.online; s=dkim; t=1795834135;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 dkim-signature; bh=f1veZyIohMMprRx7B/Vzrt7My9xt7K4bz5rGUf3zB+A=;
+	b=ApWihAjN3V4hJW08b1Bv2dY1KI4IVATPolE7AVM+7J2oTW2xAk0U2DXzYZfyuM8EGaglFr
+	l6nwKUbkcF01+krStNHiUKFNuhOOFbyhBFsuS9HIINKAm3f93nQbnjgTXu/1okTI6zJCJS
+	ATIMnvW8Mr/+ZRMCwG8/lvv/eDoLvqlyd6DVOBaqvcuAQGeYVRx5ojx0Tl8K9Jhh6S0Jpa
+	F5iTs4M0pW+tLXmhxf3dNPm+bzAMxP3jXPsroiGkgydyDu3Hu76GpvSvXi8DxTdmuN7nJ/
+	uxHH9Pa9o/39MVwooOQO5UUB1EE8TuR86PpSrHjGPpq/LRpre1OqAJ/qdsC7Hg==
+ARC-Authentication-Results: i=1;
+	mail.pony-it.com;
+	dkim=pass header.d=amazonses.com header.s=kra23psoka5qyyh6gdejiiuof3nluwuz header.b=c63aTVCL;
+	dmarc=pass (policy=quarantine) header.from=amazonses.com;
+	spf=pass (mail.pony-it.com: domain of e226-244.smtp-out.us-east-2.amazonses.com designates 23.251.226.244 as permitted sender) smtp.helo=e226-244.smtp-out.us-east-2.amazonses.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=kra23psoka5qyyh6gdejiiuof3nluwuz; d=amazonses.com; t=1795834135;
+	h=Date:From:To:Message-ID:Subject:MIME-Version:Content-Type:Feedback-ID;
+	bh=XYy+f7pcmb9smxcm7fnjxAW9evPJMyJ28FL4M4qZdps=;
+	b=c63aTVCLfEvJfGQ/1tAw1mqVVnI6TmVPfhEbL1Njz47CitX6KILMrORRIsEgoUPP
+	Gb25YERNUFn4+sbQusUWapIJsJSyoiBakllkARcBe5Ui0TCJ29TNnlYLJSb9Hgd246f
+	o3NJTERpoTSmemS5HiJ24Q/hIMAdjxjTONrLfyco=
+Date: Sat, 28 Nov 2026 02:48:54 +0000
+From: MAILER-DAEMON@us-east-2.amazonses.com
+To: amberfinster@syndaxpharmaceuticalsglobal.online
+Message-ID: <010f01a2200e4176-4674ed13-5f09-4878-bef1-84b527b65caf-000000@us-east-2.amazonses.com>
+Subject: Delivery Status Notification (Failure)
+MIME-Version: 1.0
+Content-Type: multipart/report; 
+	boundary="----=_Part_782810_1737211861.1795834134926"; 
+	report-type=delivery-status
+Feedback-ID: ::1.us-east-2.c0QCJwTJKDSb6mlKpIo5IpGwsngRMRBjZtJ48k4WYjY=:AmazonSES
+X-SES-Outgoing: 2026.11.28-23.251.226.244
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Result: default: False [-1.88 / 15.00];
+	BAYES_HAM(-5.50)[100.00%];
+	SEM_URIBL_FRESH15(3.00)[syndaxpharmaceuticalsglobal.online:email];
+	BAD_REP_POLICIES(2.00)[];
+	IP_REPUTATION_HAM(-1.18)[asn: 16509(-0.31), country: US(-0.01), ip: 23.251.226.244(-0.86)];
+	BOUNCE(-0.10)[DSN];
+	ONCE_RECEIVED(0.10)[];
+	MIME_GOOD(-0.10)[text/plain];
+	MIME_FROM_MX_GOOD(-0.10)[feedback-smtp.us-east-2.amazonses.com];
+	R_DKIM_ALLOW(0.00)[amazonses.com:s=kra23psoka5qyyh6gdejiiuof3nluwuz];
+	URIBL_BLOCKED(0.00)[amazonses.com:dkim,amazonses.com:url,syndaxpharmaceuticalsglobal.online:email,us-east-2.amazonses.com:from_mime,us-east-2.amazonses.com:mid,e226-244.smtp-out.us-east-2.amazonses.com:rdns,e226-244.smtp-out.us-east-2.amazonses.com:helo,rovinc.com:email];
+	DWL_DNSWL_NONE(0.00)[amazonses.com:dkim];
+	ARC_NA(0.00)[];
+	RCPT_MAILCOW_DOMAIN(0.00)[syndaxpharmaceuticalsglobal.online];
+	MIME_TRACE(0.00)[0:~,1:+,2:~,3:~,4:+];
+	RCPT_COUNT_ONE(0.00)[1];
+	SUBJ_BOUNCE_WORDS(0.00)[];
+	DMARC_POLICY_ALLOW(0.00)[amazonses.com,quarantine];
+	ARC_SIGNED(0.00)[syndaxpharmaceuticalsglobal.online:s=dkim:i=1];
+	RCVD_COUNT_ZERO(0.00)[0];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_NONE(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	R_SPF_ALLOW(0.00)[+ip4:23.251.226.244:c];
+	FROM_NO_DN(0.00)[];
+	ASN(0.00)[asn:16509, ipnet:23.251.226.0/24, country:US];
+	DKIM_TRACE(0.00)[amazonses.com:+];
+	MISSING_XM_UA(0.00)[];
+	RCVD_IN_DNSWL_NONE(0.00)[23.251.226.244:from]
+X-Rspamd-Queue-Id: 779AE10EF09
+
+------=_Part_782810_1737211861.1795834134926
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Content-Description: Notification
+
+An error occurred while trying to deliver the mail to the following recipients:
+info@rovinc.com
+------=_Part_782810_1737211861.1795834134926
+Content-Type: message/delivery-status
+Content-Transfer-Encoding: 7bit
+Content-Description: Delivery Status Notification
+
+Reporting-MTA: dns; e226-3.smtp-out.us-east-2.amazonses.com
+
+Action: failed
+Final-Recipient: rfc822; info@rovinc.com
+Diagnostic-Code: smtp; 553 sorry, your envelope sender has been denied (#5.7.1)
+Status: 5.3.0
+
+
+------=_Part_782810_1737211861.1795834134926
+Content-Type: message/rfc822
+Content-Description: Undelivered Message
+
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=syndaxpharmaceuticalsglobal.online; s=dkim; t=1795834122;
+	h=from:subject:message-id:to:mime-version:content-type:
+	 content-transfer-encoding; bh=KohPdOwlgrX99b1e30ifuT21ROsv9ZCqrJuJI4+sLhY=;
+	b=fBRYNDgV6vpVpfU1w/Z34TqbzaDzsAvMpCnYILHSz6HRtynf0ufukUFDYmC2IRZXN1Ja5K
+	uFVkGSKw4xVBOoamzEQck4iQgXsPC9XTc9ytIqdF09qx2D/1jkF6FYWUp7o7JP/4lRELln
+	4bQagcr5MaWOSV3GUxLn0OTaaot4BH/uuZDPtNaYQuj8/uLiYPLVR8jv4Yz0IQOY89U8xO
+	b5wKpyxPXuS9EXquqdLZ8+x5iFF0xfJTpJzHehO7Rdxlh46MK7NqZQQm92yHUwXkYgdghp
+	BriPqUp2bFOTP2IrunY+pEWoKGhiiZ88ve1fjErgPV7pOIxFkdtlzvbc+u7ymA==
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=kra23psoka5qyyh6gdejiiuof3nluwuz; d=amazonses.com; t=1795834123;
+	h=From:To:Subject:Message-ID:Content-Type:Content-Transfer-Encoding:MIME-Version:Date:Feedback-ID;
+	bh=KohPdOwlgrX99b1e30ifuT21ROsv9ZCqrJuJI4+sLhY=;
+	b=eY/p7CENwFnBvTxVulPQAJ6O7TebryRQaruoStloxkKHDPDxpto+LNBK1rdBVCMJ
+	5sMQpEes++Ae7ftUqVT/k9UHryRz4oP48KTr16YWnXJk0AW/FLdmCvNFuhjOPdc25qp
+	ziq0+D0PdHzcSoDS+BA9U876H3J+djKgtEM446e0=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=7cxp6jkqrcgcyhvmfjhn3fhur6dwxaz2;
+	d=syndaxpharmaceuticalsglobal.online; t=1795834123;
+	h=From:To:Subject:Message-ID:Content-Type:Content-Transfer-Encoding:MIME-Version:Date;
+	bh=KohPdOwlgrX99b1e30ifuT21ROsv9ZCqrJuJI4+sLhY=;
+	b=iJMHUHVliK70X/Tx+OOvPcHsbu+AdSJQMrwFhpWW5PqSnsjalA8pvtSG6m58J9IP
+	vqd421gvZOg6Ky7qKZD65/VeZ9Qpd+/L6qi8eSnCfjELdPVil7eYoz6f22UBzHPRZoN
+	W5EN8FsRWkQpCFq6S1dPcQhTPpH+Sser06fdXZXV92afyu7X/cIUsxe+78pccZwVaux
+	GDEz7z4dxfhxHeHBVPW2wWRa4pvx57VQ+HF6MsoBe3jYeCrFqZSPLPedy8FAsgf3+TY
+	zLvBq86RY5HVPKikjGNgvK2iFmKo6645AgbOD9krHj0fITdSFkNaJ5FeGWjiBoreYlK
+	f/s96ll8Ew==
+From: amberfinster@syndaxpharmaceuticalsglobal.online
+To: info@rovinc.com
+Subject: [BOND-2026-1755] Inquiry - Continuous Customs Bond
+Message-ID: <010f01a2200e1443-683a5580-1856-4e89-ba60-baf9f5b341c3-000000@us-east-2.amazonses.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-Last-TLS-Session-Version: TLSv1.3
+Date: Sat, 28 Nov 2026 02:48:43 +0000
+Feedback-ID: ::1.us-east-2.dnBLFQvZ7DBnA5nHg3QcqhG4UiG8AnTuix0bXTff/SU=:AmazonSES
+
+Good morning,
+
+We're reaching out on behalf of Syndax Pharmaceuticals LLC =E2=80=94 we're in=
+ the market for a customs bond and would appreciate a quote from you. Details=
+ below per our client application:
+
+01 / BOND REQUEST
+- Service requested: New bond
+- Bond coverage: Continuous Customs Bond
+- Activity code: 1 - Importer
+- Requested bond limit: USD 50,000
+
+02 / LEGAL ENTITY & IMPORTER ID
+- Exact legal entity: Syndax Pharmaceuticals LLC
+- Entity type: LLC
+- State of formation: CA
+- EIN: 43-2141512
+- Principal address: 3061 WATERLOO RD, STOCKTON, CA, 95205
+
+03 / CONTACTS & AUTHORIZED SIGNER
+- Authorized signer: AMBER RENE FINSTER (Organizer)
+- Contact email: amberfinster@syndaxpharmaceuticalsglobal.online
+- Phone: 15599430295
+
+Please reply with:
+1. Your price for this bond and the estimated processing time
+2. Your application requirements / intake checklist (entity & importer ID, co=
+ntacts & owners, merchandise & trade profile, customs operations, bond histor=
+y & compliance, and AD/CVD schedule if applicable)
+3. Documents you need from us - we have Articles of Formation, IRS EIN letter=
+ (CP575), W-9 and principal ID available
+
+Happy to provide anything else you may need.
+
+Thanks,
+AMBER RENE FINSTER
+Syndax Pharmaceuticals LLC
+
+------=_Part_782810_1737211861.1795834134926--

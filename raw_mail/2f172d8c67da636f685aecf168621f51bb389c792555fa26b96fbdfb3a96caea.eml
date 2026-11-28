@@ -1,0 +1,141 @@
+Return-Path: <shinghoyam.jfk@asonic-logistics.com>
+Delivered-To: amanuelafeworktiku@enproinc.live
+Received: from mail.pony-it.com ([172.22.1.253])
+	by e889d6655a74 with LMTP
+	id yDh8ACwrCmuepBIAQ1DlOA
+	(envelope-from <shinghoyam.jfk@asonic-logistics.com>)
+	for <amanuelafeworktiku@enproinc.live>; Fri, 27 Nov 2026 20:15:24 -0500
+X-Original-To: amanuelafeworktiku@enproinc.live
+Received: from chocolate.cherry.relay.mailchannels.net (chocolate.cherry.relay.mailchannels.net [23.83.223.35])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.pony-it.com (Postcow) with ESMTPS id A0F6F10F800
+	for <amanuelafeworktiku@enproinc.live>; Fri, 27 Nov 2026 20:15:22 -0500 (EST)
+Authentication-Results: mail.pony-it.com;
+	dkim=pass header.d=asonic-logistics.com header.s=default header.b=IXM6R3Kw;
+	dmarc=pass (policy=reject) header.from=asonic-logistics.com;
+	spf=pass (mail.pony-it.com: domain of shinghoyam.jfk@asonic-logistics.com designates 23.83.223.35 as permitted sender) smtp.mailfrom=shinghoyam.jfk@asonic-logistics.com
+ARC-Seal: i=1; a=rsa-sha256; d=enproinc.live; s=dkim; cv=none; t=1795828523;
+	b=UnhVo+T7y77Yz7W8Ir56EVT7SKOJflaAnjkXNblSIq2ZBtyvtT7+/FCwwr8DBbQ0mPNkNB
+	DdCV+b+ci4zlZRmVTmqU6FnGvwtQzT4Q+aefvNid/obeaMRuUpszlAzka/8JzYXD3yN3bM
+	PzUFou8ig+nrJ1rrRecEr4Mu82AzrlEoj1cCzwtBxFMRugt0tlR2ETjy5Q8yD8f6+Howiy
+	MDbRJ6TjbRpqkQEY9BuNY1U4pR6Spw0Y4//IKTAOdzToA67qrG/OzvH0UWiwa33ygCOaR1
+	1ljQt/H0BkJxaqiYkzgqeBJioqBLst3xCFWbs4QqTEvKeltg9KynfAXxbvjrIA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=enproinc.live;
+	s=dkim; t=1795828523;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:dkim-signature;
+	bh=0sx+GuVPhqTVbkzdsPVT8X3cDwjekaRc4i3Tcl/UftQ=;
+	b=k0gt36qBRcp4tV9uV3NYE03U+OuqdFZMQRCouMrVPWLsAyB9cUmT1MpXZe+giZhucZiXYA
+	B2uXdiGWXLrpQVTGvohquqrjFU5l+xxVk0BIj1uDdyxkWnNoDaYASvRp8RFf22BaUwQfnl
+	kvzPIZto9dBPanbgoTe5WlDFq/2fD/0QoIPyuj8bAB9YnFXAmkoQT9VC4FrYU65w8sT51T
+	n28XkhrrmBglpFb4vdXI98u1129buT2ZY9cNsKE+NP2I3WriyE2Hi7S+d3utntP9wQ9/cI
+	DfNMuJUH88+y5jGKTwFWAER39z4p4ptqAjyWFVwGleajY/EhTTG0tK5QYi3iGw==
+ARC-Authentication-Results: i=1;
+	mail.pony-it.com;
+	dkim=pass header.d=asonic-logistics.com header.s=default header.b=IXM6R3Kw;
+	dmarc=pass (policy=reject) header.from=asonic-logistics.com;
+	spf=pass (mail.pony-it.com: domain of shinghoyam.jfk@asonic-logistics.com designates 23.83.223.35 as permitted sender) smtp.mailfrom=shinghoyam.jfk@asonic-logistics.com
+X-Sender-Id:
+ gocloudeasypteltd|x-authuser|asoniclog@srv9106032401.gocloudserver.com
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+	by relay.mailchannels.net (Postfix) with ESMTP id 8C1404015B5
+	for <amanuelafeworktiku@enproinc.live>; Sat, 28 Nov 2026 01:15:18 +0000 (UTC)
+Received: from srv9106032401.gocloudserver.com (100-96-3-135.trex-nlb.outbound.svc.cluster.local [100.96.3.135])
+	(Authenticated sender: gocloudeasypteltd)
+	by relay.mailchannels.net (Postfix) with ESMTPA id E591C400127
+	for <amanuelafeworktiku@enproinc.live>; Sat, 28 Nov 2026 01:15:17 +0000 (UTC)
+X-Sender-Id:
+ gocloudeasypteltd|x-authuser|asoniclog@srv9106032401.gocloudserver.com
+X-MC-Relay: Bad
+X-MailChannels-SenderId:
+ gocloudeasypteltd|x-authuser|asoniclog@srv9106032401.gocloudserver.com
+X-MailChannels-Auth-Id: gocloudeasypteltd
+X-Wiry-Towering: 6237f61c16ef91fc_1795828518340_3646645184
+X-MC-Loop-Signature: 1795828518340:3143466581
+X-MC-Ingress-Time: 1795828518340
+Received: from srv9106032401.gocloudserver.com
+ (srv9106032401.gocloudserver.com [146.235.18.118])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+	by 100.96.3.135 (trex/8.0.2);
+	Sat, 28 Nov 2026 01:15:18 +0000
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=asonic-logistics.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+	Mime-Version:To:Subject:Message-Id:From:Date:Sender:Reply-To:Cc:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+	List-Unsubscribe-Post:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=0sx+GuVPhqTVbkzdsPVT8X3cDwjekaRc4i3Tcl/UftQ=; b=IXM6R3KwIEi9INHCo3xxjiBzQw
+	oJ1h4cR12RE5MvhEgYjcJZMhusTjmsOd+wAiT+2CQyIwsNmpKtUP2pHZES9Dpzk+kH9WJGvYr48xH
+	WIGD525F2jk+Ylrgn/kAeWEqAABugVhCGboGyoDjn72LAV1XSUgLN0FvIhE8hy7V9lKWIclMu4hkL
+	LuuWTFf1curGpqi1PQ7XY2k6Zd8Hg5dIqETK1y7A1Soa2AzpL+n+Hq3ylcOp9VVWRT+Z5emAUCz4F
+	hTjLcG/3/gDiRVkYjI4DfO5P6OCJfD+OmmxroSwSuZUDoPWcr238n8dbqYHT82ER4A97ti40eiZvE
+	xVU22e4A==;
+Received: from asoniclog by srv9106032401.gocloudserver.com with local (Exim 4.100.1)
+	(envelope-from <shinghoyam.jfk@asonic-logistics.com>)
+	id 1xX723-0000000DUqZ-2gle
+	for amanuelafeworktiku@enproinc.live;
+	Sat, 28 Nov 2026 09:15:15 +0800
+Date: Sat, 28 Nov 2026 01:15:15 GMT
+From: "shinghoyam.jfk@asonic-logistics.com" <shinghoyam.jfk@asonic-logistics.com>
+Message-Id: <1795828515.vX9nC9iKhAvYJQtE@srv9106032401.gocloudserver.com>
+Precedence: auto_reply
+Subject: =?UTF-8?B?T3V0IG9mIHRoZSBPZmZpY2UgLy8gT2ZmaWNlIENsb3N1cmUg4oCT?= =?UTF-8?B?IFRoYW5rc2dpdmluZyBIb2xpZGF5?=
+To: amanuelafeworktiku@enproinc.live
+X-Autorespond: [BOND-2026-1393] Inquiry - Continuous Customs Bond
+X-Loop: amanuelafeworktiku@enproinc.live
+X-Precedence: auto_reply
+Mime-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-AuthUser: asoniclog@srv9106032401.gocloudserver.com
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spamd-Result: default: False [-4.49 / 15.00];
+	BAYES_HAM(-5.50)[99.99%];
+	FROM_DN_EQ_ADDR(1.00)[];
+	IP_REPUTATION_SPAM(0.61)[asn: 63213(0.16), country: CA(-0.01), ip: 23.83.223.35(0.00)];
+	MV_CASE(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[asonic-logistics.com,reject];
+	R_DKIM_ALLOW(-0.20)[asonic-logistics.com:s=default];
+	R_SPF_ALLOW(-0.20)[+ip4:23.83.208.0/20];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.10)[mx2.mailchannels.net];
+	RCVD_COUNT_THREE(0.00)[4];
+	URIBL_BLOCKED(0.00)[asonic-logistics.com:dkim,asonic-logistics.com:from_mime,asonic-logistics.com:from_smtp];
+	PREVIOUSLY_DELIVERED(0.00)[amanuelafeworktiku@enproinc.live];
+	RCPT_MAILCOW_DOMAIN(0.00)[enproinc.live];
+	ARC_NA(0.00)[];
+	RCPT_COUNT_ONE(0.00)[1];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	ARC_SIGNED(0.00)[enproinc.live:s=dkim:i=1];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RWL_MAILSPIKE_POSSIBLE(0.00)[23.83.223.35:from];
+	FROM_EQ_ENVFROM(0.00)[];
+	ASN(0.00)[asn:63213, ipnet:23.83.223.0/24, country:CA];
+	DKIM_TRACE(0.00)[asonic-logistics.com:+];
+	MISSING_XM_UA(0.00)[];
+	TO_DN_NONE(0.00)[];
+	RCVD_IN_DNSWL_NONE(0.00)[23.83.223.35:from]
+X-Rspamd-Queue-Id: A0F6F10F800
+
+Thank you for your email.=0D
+=0D
+Please be advised that our office will be closed on Thursday, November 26, =
+and Friday, November 27, in observance of the Thanksgiving holiday.=0D
+=0D
+We will resume normal business operations on Monday, November 30.=0D
+=0D
+During this period, responses may be delayed. We will get back to you as so=
+on as possible upon our return.=0D
+=0D
+Thank you for your understanding.=0D
+=0D
+Wishing you and your family a Happy Thanksgiving!=0D
+=0D
+=0D
+Best Regards,=0D
+Shing Ho Yam=0D
