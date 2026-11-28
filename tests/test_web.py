@@ -496,6 +496,23 @@ def test_stats_renders_state_distribution(session, world):
     assert "今日动作" in page
     assert "待办横切" in page
     assert "A1 Surety" in page
+    # 状态卡必须指向状态筛选视图，不允许笼统跳 case 主页
+    assert '/cases?state=' in page
+
+
+def test_cases_state_filter_lists_cases(session, world):
+    _seed(session, world)
+    actual_state = session.query(Case).first().state
+    page = render_cases(session, "active", state=actual_state)
+
+    assert f"/cases?state={actual_state}" in page
+    assert "Case 号" in page
+
+
+def test_cases_state_filter_empty_state(session):
+    page = render_cases(session, "active", state="paid")
+
+    assert "该状态下没有 Case" in page
 
 
 def test_stats_zero_data_still_renders(session):

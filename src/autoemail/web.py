@@ -491,7 +491,7 @@ def render_stats(session: Session) -> str:
         if count == 0:
             continue  # 只展示有量的状态，空状态不占位
         pct = f"{count / active_cases * 100:.0f}%" if active_cases else "—"
-        href = "/cases?group=active" if state not in ("closed", "lost") else f"/cases?group={state}"
+        href = f"/cases?state={state}"
         state_cards_html.append(
             f'<a class="card" href="{href}">'
             f'<div class="label">{_e(STATE_LABELS.get(state, state))}'
@@ -609,7 +609,7 @@ def render_stats(session: Session) -> str:
             ("跟进任务", followup_open, "/", "到期自动生成催办草稿", ""),
             ("合规预警", compliance_open, "/compliance?status=REJECT", "REJECT/REVIEW 待处理",
              "color:var(--bad)" if compliance_open else ""),
-            ("被拦截 Case", blocked_cases, "/cases?group=active", "合规闸门暂停发件",
+            ("被拦截 Case", blocked_cases, "/cases?state=blocked", "合规闸门暂停发件",
              "color:var(--bad)" if blocked_cases else ""),
         )
     )
@@ -791,7 +791,57 @@ def render_dashboard(session: Session) -> str:
     return _layout("看板", "dashboard", content)
 
 
-def render_cases(session: Session, group: str = "active", commission_id: int | None = None) -> str:
+def _render_cases_by_state(session: Session, state: str) -> str:
+    """按状态筛选拉平的 case 列表：检测中台状态卡的落地页。
+
+    页签列出所有有量的状态（含当前），表内每行可进 case 详情。
+    """
+    counts = dict(session.execute(select(Case.state, func.count()).group_by(Case.state)).all())
+    states_in_order = [s for s in (*STATE_STEPS, "closed", "lost", "blocked") if counts.get(s)]
+    if state not in states_in_order:
+        state = states_in_order[0] if states_in_order else "init"
+    cases = session.scalars(
+        select(Case).where(Case.state == state).order_by(Case.created_at.desc()).limit(500)
+    ).all()
+    rows = []
+    for case in cases:
+        agent = session.get(Agent, case.agent_id)
+        commission = session.get(Commission, case.commission_id)
+        rows.append(
+            [
+                f'<a href="/cases/{case.id}">{_e(case.case_no)}</a>',
+                _e(commission.legal_name if commission else "—"),
+                _e(agent.name if agent else "—"),
+                _tag(case.state),
+                _wait_badge(case.state),
+                _e(case.auto_mode),
+                _fmt_dt(case.last_inbound_at),
+            ]
+        )
+    table = (
+        _table(["Case 号", "委托公司", "代理商", "状态", "当前进展", "自动模式", "最后入站"], rows)
+        if rows
+        else '<p class="muted">该状态下没有 Case</p>'
+    )
+    tabs = _tabs(
+        [
+            (s, STATE_LABELS.get(s, s), f"/cases?state={s}", counts.get(s, 0))
+            for s in states_in_order
+        ],
+        state,
+    )
+    content = f"""
+<p class="crumbs"><a href="/cases">Case 列表</a> / 按状态</p>
+<h1>{_e(STATE_LABELS.get(state, state))} <span class="muted" style="font-size:14px">{counts.get(state, 0)} 个</span></h1>
+{tabs}
+{table}
+"""
+    return _layout("Case", "cases", content)
+
+
+def render_cases(session: Session, group: str = "active", commission_id: int | None = None, state: str | None = None) -> str:
+    if state:
+        return _render_cases_by_state(session, state)
     palette = ("#2563eb", "#059669", "#b45309", "#7c3aed", "#db2777", "#0e7490", "#4d7c0f")
 
     # 委托公司专属 case 列表页
@@ -2766,7 +2816,12 @@ class Handler(BaseHTTPRequestHandler):
                     commission_id = int(commission_param) if commission_param else None
                 except ValueError:
                     commission_id = None
-                body = render_cases(session, group, commission_id=commission_id)
+                body = render_cases(
+                    session,
+                    group,
+                    commission_id=commission_id,
+                    state=(query.get("state") or [None])[0],
+                )
             elif path.startswith("/cases/"):
                 try:
                     case_id = int(path.rstrip("/").rsplit("/", 1)[1])
