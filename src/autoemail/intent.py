@@ -38,12 +38,33 @@ PAYMENT_TERMS = {
 _PAYMENT_METHOD_MENTION_RE = re.compile(
     r"accept(?:ed)?s?\s+payments?|"
     r"payments?\s+(?:via|through|using|method|link)|"
-    r"how\s+to\s+pay",
+    r"how\s+to\s+pay|"
+    r"pay(?:ing)?\s+(?:your|our|the)?\s*(?:invoices?|bills?)\s+by\s+the\s+due\s+date|"
+    r"send\s+(?:a\s+)?(?:wire|ach)\s+to|"
+    r"payment\s+instructions?|"
+    r"payment\s+methods?|"
+    r"to\s+make\s+payments?\s+click",
     re.IGNORECASE,
 )
 
-# 代理商要求填表时，正文里列出的具体材料类型（用于后续按清单响应，
-# 而不是一律套用标准三件套）。顺序即提取顺序。
+# "向你收款"的动作语句：真发票/付款通知一定有这类表述，且后面跟着账单细节。
+# 报价（Our service is $100）、条款（pay your invoices by the due date）、
+# 防诈骗提示（do not send wire to accounts not on our invoice）都不命中。
+_INVOICE_DEMAND_RE = re.compile(
+    r"invoice\s+(?:is\s+)?attached|attached\s+(?:is\s+|please\s+find\s+)?(?:our\s+|the\s+)?invoice|"
+    r"amount\s+due[:\s]|balance\s+due[:\s]|total\s+due[:\s]|"
+    r"(?:please\s+)?remit\s+(?:the\s+)?(?:payment|amount|payment\s+of)|"
+    r"pay(?:ment)?\s+(?:is\s+)?due\s+(?:by|on|within)|"
+    r"pay\s+(?:this\s+|the\s+|your\s+)?invoice\b|"
+    r"remittance\s+information|"
+    r"应付金额|请付款|请查收发票",
+    re.IGNORECASE,
+)
+# 金额 + "total/amount due" 的组合信号（兜底：有些发票正文极简，只有一句 Total due: $x）
+_TOTAL_DUE_RE = re.compile(
+    r"\b(?:total|amount|balance)\s+(?:amount\s+)?due\b", re.IGNORECASE
+)
+
 _MATERIAL_RULES: list[tuple[str, re.Pattern]] = [
     ("application", re.compile(r"bond\s+application|application\s+form|\bapplication\b", re.IGNORECASE)),
     ("personal_financial", re.compile(r"personal\s+financial\s+statement", re.IGNORECASE)),
@@ -175,7 +196,15 @@ def _find_invoice_no(text: str) -> str | None:
 
 
 def extract_payment_info(message: NormalizedMessage) -> PaymentInfo | None:
-    """从邮件正文和附件中提取付款信息；没有付款信号则返回 None。"""
+    """从邮件正文和附件中提取付款信息；没有付款信号则返回 None。
+
+    判"这是一封发票/付款通知"需要结构性证据：真发票至少占其一——
+    发票附件、正文发出"向你收款"的动作（amount due / please remit /
+    pay by / invoice attached 等）、或独立的到期日。代理商签名与条款里的
+    "pay your invoices by the due date"、"we accept payment via PayCargo"、
+    "send wire/ACH to the account on our invoice" 只是付款方式说明，
+    绝不能凭这些词把报价信判成发票。
+    """
     attachment_names = " ".join(a.filename for a in message.attachments)
     pdf_text = extract_invoice_pdf_text(message.attachments)
     text = f"{message.subject}\n{message.body_text}\n{attachment_names}"
@@ -192,17 +221,20 @@ def extract_payment_info(message: NormalizedMessage) -> PaymentInfo | None:
         amount = None
     due_date = _find_due_date(text)
     has_invoice_attachment = any(a.doc_type == "invoice" for a in message.attachments)
-    strong_signal = any(
-        term in signal_text
-        for term in (
-            "invoice", "amount due", "remit", "zelle", "wire transfer",
-            "ach payment", "payment instructions", "付款", "发票",
-        )
-    )
-    # 只有 "payment" 一个词不够：营销邮件也常出现，必须再带金额、到期日或发票附件
-    weak_signal = any(term in signal_text for term in ("payment", "paid"))
-    if not (strong_signal or has_invoice_attachment or (weak_signal and (amount is not None or due_date is not None))):
-        return None
+    if not has_invoice_attachment:
+        # 无发票附件时，"向你收款"的动作语句才算发票信号（invoice attached /
+        # amount due / please remit payment / pay the invoice 等）。
+        # 单纯出现 payment/wire/zelle/invoice 字样（报价、条款、防诈骗提示）不算。
+        demand_hit = _INVOICE_DEMAND_RE.search(signal_text)
+        if not demand_hit:
+            return None
+        strong_signal = demand_hit is not None
+        weak_signal = amount is not None and due_date is not None
+        if not (strong_signal or weak_signal):
+            return None
+    else:
+        strong_signal = True
+        weak_signal = amount is not None and due_date is not None
 
     method = _find_payment_method(text)
     detail = _extract_remit_detail(text)
@@ -287,7 +319,7 @@ def classify_message(message: NormalizedMessage) -> IntentResult:
         return IntentResult("form_request", 0.85, {"attachments": sorted(attachment_types)}, evidence=["附件包含申请材料"])
     if any(word in message.body_text.lower() for word in ("please complete", "application form", "申请表")):
         return IntentResult("form_request", 0.8, evidence=["正文请求填写申请表"])
-    if any(word in f"{message.subject}\n{message.body_text}".lower() for word in ("quote", "premium", "price", "报价", "价格")):
+    if any(word in f"{message.subject}\n{message.body_text}".lower() for word in ("quote", "premium", "price", "报价", "价格", "fee", "cost", "charge", "service for", "non-refundable")):
         amount, currency = _find_quote_amount(f"{message.subject}\n{message.body_text}")
         return IntentResult(
             "quote_reply",

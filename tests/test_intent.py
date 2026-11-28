@@ -1,4 +1,5 @@
 from datetime import date
+from datetime import date
 from decimal import Decimal
 
 from autoemail.channels.base import NormalizedMessage
@@ -231,3 +232,106 @@ def test_accept_payment_via_is_not_payment_signal():
         )
     )
     assert result is None
+
+
+def test_signature_paycargo_link_is_not_invoice():
+    """BOND-2026-1737 回归：代理反问"你从哪拿到我们的信息"，签名里有
+    "To make payments click below: PayCargo 链接"——正文无任何收款动作，
+    绝不能判成 invoice 并伪造一张 $5000 发票。"""
+    body = (
+        "Hello\n\n"
+        "Please let us know where you obtained our information\n\n"
+        "Thank You\n\n"
+        "Gerald R.\n"
+        "J.J. BOLL ASSOCIATES, INC.\n"
+        "To make payments click below:\n"
+        "https://shared.outlook.inky.com/link?domain=paycargo\n"
+        "** J.J. BOLL ASSOCIATES A WELL-ESTABLISHED C-TPAT CERTIFIED COMPANY **"
+    )
+    result = extract_payment_info(message(body, subject="Re: [BOND-2026-1737] Inquiry"))
+    assert result is None
+    assert classify_message(message(body, subject="Re: [BOND-2026-1737] Inquiry")).label == "unclear"
+
+
+def test_advisory_pay_your_invoice_by_due_date_is_not_invoice():
+    """BOND-2026-1280 回归：代理报价信（$100 服务费 + $600 连续保证金），
+    页脚 ADVISORIES 里有 "Pay your Invoice by the Due Date" 条款——
+    这是报价，不是发票。"""
+    body = (
+        "Hello Cynthia,\n\n"
+        "Our service for applying for a continuous bond application: $100.00 (non-refundable).\n"
+        "Continuous Bond: $600 for one year, $900 for two years.\n\n"
+        "ADVISORIES:\n"
+        "- Pay your Invoice by the Due Date: It is very important that you pay our "
+        "invoices by the due date. Unless otherwise explicitly agreed in writing...\n"
+        "- Checks as a Payment Method: Starting June 01, 2022, CBS will no longer "
+        "accept checks as a payment method.\n"
+    )
+    result = extract_payment_info(message(body, subject="Re: [BOND-2026-1280] Inquiry"))
+    assert result is None
+    assert classify_message(message(body, subject="Re: [BOND-2026-1280] Inquiry")).label == "quote_reply"
+
+
+def test_wire_fraud_warning_in_signature_is_not_invoice():
+    """BOND-2026-0752 回归：代理要求补充商品信息，签名防诈骗提示里有
+    "do not send wire/ACH to any account number other than what we have
+    listed directly on our invoice ... sending payment"——不是发票。"""
+    body = (
+        "Dear Amanuel,\n\n"
+        "Please advise the commodity you are considering importing.\n"
+        "Does the USA Importer have any USA employees or a USA presence?\n\n"
+        "Sincerely,\n"
+        "Bill Marston\n"
+        "-Please do not send wire/ ACH to any account number other than what we have "
+        "listed directly on our invoice. We will never send an email asking to send "
+        "a wire to a new account. Please call to verify when sending payment-"
+    )
+    result = extract_payment_info(message(body, subject="RE: [BOND-2026-0752] Inquiry"))
+    assert result is None
+    assert classify_message(message(body, subject="RE: [BOND-2026-0752] Inquiry")).label == "unclear"
+
+
+def test_premium_quote_with_payment_expectation_is_quote_reply():
+    """BOND-2026-0713 回归：代理报价 "$50,000 bond premium is $500 + $75 filing
+    fee + $250 setup fee ... We expect payment before filing with USCBP"——
+    "we expect payment" 是付款预期不是收款动作，这是报价信。"""
+    body = (
+        "Good Morning,\n\n"
+        "Thank you for your interest in our company. Just to be clear, we are a "
+        "Customs Broker & a Freight Forwarding Company but we can assist you in "
+        "obtaining your continuous bond. Before we can proceed,\n"
+        "Can you please send us the following information for verification purposes: "
+        "Articles of Formation, IRS EIN letter (CP575), W-9, principal ID, and the "
+        "list of officers in your organization. To provide this service, we require "
+        "a Power of Attorney authorizing us to file for your bond. The premium for a "
+        "$50,000.00 bond is $500.00, plus a $75.00 filing fee and a $250.00 new "
+        "customer setup fee. Approval from the Surety Company will probably take "
+        "7-10 days once we submit the application. Once approved, we will file the "
+        "bond with USCBP, usually within 24 hrs. We expect payment before filing "
+        "with USCBP. Let us know if you have any questions.\n"
+    )
+    result = extract_payment_info(message(body, subject="Re: [BOND-2026-0713] Inquiry"))
+    assert result is None
+    assert classify_message(message(body, subject="Re: [BOND-2026-0713] Inquiry")).label in (
+        "quote_reply",
+        "form_request",
+    )
+
+
+def test_real_invoice_body_still_detected():
+    """真发票正文（amount due / remit）仍必须识别为 invoice，不因收紧规则而漏判。"""
+    result = extract_payment_info(
+        message(
+            "Please find attached our invoice.\nAmount due: $750.00\n"
+            "Due date: 12/01/2026\nPlease remit payment via Zelle."
+        )
+    )
+    assert result is not None
+    assert result.amount == Decimal("750.00")
+
+
+def test_total_due_with_amount_is_invoice():
+    """极简发票正文只有 "Total due: $x" 一句也能兜底命中。"""
+    result = extract_payment_info(message("Total due: $600.00", subject="Invoice"))
+    assert result is not None
+    assert result.amount == Decimal("600.00")
