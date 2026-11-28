@@ -325,6 +325,7 @@ def _layout(title: str, active: str, content: str) -> str:
 {nav("inquiry", "/inquiry", "发起询价")}
 {nav("cases", "/cases", "Case")}
 {nav("drafts", "/drafts", "草稿")}
+{nav("invoices", "/invoices", "发票")}
 {nav("compliance", "/compliance", "合规")}
 {nav("llm", "/llm", "LLM")}
 {nav("settings", "/settings", "设置")}
@@ -459,7 +460,7 @@ def render_dashboard(session: Session) -> str:
 
     todo_cards = [
         ("待审草稿", pending_total, "/drafts?status=pending", pending_total > 0),
-        ("未付发票", unpaid_total, "/cases", unpaid_total > 0),
+        ("未付发票", unpaid_total, "/invoices", unpaid_total > 0),
         ("进行中 Case", active_total, "/cases?group=active", False),
     ]
     cards_html = "".join(
@@ -2026,6 +2027,61 @@ def render_drafts(session: Session, status: str = "all") -> str:
     return _layout("草稿", "drafts", content)
 
 
+def render_invoices(session: Session, status: str = "unpaid") -> str:
+    """发票列表页：未付发票直达回填，不再绕道 Case 主页。"""
+    counts = dict(
+        session.execute(select(Invoice.status, func.count()).group_by(Invoice.status)).all()
+    )
+    total = sum(counts.values())
+
+    statement = select(Invoice).order_by(Invoice.created_at.desc())
+    if status == "unpaid":
+        statement = statement.where(Invoice.status == INVOICE_UNPAID)
+    elif status != "all":
+        statement = statement.where(Invoice.status == status)
+    invoices = session.scalars(statement.limit(500)).all()
+
+    rows = []
+    for inv in invoices:
+        case = session.get(Case, inv.case_id)
+        action = (
+            f'<a class="btn-mini ghost" href="/cases/{inv.case_id}">去回填付款</a>'
+            if inv.status == INVOICE_UNPAID
+            else f'<a href="/cases/{inv.case_id}">查看 Case</a>'
+        )
+        rows.append(
+            [
+                f'<a href="/cases/{inv.case_id}">{_e(case.case_no if case else inv.case_id)}</a>',
+                _e(inv.invoice_no or "—"),
+                _e(f"{inv.amount} {inv.currency}" if inv.amount is not None else "未识别金额"),
+                _e(inv.payment_method),
+                _e(inv.due_date),
+                _tag(inv.status),
+                _e(inv.paid_reference or None),
+                _fmt_dt(inv.created_at),
+                action,
+            ]
+        )
+
+    tabs = _tabs(
+        [
+            ("unpaid", "未付", "/invoices", counts.get(INVOICE_UNPAID, 0)),
+            ("paid", "已付", "/invoices?status=paid", counts.get("paid", 0)),
+            ("all", "全部", "/invoices", total),
+        ],
+        status,
+    )
+    empty = '<p class="muted">没有符合条件的发票</p>' if not rows else ""
+    content = f"""
+<p class="crumbs"><a href="/">看板</a> / 发票</p>
+<h1>发票</h1>
+{tabs}
+{_table(["Case", "发票号", "金额", "付款方式", "到期日", "状态", "付款流水号", "创建时间", "操作"], rows)}
+{empty}
+"""
+    return _layout("发票", "invoices", content)
+
+
 _COMPLIANCE_TAG = {
     "REJECT": '<span class="tag blocked">REJECT 阻断</span>',
     "REVIEW": '<span class="tag pending">REVIEW 待复核</span>',
@@ -2508,6 +2564,8 @@ class Handler(BaseHTTPRequestHandler):
                     body = _layout("未找到", "cases", "<h1>Case 不存在</h1>")
             elif path == "/drafts":
                 body = render_drafts(session, (query.get("status") or ["all"])[0])
+            elif path == "/invoices":
+                body = render_invoices(session, (query.get("status") or ["unpaid"])[0])
             elif path == "/compliance":
                 body = render_compliance(
                     session,

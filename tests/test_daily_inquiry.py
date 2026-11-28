@@ -77,13 +77,13 @@ def test_batch_plans_twenty_and_never_repeats(session):
     assert second["ran"] is False
 
     # 强制再跑：不会重复已询过的，只补选剩余未询过的 5 家
-    third = run_daily_batch(session, batch_size=20, force=True)
+    third = run_daily_batch(session, batch_size=20, force=True, actor="cli")
     assert third["ran"] is True
     assert third["planned"] == 5
     assert len(_pairs(session, commission.id)) == 25
 
     # 全部询过之后，再强制跑也不再新增
-    fourth = run_daily_batch(session, batch_size=20, force=True)
+    fourth = run_daily_batch(session, batch_size=20, force=True, actor="cli")
     assert fourth["planned"] == 0
     assert len(_pairs(session, commission.id)) == 25
 
@@ -138,7 +138,7 @@ def test_batch_avoids_same_agent_across_commissions(session):
     alpha = _make_ready_commission(session, "Alpha LLC")
     beta = _make_ready_commission(session, "Beta LLC")
 
-    summary = run_daily_batch(session, batch_size=20)
+    summary = run_daily_batch(session, batch_size=20, actor="cli")
 
     alpha_agents = _pairs(session, alpha.id)
     beta_agents = _pairs(session, beta.id)
@@ -160,7 +160,7 @@ def test_batch_skips_commission_already_paid(session):
     session.add(paid_case)
     session.commit()
 
-    summary = run_daily_batch(session, batch_size=20, force=True)
+    summary = run_daily_batch(session, batch_size=20, force=True, actor="cli")
     assert summary["commissions"] == []
 
 
@@ -176,7 +176,7 @@ def test_batch_skips_closed_pair_but_uses_rest(session):
     session.add(closed)
     session.commit()
 
-    summary = run_daily_batch(session, batch_size=3, force=True)
+    summary = run_daily_batch(session, batch_size=3, force=True, actor="cli")
     picked = _pairs(session, commission.id)
     # 已关闭的那家不会被重复询价，只新选 3 家
     assert agents[0].id in picked  # 来自已关闭 case，不是新询价
@@ -222,7 +222,7 @@ def test_mark_paid_closes_sibling_cases(session):
 
 def test_batch_with_no_ready_commissions_records_audit(session):
     _make_agents(session, 3)
-    summary = run_daily_batch(session, batch_size=20)
+    summary = run_daily_batch(session, batch_size=20, actor="cli")
     assert summary["ran"] is True
     assert summary["commissions"] == []
     assert session.scalars(select(Case.id)).first() is None
