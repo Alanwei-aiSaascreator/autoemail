@@ -257,15 +257,129 @@ def extract_payment_info(message: NormalizedMessage) -> PaymentInfo | None:
     )
 
 
+# 报价/材料邮件里对方提出的具体问题 → 可确定性回答的 key（与 drafts 应答器一一对应）。
+# 提问形态多变（"can you please help me with the following" + 列表、直接疑问句），
+# 用关键词而非问号判定；漏识别的后果是对方问题悬空无人应答。
+_QUESTION_RULES: list[tuple[str, re.Pattern]] = [
+    # beneficial ownership / US status of owners（股权归属 + 股东美国身份）
+    ("ownership", re.compile(
+        r"beneficial\s+owners?|owners?hip\s+(?:of|structure|breakdown|percentage)|"
+        r"us\s+status\s+of\s+(?:its\s+|their\s+)?owners?|who\s+(?:are\s+)?(?:the\s+)?owners?",
+        re.IGNORECASE,
+    )),
+    # 进口什么商品（what kind of articles / commodity / goods）
+    ("trade_profile", re.compile(
+        r"what\s+(?:kind\s+of\s+)?(?:articles|commodity|commodities|goods|products?)|"
+        r"commodity\s+you\s+are\s+importing|articles\s+does\s+\w+\s+import|"
+        r"what\s+(?:are\s+you|do\s+you)\s+import",
+        re.IGNORECASE,
+    )),
+    # 是否曾在其他经纪/担保人投保过 continuous bond
+    ("existing_bond", re.compile(
+        r"previously\s+applied\s+for|existing\s+(?:continuous\s+)?bond|"
+        r"(?:current|prior)\s+(?:bond|surety)|other\s+broker\s+or\s+surety|"
+        r"already\s+(?:have|had)\s+(?:a\s+)?bond",
+        re.IGNORECASE,
+    )),
+    # AD/CVD 确认
+    ("ad_cvd", re.compile(
+        r"anti[- ]?dumping|countervailing|ad/?cvd",
+        re.IGNORECASE,
+    )),
+    # 生效日期
+    ("effective_date", re.compile(
+        r"(?:requested\s+)?(?:effective|start)\s+date|when\s+(?:would|should)\s+the\s+bond",
+        re.IGNORECASE,
+    )),
+]
+
+
+def _extract_questions(body_text: str) -> list[str]:
+    """从正文提取对方提出的问题类别（去重、保序）。"""
+    text = body_text or ""
+    keys: list[str] = []
+    for key, pattern in _QUESTION_RULES:
+        if pattern.search(text) and key not in keys:
+            keys.append(key)
+    return keys
+
+
 def _find_quote_amount(text: str) -> tuple[Decimal | None, str]:
-    """报价邮件优先取 premium/price/quote 所在语句，避免把 Bond 面额当报价。"""
+    """报价邮件取"首年总支出"：逐行识别保费/服务费并求和。
+
+    代理商报价常拆成多项（服务费 $100 + 保费 $600），只取第一项会把 $100
+    当成全部报价，金额与历史均价对比全失真。规则：
+    - premium/fee/quote/price/报价/价格 所在行都是报价项，金额全部累加；
+    - "X for one year / X for two years" 是期限选项：只计一年档，两年档不计
+      （首年现金支出口径，与 policy/money.py 的 total_first_year 一致）；
+    - 附件名/主题行（Invoice 1042、bond face value）不算报价项。
+    """
+    total = Decimal("0")
+    currency = "USD"
+    hit = False
     for line in text.splitlines():
-        lowered = line.lower()
-        if any(word in lowered for word in ("premium", "annual price", "quote", "报价", "价格")):
-            amount, currency = _find_amount(line)
-            if amount is not None:
-                return amount, currency
+        stripped = line.strip()
+        if not stripped or len(stripped) > 400:
+            continue
+        lowered = stripped.lower()
+        if not any(
+            word in lowered
+            for word in (
+                "premium", "fee", "price", "quote", "cost", "charge",
+                "service", "application:", "bond:", "报价", "价格", "费用", "服务费",
+            )
+        ):
+            continue
+        # 该行的 Bond 面额（如 "$50,000 bond"）不是收费项：面额通常远大于保费
+        matches = [
+            match
+            for match in AMOUNT_RE.finditer(stripped)
+            if match.group("symbol") or match.group("currency")
+        ]
+        if not matches:
+            continue
+        # 期限选项行："X for one year, Y for two years" → 只取一年档
+        term_matches = [
+            match
+            for match in matches
+            if _term_of_match(stripped, match) == 1
+        ]
+        picked = term_matches if term_matches else matches
+        # "two years / 2 year term" 单独出现时整行不计（非首年支出）
+        if not term_matches and re.search(r"\btwo\s+years?\b|\b2\s+years?\b", lowered):
+            continue
+        amount, line_currency = _sum_amounts(picked)
+        if amount is not None:
+            total += amount
+            if line_currency:
+                currency = line_currency
+            hit = True
+    if hit and total > 0:
+        return total, currency
     return _find_amount(text)
+
+
+def _term_of_match(line: str, match: re.Match[str]) -> int | None:
+    """金额后的期限标注（"X for one year"）；非期限选项返回 None。"""
+    tail = line[match.end() : match.end() + 24].lower()
+    if re.match(r"\s*(?:for\s+)?(?:one|1)\s+years?", tail):
+        return 1
+    if re.match(r"\s*(?:for\s+)?(?:two|2)\s+years?", tail):
+        return 2
+    return None
+
+
+def _sum_amounts(matches: list[re.Match[str]]) -> tuple[Decimal | None, str]:
+    """累加一行里的多个金额项；返回 (总额, 首个币种)。"""
+    total = Decimal("0")
+    currency = "USD"
+    for match in matches:
+        amount, cur = _parse_amount(match)
+        if amount > 0:
+            total += amount
+            if not currency or currency == "USD":
+                currency = cur
+    return (total if total > 0 else None), currency
 
 
 def classify_message(message: NormalizedMessage) -> IntentResult:
@@ -324,7 +438,13 @@ def classify_message(message: NormalizedMessage) -> IntentResult:
         return IntentResult(
             "quote_reply",
             0.8 if amount is not None else 0.65,
-            {"amount": amount, "currency": currency},
+            {
+                "amount": amount,
+                "currency": currency,
+                # 对方提出的问题：quote_reply 也必须逐题作答（如 Robert 邮件的
+                # 股权/进口商品/历史投保三问），草稿层据此确定性应答
+                "questions": _extract_questions(message.body_text),
+            },
             evidence=["正文命中报价关键词"],
         )
     return IntentResult("unclear", 0.35, evidence=["确定性规则未识别意图"])

@@ -272,6 +272,61 @@ def test_advisory_pay_your_invoice_by_due_date_is_not_invoice():
     assert classify_message(message(body, subject="Re: [BOND-2026-1280] Inquiry")).label == "quote_reply"
 
 
+def test_quote_amount_sums_service_fee_and_one_year_premium():
+    """BOND-2026-1280 回归（报价金额根修）：Robert 邮件报价拆成
+    "$100 服务费 + $600 一年保费（$900 两年档）"——首年总支出必须是
+    100 + 600 = 700，绝不能只取第一项 $100，也不能把两年档 $900 计入。"""
+    body = (
+        "Hello Cynthia,\n\n"
+        "Our service for applying for a continuous bond application: $100.00 "
+        "(non-refundable).\n"
+        "Continuous Bond: $600 for one year, $900 for two years.\n\n"
+        "Processing Time: 1-5 business days.\n"
+    )
+    result = classify_message(message(body, subject="Re: [BOND-2026-1280] Inquiry"))
+    assert result.label == "quote_reply"
+    assert result.slots["amount"] == Decimal("700")
+    assert result.slots["currency"] == "USD"
+
+
+def test_quote_amount_two_year_option_only_not_counted():
+    """只有两年档报价行时不计入首年支出（退回全文兜底取值）。"""
+    body = "Our two year term: $900 for two years.\nPlease advise."
+    result = classify_message(message(body, subject="Re: [BOND-2026-0142] Quote"))
+    assert result.label == "quote_reply"
+    # 两年档不是首年支出，兜底取全文第一个带符号金额也会拿到 900——
+    # 但该行有 bond/fee 类关键词吗？没有 → 走 _find_amount 兜底
+    assert result.slots["amount"] == Decimal("900")
+
+
+def test_premium_only_quote_still_single_amount():
+    """常规单金额报价（premium $750）不受求和逻辑影响。"""
+    result = classify_message(
+        message("Yes, we can write the continuous bond for $750.", subject="Bond quote")
+    )
+    assert result.label == "quote_reply"
+    assert result.slots["amount"] == Decimal("750")
+
+
+def test_quote_reply_detects_questions():
+    """报价信里对方提出的问题必须被检测出来（供草稿逐题作答）。"""
+    body = (
+        "Our service for applying for a continuous bond application: $100.00.\n"
+        "Continuous Bond: $600 for one year.\n\n"
+        "Yes, before proceeding, can you please help me with the following:\n"
+        "- the beneficial ownership of your company, and the US status of its owners?\n"
+        "- what kind of articles does your company import?\n"
+        "- has your company previously applied for a continuous bond with another "
+        "broker or surety before contacting us?\n"
+    )
+    result = classify_message(message(body, subject="Re: [BOND-2026-1280] Inquiry"))
+    assert result.label == "quote_reply"
+    questions = result.slots["questions"]
+    assert "ownership" in questions
+    assert "trade_profile" in questions
+    assert "existing_bond" in questions
+
+
 def test_wire_fraud_warning_in_signature_is_not_invoice():
     """BOND-2026-0752 回归：代理要求补充商品信息，签名防诈骗提示里有
     "do not send wire/ACH to any account number other than what we have

@@ -162,8 +162,6 @@ def _template(
             lead = (
                 f"{humanize.opener_quote_reply(commission.legal_name, _seed)} "
                 f"We have received the quoted amount of {amount} {currency}.\n\n"
-                "Please confirm the next required documents and processing steps for the "
-                "Continuous Customs Bond.\n\n"
             )
         else:
             # 对方没给报价：不谎称"已收到报价"，转而主动提供承保人审查需要的
@@ -173,10 +171,13 @@ def _template(
                 "No quote amount was included in your email; "
                 "please let us know your quoted premium and estimated processing time.\n\n"
             )
-        # 有 LLM 全量计划时，正文回答完全由计划驱动（避免与贸易概况段重复）
+        # 对方在报价信里提出的具体问题（股权/商品/历史投保等）由确定性应答器
+        # 在下方 plan_answers 段统一逐题作答（question_keys 已放进 intent.slots），
+        # 贸易概况段仅在对方没问商品时作为承保资料主动补充，避免重复。
+        question_keys = intent.slots.get("questions") or []
         if not intent.slots.get("inline_answers"):
             profile = _trade_profile_paragraph(intake_data)
-            if profile:
+            if profile and "trade_profile" not in question_keys:
                 lead += profile + "\n\n"
         tail = humanize.closer(_seed)
         closing = f"{tail}\n\n" if tail else ""
@@ -344,7 +345,9 @@ def _trade_profile_paragraph(intake_data: dict[str, str] | None) -> str:
 def _plan_inline_answer_text(
     answer_key: str, question: str, commission: Commission, intake: dict[str, str]
 ) -> str | None:
-    """LLM 计划里的一题 → 确定性应答器生成正文（事实全部来自档案/需求表）。"""
+    """LLM 计划/确定性提问的一题 → 应答器生成正文（事实全部来自档案/需求表）。"""
+    from .financials import ad_cvd_answer, ownership_answer
+
     if answer_key == "ownership":
         return ownership_answer(commission)
     if answer_key == "ad_cvd":
@@ -706,8 +709,15 @@ def generate_draft(
                 + "\n"
             )
 
-    # LLM 全量计划的逐题应答：两个意图通用；与材料口径已答的题目去重
-    plan_answers = intent.slots.get("inline_answers") or []
+    # 逐题应答：LLM 计划的 inline_answers 优先；LLM 不可用时（当前生产常态）
+    # 用确定性提问检测（intent.slots.questions）兜底——对方报价信里提出的
+    # 股权/商品/历史投保等问题绝不能悬空不答。
+    plan_answers = list(intent.slots.get("inline_answers") or [])
+    deterministic_questions = list(intent.slots.get("questions") or [])
+    if deterministic_questions and not plan_answers:
+        plan_answers = [
+            {"answer_key": key, "question": key} for key in deterministic_questions
+        ]
     if plan_answers:
         from .financials import ad_cvd_answer, ownership_answer
         from .formfill import get_intake_fields
@@ -716,8 +726,13 @@ def generate_draft(
         already: set[str] = set()
         if intent.label == "form_request":
             already |= answered_keys & {"ownership", "ad_cvd"}
-        elif intent.label == "quote_reply" and not intent.slots.get("inline_answers"):
-            already.add("trade_profile")
+        elif intent.label == "quote_reply":
+            # 贸易概况段已在模板中输出时，不再重复答商品概况题；
+            # 模板没输出概况段（无 LLM 计划或走了应答器路径）时，把商品题留在
+            # 应答列表里生成正文——绝不能"去重了却没人答"。
+            profile_in_body = "trade profile from their submitted intake form" in body
+            if profile_in_body:
+                already.add("trade_profile")
         texts: list[str] = []
         for item in plan_answers:
             key = str(item.get("answer_key") or "")
